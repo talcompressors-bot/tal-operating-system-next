@@ -44,11 +44,7 @@ function syncMavenDocuments() {
       page_size: 25,
       sort_by: "document_date",
       sort_order: "DESC",
-      date_from: Utilities.formatDate(
-        new Date(new Date().setFullYear(new Date().getFullYear() - 3)),
-        Session.getScriptTimeZone(),
-        "yyyy-MM-dd"
-      )
+      date_from: "2023-07-12"
     };
 
     const options = {
