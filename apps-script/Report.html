@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>דוח שירות</title>
+  <meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+
+  <style>
+    
+    body {
+  font-family: Arial, sans-serif;
+  direction: rtl;
+  margin: 0;
+  background: #ffffff !important;
+  color: #111827 !important;
+  color-scheme: light only;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+:root {
+  color-scheme: only light;
+}
+
+html,
+body,
+.page,
+.section,
+.field,
+.value,
+.approval,
+.signature-area,
+#signaturePad,
+#savedSignatureImage {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+}
+
+* {
+  forced-color-adjust: none !important;
+  -webkit-forced-color-adjust: none !important;
+}
+
+input,
+textarea,
+select,
+button {
+  color-scheme: light !important;
+}
+    .page {
+  max-width: 900px;
+  margin: 30px auto;
+  background: #ffffff !important;
+  color: #111827 !important;
+  padding: 20px 40px 40px 40px;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+}
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 28px;
+    }
+
+    .section {
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      margin-bottom: 18px;
+      overflow: hidden;
+    }
+
+    .section-title {
+      background: #111827;
+      color: white;
+      padding: 10px 14px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .field {
+      border-top: 1px solid #e5e7eb;
+      padding: 10px 14px;
+    }
+
+    .label {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+
+    .value {
+      font-size: 15px;
+      font-weight: bold;
+      min-height: 20px;
+    }
+
+    
+     .equipment-field {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px solid #e5e7eb;
+  padding: 7px 0;
+  font-size: 14px;
+}
+
+.equipment-label {
+  color: #6b7280;
+  font-weight: normal;
+}
+
+.equipment-value {
+  color: #111827;
+  font-weight: bold;
+  text-align: left;
+}
+    
+
+    .approval {
+      line-height: 1.8;
+      font-size: 15px;
+      padding: 14px;
+    }
+
+    .signature-box {
+      border: 2px dashed #9ca3af;
+      height: 140px;
+      border-radius: 10px;
+      margin: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6b7280;
+    }
+    .signature-area {
+  padding: 15px;
+}
+
+#signaturePad {
+  width: 100%;
+  height: 180px;
+  border: 2px dashed #9ca3af;
+  border-radius: 10px;
+  background: white;
+  touch-action: none;
+}
+
+.signature-buttons {
+  margin-top: 10px;
+  text-align: left;
+}
+
+.signature-buttons button {
+  background: #111827;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 16px;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+#signatureStatus {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #047857;
+}
+ @page {
+  size: A4;
+  margin: 10mm;
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  html,
+  body {
+    background: white !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .page {
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    background: white !important;
+  }
+
+  .section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 6mm;
+  }
+
+  .equipment-field {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .signature-box {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .print-toolbar {
+  text-align: left;
+  margin-bottom: 12px;
+}
+
+.print-toolbar button {
+  background: #111827;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+.brand-header {
+  width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
+.brand-header img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.doc-footer {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.doc-footer img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+  }
+@media (prefers-color-scheme: dark) {
+  html, body, .page, .section, .field, .value {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+  * {
+  forced-color-adjust: none !important;
+  -webkit-text-fill-color: inherit !important;
+}
+
+html, body {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+}
+
+.page, .section, .field, .value, .approval, .signature-area {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+}
+}
+
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+<div class="brand-header">
+ <img src="<?!= imageDataUrl('1aG9AZXddGGLyJSpdabHmxKxHUJHz2gMU') ?>"
+     style="
+       width: calc(100% + 60px);
+       margin-right: -30px;
+       margin-left: -30px;
+       display:block;
+     ">
+</div>
+ 
+    <div class="no-print print-toolbar">
+  <button type="button" onclick="window.print()">הדפס / שמור PDF</button>
+</div>
+
+    <h1 id="title">דוח שירות</h1>
+
+    <div class="section">
+      <div class="section-title">פרטי הדוח</div>
+      <div class="grid">
+        <div class="field">
+          <div class="label">שם לקוח</div>
+          <div class="value" id="customerName"></div>
+        </div>
+
+        <div class="field">
+          <div class="label">תאריך שירות</div>
+          <div class="value" id="serviceDate"></div>
+        </div>
+
+      
+<!--
+<div class="field">
+  <div class="label">שעת שירות</div>
+  <div class="value" id="serviceTime"></div>
+</div>
+-->
+        <div class="field">
+        <div class="label">תיאור השירות</div>
+        <div class="value" id="serviceDescription"></div>
+        </div>
+
+        <div class="field">
+          <div class="label">טכנאי</div>
+          <div class="value" id="technician"></div>
+        </div>
+
+        <div class="field">
+          <div class="label">זמן עבודת טכנאי</div>
+          <div class="value" id="workTime"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="equipmentList"></div>
+
+   
+
+    <div class="section">
+      <div class="section-title">אישור לקוח</div>
+      <div class="approval">
+        אני מאשר/ת כי קראתי את ממצאי הדוח וההמלצות שנמסרו לי
+        וכי האחריות להמשך השימוש, ההפעלה והתחזוקה השוטפת של הציוד
+        חלה על בעלי הציוד ו/או מפעיליו.
+        <br><br>
+        אני מאשר/ת כי השירות בוצע לשביעות רצוני וכי קיבלתי הסבר לגבי
+        מצב הציוד וההמלצות להמשך טיפול במידת הצורך.
+      </div>
+<div class="signature-area">
+
+ <div class="signature-area">
+
+  <canvas id="signaturePad"></canvas>
+
+  <img id="savedSignatureImage" style="display:none; width:100%; height:180px; object-fit:contain; border:2px dashed #9ca3af; border-radius:10px; background:white;">
+
+  <div class="signature-buttons no-print" id="signatureButtons">
+    <button type="button" onclick="clearSignature()">נקה חתימה</button>
+    <button type="button" onclick="saveSignature()">אשר חתימה</button>
+  </div>
+
+  <div id="signatureStatus"></div>
+
+</div>
+ <div class="doc-footer">
+  <img src="<?!= imageDataUrl('1C3wzjrAe1F42GvSnQrw28p8njc6b2mIP') ?>"
+       style="width:100%; height:auto; display:block; margin:0;">
+</div>
+  </div>
+
+ <script>
+
+const preloadedData = <?!= preloadedDataJson || '{}' ?>;
+const reportId = '<?= reportId ?>';
+
+(function(data) {
+    const report = data.report || {};
+    const customer = data.customer || {};
+    const equipment = data.equipment || [];
+
+    document.getElementById('title').innerText =
+      'דוח שירות מס׳ ' + safe(report['מספר דוח']);
+
+    document.getElementById('customerName').innerText =
+      safe(customer['שם לקוח'] || report['שם לקוח']);
+
+    document.getElementById('serviceDate').innerText =
+  safe(report['תאריך שירות']);
+  /*
+document.getElementById('serviceTime').innerText =
+safe(report['שעת שירות']);
+*/
+  document.getElementById('serviceDescription').innerText =
+  safe(report['תיאור השירות']);
+
+    document.getElementById('technician').innerText =
+      safe(report['טכנאי']);
+
+    document.getElementById('workTime').innerText =
+      safe(report['זמן עבודת טכנאי']);
+const savedSignature = safe(report['ClientSign']);
+
+if (savedSignature && savedSignature.startsWith('data:image')) {
+  document.getElementById('signaturePad').style.display = 'none';
+  document.getElementById('signatureButtons').style.display = 'none';
+
+  const img = document.getElementById('savedSignatureImage');
+  img.src = savedSignature;
+  img.style.display = 'block';
+
+  document.getElementById('signatureStatus').innerText = 'דוח חתום';
+}
+
+
+    renderEquipment(equipment);
+  })(preloadedData);
+
+function renderEquipment(items) {
+  const container = document.getElementById('equipmentList');
+  container.innerHTML = '';
+
+  items.forEach((item, index) => {
+
+    const equipmentCard = document.createElement('div');
+    equipmentCard.className = 'section';
+
+    equipmentCard.innerHTML = `
+      <div class="section-title">ציוד ${index + 1}</div>
+      <div class="field">
+        ${field('מספר ציוד', item['מספר ציוד'])}
+        ${field('סוג ציוד', item['סוג ציוד'])}
+        ${field('קטגוריית מדחס', item['קטגוריית מדחס'])}
+        ${field('סוג שמן', item['סוג שמן'])}
+        ${field('תת סוג ציוד', item['תת סוג ציוד'])}
+        ${field('דגם הציוד', item['דגם הציוד'])}
+        ${field('מס׳ סידורי', item['מס סידורי'])}
+        ${field('תיאור השירות', item['תיאור השירות'])}
+        ${field('מונה שעות נוכחי', item['מונה שעות נוכחי'])}
+        ${field('טיפול הבא', item['טיפול הבא'])}
+        ${field('תאריך החלפה עתידי', item['תאריך החלפה עתידי'])}
+
+        ${field('מסנן אויר', item['מסנן אויר'])}
+        ${field('מסנן שמן', item['מסנן שמן'])}
+        ${field('מפריד שמן', item['מפריד שמן'])}
+        ${field('שמן', item['שמן'])}
+        ${field('רצועות', item['רצועות'])}
+        ${field('מצמד', item['מצמד'])}
+        ${field('חלפים נוספים', item['חלפים נוספים'])}
+
+        ${field('מצב מערכת', item['מצב מערכת'])}
+        ${field('חיישן חום', item['חיישן חום'])}
+        ${field('חיישן לחץ', item['חיישן לחץ'])}
+        ${field('בקר', item['בקר'])}
+        ${field('טמפ מדחס', item['טמפ מדחס'])}
+
+        ${field('מתח בהזנה', item['מתח בהזנה'])}
+        ${field('זרם חשמלי בעומס', item['זרם חשמלי בעומס'])}
+        ${field('הערות נוספות להזנת החשמל', item['הערות נוספות להזנת החשמל'])}
+        ${field('מצב סביבת המדחס', item['מצב סביבת המדחס'])}
+      </div>
+    `;
+
+    container.appendChild(equipmentCard);
+
+    const summaryText = safe(item['סיכום והמלצות טכנאי']);
+
+    if (summaryText) {
+      const summaryCard = document.createElement('div');
+      summaryCard.className = 'section';
+
+      summaryCard.innerHTML = `
+        <div class="section-title">סיכום והמלצות טכנאי - ציוד ${index + 1}</div>
+        <div class="field">
+          <div class="value">${summaryText}</div>
+        </div>
+      `;
+
+      container.appendChild(summaryCard);
+    }
+
+  });
+}
+
+
+function field(label, value) {
+  if (
+    value === undefined ||
+    value === null ||
+    value === '' ||
+    value === false
+  ) {
+    return '';
+  }
+
+  return `
+    <div class="equipment-field">
+      <span class="equipment-label">${label}</span>
+      <span class="equipment-value">${value}</span>
+    </div>
+  `;
+}
+
+function safe(value) {
+  return value === undefined || value === null ? '' : value;
+}
+const canvas = document.getElementById('signaturePad');
+const ctx = canvas.getContext('2d');
+
+let drawing = false;
+
+function resizeCanvas() {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+
+  ctx.lineWidth = 2;
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = '#111827';
+}
+
+resizeCanvas();
+
+window.addEventListener('resize', resizeCanvas);
+
+function startDrawing(e) {
+  drawing = true;
+
+  const rect = canvas.getBoundingClientRect();
+
+  ctx.beginPath();
+  ctx.moveTo(
+    (e.touches ? e.touches[0].clientX : e.clientX) - rect.left,
+    (e.touches ? e.touches[0].clientY : e.clientY) - rect.top
+  );
+}
+
+function draw(e) {
+  if (!drawing) return;
+
+  e.preventDefault();
+
+  const rect = canvas.getBoundingClientRect();
+
+  ctx.lineTo(
+    (e.touches ? e.touches[0].clientX : e.clientX) - rect.left,
+    (e.touches ? e.touches[0].clientY : e.clientY) - rect.top
+  );
+
+  ctx.stroke();
+}
+
+function stopDrawing() {
+  drawing = false;
+}
+
+canvas.addEventListener('mousedown', startDrawing);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', stopDrawing);
+
+canvas.addEventListener('touchstart', startDrawing);
+canvas.addEventListener('touchmove', draw);
+canvas.addEventListener('touchend', stopDrawing);
+
+function clearSignature() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  document.getElementById('signatureStatus').innerText = '';
+}
+
+function saveSignature() {
+  const signatureData = canvas.toDataURL('image/png');
+
+ if (typeof google !== 'undefined' && google.script && google.script.run) {
+  google.script.run
+    .withSuccessHandler(function() {
+      document.getElementById('signatureStatus').innerText =
+        'החתימה נשמרה בהצלחה והדוח נחתם';
+    })
+    .withFailureHandler(function(error) {
+      alert('שגיאה בשמירת החתימה: ' + error.message);
+    })
+    .saveClientSignature(reportId, signatureData);
+} else {
+  document.getElementById('signatureStatus').innerText =
+    'פתיחת דוח בלבד - חתימה דרך הקישור המקורי';
+}
+    function formatDate(value) {
+  if (!value) return '';
+  const date = new Date(value);
+  if (isNaN(date)) return value;
+
+  return date.toLocaleDateString('he-IL', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+}
+
+function formatTime(value) {
+  if (!value) return '';
+
+  const date = new Date(value);
+  if (!isNaN(date)) {
+    return date.toLocaleTimeString('he-IL', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+  }
+
+  return String(value).slice(0, 5);
+}
+}</script>
+
+</body>
+</html>
