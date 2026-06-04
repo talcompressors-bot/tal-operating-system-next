@@ -192,7 +192,7 @@ Forbidden:
 
 
 
-\## Historical Pricing Logic
+# &#x20;Historical Pricing Logic
 
 
 
@@ -315,6 +315,4 @@ NeedsPriceApproval = No
 
 
 The final recommendation must always be presented to the user before creating any Maven document.
-
-
 
