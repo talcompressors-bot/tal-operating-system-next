@@ -41,10 +41,11 @@ function syncMavenDocuments() {
     const payload = {
       api_key: MAVEN_API_KEY,
       page: currentPage,
-      page_size: 25,
+      page_size: 100,
       sort_by: "document_date",
-      sort_order: "DESC",
-      date_from: "2023-07-12"
+      sort_dir: "desc",
+      from_document_date: "12/07/2023",
+      to_document_date: "02/06/2026"
     };
 
     const options = {
@@ -79,6 +80,7 @@ function syncMavenDocuments() {
     }
 
     const documents = data.documents || [];
+    const totalPages = Number(data.pages) || currentPage;
 
     if (documents.length === 0) {
       if (logSheet) {
@@ -200,7 +202,8 @@ function syncMavenDocuments() {
     }
 
     if (stateSheet && stateRow) {
-      stateSheet.getRange(stateRow, 3).setValue(currentPage + 1);
+      const nextPage = currentPage >= totalPages ? currentPage : (currentPage + 1);
+      stateSheet.getRange(stateRow, 3).setValue(nextPage);
       stateSheet.getRange(stateRow, 4).setValue(
         Utilities.formatDate(new Date(), Session.getScriptTimeZone(), "dd/MM/yyyy HH:mm:ss")
       );
@@ -528,6 +531,241 @@ Logger.log(
   "Processed rows: " + startRow + " - " + endRow
 );
  
+}
+
+function backfillMavenDocumentItemsFrom20230712Preview() {
+  const ss = SpreadsheetApp.openById("1q6cCUJTNhhrUSok9rrZyFTN9BlrT6-4d7s9CUqrVHh4");
+  const docsSheet = ss.getSheetByName("InvoiceMavenDocuments");
+
+  if (!docsSheet) {
+    throw new Error("InvoiceMavenDocuments sheet not found");
+  }
+
+  const docs = docsSheet.getDataRange().getValues();
+  if (docs.length < 2) {
+    Logger.log("Preview: no document rows found.");
+    return { scanned: 0, eligibleDocuments: 0, expectedItems: 0 };
+  }
+
+  const headers = docs[0].map(function(h) {
+    return String(h || "").trim();
+  });
+
+  const documentIdCol = headers.indexOf("DocumentId");
+  const documentDateCol = headers.indexOf("DocumentDate");
+  const rawJsonCol = headers.indexOf("RawJson");
+
+  if (documentIdCol === -1 || documentDateCol === -1 || rawJsonCol === -1) {
+    throw new Error("Required headers not found. Expected: DocumentId, DocumentDate, RawJson");
+  }
+
+  const fromDate = new Date("2023-07-12T00:00:00");
+  let scanned = 0;
+  let eligibleDocuments = 0;
+  let expectedItems = 0;
+  let skippedNoRawJson = 0;
+  let skippedBadJson = 0;
+
+  for (let i = 1; i < docs.length; i++) {
+    scanned++;
+
+    const documentId = String(docs[i][documentIdCol] || "").trim();
+    const documentDateValue = docs[i][documentDateCol];
+    const rawJson = docs[i][rawJsonCol];
+
+    if (!documentId) continue;
+
+    const parsedDate = new Date(documentDateValue);
+    if (isNaN(parsedDate.getTime()) || parsedDate < fromDate) continue;
+
+    if (!rawJson) {
+      skippedNoRawJson++;
+      continue;
+    }
+
+    let doc;
+    try {
+      doc = JSON.parse(rawJson);
+    } catch (e) {
+      skippedBadJson++;
+      continue;
+    }
+
+    if (!doc.items || !Array.isArray(doc.items)) continue;
+
+    eligibleDocuments++;
+    expectedItems += doc.items.length;
+  }
+
+  const preview = {
+    scanned: scanned,
+    eligibleDocuments: eligibleDocuments,
+    expectedItems: expectedItems,
+    skippedNoRawJson: skippedNoRawJson,
+    skippedBadJson: skippedBadJson
+  };
+
+  Logger.log("Preview backfill from 2023-07-12: " + JSON.stringify(preview));
+  return preview;
+}
+
+function backfillMavenDocumentItemsFrom20230712Apply() {
+  const ss = SpreadsheetApp.openById("1q6cCUJTNhhrUSok9rrZyFTN9BlrT6-4d7s9CUqrVHh4");
+  const docsSheet = ss.getSheetByName("InvoiceMavenDocuments");
+  const itemsSheet = ss.getSheetByName("InvoiceMavenDocumentItems");
+
+  if (!docsSheet) throw new Error("InvoiceMavenDocuments sheet not found");
+  if (!itemsSheet) throw new Error("InvoiceMavenDocumentItems sheet not found");
+
+  const docs = docsSheet.getDataRange().getValues();
+  const items = itemsSheet.getDataRange().getValues();
+
+  if (docs.length < 2) {
+    const emptySummary = {
+      scanned: 0,
+      eligibleDocuments: 0,
+      addedItems: 0,
+      skippedExistingItems: 0,
+      skippedBadJson: 0
+    };
+    Logger.log("Apply backfill from 2023-07-12: " + JSON.stringify(emptySummary));
+    return emptySummary;
+  }
+
+  const docHeaders = docs[0].map(function(h) {
+    return String(h || "").trim();
+  });
+  const itemHeaders = (items[0] || []).map(function(h) {
+    return String(h || "").trim();
+  });
+
+  const documentIdCol = docHeaders.indexOf("InvoiceMavenDocumentId");
+  const documentDateCol = docHeaders.indexOf("DocumentDate");
+  const rawJsonCol = docHeaders.indexOf("RawJson");
+
+  if (documentIdCol === -1 || documentDateCol === -1 || rawJsonCol === -1) {
+    throw new Error("Required headers not found in InvoiceMavenDocuments: InvoiceMavenDocumentId, DocumentDate, RawJson");
+  }
+
+  const itemRowIdHeaderCandidates = [
+    "ItemRowId",
+    "InvoiceMavenDocumentItemId",
+    "InvoiceMavenItemRowId",
+    "DocumentItemRowId"
+  ];
+
+  let itemRowIdCol = -1;
+  for (let i = 0; i < itemRowIdHeaderCandidates.length; i++) {
+    const idx = itemHeaders.indexOf(itemRowIdHeaderCandidates[i]);
+    if (idx !== -1) {
+      itemRowIdCol = idx;
+      break;
+    }
+  }
+  if (itemRowIdCol === -1) itemRowIdCol = 0;
+
+  const existingItemIds = new Set();
+  for (let i = 1; i < items.length; i++) {
+    const existingId = String(items[i][itemRowIdCol] || "").trim();
+    if (existingId) existingItemIds.add(existingId);
+  }
+
+  const fromDate = new Date("2023-07-12T00:00:00");
+  const timestamp = Utilities.formatDate(
+    new Date(),
+    Session.getScriptTimeZone(),
+    "dd/MM/yyyy HH:mm:ss"
+  );
+
+  const rowsToAppend = [];
+  let scanned = 0;
+  let eligibleDocuments = 0;
+  let addedItems = 0;
+  let skippedExistingItems = 0;
+  let skippedBadJson = 0;
+
+  for (let i = 1; i < docs.length; i++) {
+    scanned++;
+
+    const documentId = String(docs[i][documentIdCol] || "").trim();
+    const documentDateValue = docs[i][documentDateCol];
+    const rawJson = docs[i][rawJsonCol];
+
+    if (!documentId) continue;
+
+    const parsedDate = new Date(documentDateValue);
+    if (isNaN(parsedDate.getTime()) || parsedDate < fromDate) continue;
+
+    if (!rawJson) continue;
+
+    let doc;
+    try {
+      doc = JSON.parse(rawJson);
+    } catch (e) {
+      skippedBadJson++;
+      continue;
+    }
+
+    if (!doc.items || !Array.isArray(doc.items)) continue;
+    eligibleDocuments++;
+
+    doc.items.forEach(function(item, index) {
+      const itemRowId = documentId + "_" + index;
+      if (existingItemIds.has(itemRowId)) {
+        skippedExistingItems++;
+        return;
+      }
+
+      const rowByHeader = {};
+      rowByHeader["ItemRowId"] = itemRowId;
+      rowByHeader["InvoiceMavenDocumentItemId"] = itemRowId;
+      rowByHeader["InvoiceMavenDocumentId"] = documentId;
+      rowByHeader["DocumentId"] = documentId;
+      rowByHeader["DocNo"] = doc.doc_no || "";
+      rowByHeader["DocumentDate"] = doc.document_date || "";
+      rowByHeader["CustomerId"] = doc.customer && doc.customer.id ? doc.customer.id : "";
+      rowByHeader["CustomerName"] = doc.customer && doc.customer.name ? doc.customer.name : "";
+      rowByHeader["DocumentType"] = doc.doc_type || "";
+      rowByHeader["ItemDescription"] = item.description || item.name || "";
+      rowByHeader["Description"] = item.description || item.name || "";
+      rowByHeader["Quantity"] = item.quantity || "";
+      rowByHeader["Price"] = item.price || "";
+      rowByHeader["Total"] = item.total || "";
+      rowByHeader["Currency"] = item.currency_code || doc.currency_code || "ILS";
+      rowByHeader["RawJson"] = JSON.stringify(item);
+      rowByHeader["ImportedAt"] = timestamp;
+
+      const outputRow = itemHeaders.map(function(header) {
+        return Object.prototype.hasOwnProperty.call(rowByHeader, header)
+          ? rowByHeader[header]
+          : "";
+      });
+
+      rowsToAppend.push(outputRow);
+      existingItemIds.add(itemRowId);
+      addedItems++;
+    });
+  }
+
+  if (rowsToAppend.length > 0) {
+    itemsSheet.getRange(
+      itemsSheet.getLastRow() + 1,
+      1,
+      rowsToAppend.length,
+      itemHeaders.length
+    ).setValues(rowsToAppend);
+  }
+
+  const summary = {
+    scanned: scanned,
+    eligibleDocuments: eligibleDocuments,
+    addedItems: addedItems,
+    skippedExistingItems: skippedExistingItems,
+    skippedBadJson: skippedBadJson
+  };
+
+  Logger.log("Apply backfill from 2023-07-12: " + JSON.stringify(summary));
+  return summary;
 }
 
 function claimAutomationCommand(commandId) {
