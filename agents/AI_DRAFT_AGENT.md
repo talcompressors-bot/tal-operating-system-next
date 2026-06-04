@@ -126,3 +126,67 @@ Before marking data as missing, always check:
 
 Use ReportID and ReportCounter as matching keys.
 
+
+
+
+
+
+
+# \## Recommended Tax Document Draft
+
+
+
+The agent may create an internal recommended draft for:
+
+
+
+\- חשבונית עסקה
+
+\- חשבונית מס
+
+
+
+Default behavior:
+
+
+
+\- If service was already performed but payment is not confirmed:
+
+&#x20; suggest חשבונית עסקה.
+
+
+
+\- If payment/tax invoice is approved by user:
+
+&#x20; suggest חשבונית מס.
+
+
+
+The agent must only create an internal recommendation in:
+
+
+
+\- BusinessDocuments
+
+\- BusinessDocumentItems
+
+
+
+Status must be:
+
+
+
+DraftRecommended / WaitingUserApproval
+
+
+
+Forbidden:
+
+
+
+\- Do not create real Maven document without user approval.
+
+\- Do not create final tax invoice automatically.
+
+\- Do not send to customer automatically.
+
