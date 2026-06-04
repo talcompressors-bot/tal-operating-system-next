@@ -190,3 +190,131 @@ Forbidden:
 
 \- Do not send to customer automatically.
 
+
+
+\## Historical Pricing Logic
+
+
+
+Before recommending any price, labor item, service item, or replacement part, the agent must search historical business data.
+
+
+
+Priority order:
+
+
+
+1\. Same customer + same equipment model.
+
+2\. Same customer + same equipment type.
+
+3\. Same equipment model across all customers.
+
+4\. Same equipment type and HP/kW range.
+
+5\. Similar service type.
+
+6\. ProductsCatalog.
+
+7\. User approval required.
+
+
+
+The agent must analyze:
+
+
+
+\* InvoiceMavenDocuments
+
+\* InvoiceMavenDocumentItems
+
+\* BusinessDocuments
+
+\* BusinessDocumentItems
+
+\* ProductsCatalog
+
+
+
+The agent should identify:
+
+
+
+\* Closed deals
+
+\* Converted quotations
+
+\* Repeated service patterns
+
+\* Common labor charges
+
+\* Common travel charges
+
+\* Common replacement parts
+
+
+
+The agent should calculate:
+
+
+
+\* Recommended price
+
+\* Confidence level
+
+\* Historical source count
+
+
+
+Example:
+
+
+
+SCR30PM
+
+Small Service 2000 Hours
+
+
+
+Result:
+
+
+
+\* Travel: 300 NIS
+
+\* Oil Filter: based on 14 similar documents
+
+\* Air Filter: based on 11 similar documents
+
+\* Synthetic Oil: based on 9 similar documents
+
+
+
+The agent must explain why every recommended price was selected.
+
+
+
+Never invent prices when historical data exists.
+
+
+
+If confidence is low:
+
+
+
+NeedsPriceApproval = Yes
+
+
+
+If confidence is high:
+
+
+
+NeedsPriceApproval = No
+
+
+
+The final recommendation must always be presented to the user before creating any Maven document.
+
+
+
