@@ -20,22 +20,22 @@ Maven Draft
 
 ## Read First
 
-- project-brain/PROJECT_BRAIN_MASTER.md
-- project-brain/maps/SYSTEM_MAP.md
-- project-brain/lessons/LESSONS_LEARNED.md
-- project-brain/bugs/CURRENT_BUGS.md
-- apps-script/MavenAPI.js
+* project-brain/PROJECT\_BRAIN\_MASTER.md
+* project-brain/maps/SYSTEM\_MAP.md
+* project-brain/lessons/LESSONS\_LEARNED.md
+* project-brain/bugs/CURRENT\_BUGS.md
+* apps-script/MavenAPI.js
 
 ## Input Sources
 
-- ServiceReports
-- ReportEquipmentItems
-- Customers_Final
-- ProductsCatalog
-- InvoiceMavenDocuments
-- InvoiceMavenDocumentItems
-- BusinessDocuments
-- BusinessDocumentItems
+* ServiceReports
+* ReportEquipmentItems
+* Customers\_Final
+* ProductsCatalog
+* InvoiceMavenDocuments
+* InvoiceMavenDocumentItems
+* BusinessDocuments
+* BusinessDocumentItems
 
 ## Pricing Logic Priority
 
@@ -47,8 +47,8 @@ Maven Draft
 
 ## Fixed Pricing Rules
 
-- Technician labor: 275 NIS per hour
-- Technician visit: 300 NIS base visit
+* Technician labor: 275 NIS per hour
+* Technician visit: 300 NIS base visit
 
 ## Output
 
@@ -58,34 +58,34 @@ Do not create final document.
 
 Recommended output:
 
-- Customer
-- Source Report
-- Suggested Document Type
-- Suggested Items
-- Quantity
-- Unit Price
-- Total
-- Reasoning
-- Confidence
-- NeedsPriceApproval
+* Customer
+* Source Report
+* Suggested Document Type
+* Suggested Items
+* Quantity
+* Unit Price
+* Total
+* Reasoning
+* Confidence
+* NeedsPriceApproval
 
 ## Forbidden
 
-- Do not create Maven document without user approval
-- Do not send anything to customer
-- Do not mark invoice as paid
-- Do not overwrite existing BusinessDocuments
-- Do not guess prices without marking NeedsPriceApproval
-- Do not ignore historical documents
+* Do not create Maven document without user approval
+* Do not send anything to customer
+* Do not mark invoice as paid
+* Do not overwrite existing BusinessDocuments
+* Do not guess prices without marking NeedsPriceApproval
+* Do not ignore historical documents
 
 ## Approval Rule
 
 User must approve before:
 
-- Maven draft creation
-- Invoice creation
-- Sending document
-- Updating payment status
+* Maven draft creation
+* Invoice creation
+* Sending document
+* Updating payment status
 
 ## Test Plan
 
@@ -97,3 +97,32 @@ Before production:
 4. Verify prices
 5. Ask user approval
 6. Only then trigger Maven draft
+
+
+
+# &#x20;Data Completeness Rule
+
+
+
+Never decide that work time, parts, or equipment data is missing based only on ServiceReports.
+
+
+
+Before marking data as missing, always check:
+
+
+
+\- ReportEquipmentItems
+
+\- PartsUsed
+
+\- ProductsCatalog
+
+\- InvoiceMavenDocuments
+
+\- InvoiceMavenDocumentItems
+
+
+
+Use ReportID and ReportCounter as matching keys.
+
