@@ -15,6 +15,7 @@ Do not write or change code before reading project-brain.
 ## Always Read First
 
 - project-brain/PROJECT_BRAIN_MASTER.md
+- project-brain/CURRENT_TASK.md
 - project-brain/maps/SYSTEM_MAP.md
 - project-brain/lessons/LESSONS_LEARNED.md
 - project-brain/bugs/CURRENT_BUGS.md
@@ -61,6 +62,22 @@ Before any modification:
 4. Files that must not be broken
 5. Recommended next step
 6. Ask for approval before any change
+
+## Track Important IDs
+
+Always preserve:
+
+- ReportCounter
+- ReportId
+- BusinessDocumentId
+- AutomationCommandId
+- MavenDocumentId
+
+If unknown:
+
+Write UNKNOWN
+
+Never invent values.
 
 ## Closing Word
 
