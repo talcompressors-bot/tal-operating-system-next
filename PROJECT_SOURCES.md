@@ -18,3 +18,130 @@ Google Drive Folder
 3. Update Project Brain only after approval.
 4. Use GitHub as Digital Twin of the project.
 5. Production changes must be tested first.
+
+---
+
+## Connected Systems
+
+### Project Brain
+
+Status: Active
+
+Sources:
+
+- ProjectBrain_ServiceReports_Master_v3_Consolidated
+- ProjectBrain_Script_ServiceReports_Master_v3_Consolidated
+- ProjectBrain_ServiceReports
+
+---
+
+### GitHub
+
+Status: Active
+
+Purpose:
+
+- Project Brain Mirror
+- Agent Definitions
+- Checkpoints
+- Documentation
+
+---
+
+### AppSheet
+
+Status: Active
+
+Purpose:
+
+- Service Reports
+- Business Documents
+- Automation Commands
+
+---
+
+### Google Sheets
+
+Status: Active
+
+Purpose:
+
+- Operational Database
+- AppSheet Backend
+
+---
+
+### Apps Script
+
+Status: Active
+
+Purpose:
+
+- Business Logic
+- Maven Integration
+- Drive Integration
+- Email Logic
+
+---
+
+### Google Drive
+
+Status: Active
+
+Purpose:
+
+- Customer Folders
+- Service Reports
+- PDFs
+- Signatures
+
+---
+
+### Maven API
+
+Status: Active
+
+Purpose:
+
+- Historical Documents
+- Draft Creation
+- Synchronization
+
+---
+
+### Invoice4u
+
+Status: Planned
+
+Purpose:
+
+- Future Document Engine
+- Expense Documents
+- Invoices
+- Credit Notes
+
+---
+
+### AI Agents
+
+Status: Development
+
+Agents:
+
+- PROJECT_BRAIN_AGENT
+- AI_DRAFT_AGENT
+- MAVEN_AGENT
+- APPS_SCRIPT_AGENT
+- GIT_AGENT
+
+---
+
+### MCP Infrastructure
+
+Status: Planned
+
+Purpose:
+
+- Future Agent Orchestration
+- Tool Routing
+- Memory Access
