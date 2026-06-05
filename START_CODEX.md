@@ -6,14 +6,23 @@ Activation:
 When activated:
 
 1. Read:
+
 - agents/PROJECT_BRAIN_AGENT.md
+
+- project-brain/current/CURRENT_TASK.md
+
 - project-brain/PROJECT_BRAIN_MASTER.md
+
 - project-brain/maps/SYSTEM_MAP.md
+
 - project-brain/lessons/LESSONS_LEARNED.md
+
 - project-brain/bugs/CURRENT_BUGS.md
+
 - latest file in project-brain/checkpoints/
 
 2. Output:
+- Current active task 
 - Current state
 - Stable systems
 - Open bugs
