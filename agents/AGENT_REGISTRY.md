@@ -1,6 +1,19 @@
 # AGENT REGISTRY
 
 ## Active Agents
+### ORCHESTRATOR_AGENT
+
+Status: Active
+
+Priority: Highest
+
+Role:
+
+Select agents.
+Select tools.
+Select sources.
+Build execution plan.
+Protect stable systems.
 
 ### PROJECT_BRAIN_AGENT
 Status: Active
