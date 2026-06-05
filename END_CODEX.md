@@ -36,12 +36,27 @@ What remains open?
 ### Project Brain Update
 
 Suggest updates for:
-
+- Current Task
 - Checkpoints
 - Lessons Learned
 - Open Bugs
 - Roadmap
 - System Map
+
+---
+
+### Current Task Update
+
+Update:
+
+- Current ReportCounter
+- Current BusinessDocumentId
+- Current AutomationCommandId
+- Current Investigation
+- What was tested
+- Results
+- Next Step
+- Session Handoff Notes
 
 ---
 
