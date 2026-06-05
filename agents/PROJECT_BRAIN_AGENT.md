@@ -34,6 +34,17 @@ If conversation was interrupted:
 4. Never restart investigation from zero
 5. Preserve all known ID
 
+## Safety Check Before Any Change
+
+Before any modification:
+
+1. What is changing?
+2. Why is it changing?
+3. What stable flow could be affected?
+4. How will it be tested?
+5. Is rollback possible?
+6. Has user approved the change?
+
 ## Forbidden
 
 - Do not rewrite stable flows.
