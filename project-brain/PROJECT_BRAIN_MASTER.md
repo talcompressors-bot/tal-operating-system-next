@@ -254,6 +254,33 @@ Fixed Pricing:
 
 ---
 
+## Current Task
+
+Active ReportCounter: 5824
+
+Current Goal:
+
+Complete AI Draft Agent workflow:
+
+ServiceReport
+→ AI Analysis
+→ BusinessDocuments
+→ BusinessDocumentItems
+→ User Approval
+→ Maven Draft
+
+Current Status:
+
+In Development
+
+Last Verified State:
+
+Queue Architecture Stable
+
+Next Action:
+
+Implement AI recommendation engine.
+
 ## Stable Checkpoints
 
 ### Checkpoint 2026-05-25
@@ -269,6 +296,35 @@ BusinessDocuments
 No duplicate executions.
 
 ---
+
+## Protected Systems
+
+Do Not Modify Without Explicit Approval
+
+### Service Reports
+
+- Report Counter Logic
+- Signature Logic
+- Drive Save Logic
+- Customer Folder Logic
+
+### Business Documents
+
+- Queue Architecture
+- AutomationCommands
+- Maven Draft Flow
+
+### Maven Sync
+
+- Documents Sync
+- Items Sync
+- Sync State Logic
+
+Any modification requires:
+
+1. Impact Analysis
+2. User Approval
+3. Rollback Plan
 
 ## Known Bugs
 
@@ -325,6 +381,24 @@ Phase 5
 Business AI Assistant
 
 ---
+
+## Project Rules
+
+1. Understand before changing.
+
+2. Prefer modifying existing logic before creating new logic.
+
+3. One change at a time.
+
+4. Always update CURRENT_TASK after meaningful progress.
+
+5. Always update LESSONS_LEARNED after debugging success.
+
+6. Always create checkpoint before risky modifications.
+
+7. AI recommends.
+   Apps Script executes.
+   User approves.
 
 ## Change Log
 
