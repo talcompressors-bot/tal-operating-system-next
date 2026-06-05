@@ -1,4 +1,4 @@
-# PROJECT BRAIN AGENT
+/1# PROJECT BRAIN AGENT
 
 ## Activation Word
 
@@ -23,6 +23,16 @@ Do not write or change code before reading project-brain.
 ## Workflow
 
 Read → Understand → Plan → Diff → Approve → Apply → Test → Commit → Update Brain
+
+## Session Recovery
+
+If conversation was interrupted:
+
+1. Load project-brain/CURRENT_TASK.md
+2. Load latest checkpoint
+3. Continue from last verified step
+4. Never restart investigation from zero
+5. Preserve all known ID
 
 ## Forbidden
 
