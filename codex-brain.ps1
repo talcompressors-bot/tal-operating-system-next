@@ -32,35 +32,30 @@ elseif ($Command -eq "status") {
   Write-Host "=== PROJECT STATUS ==="
   Write-Host ""
 
-  Write-Host "Project: ServiceApp_FIX"
-  Write-Host ""
+  $activeSession = Get-Content ".\project-brain\checkpoints\ACTIVE_SESSION_STATE.md"
+$bugs = Get-Content ".\project-brain\bugs\CURRENT_BUGS.md"
+ $focusIndex = $activeSession.IndexOf("## Current Focus")
+$focus = $activeSession[$focusIndex + 2]
 
-  Write-Host "Current Focus:"
-  Write-Host "Project Brain Runtime"
-  Write-Host ""
+$objectiveIndex = $activeSession.IndexOf("## Current Objective")
+$objective = $activeSession[$objectiveIndex + 2]
+ Write-Host "Focus:"
+Write-Host $focus
+Write-Host ""
 
-  Write-Host "Stable Systems:"
-  Write-Host "- Queue Architecture"
-  Write-Host "- BusinessDocuments Workflow"
-  Write-Host "- Maven Draft Creation"
-  Write-Host "- Service Report HTML Generation"
-  Write-Host ""
+Write-Host "Objective:"
+Write-Host $objective
+Write-Host ""
 
-  Write-Host "Open Bugs:"
-  Write-Host "1. Drive Auto Save"
-  Write-Host "2. Maven Sync"
-  Write-Host ""
+Write-Host "Open Bugs:"
+Write-Host ""
 
-  Write-Host "Current Report:"
-  Write-Host "5824"
-  Write-Host ""
+$bugs | Select-String "## Bug"
 
-  Write-Host "Recommended Next Step:"
-  Write-Host "Build intelligent bye workflow"
-  Write-Host ""
+Write-Host ""
 
   Write-Host "Git Status:"
-  git status
+  git status --short
 }
 elseif ($Command -eq "bye") {
   Show-File "END CODEX" ".\END_CODEX.md"
