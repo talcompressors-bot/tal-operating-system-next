@@ -111,6 +111,27 @@ elseif ($Command -eq "dashboard") {
   Write-Host "Git Status:"
   git status --short
 }
+elseif ($Command -eq "brain") {
+
+  Write-Host ""
+  Write-Host "=== PROJECT BRAIN ==="
+  Write-Host ""
+
+  type .\project-brain\CURRENT_TASK.md
+
+  Write-Host ""
+  Write-Host "====================="
+  Write-Host ""
+
+  type .\project-brain\checkpoints\NEXT_SESSION.md
+
+  Write-Host ""
+  Write-Host "====================="
+  Write-Host ""
+
+  Get-Content .\project-brain\bugs\CURRENT_BUGS.md |
+    Select-String "## Bug"
+}
 else {
   Write-Host "Unknown command: $Command"
 }
