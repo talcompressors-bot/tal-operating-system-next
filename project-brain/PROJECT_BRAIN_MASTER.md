@@ -402,6 +402,28 @@ Business AI Assistant
 
 ## Change Log
 
+### 2026-06-08
+
+Commit:
+585ef51a02ae8709cb1c4ccd0e39967d39a9bd29
+
+Added BusinessDocument-level idempotency guard to Maven queue flow.
+
+Added BusinessDocuments columns:
+
+- ProcessingCommandId
+- ProcessingStartedAt
+
+Purpose:
+
+Prevent duplicate AutomationCommands from processing the same BusinessDocumentId.
+
+Recovery rule:
+
+ProcessingCommandId is not auto-cleared when AutomationCommands becomes Error.
+
+If a command fails after claiming a BusinessDocumentId, manual recovery is required before retrying with a different CommandID.
+
 ### 2026-05-29
 
 Created Project Brain Master.
