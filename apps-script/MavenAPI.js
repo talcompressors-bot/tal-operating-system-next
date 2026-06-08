@@ -487,7 +487,14 @@ for (let i = 1; i < values.length; i++) {
       "",
       "DocumentStatus changed to DraftRequestReceived"
     ]);
-
+    const sourceReportIdCol = cleanHeaders.indexOf("SourceReportId");
+    if (sourceReportIdCol >= 0) {
+      updateServiceReportAfterBusinessDraftCreated_(
+        ss,
+        String(values[i][sourceReportIdCol]).trim(),
+        logSheet
+      );
+    }
     updated = true;
     break;
   }
@@ -518,7 +525,49 @@ for (let i = 1; i < values.length; i++) {
   businessDocumentId: data.BusinessDocumentId || ""
 };
   }
+function updateServiceReportAfterBusinessDraftCreated_(ss, sourceReportId, logSheet) {
+  if (!sourceReportId) {
+    logSheet.appendRow([new Date(), "SERVICE_REPORT_UPDATE_SKIPPED", "", "", "", "", "Missing SourceReportId"]);
+    return;
+  }
 
+  const sheet = ss.getSheetByName("ServiceReports");
+  if (!sheet) {
+    logSheet.appendRow([new Date(), "SERVICE_REPORT_UPDATE_ERROR", sourceReportId, "", "", "", "ServiceReports sheet not found"]);
+    return;
+  }
+
+  const values = sheet.getDataRange().getValues();
+  const headers = values[0].map(h => String(h).trim());
+
+  const reportIdCol = headers.indexOf("ReportID");
+  const businessDraftCreatedCol = headers.indexOf("BusinessDraftCreated");
+  const mavenDocumentCreatedCol = headers.indexOf("MavenDocumentCreated");
+  const mavenSentToCustomerCol = headers.indexOf("MavenSentToCustomer");
+
+  if (
+    reportIdCol === -1 ||
+    businessDraftCreatedCol === -1 ||
+    mavenDocumentCreatedCol === -1 ||
+    mavenSentToCustomerCol === -1
+  ) {
+    logSheet.appendRow([new Date(), "SERVICE_REPORT_UPDATE_ERROR", sourceReportId, "", "", "", "Required ServiceReports columns not found"]);
+    return;
+  }
+
+  for (let i = 1; i < values.length; i++) {
+    if (String(values[i][reportIdCol]).trim() === sourceReportId) {
+      sheet.getRange(i + 1, businessDraftCreatedCol + 1).setValue(true);
+      sheet.getRange(i + 1, mavenDocumentCreatedCol + 1).setValue(false);
+      sheet.getRange(i + 1, mavenSentToCustomerCol + 1).setValue(false);
+
+      logSheet.appendRow([new Date(), "SERVICE_REPORT_UPDATED", sourceReportId, "", "", "", "BusinessDraftCreated=TRUE, MavenDocumentCreated=FALSE, MavenSentToCustomer=FALSE"]);
+      return;
+    }
+  }
+
+  logSheet.appendRow([new Date(), "SERVICE_REPORT_UPDATE_ERROR", sourceReportId, "", "", "", "ReportID not found in ServiceReports"]);
+}
 
 function updateAutomationCommandStatus(commandId, status, result, errorMessage) {
   const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
