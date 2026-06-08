@@ -257,7 +257,46 @@ function doPost(e) {
       .setMimeType(ContentService.MimeType.JSON);
   }
 
-  const result = createMavenDraft(data);
+  const businessDocumentClaim = claimBusinessDocumentForCommand(
+    data.BusinessDocumentId,
+    data.CommandID
+  );
+
+  if (!businessDocumentClaim.claimed) {
+    const isDuplicateClaim = String(businessDocumentClaim.reason || "")
+      .indexOf("BusinessDocument already claimed by CommandID ") === 0;
+
+    updateAutomationCommandStatus(
+      data.CommandID,
+      isDuplicateClaim ? "Completed" : "Error",
+      isDuplicateClaim ? "Duplicate skipped: " + businessDocumentClaim.reason : "",
+      isDuplicateClaim ? "" : businessDocumentClaim.reason
+    );
+
+    return ContentService
+      .createTextOutput(JSON.stringify({
+        success: true,
+        skipped: isDuplicateClaim,
+        message: isDuplicateClaim ? "Duplicate business document skipped" : "Business document claim failed",
+        reason: businessDocumentClaim.reason,
+        commandId: data.CommandID,
+        businessDocumentId: data.BusinessDocumentId || ""
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  let result;
+  try {
+    result = createMavenDraft(data);
+  } catch (error) {
+    updateAutomationCommandStatus(
+      data.CommandID,
+      "Error",
+      "",
+      error.message
+    );
+    throw error;
+  }
 
     return ContentService
       .createTextOutput(JSON.stringify({
@@ -275,6 +314,103 @@ function doPost(e) {
       command: data.command || ""
     }))
     .setMimeType(ContentService.MimeType.JSON);
+}
+
+function claimBusinessDocumentForCommand(businessDocumentId, commandId) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+
+  try {
+    const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+    const sheet = ss.getSheetByName("BusinessDocuments");
+
+    if (!sheet) {
+      return {
+        claimed: false,
+        reason: "BusinessDocuments sheet not found"
+      };
+    }
+
+    const values = sheet.getDataRange().getValues();
+    const headers = values[0].map(h => String(h).trim());
+
+    const idCol = headers.indexOf("BusinessDocumentId");
+    const processingCommandCol = headers.indexOf("ProcessingCommandId");
+    const processingStartedAtCol = headers.indexOf("ProcessingStartedAt");
+
+    if (idCol === -1) {
+      return {
+        claimed: false,
+        reason: "BusinessDocumentId column not found"
+      };
+    }
+
+    if (processingCommandCol === -1) {
+      return {
+        claimed: false,
+        reason: "ProcessingCommandId column not found"
+      };
+    }
+
+    const requestId = String(businessDocumentId || "").trim();
+    const requestCommandId = String(commandId || "").trim();
+
+    if (!requestId) {
+      return {
+        claimed: false,
+        reason: "BusinessDocumentId is empty"
+      };
+    }
+
+    if (!requestCommandId) {
+      return {
+        claimed: false,
+        reason: "CommandID is empty"
+      };
+    }
+
+    for (let i = 1; i < values.length; i++) {
+      const sheetId = String(values[i][idCol] || "").trim();
+
+      if (sheetId === requestId) {
+        const existingCommandId = String(values[i][processingCommandCol] || "").trim();
+
+        if (!existingCommandId) {
+          sheet.getRange(i + 1, processingCommandCol + 1).setValue(requestCommandId);
+
+          if (processingStartedAtCol !== -1) {
+            sheet.getRange(i + 1, processingStartedAtCol + 1).setValue(new Date());
+          }
+
+          SpreadsheetApp.flush();
+
+          return {
+            claimed: true
+          };
+        }
+
+        if (existingCommandId === requestCommandId) {
+          return {
+            claimed: true,
+            replay: true
+          };
+        }
+
+        return {
+          claimed: false,
+          reason: "BusinessDocument already claimed by CommandID " + existingCommandId
+        };
+      }
+    }
+
+    return {
+      claimed: false,
+      reason: "BusinessDocumentId not found"
+    };
+
+  } finally {
+    lock.releaseLock();
+  }
 }
 
  
