@@ -1105,3 +1105,366 @@ function seedHealthCheckRegistryRows_(sheet, headers) {
 
   return values.length;
 }
+
+function setupSystemHealthLogSheet() {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const existingSheet = ss.getSheetByName('SystemHealthLog');
+
+  if (existingSheet) {
+    return {
+      success: true,
+      created: false,
+      modified: false,
+      sheetName: 'SystemHealthLog',
+      existingRows: existingSheet.getLastRow(),
+      existingColumns: existingSheet.getLastColumn(),
+      message: 'SystemHealthLog already exists. No changes applied.'
+    };
+  }
+
+  const sheet = ss.insertSheet('SystemHealthLog');
+  const headers = getSystemHealthLogHeaders_();
+
+  sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+  sheet.setFrozenRows(1);
+
+  const headerRange = sheet.getRange(1, 1, 1, headers.length);
+  headerRange
+    .setFontWeight('bold')
+    .setBackground('#1f4e79')
+    .setFontColor('#ffffff')
+    .setHorizontalAlignment('center')
+    .setVerticalAlignment('middle')
+    .setWrap(true);
+
+  sheet.getRange(1, 1, Math.max(sheet.getMaxRows(), 2), headers.length).setVerticalAlignment('top');
+  sheet.autoResizeColumns(1, headers.length);
+
+  applySystemHealthLogDropdowns_(sheet, headers);
+  applySystemHealthLogBooleanValidations_(sheet, headers);
+  applySystemHealthLogConditionalFormatting_(sheet, headers);
+  const seedRowCount = seedSystemHealthLogRows_(sheet, headers);
+
+  return {
+    success: true,
+    created: true,
+    modified: true,
+    sheetName: 'SystemHealthLog',
+    headerCount: headers.length,
+    seedRowCount: seedRowCount,
+    message: 'SystemHealthLog created with v1 headers, validations, formatting, conditional formatting, and seed rows.'
+  };
+}
+
+function getSystemHealthLogHeaders_() {
+  return [
+    'LogId',
+    'ParentLogId',
+    'RecordType',
+    'RunId',
+    'HealthCheckId',
+    'CheckName',
+    'Timestamp',
+    'SchemaTimestamp',
+    'Status',
+    'Severity',
+    'FailureCategory',
+    'BusinessImpact',
+    'AffectedObject',
+    'AffectedRecordId',
+    'Details',
+    'RootCause',
+    'ConfidenceScore',
+    'SuggestedFix',
+    'EscalationPolicy',
+    'RequiresApproval',
+    'AutoRepairAllowed',
+    'ExecutionMode',
+    'ValidationFunction',
+    'DurationMs',
+    'AgentName',
+    'SourceAttribution',
+    'RegistryVersion',
+    'LogSchemaVersion',
+    'RelatedAutomationRegistryId',
+    'DataSource',
+    'Environment',
+    'CorrelationId',
+    'ReviewedBy',
+    'ReviewedAt',
+    'ReviewStatus',
+    'ResolutionStatus',
+    'ResolvedAt',
+    'LearningEligible'
+  ];
+}
+
+function applySystemHealthLogDropdowns_(sheet, headers) {
+  const dropdowns = {
+    RecordType: ['SchemaDefinition', 'ExecutionResult', 'Summary', 'MigrationNote'],
+    Status: ['Pass', 'Warning', 'Critical', 'Skipped', 'Error'],
+    Severity: ['Info', 'Warning', 'Critical'],
+    FailureCategory: [
+      'MissingData',
+      'DuplicateData',
+      'BrokenLink',
+      'MissingDriveObject',
+      'DrivePermission',
+      'QueueStuck',
+      'StatusFlowBroken',
+      'DuplicateExecution',
+      'ApiFailure',
+      'RateLimit',
+      'SchemaDrift',
+      'FieldDrift',
+      'LogError',
+      'TimingDelay',
+      'ConfigurationError',
+      'ApprovalBlocked',
+      'Unknown'
+    ],
+    BusinessImpact: [
+      'None',
+      'Operational',
+      'CustomerService',
+      'Revenue',
+      'CashCollection',
+      'FinancialAccuracy',
+      'Compliance',
+      'Inventory',
+      'SupplierOperations',
+      'DataQuality',
+      'SystemReliability'
+    ],
+    EscalationPolicy: [
+      'None',
+      'DailyReportOnly',
+      'NotifyOwner',
+      'NotifyOwnerCriticalOnly',
+      'ManualReview',
+      'BlockDependentChecks',
+      'FutureAlertWorkflow'
+    ],
+    ExecutionMode: ['ReadOnly', 'Diagnostic', 'Simulation', 'ApprovedRepair', 'Disabled'],
+    DataSource: [
+      'GoogleSheets',
+      'GoogleDrive',
+      'AppsScriptLog',
+      'Maven',
+      'AppSheetDerived',
+      'Registry',
+      'Mixed',
+      'MCP',
+      'Gmail',
+      'GoogleCalendar',
+      'Invoice4u'
+    ],
+    Environment: ['Production', 'Test', 'Sandbox', 'LocalDesign'],
+    ReviewStatus: ['NotReviewed', 'Reviewed', 'Approved', 'Rejected', 'NeedsMoreInfo'],
+    ResolutionStatus: ['Open', 'Resolved', 'Ignored', 'FalsePositive', 'Deferred', 'Blocked', 'NotApplicable']
+  };
+
+  Object.keys(dropdowns).forEach(function(header) {
+    const columnIndex = headers.indexOf(header) + 1;
+    if (columnIndex <= 0) return;
+
+    const rule = SpreadsheetApp.newDataValidation()
+      .requireValueInList(dropdowns[header], true)
+      .setAllowInvalid(false)
+      .build();
+
+    sheet.getRange(2, columnIndex, sheet.getMaxRows() - 1, 1).setDataValidation(rule);
+  });
+}
+
+function applySystemHealthLogBooleanValidations_(sheet, headers) {
+  const booleanHeaders = [
+    'RequiresApproval',
+    'AutoRepairAllowed',
+    'LearningEligible'
+  ];
+
+  const rule = SpreadsheetApp.newDataValidation()
+    .requireCheckbox()
+    .build();
+
+  booleanHeaders.forEach(function(header) {
+    const columnIndex = headers.indexOf(header) + 1;
+    if (columnIndex <= 0) return;
+
+    sheet.getRange(2, columnIndex, sheet.getMaxRows() - 1, 1).setDataValidation(rule);
+  });
+}
+
+function applySystemHealthLogConditionalFormatting_(sheet, headers) {
+  const rules = [];
+  const maxRows = sheet.getMaxRows();
+  const statusColumn = headers.indexOf('Status') + 1;
+  const severityColumn = headers.indexOf('Severity') + 1;
+  const confidenceColumn = headers.indexOf('ConfidenceScore') + 1;
+  const resolutionColumn = headers.indexOf('ResolutionStatus') + 1;
+
+  if (statusColumn > 0) {
+    const statusRange = sheet.getRange(2, statusColumn, maxRows - 1, 1);
+    rules.push(
+      SpreadsheetApp.newConditionalFormatRule()
+        .whenTextEqualTo('Critical')
+        .setBackground('#f4cccc')
+        .setFontColor('#990000')
+        .setRanges([statusRange])
+        .build()
+    );
+    rules.push(
+      SpreadsheetApp.newConditionalFormatRule()
+        .whenTextEqualTo('Warning')
+        .setBackground('#fff2cc')
+        .setFontColor('#7f6000')
+        .setRanges([statusRange])
+        .build()
+    );
+    rules.push(
+      SpreadsheetApp.newConditionalFormatRule()
+        .whenTextEqualTo('Pass')
+        .setBackground('#d9ead3')
+        .setFontColor('#274e13')
+        .setRanges([statusRange])
+        .build()
+    );
+    rules.push(
+      SpreadsheetApp.newConditionalFormatRule()
+        .whenTextEqualTo('Error')
+        .setBackground('#cc0000')
+        .setFontColor('#ffffff')
+        .setRanges([statusRange])
+        .build()
+    );
+  }
+
+  if (severityColumn > 0) {
+    const severityRange = sheet.getRange(2, severityColumn, maxRows - 1, 1);
+    rules.push(
+      SpreadsheetApp.newConditionalFormatRule()
+        .whenTextEqualTo('Critical')
+        .setBackground('#f4cccc')
+        .setFontColor('#990000')
+        .setRanges([severityRange])
+        .build()
+    );
+    rules.push(
+      SpreadsheetApp.newConditionalFormatRule()
+        .whenTextEqualTo('Warning')
+        .setBackground('#fff2cc')
+        .setFontColor('#7f6000')
+        .setRanges([severityRange])
+        .build()
+    );
+  }
+
+  if (confidenceColumn > 0) {
+    const confidenceRange = sheet.getRange(2, confidenceColumn, maxRows - 1, 1);
+    rules.push(
+      SpreadsheetApp.newConditionalFormatRule()
+        .whenNumberLessThan(50)
+        .setBackground('#f4cccc')
+        .setFontColor('#990000')
+        .setRanges([confidenceRange])
+        .build()
+    );
+    rules.push(
+      SpreadsheetApp.newConditionalFormatRule()
+        .whenNumberBetween(50, 79)
+        .setBackground('#fff2cc')
+        .setFontColor('#7f6000')
+        .setRanges([confidenceRange])
+        .build()
+    );
+    rules.push(
+      SpreadsheetApp.newConditionalFormatRule()
+        .whenNumberGreaterThanOrEqualTo(80)
+        .setBackground('#d9ead3')
+        .setFontColor('#274e13')
+        .setRanges([confidenceRange])
+        .build()
+    );
+  }
+
+  if (resolutionColumn > 0) {
+    const resolutionRange = sheet.getRange(2, resolutionColumn, maxRows - 1, 1);
+    rules.push(
+      SpreadsheetApp.newConditionalFormatRule()
+        .whenTextEqualTo('Open')
+        .setBackground('#fce5cd')
+        .setFontColor('#783f04')
+        .setRanges([resolutionRange])
+        .build()
+    );
+    rules.push(
+      SpreadsheetApp.newConditionalFormatRule()
+        .whenTextEqualTo('Resolved')
+        .setBackground('#d9ead3')
+        .setFontColor('#274e13')
+        .setRanges([resolutionRange])
+        .build()
+    );
+  }
+
+  sheet.setConditionalFormatRules(rules);
+}
+
+function seedSystemHealthLogRows_(sheet, headers) {
+  const rows = [
+    {
+      LogId: 'SHL_REGISTRY_SCHEMA',
+      ParentLogId: '',
+      RecordType: 'SchemaDefinition',
+      RunId: 'SYSTEM_SCHEMA',
+      HealthCheckId: 'HC-SYSTEM-LOG-SCHEMA',
+      CheckName: 'SystemHealthLog Schema',
+      Timestamp: '',
+      SchemaTimestamp: '2026-06-10T00:00:00+03:00',
+      Status: 'Pass',
+      Severity: 'Info',
+      FailureCategory: '',
+      BusinessImpact: 'SystemReliability',
+      AffectedObject: 'SystemHealthLog',
+      AffectedRecordId: 'SHL_REGISTRY_SCHEMA',
+      Details: 'Defines the SystemHealthLog v1.0 schema contract.',
+      RootCause: '',
+      ConfidenceScore: 100,
+      SuggestedFix: 'Do not modify SystemHealthLog schema without approved migration.',
+      EscalationPolicy: 'BlockDependentChecks',
+      RequiresApproval: true,
+      AutoRepairAllowed: false,
+      ExecutionMode: 'ReadOnly',
+      ValidationFunction: 'validateSystemHealthLogSchema',
+      DurationMs: '',
+      AgentName: 'System Health Agent',
+      SourceAttribution: 'SystemHealthLog v1 approved design',
+      RegistryVersion: '1.0.0',
+      LogSchemaVersion: '1.0.0',
+      RelatedAutomationRegistryId: '',
+      DataSource: 'Registry',
+      Environment: 'Production',
+      CorrelationId: 'SYSTEM_SCHEMA',
+      ReviewedBy: '',
+      ReviewedAt: '',
+      ReviewStatus: 'NotReviewed',
+      ResolutionStatus: 'NotApplicable',
+      ResolvedAt: '',
+      LearningEligible: false
+    }
+  ];
+
+  const values = rows.map(function(row) {
+    return headers.map(function(header) {
+      if (Object.prototype.hasOwnProperty.call(row, header)) return row[header];
+      return '';
+    });
+  });
+
+  if (values.length > 0) {
+    sheet.getRange(sheet.getLastRow() + 1, 1, values.length, headers.length).setValues(values);
+  }
+
+  return values.length;
+}
