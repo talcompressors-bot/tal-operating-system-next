@@ -153,6 +153,7 @@ function applyAutomationRegistryDropdowns_(sheet, headers) {
       'AppSheetBot',
       'AutomationCommand',
       'AppsScriptFunction',
+      'SchemaDefinition',
       'HealthCheck',
       'ExternalApi',
       'CompositeFlow'
@@ -236,6 +237,30 @@ function applyAutomationRegistryConditionalFormatting_(sheet, headers) {
 
 function seedAutomationRegistryRows_(sheet, headers) {
   const rows = [
+    {
+      RegistryId: 'REGISTRY_SCHEMA',
+      RegistryVersion: '1.0.0',
+      VersionStatus: 'Active',
+      Enabled: true,
+      SystemArea: 'System Health',
+      BusinessProcess: 'Automation registry governance',
+      BusinessObjectType: 'AutomationRegistry',
+      BusinessObjectIdField: 'RegistryId',
+      LifecycleStage: 'Governance',
+      SystemOfRecord: 'GoogleSheets',
+      AutomationName: 'AutomationRegistry Schema',
+      AutomationType: 'SchemaDefinition',
+      Description: 'Defines the AutomationRegistry v1.0 schema contract.',
+      Owner: 'Liad / System Health Agent',
+      RiskLevel: 'Critical',
+      ProductionImpact: false,
+      IntegrationType: 'GoogleSheets',
+      ManualOrAutomaticTrigger: 'ReadOnlyHealthCheck',
+      ExpectedResult: 'AutomationRegistry schema v1.0 exists and can be validated.',
+      SafetyRules: 'Do not modify registry schema without approved migration.',
+      SourceAttribution: 'Safe Setup Strategy; validateAutomationRegistrySchema design.',
+      LastHealthStatus: 'Unknown'
+    },
     {
       RegistryId: 'AR-SR-DRIVE-001',
       RegistryVersion: '1.0.0',
