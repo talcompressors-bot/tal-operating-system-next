@@ -666,3 +666,16 @@ function servePublicReport(ReportID, token) {
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 
+// DEBUG / MANUAL TEST
+// Preserved from remote Apps Script project so future clasp push does not delete it.
+function debugReport5852() {
+  try {
+    Logger.log('START debugReport5852');
+    const result = saveSignedHtmlFile('242d75e8');
+    Logger.log('RESULT: ' + JSON.stringify(result));
+  } catch (err) {
+    Logger.log('ERROR: ' + err.message);
+    Logger.log(err.stack);
+    throw err;
+  }
+}
