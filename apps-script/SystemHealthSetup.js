@@ -1140,10 +1140,10 @@ function setupSystemHealthLogSheet() {
   sheet.getRange(1, 1, Math.max(sheet.getMaxRows(), 2), headers.length).setVerticalAlignment('top');
   sheet.autoResizeColumns(1, headers.length);
 
+  const seedRowCount = seedSystemHealthLogRows_(sheet, headers);
   applySystemHealthLogDropdowns_(sheet, headers);
   applySystemHealthLogBooleanValidations_(sheet, headers);
   applySystemHealthLogConditionalFormatting_(sheet, headers);
-  const seedRowCount = seedSystemHealthLogRows_(sheet, headers);
 
   return {
     success: true,
@@ -1412,48 +1412,7 @@ function applySystemHealthLogConditionalFormatting_(sheet, headers) {
 }
 
 function seedSystemHealthLogRows_(sheet, headers) {
-  const rows = [
-    {
-      LogId: 'SHL_REGISTRY_SCHEMA',
-      ParentLogId: '',
-      RecordType: 'SchemaDefinition',
-      RunId: 'SYSTEM_SCHEMA',
-      HealthCheckId: 'HC-SYSTEM-LOG-SCHEMA',
-      CheckName: 'SystemHealthLog Schema',
-      Timestamp: '',
-      SchemaTimestamp: '2026-06-10T00:00:00+03:00',
-      Status: 'Pass',
-      Severity: 'Info',
-      FailureCategory: '',
-      BusinessImpact: 'SystemReliability',
-      AffectedObject: 'SystemHealthLog',
-      AffectedRecordId: 'SHL_REGISTRY_SCHEMA',
-      Details: 'Defines the SystemHealthLog v1.0 schema contract.',
-      RootCause: '',
-      ConfidenceScore: 100,
-      SuggestedFix: 'Do not modify SystemHealthLog schema without approved migration.',
-      EscalationPolicy: 'BlockDependentChecks',
-      RequiresApproval: true,
-      AutoRepairAllowed: false,
-      ExecutionMode: 'ReadOnly',
-      ValidationFunction: 'validateSystemHealthLogSchema',
-      DurationMs: '',
-      AgentName: 'System Health Agent',
-      SourceAttribution: 'SystemHealthLog v1 approved design',
-      RegistryVersion: '1.0.0',
-      LogSchemaVersion: '1.0.0',
-      RelatedAutomationRegistryId: '',
-      DataSource: 'Registry',
-      Environment: 'Production',
-      CorrelationId: 'SYSTEM_SCHEMA',
-      ReviewedBy: '',
-      ReviewedAt: '',
-      ReviewStatus: 'NotReviewed',
-      ResolutionStatus: 'NotApplicable',
-      ResolvedAt: '',
-      LearningEligible: false
-    }
-  ];
+  const rows = [getSystemHealthLogSchemaRow_()];
 
   const values = rows.map(function(row) {
     return headers.map(function(header) {
@@ -1463,8 +1422,129 @@ function seedSystemHealthLogRows_(sheet, headers) {
   });
 
   if (values.length > 0) {
-    sheet.getRange(sheet.getLastRow() + 1, 1, values.length, headers.length).setValues(values);
+    sheet.getRange(2, 1, values.length, headers.length).setValues(values);
   }
 
   return values.length;
+}
+
+function repairSystemHealthLogSchemaRow() {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheet = ss.getSheetByName('SystemHealthLog');
+
+  if (!sheet) {
+    return {
+      success: false,
+      repaired: false,
+      sheetName: 'SystemHealthLog',
+      message: 'SystemHealthLog sheet does not exist.'
+    };
+  }
+
+  const sheetColumnCount = sheet.getLastColumn();
+  const headers = sheet.getRange(1, 1, 1, sheetColumnCount).getValues()[0];
+  const logIdColumn = headers.indexOf('LogId') + 1;
+
+  if (logIdColumn <= 0) {
+    return {
+      success: false,
+      repaired: false,
+      sheetName: 'SystemHealthLog',
+      message: 'LogId header is missing. No changes applied.'
+    };
+  }
+
+  const expectedHeaders = getSystemHealthLogHeaders_();
+  const schemaValues = expectedHeaders.map(function(header) {
+    const row = getSystemHealthLogSchemaRow_();
+    if (Object.prototype.hasOwnProperty.call(row, header)) return row[header];
+    return '';
+  });
+  const maxRows = sheet.getMaxRows();
+  const logIdValues = sheet.getRange(2, logIdColumn, maxRows - 1, 1).getValues();
+  const schemaRows = [];
+
+  logIdValues.forEach(function(row, index) {
+    if (row[0] === 'SHL_REGISTRY_SCHEMA') {
+      schemaRows.push(index + 2);
+    }
+  });
+
+  const rowTwoLogId = sheet.getRange(2, logIdColumn).getValue();
+  let insertedRow = false;
+
+  if (rowTwoLogId && rowTwoLogId !== 'SHL_REGISTRY_SCHEMA') {
+    sheet.insertRowBefore(2);
+    insertedRow = true;
+  }
+
+  sheet.getRange(2, 1, 1, expectedHeaders.length).setValues([schemaValues]);
+
+  const duplicateRows = schemaRows
+    .map(function(rowNumber) {
+      return insertedRow ? rowNumber + 1 : rowNumber;
+    })
+    .filter(function(rowNumber) {
+      return rowNumber !== 2;
+    })
+    .sort(function(a, b) {
+      return b - a;
+    });
+
+  duplicateRows.forEach(function(rowNumber) {
+    sheet.getRange(rowNumber, 1, 1, sheetColumnCount).clearContent();
+  });
+
+  return {
+    success: true,
+    repaired: true,
+    sheetName: 'SystemHealthLog',
+    schemaRow: 2,
+    duplicateRowsCleared: duplicateRows,
+    insertedRow: insertedRow,
+    message: 'SHL_REGISTRY_SCHEMA is present at row 2 and misplaced duplicate schema rows were cleared.'
+  };
+}
+
+function getSystemHealthLogSchemaRow_() {
+  return {
+    LogId: 'SHL_REGISTRY_SCHEMA',
+    ParentLogId: '',
+    RecordType: 'SchemaDefinition',
+    RunId: 'SYSTEM_SCHEMA',
+    HealthCheckId: 'HC-SYSTEM-LOG-SCHEMA',
+    CheckName: 'SystemHealthLog Schema',
+    Timestamp: '',
+    SchemaTimestamp: '2026-06-10T00:00:00+03:00',
+    Status: 'Pass',
+    Severity: 'Info',
+    FailureCategory: '',
+    BusinessImpact: 'SystemReliability',
+    AffectedObject: 'SystemHealthLog',
+    AffectedRecordId: 'SHL_REGISTRY_SCHEMA',
+    Details: 'Defines the SystemHealthLog v1.0 schema contract.',
+    RootCause: '',
+    ConfidenceScore: 100,
+    SuggestedFix: 'Do not modify SystemHealthLog schema without approved migration.',
+    EscalationPolicy: 'BlockDependentChecks',
+    RequiresApproval: true,
+    AutoRepairAllowed: false,
+    ExecutionMode: 'ReadOnly',
+    ValidationFunction: 'validateSystemHealthLogSchema',
+    DurationMs: '',
+    AgentName: 'System Health Agent',
+    SourceAttribution: 'SystemHealthLog v1 approved design',
+    RegistryVersion: '1.0.0',
+    LogSchemaVersion: '1.0.0',
+    RelatedAutomationRegistryId: '',
+    DataSource: 'Registry',
+    Environment: 'Production',
+    CorrelationId: 'SYSTEM_SCHEMA',
+    ReviewedBy: '',
+    ReviewedAt: '',
+    ReviewStatus: 'NotReviewed',
+    ResolutionStatus: 'NotApplicable',
+    ResolvedAt: '',
+    LearningEligible: false
+  };
 }
