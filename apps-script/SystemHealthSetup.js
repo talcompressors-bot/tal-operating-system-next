@@ -545,3 +545,563 @@ function getAutomationRegistryExistingIds_(sheet) {
     })
     .filter(Boolean);
 }
+
+function setupHealthCheckRegistrySheet() {
+  const ss = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const sheetName = 'HealthCheckRegistry';
+  const existingSheet = ss.getSheetByName(sheetName);
+
+  if (existingSheet) {
+    return {
+      success: true,
+      created: false,
+      modified: false,
+      sheetName: sheetName,
+      existingRows: existingSheet.getLastRow(),
+      existingColumns: existingSheet.getLastColumn(),
+      message: 'HealthCheckRegistry already exists. No changes applied.'
+    };
+  }
+
+  const sheet = ss.insertSheet(sheetName);
+  const headers = getHealthCheckRegistryHeaders_();
+
+  sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+  sheet.setFrozenRows(1);
+  sheet.getRange(1, 1, 1, headers.length)
+    .setFontWeight('bold')
+    .setBackground('#1f4e78')
+    .setFontColor('#ffffff')
+    .setHorizontalAlignment('center')
+    .setWrap(true);
+  sheet.getRange(1, 1, Math.max(sheet.getMaxRows(), 2), headers.length).setWrap(true);
+  sheet.autoResizeColumns(1, headers.length);
+
+  applyHealthCheckRegistryDropdowns_(sheet, headers);
+  applyHealthCheckRegistryConditionalFormatting_(sheet, headers);
+  const seedRowCount = seedHealthCheckRegistryRows_(sheet, headers);
+
+  return {
+    success: true,
+    created: true,
+    modified: true,
+    sheetName: sheetName,
+    headerCount: headers.length,
+    seedRowCount: seedRowCount,
+    message: 'HealthCheckRegistry created with v1.0 headers, formatting, validations, conditional formatting, and seed rows.'
+  };
+}
+
+function getHealthCheckRegistryHeaders_() {
+  return [
+    'HealthCheckId',
+    'Name',
+    'Description',
+    'SystemArea',
+    'Severity',
+    'RiskLevel',
+    'BusinessImpact',
+    'CheckType',
+    'ExecutionMode',
+    'Frequency',
+    'DependsOn',
+    'Enabled',
+    'ReadOnlyCheck',
+    'AutoRepairAllowed',
+    'RequiresApproval',
+    'TargetObject',
+    'TargetTable',
+    'TargetField',
+    'RelatedAutomationRegistryId',
+    'DataSource',
+    'ValidationFunction',
+    'ExpectedResult',
+    'FailureCondition',
+    'FailureCategory',
+    'SuggestedFix',
+    'ApprovalPolicy',
+    'EscalationPolicy',
+    'SafetyRules',
+    'LearningEligible',
+    'LastRun',
+    'LastStatus',
+    'LastFailureReason',
+    'LastRelatedId',
+    'LastRunBy',
+    'OutputLogTarget',
+    'AlertEligible',
+    'AlertThreshold',
+    'Owner',
+    'SourceAttribution',
+    'RegistryVersion',
+    'VersionStatus',
+    'CreatedAt',
+    'UpdatedAt',
+    'Notes'
+  ];
+}
+
+function applyHealthCheckRegistryDropdowns_(sheet, headers) {
+  const dropdowns = {
+    SystemArea: [
+      'ServiceReports',
+      'Drive',
+      'AutomationCommands',
+      'BusinessDocuments',
+      'BusinessDocumentLog',
+      'Maven',
+      'AppsScript',
+      'AppSheet',
+      'AI Draft',
+      'Registry',
+      'System Health'
+    ],
+    Severity: ['Info', 'Warning', 'Critical'],
+    RiskLevel: ['Low', 'Medium', 'High', 'Critical'],
+    BusinessImpact: [
+      'None',
+      'Operational',
+      'CustomerService',
+      'Revenue',
+      'CashCollection',
+      'FinancialAccuracy',
+      'Compliance',
+      'Inventory',
+      'SupplierOperations',
+      'DataQuality',
+      'SystemReliability'
+    ],
+    CheckType: [
+      'Existence',
+      'Uniqueness',
+      'StatusFlow',
+      'QueueHealth',
+      'DriveFileAccess',
+      'DriveFolderAccess',
+      'Permission',
+      'FieldIntegrity',
+      'LogErrorScan',
+      'ApiState',
+      'RegistrySchema',
+      'IndirectBotHealth'
+    ],
+    ExecutionMode: ['ReadOnly', 'Diagnostic', 'Simulation', 'ApprovedRepair', 'Disabled'],
+    Frequency: ['Manual', 'EveryRun', 'DailyMorning', 'DailyNight', 'Scheduled', 'OnDemand', 'FutureSimulation'],
+    FailureCategory: [
+      'MissingData',
+      'DuplicateData',
+      'BrokenLink',
+      'MissingDriveObject',
+      'DrivePermission',
+      'QueueStuck',
+      'StatusFlowBroken',
+      'DuplicateExecution',
+      'ApiFailure',
+      'RateLimit',
+      'SchemaDrift',
+      'FieldDrift',
+      'LogError',
+      'TimingDelay',
+      'ConfigurationError',
+      'ApprovalBlocked',
+      'Unknown'
+    ],
+    EscalationPolicy: [
+      'None',
+      'DailyReportOnly',
+      'NotifyOwner',
+      'NotifyOwnerCriticalOnly',
+      'ManualReview',
+      'BlockDependentChecks',
+      'FutureAlertWorkflow'
+    ],
+    LastStatus: ['Unknown', 'Pass', 'Warning', 'Critical', 'Skipped', 'Error'],
+    DataSource: ['GoogleSheets', 'GoogleDrive', 'AppsScriptLog', 'Maven', 'AppSheetDerived', 'Registry', 'Mixed'],
+    VersionStatus: ['Draft', 'Active', 'Deprecated', 'Archived']
+  };
+
+  Object.keys(dropdowns).forEach(function(header) {
+    const column = headers.indexOf(header) + 1;
+    if (column < 1) return;
+
+    const rule = SpreadsheetApp.newDataValidation()
+      .requireValueInList(dropdowns[header], true)
+      .setAllowInvalid(false)
+      .build();
+
+    sheet.getRange(2, column, sheet.getMaxRows() - 1, 1).setDataValidation(rule);
+  });
+}
+
+function applyHealthCheckRegistryConditionalFormatting_(sheet, headers) {
+  const severityColumn = headers.indexOf('Severity') + 1;
+  const lastStatusColumn = headers.indexOf('LastStatus') + 1;
+  const enabledColumn = headers.indexOf('Enabled') + 1;
+  const executionModeColumn = headers.indexOf('ExecutionMode') + 1;
+  const dataRows = sheet.getMaxRows() - 1;
+  const severityRanges = [];
+  const statusRanges = [];
+  const disabledRanges = [];
+
+  if (severityColumn > 0) {
+    severityRanges.push(sheet.getRange(2, severityColumn, dataRows, 1));
+  }
+
+  if (lastStatusColumn > 0) {
+    statusRanges.push(sheet.getRange(2, lastStatusColumn, dataRows, 1));
+  }
+
+  if (enabledColumn > 0) {
+    disabledRanges.push(sheet.getRange(2, enabledColumn, dataRows, 1));
+  }
+
+  if (executionModeColumn > 0) {
+    disabledRanges.push(sheet.getRange(2, executionModeColumn, dataRows, 1));
+  }
+
+  const rules = [
+    SpreadsheetApp.newConditionalFormatRule()
+      .whenTextEqualTo('Critical')
+      .setBackground('#f4cccc')
+      .setFontColor('#990000')
+      .setRanges(severityRanges.concat(statusRanges))
+      .build(),
+    SpreadsheetApp.newConditionalFormatRule()
+      .whenTextEqualTo('Warning')
+      .setBackground('#fff2cc')
+      .setFontColor('#7f6000')
+      .setRanges(severityRanges.concat(statusRanges))
+      .build(),
+    SpreadsheetApp.newConditionalFormatRule()
+      .whenTextEqualTo('Pass')
+      .setBackground('#d9ead3')
+      .setFontColor('#274e13')
+      .setRanges(statusRanges)
+      .build(),
+    SpreadsheetApp.newConditionalFormatRule()
+      .whenTextEqualTo('false')
+      .setBackground('#eeeeee')
+      .setFontColor('#666666')
+      .setRanges(disabledRanges)
+      .build(),
+    SpreadsheetApp.newConditionalFormatRule()
+      .whenTextEqualTo('Disabled')
+      .setBackground('#eeeeee')
+      .setFontColor('#666666')
+      .setRanges(disabledRanges)
+      .build()
+  ];
+
+  sheet.setConditionalFormatRules(rules);
+}
+
+function seedHealthCheckRegistryRows_(sheet, headers) {
+  const rows = [
+    {
+      HealthCheckId: 'HC_REGISTRY_SCHEMA',
+      Name: 'HealthCheckRegistry Schema',
+      Description: 'Defines the HealthCheckRegistry v1.0 schema contract.',
+      SystemArea: 'System Health',
+      Severity: 'Critical',
+      RiskLevel: 'Critical',
+      BusinessImpact: 'SystemReliability',
+      CheckType: 'RegistrySchema',
+      ExecutionMode: 'ReadOnly',
+      Frequency: 'EveryRun',
+      DependsOn: '',
+      TargetObject: 'HealthCheckRegistry',
+      TargetTable: 'HealthCheckRegistry',
+      TargetField: 'HealthCheckId',
+      RelatedAutomationRegistryId: 'REGISTRY_SCHEMA',
+      DataSource: 'Registry',
+      ValidationFunction: 'validateHealthCheckRegistrySchema',
+      ExpectedResult: 'HealthCheckRegistry schema v1.0 exists and can be validated.',
+      FailureCondition: 'HealthCheckRegistry schema row is missing, invalid, duplicated, or version-incompatible.',
+      FailureCategory: 'SchemaDrift',
+      SuggestedFix: 'Review schema differences and use an approved HealthCheckRegistry migration plan.',
+      ApprovalPolicy: 'Approval required before schema changes or migration.',
+      EscalationPolicy: 'BlockDependentChecks',
+      SafetyRules: 'Do not modify HealthCheckRegistry schema without approved migration.',
+      SourceAttribution: 'HealthCheckRegistry v1 design; Safe Setup Strategy',
+      AlertThreshold: 'Any Critical',
+      Notes: 'Schema control row. Health agent should validate this before running dependent checks.'
+    },
+    {
+      HealthCheckId: 'HC-SYSTEM-001',
+      Name: 'VerifyAutomationRegistrySchema',
+      Description: 'Verifies that AutomationRegistry exists, contains required v1.0 headers, seed rows, and a compatible schema version row.',
+      SystemArea: 'System Health',
+      Severity: 'Critical',
+      RiskLevel: 'Critical',
+      BusinessImpact: 'SystemReliability',
+      CheckType: 'RegistrySchema',
+      ExecutionMode: 'ReadOnly',
+      Frequency: 'EveryRun',
+      DependsOn: 'HC_REGISTRY_SCHEMA',
+      TargetObject: 'AutomationRegistry',
+      TargetTable: 'AutomationRegistry',
+      TargetField: 'RegistryId',
+      RelatedAutomationRegistryId: 'REGISTRY_SCHEMA',
+      DataSource: 'Registry',
+      ValidationFunction: 'validateAutomationRegistrySchema',
+      ExpectedResult: 'AutomationRegistry schema v1.0 exists and can be validated.',
+      FailureCondition: 'AutomationRegistry is missing, invalid, duplicated, or version-incompatible.',
+      FailureCategory: 'SchemaDrift',
+      SuggestedFix: 'Review AutomationRegistry validation findings and use an approved migration or seed flow.',
+      ApprovalPolicy: 'Approval required before AutomationRegistry schema changes or migration.',
+      EscalationPolicy: 'BlockDependentChecks',
+      SafetyRules: 'Do not modify AutomationRegistry from this health check.',
+      SourceAttribution: 'AutomationRegistry validation layer; HealthCheckRegistry v1 design',
+      AlertThreshold: 'Any Critical',
+      Notes: 'Runs as a registry health definition only; setup does not execute this check.'
+    },
+    {
+      HealthCheckId: 'HC-DRIVE-001',
+      Name: 'VerifyHtmlFileExists',
+      Description: 'Verifies that signed service reports have a valid SignedHtmlFileUrl and the Drive file can be opened.',
+      SystemArea: 'Drive',
+      Severity: 'Critical',
+      RiskLevel: 'Critical',
+      BusinessImpact: 'CustomerService',
+      CheckType: 'DriveFileAccess',
+      ExecutionMode: 'ReadOnly',
+      Frequency: 'DailyMorning',
+      DependsOn: 'HC_REGISTRY_SCHEMA, HC-DRIVE-004',
+      TargetObject: 'ServiceReports.SignedHtmlFileUrl',
+      TargetTable: 'ServiceReports',
+      TargetField: 'SignedHtmlFileUrl',
+      RelatedAutomationRegistryId: 'AR-SR-DRIVE-001',
+      DataSource: 'Mixed',
+      ValidationFunction: 'checkSignedReportsHtmlFileExists',
+      ExpectedResult: 'Signed reports have one accessible HTML file.',
+      FailureCondition: 'SignedHtmlFileUrl is empty or points to a missing/inaccessible Drive file.',
+      FailureCategory: 'BrokenLink',
+      SuggestedFix: 'Inspect the report file link and approve targeted Drive save repair if needed.',
+      ApprovalPolicy: 'Approval required before any Drive file creation or link update.',
+      EscalationPolicy: 'NotifyOwnerCriticalOnly',
+      SafetyRules: 'Do not create or modify Drive files during this check.',
+      SourceAttribution: 'SYSTEM_HEALTH_AGENT_PLAN HC-001, HC-007',
+      AlertThreshold: 'Any Critical'
+    },
+    {
+      HealthCheckId: 'HC-DRIVE-002',
+      Name: 'VerifyCustomerFolderExists',
+      Description: 'Verifies that customer Drive folder exists for customer-linked reports.',
+      SystemArea: 'Drive',
+      Severity: 'Critical',
+      RiskLevel: 'High',
+      BusinessImpact: 'Operational',
+      CheckType: 'DriveFolderAccess',
+      ExecutionMode: 'ReadOnly',
+      Frequency: 'DailyMorning',
+      DependsOn: 'HC_REGISTRY_SCHEMA, HC-DRIVE-004',
+      TargetObject: 'Customer Drive folder',
+      TargetTable: 'Customers_Final',
+      TargetField: 'CustomerFolderId',
+      RelatedAutomationRegistryId: 'AR-SR-DRIVE-001',
+      DataSource: 'Mixed',
+      ValidationFunction: 'checkCustomerFolderExists',
+      ExpectedResult: 'Customer folder exists and is accessible.',
+      FailureCondition: 'CustomerFolderId is empty or Drive folder cannot be opened.',
+      FailureCategory: 'MissingDriveObject',
+      SuggestedFix: 'Review customer folder mapping and approve manual folder repair if required.',
+      ApprovalPolicy: 'Approval required before creating or changing customer folders.',
+      EscalationPolicy: 'NotifyOwnerCriticalOnly',
+      SafetyRules: 'Do not create customer folders during read-only health check.',
+      SourceAttribution: 'SYSTEM_HEALTH_RULES Drive',
+      AlertThreshold: 'Any Critical'
+    },
+    {
+      HealthCheckId: 'HC-DRIVE-003',
+      Name: 'VerifyNoDuplicateCustomerFolder',
+      Description: 'Detects duplicate active Drive folders for the same customer.',
+      SystemArea: 'Drive',
+      Severity: 'Warning',
+      RiskLevel: 'High',
+      BusinessImpact: 'DataQuality',
+      CheckType: 'Uniqueness',
+      ExecutionMode: 'ReadOnly',
+      Frequency: 'DailyNight',
+      DependsOn: 'HC_REGISTRY_SCHEMA, HC-DRIVE-004',
+      TargetObject: 'Customer Drive folders',
+      TargetTable: 'Customers_Final',
+      TargetField: 'CustomerFolderId',
+      RelatedAutomationRegistryId: 'AR-SR-DRIVE-001',
+      DataSource: 'GoogleDrive',
+      ValidationFunction: 'checkDuplicateCustomerFolders',
+      ExpectedResult: 'One active customer folder per customer.',
+      FailureCondition: 'More than one folder exists for the same customer name or customer ID.',
+      FailureCategory: 'DuplicateData',
+      SuggestedFix: 'Review duplicate folders and approve manual consolidation plan.',
+      ApprovalPolicy: 'Approval required before deleting, moving, renaming, or merging folders.',
+      EscalationPolicy: 'ManualReview',
+      SafetyRules: 'Do not delete, move, rename, or merge folders automatically.',
+      SourceAttribution: 'SYSTEM_HEALTH_AGENT_PLAN HC-009',
+      AlertThreshold: 'More than 5 Warning'
+    },
+    {
+      HealthCheckId: 'HC-MAVEN-001',
+      Name: 'VerifyMavenDraftCreated',
+      Description: 'Verifies approved BusinessDocuments create no more than one Maven draft.',
+      SystemArea: 'Maven',
+      Severity: 'Critical',
+      RiskLevel: 'Critical',
+      BusinessImpact: 'Revenue',
+      CheckType: 'ApiState',
+      ExecutionMode: 'ReadOnly',
+      Frequency: 'DailyMorning',
+      DependsOn: 'HC_REGISTRY_SCHEMA, HC-AUTO-001, HC-BD-001',
+      TargetObject: 'BusinessDocuments.MavenDocumentId',
+      TargetTable: 'BusinessDocuments',
+      TargetField: 'MavenDocumentId',
+      RelatedAutomationRegistryId: 'AR-BD-MAVEN-001',
+      DataSource: 'GoogleSheets',
+      ValidationFunction: 'checkMavenDraftCreated',
+      ExpectedResult: 'One approved BusinessDocument maps to one Maven draft.',
+      FailureCondition: 'Missing MavenDocumentId after expected flow or duplicated Maven draft evidence.',
+      FailureCategory: 'ApiFailure',
+      SuggestedFix: 'Review BusinessDocumentLog and AutomationCommands before approving retry/manual recovery.',
+      ApprovalPolicy: 'Approval required before Maven document creation, queue retry, or manual recovery.',
+      EscalationPolicy: 'NotifyOwnerCriticalOnly',
+      SafetyRules: 'Do not create Maven documents from health check.',
+      SourceAttribution: 'SYSTEM_HEALTH_AGENT_PLAN HC-015; DECISION_LOG queue architecture',
+      AlertThreshold: 'Any Critical'
+    },
+    {
+      HealthCheckId: 'HC-AUTO-001',
+      Name: 'VerifyCommandQueueHealthy',
+      Description: 'Detects AutomationCommands stuck in Pending or Running.',
+      SystemArea: 'AutomationCommands',
+      Severity: 'Critical',
+      RiskLevel: 'Critical',
+      BusinessImpact: 'SystemReliability',
+      CheckType: 'QueueHealth',
+      ExecutionMode: 'ReadOnly',
+      Frequency: 'EveryRun',
+      DependsOn: 'HC_REGISTRY_SCHEMA',
+      TargetObject: 'AutomationCommands',
+      TargetTable: 'AutomationCommands',
+      TargetField: 'Status',
+      RelatedAutomationRegistryId: 'AR-BD-MAVEN-001',
+      DataSource: 'GoogleSheets',
+      ValidationFunction: 'checkAutomationCommandsStuck',
+      ExpectedResult: 'Pending becomes Running; Running becomes Completed, Error, or Cancelled.',
+      FailureCondition: 'Pending or Running longer than 30 minutes.',
+      FailureCategory: 'QueueStuck',
+      SuggestedFix: 'Inspect command payload, Apps Script execution, and logs before approving manual recovery.',
+      ApprovalPolicy: 'Approval required before changing command status or retrying a command.',
+      EscalationPolicy: 'NotifyOwnerCriticalOnly',
+      SafetyRules: 'Do not change AutomationCommands status from health check.',
+      SourceAttribution: 'SYSTEM_HEALTH_AGENT_PLAN HC-011, HC-012',
+      AlertThreshold: 'Any Critical'
+    },
+    {
+      HealthCheckId: 'HC-BD-001',
+      Name: 'VerifyBusinessDocumentStatusFlow',
+      Description: 'Detects BusinessDocuments stuck in draft request statuses.',
+      SystemArea: 'BusinessDocuments',
+      Severity: 'Critical',
+      RiskLevel: 'Critical',
+      BusinessImpact: 'Revenue',
+      CheckType: 'StatusFlow',
+      ExecutionMode: 'ReadOnly',
+      Frequency: 'EveryRun',
+      DependsOn: 'HC_REGISTRY_SCHEMA, HC-AUTO-001',
+      TargetObject: 'BusinessDocuments.DocumentStatus',
+      TargetTable: 'BusinessDocuments',
+      TargetField: 'DocumentStatus',
+      RelatedAutomationRegistryId: 'AR-BD-MAVEN-001',
+      DataSource: 'GoogleSheets',
+      ValidationFunction: 'checkBusinessDocumentsStuck',
+      ExpectedResult: 'Draft request statuses continue through the approved queue flow.',
+      FailureCondition: 'CreateDraftRequested or DraftRequestReceived remains unchanged longer than 30 minutes.',
+      FailureCategory: 'StatusFlowBroken',
+      SuggestedFix: 'Review related AutomationCommand and BusinessDocumentLog before approving recovery.',
+      ApprovalPolicy: 'Approval required before changing BusinessDocuments status or queue state.',
+      EscalationPolicy: 'NotifyOwnerCriticalOnly',
+      SafetyRules: 'Do not update BusinessDocuments status from health check.',
+      SourceAttribution: 'SYSTEM_HEALTH_AGENT_PLAN HC-014',
+      AlertThreshold: 'Any Critical'
+    },
+    {
+      HealthCheckId: 'HC-DRIVE-004',
+      Name: 'VerifyDrivePermissions',
+      Description: 'Verifies health agent can read required Drive file/folder metadata.',
+      SystemArea: 'Drive',
+      Severity: 'Critical',
+      RiskLevel: 'Critical',
+      BusinessImpact: 'Operational',
+      CheckType: 'Permission',
+      ExecutionMode: 'ReadOnly',
+      Frequency: 'DailyMorning',
+      DependsOn: 'HC_REGISTRY_SCHEMA',
+      TargetObject: 'Drive files and folders',
+      TargetTable: 'ServiceReports, Customers_Final',
+      TargetField: 'SignedHtmlFileUrl, CustomerFolderId',
+      RelatedAutomationRegistryId: 'AR-SR-DRIVE-001',
+      DataSource: 'GoogleDrive',
+      ValidationFunction: 'checkDrivePermissions',
+      ExpectedResult: 'Required Drive objects are accessible to the authorized script account.',
+      FailureCondition: 'Drive metadata cannot be opened due to missing permission or missing object.',
+      FailureCategory: 'DrivePermission',
+      SuggestedFix: 'Review Drive permissions and ownership before approving access correction.',
+      ApprovalPolicy: 'Approval required before changing Drive sharing permissions.',
+      EscalationPolicy: 'NotifyOwnerCriticalOnly',
+      SafetyRules: 'Do not change Drive sharing permissions automatically.',
+      SourceAttribution: 'SYSTEM_HEALTH_RULES Drive; SYSTEM_HEALTH_AGENT_PLAN HC-007',
+      AlertThreshold: 'Any Critical'
+    },
+    {
+      HealthCheckId: 'HC-AUTO-002',
+      Name: 'VerifyAutomationCommandCompletion',
+      Description: 'Verifies AutomationCommands complete exactly once and do not loop or remain unresolved.',
+      SystemArea: 'AutomationCommands',
+      Severity: 'Critical',
+      RiskLevel: 'Critical',
+      BusinessImpact: 'SystemReliability',
+      CheckType: 'StatusFlow',
+      ExecutionMode: 'ReadOnly',
+      Frequency: 'EveryRun',
+      DependsOn: 'HC_REGISTRY_SCHEMA, HC-AUTO-001',
+      TargetObject: 'AutomationCommands.Status',
+      TargetTable: 'AutomationCommands',
+      TargetField: 'Status',
+      RelatedAutomationRegistryId: 'AR-BD-MAVEN-001',
+      DataSource: 'GoogleSheets',
+      ValidationFunction: 'checkAutomationCommandCompletion',
+      ExpectedResult: 'Each command is processed once and reaches a terminal status.',
+      FailureCondition: 'Command is processed more than once, stuck, or lacks terminal status after expected duration.',
+      FailureCategory: 'DuplicateExecution',
+      SuggestedFix: 'Review command log and idempotency markers before approving retry or manual cancellation.',
+      ApprovalPolicy: 'Approval required before retrying, cancelling, or updating command status.',
+      EscalationPolicy: 'NotifyOwnerCriticalOnly',
+      SafetyRules: 'Do not retry, cancel, or update command status automatically.',
+      SourceAttribution: 'SYSTEM_HEALTH_AGENT_PLAN HC-011, HC-012, HC-013',
+      AlertThreshold: 'Any Critical'
+    }
+  ];
+
+  const values = rows.map(function(row) {
+    return headers.map(function(header) {
+      if (Object.prototype.hasOwnProperty.call(row, header)) return row[header];
+      if (header === 'Enabled') return true;
+      if (header === 'ReadOnlyCheck') return true;
+      if (header === 'AutoRepairAllowed') return false;
+      if (header === 'RequiresApproval') return true;
+      if (header === 'LearningEligible') return true;
+      if (header === 'LastStatus') return 'Unknown';
+      if (header === 'OutputLogTarget') return 'SystemHealthLog';
+      if (header === 'AlertEligible') return true;
+      if (header === 'Owner') return 'Liad / System Health Agent';
+      if (header === 'RegistryVersion') return '1.0.0';
+      if (header === 'VersionStatus') return 'Active';
+      return '';
+    });
+  });
+
+  if (values.length > 0) {
+    sheet.getRange(sheet.getLastRow() + 1, 1, values.length, headers.length).setValues(values);
+  }
+
+  return values.length;
+}
