@@ -2,44 +2,50 @@
 
 ## Date
 
-2026-06-09
+2026-06-14
 
 ## Active Area
 
-Codex Skills Framework Validation
+Service Report 5840 equipment mismatch
 
 ## Current Status
 
-Validation complete.
+Resolved.
 
 ---
 
-## Created Project-Local Skills
+## Report 5840 Incident
 
-- project-brain-startup
-- ai-draft-recommendation
+- Report 5840 incident resolved.
+- Manual data correction completed on `ReportEquipmentItems` row 83.
+- Verified reports 5839, 5840, and 5841 are correct after the fix.
+- Code fix committed as `52f8472`: `Fix report equipment matching by ReportID only`.
+
+---
+
+## Root Cause
+
+The incident involved a combination of:
+
+- Unsafe fallback equipment matching logic in `getReportData()`.
+- Incorrect backend data found in `ReportEquipmentItems` row 83.
+
+Both issues were addressed:
+
+- Code fixed in commit `52f8472`.
+- Data corrected manually.
+
+`ReportEquipmentItems` must be matched to `ServiceReports` only by exact `ReportID`.
 
 ---
 
 ## Verified
 
-- Codex discovers both skills from `.agents/skills`.
-- `project-brain-startup` executes successfully and loads Project Brain context.
-- Commit `e0d1583` created: `Add initial Codex skills framework`.
-- Repository working tree is clean.
-
----
-
-## Previous AI Draft Context Preserved
-
-ReportCounter: 5824
-
-ReportId: UNKNOWN
-BusinessDocumentId: UNKNOWN
-AutomationCommandId: UNKNOWN
-MavenDocumentId: UNKNOWN
-
-The previous ReportCounter 5824 AI Draft investigation is preserved as historical context, but the current active task is Codex Skills Framework validation.
+- Report 5839 renders the correct equipment.
+- Report 5840 renders the corrected equipment after manual row 83 data correction.
+- Report 5841 renders its own equipment and is not mixed into report 5840.
+- `פתח דוח` WebApp reads raw `ReportEquipmentItems` backend rows directly from Google Sheets.
+- AppSheet UI may not expose every backend value visible to the WebApp.
 
 ---
 
@@ -55,13 +61,11 @@ The previous ReportCounter 5824 AI Draft investigation is preserved as historica
 
 ## Next Step
 
-1. Push local commits to origin.
-2. Create `project-brain-session-close` skill.
-3. After skills framework is closed, resume AI Draft / ServiceReport flow using `ai-draft-recommendation` skill.
+1. Commit documentation update after review.
+2. Push local commits to origin after approval.
 
 ---
 
 ## Session Handoff Notes
 
-Use `project-brain-startup` at the beginning of a new TalCompressors session.
-Use `ai-draft-recommendation` when resuming AI Draft analysis.
+When a mismatch appears between AppSheet and `פתח דוח`, compare AppSheet UI, Google Sheet raw rows, and WebApp output separately.

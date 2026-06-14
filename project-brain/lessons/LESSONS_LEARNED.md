@@ -56,6 +56,46 @@ Always identify customer folder and report file before creating new ones.
 
 ---
 
+## Service Report Equipment Matching
+
+Problem:
+
+Report 5840 rendered wrong equipment in `פתח דוח`.
+
+Root cause:
+
+The incident involved a combination of unsafe fallback equipment matching logic in `getReportData()` and incorrect backend data in `ReportEquipmentItems` row 83.
+
+Solution:
+
+Code was fixed in commit `52f8472`, and the backend data was corrected manually.
+
+Rule:
+
+Equipment matching in `getReportData()` must use exact `ReportID` only, never `ReportCounter` / `מספר דוח` fallbacks.
+
+---
+
+## AppSheet vs WebApp Data Mismatch
+
+Problem:
+
+AppSheet UI did not show the same equipment values that appeared when clicking `פתח דוח`.
+
+Root cause:
+
+The WebApp `פתח דוח` reads raw `ReportEquipmentItems` backend rows directly, while AppSheet UI may not expose all backend values.
+
+Solution:
+
+Compare each data surface separately before deciding which layer is wrong.
+
+Rule:
+
+When mismatch appears, compare AppSheet UI, Google Sheet raw rows, and WebApp output separately.
+
+---
+
 ## Maven Sync
 
 Problem:
