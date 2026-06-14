@@ -103,25 +103,15 @@ const reportCounter = String(report['ReportCounter'] || '').trim();
 const reportNumber = String(report['מספר דוח'] || '').trim();
 const requestId = String(reportId || '').trim();
 
-const relatedEquipment = equipment.filter(row => {
-  const eqReportId = String(row['ReportID'] || '').trim();
-  const eqReportRef = String(row['דוח'] || '').trim();
-  const eqReportNumber = String(row['מספר דוח'] || '').trim();
-
-  return (
-    eqReportId === reportKey ||
-    eqReportId === reportCounter ||
-    eqReportId === reportNumber ||
-    eqReportId === requestId ||
-    eqReportRef === reportKey ||
-    eqReportRef === reportCounter ||
-    eqReportRef === reportNumber ||
-    eqReportRef === requestId ||
-    eqReportNumber === reportCounter ||
-    eqReportNumber === reportNumber ||
-    eqReportNumber === requestId
-  );
-});
+// Equipment rows belong to the service report by ReportID only.
+// Do not fall back to ReportCounter / מספר דוח / requestId: ReportEquipmentItems
+// does not have a reliable מספר דוח field, and blank fallback matches can attach
+// equipment from the next report.
+const relatedEquipment = reportKey
+  ? equipment.filter(row =>
+      String(row['ReportID'] || '').trim() === reportKey
+    )
+  : [];
 report['תאריך שירות'] = formatDateForReport(report['תאריך שירות']);
 report['שעת שירות'] = formatTimeForReport(report['שעת שירות']);
  return JSON.parse(JSON.stringify({
