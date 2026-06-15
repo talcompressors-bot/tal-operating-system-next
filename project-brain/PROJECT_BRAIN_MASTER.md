@@ -39,6 +39,30 @@
 ## Change Log
 # PROJECT BRAIN MASTER
 
+## Governance Foundation
+
+Current status:
+
+- `PROJECT_OPERATING_PROTOCOL.md` is the official governance and execution protocol.
+- `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md` exists as the future-state comparison guide.
+- `data-sources/tools/SHEETS_REGISTRY.md` is populated from live `ServiceApp_FIX` Google Sheet headers.
+- `agents/INFRASTRUCTURE_MANAGER_AGENT.md` is active.
+- `agents/INFRASTRUCTURE_REVIEW_TEMPLATE.md` exists.
+- `agents/AGENT_REGISTRY.md` includes Infrastructure Manager as an active governance agent.
+
+Current immediate direction:
+
+1. Complete governance integration.
+2. Create checkpoint after review.
+3. Commit approved governance documentation.
+4. Continue to Digital Twin Foundation.
+
+Rule:
+
+Infrastructure Manager must review architecture, schema, new table, new agent, registry, migration, source-of-truth conflict, and future-platform requests before implementation.
+
+---
+
 ## Project Overview
 
 מערכת ניהול דוחות שירות, אוטומציות עסקיות, AI, AppSheet, Apps Script, Google Drive, Maven ו-Invoice4u.

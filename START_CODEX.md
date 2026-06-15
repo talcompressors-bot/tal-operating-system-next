@@ -7,6 +7,8 @@ When activated:
 
 1. Read:
 
+- PROJECT_OPERATING_PROTOCOL.md
+
 - agents/PROJECT_BRAIN_AGENT.md
 
 - project-brain/current/CURRENT_TASK.md
@@ -20,6 +22,14 @@ When activated:
 - project-brain/bugs/CURRENT_BUGS.md
 
 - latest file in project-brain/checkpoints/
+
+Infrastructure Manager routing rule:
+
+If task involves architecture, schema, new tables, new agents, registries, migration, source-of-truth conflicts, or future platform work, read:
+
+- agents/INFRASTRUCTURE_MANAGER_AGENT.md
+
+before specialist agents.
 
 2. Output:
 - Current active task 

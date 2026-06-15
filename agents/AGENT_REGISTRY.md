@@ -20,6 +20,11 @@ Status: Active
 Priority: Critical
 Role: Load project brain and protect project logic.
 
+### INFRASTRUCTURE_MANAGER_AGENT
+Status: Active
+Priority: Critical
+Role: Enforce source-of-truth, reuse-before-create, registry awareness, and safe architecture review before new components or production-impacting work.
+
 ### GIT_AGENT
 Status: Active
 Priority: High
