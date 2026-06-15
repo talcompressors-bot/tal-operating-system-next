@@ -2,13 +2,32 @@
 
 Last updated: 2026-06-10
 
+Status: NON-CURRENT / HISTORICAL CONTEXT
+
+Current-state warning:
+
+This file preserves useful durable context from 2026-06-10, but it is not the current project-state source. Do not use this file for the current phase, current task, or next action.
+
+Official current-state sources:
+
+- `project-brain/current/CURRENT_TASK.md`
+- `project-brain/roadmap/ROADMAP.md`
+- `project-brain/current/LIVE_OBJECTS.md`
+
+Official current state:
+
+- PHASE 0 - Governance Foundation: COMPLETE
+- PHASE 1 - Digital Twin Foundation: CURRENT
+- Infrastructure Manager: ACTIVE
+- Master Roadmap: `project-brain/roadmap/ROADMAP.md`
+
 ## Purpose
 
-This file is the high-level project context for `TalCompressors-ServiceReports-AI`.
+This file is historical high-level project context for `TalCompressors-ServiceReports-AI`.
 
 It consolidates the current repository state, Project Brain memory, stable production flows, System Health infrastructure, AI Draft roadmap, and active blockers so future work can resume without relying on chat history or screenshots.
 
-This file is documentation only. It does not replace Project Brain, Google Sheets, Apps Script, or git history as operational sources of truth.
+This file is documentation only. It does not replace Project Brain, Google Sheets, Apps Script, git history, `project-brain/current/CURRENT_TASK.md`, or `project-brain/roadmap/ROADMAP.md` as operational sources of truth.
 
 ## Project Vision
 
@@ -359,6 +378,14 @@ Current AI Draft blocker:
 
 ## Current Blocking Issues
 
+Historical note:
+
+The following blocking issues were captured on 2026-06-10. They are preserved for context but are not the current project objective.
+
+Current objective:
+
+Start Digital Twin Foundation as a read-only mapping phase.
+
 1. `clasp push` is blocked pending manual review of two differing Apps Script files.
 2. Remote Apps Script project does not contain `SystemHealthSetup.js`.
 3. System Health setup functions cannot run until remote source is synced.
@@ -366,6 +393,14 @@ Current AI Draft blocker:
 5. Google Sheet backup is confirmed, but cloud Apps Script push safety is not yet approved.
 
 ## Exact Next Steps
+
+Historical note:
+
+The following next steps were captured on 2026-06-10. They are preserved for context only and are not the active next steps for the current project phase.
+
+Current active next step:
+
+Run Infrastructure Manager review for Digital Twin Foundation before creating or modifying anything.
 
 1. Decide whether to preserve or remove remote-only `debugReport5852()` from `טופס HTML דוחות שירות.js`.
 2. Decide whether local `AIDraftHistory.js` preview implementation is approved to push to cloud.
@@ -392,7 +427,8 @@ Top-level:
 - `AI_DRAFT_FLOW_MAP.md`: AI Draft flow and dependency analysis.
 - `AI_RULES.md`: AI operating and development rules.
 - `PROJECT_INDEX.md`: project source-of-truth index.
-- `PROJECT_OPERATING_PROTOCOL.md`: currently empty documentation placeholder.
+- `PROJECT_OPERATING_PROTOCOL.md`: official governance and execution protocol.
+- `project-brain/roadmap/ROADMAP.md`: official master roadmap.
 - `PROJECT_SOURCES.md`: project source notes.
 - `START_CODEX.md` / `END_CODEX.md`: session start/end docs.
 
@@ -410,8 +446,8 @@ Apps Script files:
 
 ## Documentation Gaps
 
-- `PROJECT_OPERATING_PROTOCOL.md` exists but is empty.
-- `project-brain/current/CURRENT_TASK.md` is stale relative to the active System Health infrastructure work.
-- `project-brain/checkpoints/ACTIVE_SESSION_STATE.md` is stale relative to current System Health work.
-- `PROJECT_BRAIN_MASTER.md` contains duplicated headings and some encoding-corrupted Hebrew text.
-- System Health infrastructure status is now mostly in git history and chat context; this file captures it until Project Brain is updated with approval.
+- `PROJECT_OPERATING_PROTOCOL.md` is active and official.
+- `project-brain/current/CURRENT_TASK.md` is the official current-task source.
+- `project-brain/roadmap/ROADMAP.md` is the official master roadmap.
+- `project-brain/checkpoints/ACTIVE_SESSION_STATE.md` is historical/archive context only.
+- This file is non-current and should not be used for active next steps.

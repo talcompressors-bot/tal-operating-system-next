@@ -1,87 +1,57 @@
 # ACTIVE SESSION STATE
 
+Status: HISTORICAL / ARCHIVE
+
 Date: 2026-06-07
 
-## Current Focus
+This file is not a current-state source.
 
-Project Brain Runtime
+Official current-state sources:
 
-## Current Objective
+- `project-brain/current/CURRENT_TASK.md`
+- `project-brain/roadmap/ROADMAP.md`
+- `project-brain/current/LIVE_OBJECTS.md`
 
-Create a working Project Brain that can load project knowledge directly from the repository and provide project status without requiring screenshots or repeated explanations.
+Current official state:
 
-## Current Status
+- PHASE 0 - Governance Foundation: COMPLETE
+- PHASE 1 - Digital Twin Foundation: CURRENT
+- Infrastructure Manager: ACTIVE
+- Master Roadmap: `project-brain/roadmap/ROADMAP.md`
 
-* GitHub repository verified
-* Local repository verified
-* Project Brain structure verified
-* Agents structure verified
-* project-brain folder verified
-* checkpoints folder verified
-* brain-agent.ps1 created and running
-* START_CODEX.md loading successfully
-* ACTIVE_SESSION_STATE.md loading successfully
+## Historical Focus
 
-## What Was Tested
+Project Brain Runtime.
 
-* GitHub repository audit
-* Project Brain audit
-* Folder structure verification
-* PowerShell runtime execution
-* Repository navigation
-* Brain startup sequence
+## Historical Objective
 
-## Results
+Create a working Project Brain that could load project knowledge directly from the repository and provide project status without requiring screenshots or repeated explanations.
 
-* Repository structure is valid
-* Brain files exist
-* Agents exist
-* Local runtime is operational
-* Brain can now read repository files
+## Historical Status
 
-## Current Limitation
+- GitHub repository verified.
+- Local repository verified.
+- Project Brain structure verified.
+- Agents structure verified.
+- `project-brain` folder verified.
+- `checkpoints` folder verified.
+- `brain-agent.ps1` created and running.
+- `START_CODEX.md` loading successfully.
+- `ACTIVE_SESSION_STATE.md` loading successfully at that time.
 
-The Brain currently reads only:
+## Historical Limitation
 
-* START_CODEX.md
-* ACTIVE_SESSION_STATE.md
+At the time, the Brain read only:
 
-It does not yet automatically load:
+- `START_CODEX.md`
+- `ACTIVE_SESSION_STATE.md`
 
-* PROJECT_BRAIN_MASTER.md
-* CURRENT_BUGS.md
-* LESSONS_LEARNED.md
-* SYSTEM_MAP.md
-* PROJECT_INDEX.md
+That limitation is no longer the official startup model. Startup must now use `PROJECT_OPERATING_PROTOCOL.md`, `PROJECT_INDEX.md`, `project-brain/current/CURRENT_TASK.md`, and `project-brain/roadmap/ROADMAP.md`.
 
-## Current Investigation
+## Historical Next Step
 
-Build a complete startup flow for:
+The old next step was to create `PROJECT_INDEX.md` as the single entry point for the Project Brain.
 
-שלום קודקס
+Current active next step:
 
-Expected flow:
-
-1. Load PROJECT_BRAIN_MASTER.md
-2. Load ACTIVE_SESSION_STATE.md
-3. Load CURRENT_BUGS.md
-4. Load LESSONS_LEARNED.md
-5. Load SYSTEM_MAP.md
-6. Display project status
-7. Suggest next action
-
-## Current Project Context
-
-ServiceApp_FIX
-
-Current Report Under Investigation:
-
-ReportCounter: 5824
-
-## Next Step
-
-Create PROJECT_INDEX.md as the single entry point for the entire Project Brain and connect all core project files through one startup sequence.
-
-## Success Definition
-
-When "שלום קודקס" is activated, the Brain can automatically load the current project state from repository files and continue work from the latest checkpoint.
+Run Infrastructure Manager review for Digital Twin Foundation before creating or modifying anything.

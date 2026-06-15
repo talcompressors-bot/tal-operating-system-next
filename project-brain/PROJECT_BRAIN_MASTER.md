@@ -1,111 +1,90 @@
 # PROJECT BRAIN MASTER
 
-## Project Overview
+Status: Durable project memory  
+Current-state sources: `project-brain/current/CURRENT_TASK.md` and `project-brain/roadmap/ROADMAP.md`
 
-## Current Architecture
+## Official Current State
 
-## AppSheet Structure
+PHASE 0 - Governance Foundation: COMPLETE
 
-## Apps Script Structure
+PHASE 1 - Digital Twin Foundation: CURRENT
 
-## Service Report System
+Infrastructure Manager: ACTIVE
 
-## BusinessDocuments Workflow
+Master Roadmap: `project-brain/roadmap/ROADMAP.md`
 
-## AutomationCommands Queue Architecture
+Current task:
 
-## Maven Integration
+Start Digital Twin Foundation as a read-only mapping phase.
 
-## InvoiceMaven Future Integration
+Next step:
 
-## Expense Invoice Automation
-
-## Drive Save Logic
-
-## Customer Folder Logic
-
-## Report Counter Logic
-
-## AI Draft Generation Logic
-
-## Stable Checkpoints
-
-## Known Bugs
-
-## Lessons Learned
-
-## Future Roadmap
-
-## Change Log
-# PROJECT BRAIN MASTER
+Run Infrastructure Manager review for Digital Twin Foundation before creating or modifying anything.
 
 ## Governance Foundation
 
 Current status:
 
 - `PROJECT_OPERATING_PROTOCOL.md` is the official governance and execution protocol.
-- `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md` exists as the future-state comparison guide.
+- `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md` is the future-state comparison guide.
+- `project-brain/roadmap/ROADMAP.md` is the official master roadmap.
 - `data-sources/tools/SHEETS_REGISTRY.md` is populated from live `ServiceApp_FIX` Google Sheet headers.
 - `agents/INFRASTRUCTURE_MANAGER_AGENT.md` is active.
 - `agents/INFRASTRUCTURE_REVIEW_TEMPLATE.md` exists.
 - `agents/AGENT_REGISTRY.md` includes Infrastructure Manager as an active governance agent.
 
-Current immediate direction:
-
-1. Complete governance integration.
-2. Create checkpoint after review.
-3. Commit approved governance documentation.
-4. Continue to Digital Twin Foundation.
-
 Rule:
 
 Infrastructure Manager must review architecture, schema, new table, new agent, registry, migration, source-of-truth conflict, and future-platform requests before implementation.
 
----
-
 ## Project Overview
 
-מערכת ניהול דוחות שירות, אוטומציות עסקיות, AI, AppSheet, Apps Script, Google Drive, Maven ו-Invoice4u.
+The project supports service reports, business automation, AI assistance, AppSheet, Apps Script, Google Drive, Maven, and future Invoice4u integration.
 
-מטרה:
-לייצר מערכת אחת מרכזית המנהלת:
-- דוחות שירות
-- הצעות מחיר
-- חשבוניות
-- הוצאות
-- אוטומציות
-- מסמכים
-- AI Recommendations
+Goal:
 
----
+Create a governed operating platform for:
+
+- Service reports
+- Quotes
+- Invoices
+- Expenses
+- Automations
+- Documents
+- AI recommendations
 
 ## Current Architecture
 
+```text
 AppSheet
-↓
-Google Sheets
-↓
-Apps Script
-↓
-Business Logic
-↓
-Maven API
-↓
-Invoice4u API (Future)
+-> Google Sheets
+-> Apps Script
+-> Business Logic
+-> Maven API
+-> Invoice4u API (future)
+```
 
----
+Current legacy production layer:
+
+- Google Sheets
+- AppSheet
+- Apps Script
+- Drive
+- Maven
+
+Future platform work must not destabilize the current production layer.
 
 ## Service Report System
 
-### Current Status
+Current known status:
 
-- HTML Report System פעיל
-- Web App פעיל
-- Signature System פעיל
-- Report Data Loading פעיל
-- Multi Equipment Support פעיל
+- HTML Report System active
+- Web App active
+- Signature System active
+- Report Data Loading active
+- Multi Equipment Support active
 
-### Known Open Tasks
+Known open tasks:
 
 - A4 Print Layout
 - Page Break Logic
@@ -113,11 +92,9 @@ Invoice4u API (Future)
 - Signature Storage Improvements
 - Drive Save Improvements
 
----
-
 ## AppSheet Structure
 
-### Main Tables
+Main tables:
 
 - ServiceReports
 - ReportEquipmentItems
@@ -126,67 +103,78 @@ Invoice4u API (Future)
 - InspectionItems
 - PartsUsed
 - EmailLog
+- BusinessDocuments
+- BusinessDocumentItems
+- BusinessDocumentLog
+- AutomationCommands
+- ProductsCatalog
+- InvoiceMavenDocuments
+- InvoiceMavenDocumentItems
+- SyncState
+- SyncLog
 
----
+Detailed mapping belongs in:
+
+- `project-brain/maps/APPSHEET_MAP.md`
+- `data-sources/tools/SHEETS_REGISTRY.md`
 
 ## Apps Script Structure
 
-### Main Functions
+Main function areas:
 
-- getReportData()
-- saveReportToDrive()
-- sendReportEmail()
-- createMavenDraft()
+- `getReportData()`
+- service report rendering and signature handling
+- Drive save logic
+- email sending
+- `createMavenDraft()`
+- Maven sync
+- AutomationCommands webhook processing
 
----
+Detailed mapping belongs in:
+
+- `project-brain/maps/APPS_SCRIPT_MAP.md`
+- `apps-script/*`
 
 ## BusinessDocuments Workflow
 
-Current Working Flow:
+Stable queue flow:
 
+```text
 BusinessDocuments
-↓
-AutomationCommands
-↓
-Bot
-↓
-Apps Script
-↓
-Maven Draft
+-> AutomationCommands
+-> AppSheet Bot
+-> Apps Script
+-> Maven Draft
+```
 
-Status:
+Important distinction:
 
-Pending
-↓
-Running
-↓
-Completed
-
----
+- `AutomationCommands.Status` uses queue execution states such as Pending, Running, Completed, and Error.
+- `BusinessDocuments.DocumentStatus` should be documented separately from queue status.
 
 ## AutomationCommands Queue Architecture
 
 Purpose:
 
-Prevent duplicate Bot executions.
+Prevent duplicate Bot executions and preserve one safe execution path.
 
-Current Status:
+Current status:
 
-Stable Working Checkpoint
+Stable working checkpoint.
 
----
+Rule:
+
+Never allow AppSheet Bot and Apps Script to update the same row simultaneously.
 
 ## Maven Integration
 
-Current Status:
+Current status:
 
-Working
+Maven integration exists and must remain approval-gated.
 
-Known Rule:
+Known rule:
 
 Never create Maven documents without user approval.
-
----
 
 ## Invoice4u Future Integration
 
@@ -197,25 +185,21 @@ Planned:
 - Credit Notes
 - Expense Documents
 
-Approval Required Before Creation.
-
----
+Approval is required before creation or finalization.
 
 ## Expense Invoice Automation
 
-Planned Flow:
+Planned flow:
 
+```text
 PDF/Image
-↓
-OCR
-↓
-AI Extraction
-↓
-User Approval
-↓
-Invoice4u
+-> OCR
+-> AI Extraction
+-> User Approval
+-> Invoice4u
+```
 
-Required Fields:
+Required fields:
 
 - SupplierName
 - InvoiceNumber
@@ -225,19 +209,15 @@ Required Fields:
 - VAT
 - PaymentStatus
 
----
-
 ## Drive Save Logic
 
-Known Issues:
+Known issues:
 
-1. Duplicate customer folders
-2. Duplicate report files
-3. Save report not always updating existing file
+1. Duplicate customer folders.
+2. Duplicate report files.
+3. Save report not always updating existing file.
 
 Needs investigation.
-
----
 
 ## Customer Folder Logic
 
@@ -247,23 +227,23 @@ One customer folder only.
 
 Never create duplicate folders.
 
----
-
 ## Report Counter Logic
 
-Current Target:
+Current target:
 
 Stable unique numbering.
 
-Known Issue:
+Known issue:
 
-Duplicate numbering around report 5835.
-
----
+Duplicate numbering risk around report 5835.
 
 ## AI Draft Generation Logic
 
-Priority:
+Status:
+
+Future/pilot work, not the current phase.
+
+Pricing priority:
 
 1. ProductsCatalog
 2. Same Equipment History
@@ -271,74 +251,87 @@ Priority:
 4. Similar Customers
 5. AI Recommendation
 
-Fixed Pricing:
+Fixed pricing:
 
 - Technician Hour = 275 NIS
 - Visit = 300 NIS
 
----
+AI Draft pilot and implementation planning belong in:
 
-## Current Task
+- `project-brain/roadmap/AI_DRAFT_PILOT_DESIGN.md`
+- `AI_DRAFT_FLOW_MAP.md`
+- `project-brain/roadmap/ROADMAP.md`
 
-Active ReportCounter: 5824
+## Digital Twin Foundation
 
-Current Goal:
+Status:
 
-Complete AI Draft Agent workflow:
+Current phase.
 
-ServiceReport
-→ AI Analysis
-→ BusinessDocuments
-→ BusinessDocumentItems
-→ User Approval
-→ Maven Draft
+Purpose:
 
-Current Status:
+Map the current legacy production system before migration or rebuild.
 
-In Development
+Initial assets:
 
-Last Verified State:
+- `project-brain/maps/SYSTEM_MAP.md`
+- `project-brain/maps/APPSHEET_MAP.md`
+- `project-brain/maps/APPS_SCRIPT_MAP.md`
+- `data-sources/tools/SHEETS_REGISTRY.md`
 
-Queue Architecture Stable
+Protected systems:
 
-Next Action:
-
-Implement AI recommendation engine.
+- Apps Script
+- Google Sheets live data
+- AppSheet production
+- Maven
+- Drive
+- AutomationCommands
 
 ## Stable Checkpoints
 
 ### Checkpoint 2026-05-25
 
-AutomationCommands Queue Architecture Working.
+AutomationCommands Queue Architecture working.
 
+```text
 BusinessDocuments
-→ AutomationCommands
-→ Bot
-→ Apps Script
-→ Maven
+-> AutomationCommands
+-> Bot
+-> Apps Script
+-> Maven
+```
+
+Result:
 
 No duplicate executions.
 
----
+### Checkpoint 2026-06-15
+
+Governance Foundation complete.
+
+Infrastructure Manager V1 active.
+
+Digital Twin Foundation recommended as the next read-only mapping phase.
 
 ## Protected Systems
 
-Do Not Modify Without Explicit Approval
+Do not modify without explicit approval.
 
-### Service Reports
+Service Reports:
 
 - Report Counter Logic
 - Signature Logic
 - Drive Save Logic
 - Customer Folder Logic
 
-### Business Documents
+Business Documents:
 
 - Queue Architecture
 - AutomationCommands
 - Maven Draft Flow
 
-### Maven Sync
+Maven Sync:
 
 - Documents Sync
 - Items Sync
@@ -364,8 +357,6 @@ Drive save creates duplicate report files.
 
 Report counter synchronization issue.
 
----
-
 ## Lessons Learned
 
 ### AppSheet
@@ -380,51 +371,43 @@ Prefer queue architecture.
 
 Always isolate logic before changing architecture.
 
----
+## Roadmap
 
-## Future Roadmap
+Official roadmap:
 
-Phase 1
+- `project-brain/roadmap/ROADMAP.md`
 
-Stabilize Service Report System
+Current roadmap state:
 
-Phase 2
+- PHASE 0 - Governance Foundation: COMPLETE
+- PHASE 1 - Digital Twin Foundation: CURRENT
 
-AI Draft Generation
+Long-term target architecture:
 
-Phase 3
-
-Invoice4u Integration
-
-Phase 4
-
-Expense Automation
-
-Phase 5
-
-Business AI Assistant
-
----
+- `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`
 
 ## Project Rules
 
 1. Understand before changing.
-
 2. Prefer modifying existing logic before creating new logic.
-
 3. One change at a time.
-
-4. Always update CURRENT_TASK after meaningful progress.
-
-5. Always update LESSONS_LEARNED after debugging success.
-
-6. Always create checkpoint before risky modifications.
-
-7. AI recommends.
-   Apps Script executes.
-   User approves.
+4. Use `project-brain/current/CURRENT_TASK.md` for current task.
+5. Use `project-brain/roadmap/ROADMAP.md` for roadmap state.
+6. Update Project Brain only with approval.
+7. Create or propose a checkpoint before risky modifications.
+8. AI recommends. Apps Script executes. User approves.
 
 ## Change Log
+
+### 2026-06-15
+
+Governance Foundation completed and pushed.
+
+Infrastructure Manager V1 activated.
+
+Master Roadmap established as the official roadmap.
+
+Current phase moved to PHASE 1 - Digital Twin Foundation.
 
 ### 2026-06-08
 

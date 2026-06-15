@@ -1,19 +1,26 @@
 # NEXT SESSION
 
-Current Task:
-Build AI Draft Agent Workflow
+Status: HISTORICAL / ARCHIVE
 
-Current Report:
-5824
+This file is not a current-state source.
 
-Open Bugs:
-1. Drive Auto Save
-2. Maven Sync
+Official current-state sources:
 
-Next Action:
-Complete AI Draft integration using Queue Architecture.
+- `project-brain/current/CURRENT_TASK.md`
+- `project-brain/roadmap/ROADMAP.md`
+- `project-brain/current/LIVE_OBJECTS.md`
 
-Do Not Break:
-- Queue Architecture
-- Maven Draft Creation
-- ReportCounter Logic
+Current official state:
+
+- PHASE 0 - Governance Foundation: COMPLETE
+- PHASE 1 - Digital Twin Foundation: CURRENT
+- Infrastructure Manager: ACTIVE
+- Master Roadmap: `project-brain/roadmap/ROADMAP.md`
+
+Historical note:
+
+This file previously pointed to AI Draft Agent Workflow as the next session task. That is no longer the current phase. AI Draft remains future/pilot work documented in the roadmap and AI Draft planning files.
+
+Current active next step:
+
+Run Infrastructure Manager review for Digital Twin Foundation before creating or modifying anything.
