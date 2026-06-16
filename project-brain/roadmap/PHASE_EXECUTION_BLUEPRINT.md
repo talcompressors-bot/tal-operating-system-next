@@ -1,4 +1,4 @@
-﻿# PHASE EXECUTION BLUEPRINT
+# PHASE EXECUTION BLUEPRINT
 
 Status: Draft execution blueprint  
 Mission: PEB-1  
@@ -127,6 +127,44 @@ Every phase uses this base algorithm unless the phase card narrows it:
 
 Objective: Recover current project state and remove dependency on chat memory or undocumented assumptions.
 
+Business Goal: Advance Tal AI Operating System readiness by using Project Discovery & Recovery to support this verified objective: Recover current project state and remove dependency on chat memory or undocumented assumptions.
+
+Practical Goal: Execute these concrete phase actions: Read source-of-truth files; run repository file discovery; compare maps against current files; identify stale, duplicate, missing, and unknown sources.
+
+Factory Component: Project Discovery & Recovery.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Repository access and readable governance files.; required table evidence: `SHEETS_REGISTRY` evidence only; no table writes. Read-only references: all verified existing tables.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, `GIT_AGENT`..
+
+Required Outputs: Source inventory, file tree map, current-state summary, active/stale file list, protected-system list.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Read source-of-truth files; run repository file discovery; compare maps against current files; identify stale, duplicate, missing, and unknown sources. -> produce required outputs: Source inventory, file tree map, current-state summary, active/stale file list, protected-system list. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Current phase can be cited; active source hierarchy can be cited; every listed table or agent has a source path. Practical verification: Ask "What is current?", "What is stale?", and "What is protected?" Answers must cite files. Completion evidence: Current-state sources are identified; no production writes occurred; unknowns are documented.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Propose updates to current task, Project Brain master, maps, and checkpoint if recovery changes durable state.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Source hierarchy and current-state inventory are reliable enough to build Project Brain foundation.
+
+Next Phase Trigger: Source hierarchy and current-state inventory are reliable enough to build Project Brain foundation.
+
 Deliverables: Source inventory, file tree map, current-state summary, active/stale file list, protected-system list.
 
 Required Tables: `SHEETS_REGISTRY` evidence only; no table writes. Read-only references: all verified existing tables.
@@ -164,6 +202,44 @@ Mission Breakdown:
 ## Phase 1 - Project Brain Foundation
 
 Objective: Establish durable project memory with current task, roadmap, decisions, maps, lessons, bugs, and checkpoints.
+
+Business Goal: Advance Tal AI Operating System readiness by using Project Brain Foundation to support this verified objective: Establish durable project memory with current task, roadmap, decisions, maps, lessons, bugs, and checkpoints.
+
+Practical Goal: Execute these concrete phase actions: Confirm Project Brain files exist; align source hierarchy; identify stale or duplicated project memory; define update rules.
+
+Factory Component: Project Brain Foundation.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 0 current-state recovery.; required table evidence: None required for writes. Read-only table evidence from `SHEETS_REGISTRY`.; required agent evidence: `PROJECT_BRAIN_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `GIT_AGENT`..
+
+Required Outputs: Updated/proposed Project Brain structure, current task source, roadmap source, decision log process, checkpoint process.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Confirm Project Brain files exist; align source hierarchy; identify stale or duplicated project memory; define update rules. -> produce required outputs: Updated/proposed Project Brain structure, current task source, roadmap source, decision log process, checkpoint process. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Current task and roadmap agree on active phase; Project Brain points to official sources; stale files are not treated as current truth. Practical verification: Ask "What is the active task?" and "Where is durable memory stored?" Answers must cite Project Brain files. Completion evidence: Project Brain files define current state and update rules clearly.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Update/propose `project-brain/PROJECT_BRAIN_MASTER.md`, `project-brain/current/CURRENT_TASK.md`, roadmap, maps, and checkpoint.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Project memory can support validation rules and repeatable execution.
+
+Next Phase Trigger: Project memory can support validation rules and repeatable execution.
 
 Deliverables: Updated/proposed Project Brain structure, current task source, roadmap source, decision log process, checkpoint process.
 
@@ -203,6 +279,44 @@ Mission Breakdown:
 
 Objective: Create repeatable validation rules for files, schemas, active IDs, workflows, and documentation.
 
+Business Goal: Advance Tal AI Operating System readiness by using Validation Foundation to support this verified objective: Create repeatable validation rules for files, schemas, active IDs, workflows, and documentation.
+
+Practical Goal: Execute these concrete phase actions: Define validations for source hierarchy, sheet schema evidence, map completeness, workflow contracts, and protected-system boundaries.
+
+Factory Component: Validation Foundation.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 1 Project Brain foundation.; required table evidence: `AutomationRegistry`, `HealthCheckRegistry`, `SystemHealthLog`, `SyncLog`, `ErrorLog`, `SyncState` as read-only evidence; writes require approval.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, future `QA_AGENT`, `PROJECT_BRAIN_AGENT`, `APPS_SCRIPT_AGENT` for read-only code analysis..
+
+Required Outputs: Validation checklist, evidence rules, schema validation plan, workflow contract validation plan.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools; dry-run/test documentation tools; no repair actions.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Define validations for source hierarchy, sheet schema evidence, map completeness, workflow contracts, and protected-system boundaries. -> produce required outputs: Validation checklist, evidence rules, schema validation plan, workflow contract validation plan. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Validation rules can detect missing evidence, schema drift risk, duplicate assets, and unapproved production actions. Practical verification: Run a documentation-only validation against `ServiceReports`, `AutomationCommands`, and `BusinessDocuments`. Completion evidence: Repeatable validation checklist exists and can be applied before implementation work.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Propose validation rules in Project Brain, roadmap, and relevant maps.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Validation rules are ready to support read-only health checks.
+
+Next Phase Trigger: Validation rules are ready to support read-only health checks.
+
 Deliverables: Validation checklist, evidence rules, schema validation plan, workflow contract validation plan.
 
 Required Tables: `AutomationRegistry`, `HealthCheckRegistry`, `SystemHealthLog`, `SyncLog`, `ErrorLog`, `SyncState` as read-only evidence; writes require approval.
@@ -240,6 +354,44 @@ Mission Breakdown:
 ## Phase 3 - System Health Platform
 
 Objective: Build read-only health checks for service reports, Drive files, Maven sync, queue status, schema drift, duplicate records, and automation failures.
+
+Business Goal: Advance Tal AI Operating System readiness by using System Health Platform to support this verified objective: Build read-only health checks for service reports, Drive files, Maven sync, queue status, schema drift, duplicate records, and automation failures.
+
+Practical Goal: Execute these concrete phase actions: Map health checks; define query targets; identify read-only versus write-required checks; validate that no repair action runs automatically.
+
+Factory Component: System Health Platform.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 2 validation foundation and Digital Twin mapping sufficient to know target tables.; required table evidence: `HealthCheckRegistry`, `SystemHealthLog`, `AutomationRegistry`, `ServiceReports`, `ReportEquipmentItems`, `BusinessDocuments`, `BusinessDocumentItems`, `AutomationCommands`, `SyncLog`, `ErrorLog`, `SyncState`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, future `QA_AGENT`, `APPS_SCRIPT_AGENT` for read-only analysis, `PROJECT_BRAIN_AGENT`..
+
+Required Outputs: Health check definitions, read-only health report format, registry mapping, approval gates for any logging or repair.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools; sandbox/design tooling only after approval; no infrastructure creation unless separately approved.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map health checks; define query targets; identify read-only versus write-required checks; validate that no repair action runs automatically. -> produce required outputs: Health check definitions, read-only health report format, registry mapping, approval gates for any logging or repair. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Health checks identify missing `SignedHtmlFileUrl`, duplicate `ReportCounter`, stuck `AutomationCommands`, Maven sync errors, and schema drift risks in documentation mode. Practical verification: Produce a sample health report from documented evidence without modifying live tables. Completion evidence: Read-only checks are mapped and production repair remains approval-gated.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Update/propose System Health plan, roadmap, Project Brain, registry/map files, checkpoint if milestone complete.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Health signals can support output verification.
+
+Next Phase Trigger: Health signals can support output verification.
 
 Deliverables: Health check definitions, read-only health report format, registry mapping, approval gates for any logging or repair.
 
@@ -280,6 +432,44 @@ Mission Breakdown:
 
 Objective: Verify generated outputs before user delivery.
 
+Business Goal: Advance Tal AI Operating System readiness by using Output Verification Platform to support this verified objective: Verify generated outputs before user delivery.
+
+Practical Goal: Execute these concrete phase actions: Identify each output type; define required fields; define validation before sending, saving, or customer-facing action.
+
+Factory Component: Output Verification Platform.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 3 health signals and mapped current workflows.; required table evidence: `ServiceReports`, `ReportEquipmentItems`, `Customers_Final`, `BusinessDocuments`, `BusinessDocumentItems`, `BusinessDocumentLog`, `EmailLog`, `ApprovalsLog`, `AIDraftSuggestions`.; required agent evidence: future `QA_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, `AI_DRAFT_AGENT` when AI drafts are in scope, `MAVEN_AGENT` when Maven output is in scope..
+
+Required Outputs: Output verification checklist, document/email/PDF/recommendation verification rules, approval boundaries.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools; sandbox/design tooling only after approval; no infrastructure creation unless separately approved.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Identify each output type; define required fields; define validation before sending, saving, or customer-facing action. -> produce required outputs: Output verification checklist, document/email/PDF/recommendation verification rules, approval boundaries. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Missing customer, missing items, missing approval, missing file link, or unverified price blocks output. Practical verification: Verify one sample service report or business draft from evidence without sending or creating documents. Completion evidence: Output checks are documented and no customer-facing output is sent automatically.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Update/propose verification map, roadmap, Project Brain, and checkpoint if milestone complete.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: AppSheet digital twin can map output behavior and approval UX.
+
+Next Phase Trigger: AppSheet digital twin can map output behavior and approval UX.
+
 Deliverables: Output verification checklist, document/email/PDF/recommendation verification rules, approval boundaries.
 
 Required Tables: `ServiceReports`, `ReportEquipmentItems`, `Customers_Final`, `BusinessDocuments`, `BusinessDocumentItems`, `BusinessDocumentLog`, `EmailLog`, `ApprovalsLog`, `AIDraftSuggestions`.
@@ -319,6 +509,44 @@ Mission Breakdown:
 
 Objective: Map AppSheet tables, columns, actions, bots, slices, UX views, security filters, automations, and dependencies.
 
+Business Goal: Advance Tal AI Operating System readiness by using AppSheet Digital Twin to support this verified objective: Map AppSheet tables, columns, actions, bots, slices, UX views, security filters, automations, and dependencies.
+
+Practical Goal: Execute these concrete phase actions: Compare current maps to sheet registry; collect manual/exported AppSheet evidence only if available; mark missing AppSheet settings `UNKNOWN`.
+
+Factory Component: AppSheet Digital Twin.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 1 current Digital Twin Foundation, sheet registry, existing maps.; required table evidence: All AppSheet-related tables in `SHEETS_REGISTRY`, especially `ServiceReports`, `ReportEquipmentItems`, `Customers_Final`, `BusinessDocuments`, `BusinessDocumentItems`, `BusinessDocumentLog`, `AutomationCommands`, `ProductsCatalog`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, `SyncState`, `SyncLog`, `ErrorLog`, `AppMenu`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Digital Twin Agent (`UNKNOWN` until created), `APPS_SCRIPT_AGENT` for boundary mapping..
+
+Required Outputs: AppSheet table map, action map, bot map, UX map, security/filter map, dependency map, unknowns list.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools; read-only AppSheet manual/exported evidence if available; no AppSheet editor changes.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`; AppSheet manual/exported evidence only if available; otherwise `UNKNOWN`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Compare current maps to sheet registry; collect manual/exported AppSheet evidence only if available; mark missing AppSheet settings `UNKNOWN`. -> produce required outputs: AppSheet table map, action map, bot map, UX map, security/filter map, dependency map, unknowns list. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`; AppSheet manual/exported evidence only if available; otherwise `UNKNOWN`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Every mapped AppSheet object cites source; every unknown is explicit; AutomationCommands boundary is preserved. Practical verification: Answer "Which bot processes AutomationCommands?" and "Which tables are part of BusinessDocuments flow?" from evidence. Completion evidence: AppSheet behavior is mapped enough to support migration and health planning.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Update/propose `project-brain/maps/APPSHEET_MAP.md`, system map, roadmap, Project Brain, checkpoint.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Current legacy behavior is mapped enough to design migration.
+
+Next Phase Trigger: Current legacy behavior is mapped enough to design migration.
+
 Deliverables: AppSheet table map, action map, bot map, UX map, security/filter map, dependency map, unknowns list.
 
 Required Tables: All AppSheet-related tables in `SHEETS_REGISTRY`, especially `ServiceReports`, `ReportEquipmentItems`, `Customers_Final`, `BusinessDocuments`, `BusinessDocumentItems`, `BusinessDocumentLog`, `AutomationCommands`, `ProductsCatalog`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, `SyncState`, `SyncLog`, `ErrorLog`, `AppMenu`.
@@ -356,6 +584,44 @@ Mission Breakdown:
 ## Phase 6 - Migration Blueprint
 
 Objective: Define a safe migration path from Google Sheets/AppSheet/Apps Script to future platform without breaking production.
+
+Business Goal: Advance Tal AI Operating System readiness by using Migration Blueprint to support this verified objective: Define a safe migration path from Google Sheets/AppSheet/Apps Script to future platform without breaking production.
+
+Practical Goal: Execute these concrete phase actions: Identify legacy system of record; define no-write migration analysis; map stable flows; create cutover prerequisites.
+
+Factory Component: Migration Blueprint.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 5 AppSheet Digital Twin and mapped Apps Script/Drive/Maven flows.; required table evidence: All current production tables; future Supabase schema tables are `UNKNOWN` until approved design.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, `GIT_AGENT`, future `QA_AGENT`, future migration agent `UNKNOWN`..
+
+Required Outputs: Migration inventory, dependency graph, migration sequence, rollback plan, parallel-run plan, approval gates.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Identify legacy system of record; define no-write migration analysis; map stable flows; create cutover prerequisites. -> produce required outputs: Migration inventory, dependency graph, migration sequence, rollback plan, parallel-run plan, approval gates. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Each migration step has source, owner, rollback, and production boundary. Practical verification: Walk one flow from `ServiceReports` to Maven draft and show how migration would preserve it. Completion evidence: Migration risks are documented and no migration work begins without approval.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Update/propose roadmap, Project Brain, migration map, checkpoint.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Supabase foundation can be designed from mapped source-of-record evidence.
+
+Next Phase Trigger: Supabase foundation can be designed from mapped source-of-record evidence.
 
 Deliverables: Migration inventory, dependency graph, migration sequence, rollback plan, parallel-run plan, approval gates.
 
@@ -396,6 +662,44 @@ Mission Breakdown:
 
 Objective: Design and later implement the future relational data layer.
 
+Business Goal: Advance Tal AI Operating System readiness by using Supabase Foundation to support this verified objective: Design and later implement the future relational data layer.
+
+Practical Goal: Execute these concrete phase actions: Map current sheet tables to future relational entities; define IDs and relationships without creating database tables until approved.
+
+Factory Component: Supabase Foundation.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 6 Migration Blueprint.; required table evidence: Current source tables from `SHEETS_REGISTRY`; future Supabase tables for tenants, companies, users, customers, service reports, documents, inventory, finance, audit logs, integrations are `UNKNOWN` until schema approval.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future `QA_AGENT`, future Supabase/data agent `UNKNOWN`..
+
+Required Outputs: Supabase schema design, tenant/company model, migration mapping, audit model, permission model.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools; sandbox/design tooling only after approval; no infrastructure creation unless separately approved.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map current sheet tables to future relational entities; define IDs and relationships without creating database tables until approved. -> produce required outputs: Supabase schema design, tenant/company model, migration mapping, audit model, permission model. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Every future table maps to a current need or approved target need; no duplicate schema exists. Practical verification: Trace `Customer -> ServiceReport -> BusinessDocument -> MavenDocument` through proposed schema. Completion evidence: Schema design is reviewable and migration-safe.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Update/propose architecture, roadmap, data model map, Project Brain.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Approved data model supports application UI design.
+
+Next Phase Trigger: Approved data model supports application UI design.
+
 Deliverables: Supabase schema design, tenant/company model, migration mapping, audit model, permission model.
 
 Required Tables: Current source tables from `SHEETS_REGISTRY`; future Supabase tables for tenants, companies, users, customers, service reports, documents, inventory, finance, audit logs, integrations are `UNKNOWN` until schema approval.
@@ -435,6 +739,44 @@ Mission Breakdown:
 
 Objective: Build future application UI for operations, approvals, service reports, dashboards, customers, documents, workflows, and admin tools.
 
+Business Goal: Advance Tal AI Operating System readiness by using Next.js Platform to support this verified objective: Build future application UI for operations, approvals, service reports, dashboards, customers, documents, workflows, and admin tools.
+
+Practical Goal: Execute these concrete phase actions: Design screens from workflow evidence; define read/write boundaries; keep current AppSheet production untouched until migration approval.
+
+Factory Component: Next.js Platform.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 7 Supabase Foundation.; required table evidence: Future Supabase tables from Phase 7; current sheet tables only as migration/source references.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future UI agent `UNKNOWN`, future `QA_AGENT`..
+
+Required Outputs: UI route map, role map, approval screens, operational dashboards, admin surface, integration boundaries.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools; sandbox/design tooling only after approval; no infrastructure creation unless separately approved.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Design screens from workflow evidence; define read/write boundaries; keep current AppSheet production untouched until migration approval. -> produce required outputs: UI route map, role map, approval screens, operational dashboards, admin surface, integration boundaries. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: UI action cannot bypass approval, queue, or output verification rules. Practical verification: Walk an approval flow in a non-production environment. Completion evidence: UI supports approved workflows without destabilizing legacy production.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Update/propose UI map, roadmap, Project Brain, checkpoint.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Stable UI/data boundaries support workflow orchestration.
+
+Next Phase Trigger: Stable UI/data boundaries support workflow orchestration.
+
 Deliverables: UI route map, role map, approval screens, operational dashboards, admin surface, integration boundaries.
 
 Required Tables: Future Supabase tables from Phase 7; current sheet tables only as migration/source references.
@@ -472,6 +814,44 @@ Mission Breakdown:
 ## Phase 9 - n8n Orchestration Layer
 
 Objective: Orchestrate scheduled processes, integration routing, approval workflows, event handling, and agent coordination.
+
+Business Goal: Advance Tal AI Operating System readiness by using n8n Orchestration Layer to support this verified objective: Orchestrate scheduled processes, integration routing, approval workflows, event handling, and agent coordination.
+
+Practical Goal: Execute these concrete phase actions: Map existing AutomationCommands queue before replacing or extending orchestration; design n8n as additive until migration approved.
+
+Factory Component: n8n Orchestration Layer.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 8 Platform UI and current queue mapping.; required table evidence: `AutomationRegistry`, `AutomationCommands`, `BusinessDocuments`, `BusinessDocumentLog`, `SyncLog`, `ErrorLog`, future orchestration tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future n8n agent `UNKNOWN`, future `QA_AGENT`..
+
+Required Outputs: Workflow inventory, n8n workflow specs, trigger map, approval route map, retry/error policy.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools; sandbox/design tooling only after approval; no infrastructure creation unless separately approved.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map existing AutomationCommands queue before replacing or extending orchestration; design n8n as additive until migration approved. -> produce required outputs: Workflow inventory, n8n workflow specs, trigger map, approval route map, retry/error policy. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Workflow preserves idempotency and does not update same row from competing systems. Practical verification: Simulate BusinessDocuments approval-to-command flow without live production write. Completion evidence: Orchestration is mapped, testable, and approval-gated.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Update/propose automation registry docs, system map, roadmap, checkpoint.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Orchestration boundaries support AI runtime and tools.
+
+Next Phase Trigger: Orchestration boundaries support AI runtime and tools.
 
 Deliverables: Workflow inventory, n8n workflow specs, trigger map, approval route map, retry/error policy.
 
@@ -511,6 +891,44 @@ Mission Breakdown:
 
 Objective: Define runtime execution through CLI and MCP connectors with explicit permissions.
 
+Business Goal: Advance Tal AI Operating System readiness by using AI Runtime Layer / CLI / MCP to support this verified objective: Define runtime execution through CLI and MCP connectors with explicit permissions.
+
+Practical Goal: Execute these concrete phase actions: Identify allowed tools, forbidden tools, credential boundaries, approval-required operations, and audit evidence.
+
+Factory Component: AI Runtime Layer / CLI / MCP.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 9 Orchestration Layer.; required table evidence: `SecretAccessLog`, `ApprovalsLog`, `AutomationRegistry`, future runtime audit tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, `GIT_AGENT`, future MCP/runtime agent `UNKNOWN`..
+
+Required Outputs: Tool permission model, connector inventory, runtime boundary map, audit requirements, approval policy.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools; sandbox/design tooling only after approval; no infrastructure creation unless separately approved.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Identify allowed tools, forbidden tools, credential boundaries, approval-required operations, and audit evidence. -> produce required outputs: Tool permission model, connector inventory, runtime boundary map, audit requirements, approval policy. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Runtime cannot perform production writes without approval evidence. Practical verification: Demonstrate read-only inspection and blocked write action in sandbox or documentation mode. Completion evidence: Runtime boundaries are explicit and auditable.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Update/propose runtime map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Runtime boundaries support structured agents.
+
+Next Phase Trigger: Runtime boundaries support structured agents.
+
 Deliverables: Tool permission model, connector inventory, runtime boundary map, audit requirements, approval policy.
 
 Required Tables: `SecretAccessLog`, `ApprovalsLog`, `AutomationRegistry`, future runtime audit tables `UNKNOWN`.
@@ -548,6 +966,44 @@ Mission Breakdown:
 ## Phase 10 - Agent Platform
 
 Objective: Create structured agent layer for governance, departments, workers, verification, health, and infrastructure.
+
+Business Goal: Advance Tal AI Operating System readiness by using Agent Platform to support this verified objective: Create structured agent layer for governance, departments, workers, verification, health, and infrastructure.
+
+Practical Goal: Execute these concrete phase actions: Extend documentation registry before creating runtime agents; define who builds, audits, validates, and approves.
+
+Factory Component: Agent Platform.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 9.5 AI Runtime Layer.; required table evidence: `AutomationRegistry`, `ApprovalsLog`, `SecretAccessLog`, future agent registry tables `UNKNOWN`; current source is `agents/AGENT_REGISTRY.md`.; required agent evidence: `ORCHESTRATOR_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, `GIT_AGENT`, future department/worker agents `UNKNOWN`..
+
+Required Outputs: Agent registry expansion, agent responsibilities, routing model, audit model, permission boundaries.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools; sandbox/design tooling only after approval; no infrastructure creation unless separately approved.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Extend documentation registry before creating runtime agents; define who builds, audits, validates, and approves. -> produce required outputs: Agent registry expansion, agent responsibilities, routing model, audit model, permission boundaries. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: No duplicate agent role; each agent has owner, scope, forbidden actions, evidence requirements. Practical verification: Route a sample mission from Orchestrator to Builder, Auditor, Discovery, and Infrastructure Manager. Completion evidence: Agent layer can route work without bypassing governance.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Update/propose `agents/AGENT_REGISTRY.md`, Project Brain, roadmap, checkpoint.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Agent platform can support department factories.
+
+Next Phase Trigger: Agent platform can support department factories.
 
 Deliverables: Agent registry expansion, agent responsibilities, routing model, audit model, permission boundaries.
 
@@ -590,6 +1046,44 @@ The following phases use the same required structure. Current required tables an
 ## Phase 11 - Office Automation Factory
 
 Objective: Automate office documents, reminders, filing, customer follow-ups, and internal routing under approval control.
+
+Business Goal: Advance Tal AI Operating System readiness by using Office Automation Factory to support this verified objective: Automate office documents, reminders, filing, customer follow-ups, and internal routing under approval control.
+
+Practical Goal: Execute these concrete phase actions: Map office tasks; classify read/write/customer-facing actions; design approval-gated automations.
+
+Factory Component: Office Automation Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 10 Agent Platform.; required table evidence: `AutomationRegistry`, `ApprovalsLog`, `EmailLog`, `BusinessDocumentLog`, `AppMenu`; future office task tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Office Agent `UNKNOWN`..
+
+Required Outputs: Office workflow inventory; document/email/reminder specs; approval and filing rules.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map office tasks; classify read/write/customer-facing actions; design approval-gated automations. -> produce required outputs: Office workflow inventory; document/email/reminder specs; approval and filing rules. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: No email, document, Drive change, or external write can happen without approval. Practical verification: Simulate one follow-up task and show blocked send step. Completion evidence: Office tasks have safe workflow contracts and approval gates.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Project Brain, roadmap, automation map, checkpoint if milestone.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Office workflow controls are reusable by Service Factory.
+
+Next Phase Trigger: Office workflow controls are reusable by Service Factory.
 Deliverables: Office workflow inventory; document/email/reminder specs; approval and filing rules.
 Required Tables: `AutomationRegistry`, `ApprovalsLog`, `EmailLog`, `BusinessDocumentLog`, `AppMenu`; future office task tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Office Agent `UNKNOWN`.
@@ -611,6 +1105,44 @@ Mission Breakdown:
 ## Phase 12 - Service Factory
 
 Objective: Automate service report lifecycle, technician workflows, equipment history, recommendations, and service quality checks.
+
+Business Goal: Advance Tal AI Operating System readiness by using Service Factory to support this verified objective: Automate service report lifecycle, technician workflows, equipment history, recommendations, and service quality checks.
+
+Practical Goal: Execute these concrete phase actions: Map service lifecycle; validate ReportCounter, Drive save, signature, email, and report-generation boundaries.
+
+Factory Component: Service Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 11 Office Automation Factory and Phase 5 Digital Twin.; required table evidence: `ServiceReports`, `ReportEquipmentItems`, `Customers_Final`, `InspectionItems`, `PartsUsed`, `Lists`, `PDF_Template`, `EmailLog`, `BusinessDocuments`, `AutomationCommands`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `APPS_SCRIPT_AGENT`, `PROJECT_BRAIN_AGENT`, future Service Agent `UNKNOWN`, future `QA_AGENT`..
+
+Required Outputs: Service workflow specs; equipment history map; recommendation rules; technician action contracts.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools; read-only pps-script/* inspection; no clasp push; no deploy; no setup functions.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`; `apps-script/*` read-only when source evidence is needed.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map service lifecycle; validate ReportCounter, Drive save, signature, email, and report-generation boundaries. -> produce required outputs: Service workflow specs; equipment history map; recommendation rules; technician action contracts. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`; `apps-script/*` read-only when source evidence is needed. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: ReportCounter, Drive folder logic, signature logic, and queue boundaries remain protected. Practical verification: Trace one `ServiceReports.ReportID` path through equipment, HTML report, Drive, email, and business draft eligibility. Completion evidence: Service workflows are mapped and automations are approval-gated.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Service maps, Project Brain, roadmap, checkpoint.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Service outputs can safely feed Finance Factory.
+
+Next Phase Trigger: Service outputs can safely feed Finance Factory.
 Deliverables: Service workflow specs; equipment history map; recommendation rules; technician action contracts.
 Required Tables: `ServiceReports`, `ReportEquipmentItems`, `Customers_Final`, `InspectionItems`, `PartsUsed`, `Lists`, `PDF_Template`, `EmailLog`, `BusinessDocuments`, `AutomationCommands`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `APPS_SCRIPT_AGENT`, `PROJECT_BRAIN_AGENT`, future Service Agent `UNKNOWN`, future `QA_AGENT`.
@@ -632,6 +1164,44 @@ Mission Breakdown:
 ## Phase 13 - Finance Factory
 
 Objective: Automate quotes, invoices, receipts, payments, expenses, collections, approvals, and audit trails.
+
+Business Goal: Advance Tal AI Operating System readiness by using Finance Factory to support this verified objective: Automate quotes, invoices, receipts, payments, expenses, collections, approvals, and audit trails.
+
+Practical Goal: Execute these concrete phase actions: Map existing Maven draft flow; define quote/invoice/expense approval gates; prohibit finalization without approval.
+
+Factory Component: Finance Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 12 Service Factory.; required table evidence: `BusinessDocuments`, `BusinessDocumentItems`, `BusinessDocumentLog`, `AutomationCommands`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, `InvoiceMavenCustomers`, `InvoiceMavenItems`, `ApprovalsLog`, `SyncState`, `SyncLog`, `ErrorLog`.; required agent evidence: `MAVEN_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, planned `INVOICE4U_AGENT`, planned `EXPENSE_AGENT`..
+
+Required Outputs: Finance workflow contracts; Maven/Invoice4u boundary map; approval policies; audit requirements.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools; read-only Maven map/source review; no Maven document creation or sync writes.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`; `apps-script/*` read-only when source evidence is needed.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map existing Maven draft flow; define quote/invoice/expense approval gates; prohibit finalization without approval. -> produce required outputs: Finance workflow contracts; Maven/Invoice4u boundary map; approval policies; audit requirements. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`; `apps-script/*` read-only when source evidence is needed. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: No Maven document, invoice, payment update, or customer send without explicit approval. Practical verification: Trace BusinessDocuments -> AutomationCommands -> Maven Draft with approval checkpoints. Completion evidence: Finance automations preserve queue idempotency and approval control.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Finance map, Maven map, Project Brain, roadmap, checkpoint.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Finance outputs can support sales pricing and customer history.
+
+Next Phase Trigger: Finance outputs can support sales pricing and customer history.
 Deliverables: Finance workflow contracts; Maven/Invoice4u boundary map; approval policies; audit requirements.
 Required Tables: `BusinessDocuments`, `BusinessDocumentItems`, `BusinessDocumentLog`, `AutomationCommands`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, `InvoiceMavenCustomers`, `InvoiceMavenItems`, `ApprovalsLog`, `SyncState`, `SyncLog`, `ErrorLog`.
 Required Agents: `MAVEN_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, planned `INVOICE4U_AGENT`, planned `EXPENSE_AGENT`.
@@ -653,6 +1223,44 @@ Mission Breakdown:
 ## Phase 14 - Sales Factory
 
 Objective: Automate lead tracking, quote preparation, history analysis, follow-up, pricing recommendations, and pipeline visibility.
+
+Business Goal: Advance Tal AI Operating System readiness by using Sales Factory to support this verified objective: Automate lead tracking, quote preparation, history analysis, follow-up, pricing recommendations, and pipeline visibility.
+
+Practical Goal: Execute these concrete phase actions: Map quote inputs; validate pricing sources; design sales follow-up without automatic customer send.
+
+Factory Component: Sales Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 13 Finance Factory.; required table evidence: `Customers_Final`, `BusinessDocuments`, `BusinessDocumentItems`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, `ProductsCatalog`, `AIDraftSuggestions`; future leads/pipeline tables `UNKNOWN`.; required agent evidence: `AI_DRAFT_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Sales Agent `UNKNOWN`..
+
+Required Outputs: Sales workflow specs; quote recommendation rules; customer history inputs; pipeline data requirements.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map quote inputs; validate pricing sources; design sales follow-up without automatic customer send. -> produce required outputs: Sales workflow specs; quote recommendation rules; customer history inputs; pipeline data requirements. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Price recommendation cites source; missing price creates approval flag. Practical verification: Produce one quote recommendation from historical evidence without creating Maven document. Completion evidence: Sales recommendations are evidence-backed and approval-gated.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Sales map, AI Draft docs, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Customer segments and sales outputs can feed marketing.
+
+Next Phase Trigger: Customer segments and sales outputs can feed marketing.
 Deliverables: Sales workflow specs; quote recommendation rules; customer history inputs; pipeline data requirements.
 Required Tables: `Customers_Final`, `BusinessDocuments`, `BusinessDocumentItems`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, `ProductsCatalog`, `AIDraftSuggestions`; future leads/pipeline tables `UNKNOWN`.
 Required Agents: `AI_DRAFT_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Sales Agent `UNKNOWN`.
@@ -674,6 +1282,44 @@ Mission Breakdown:
 ## Phase 15 - Marketing Factory
 
 Objective: Automate segmentation, campaigns, service reminders, renewal messaging, and performance feedback loops.
+
+Business Goal: Advance Tal AI Operating System readiness by using Marketing Factory to support this verified objective: Automate segmentation, campaigns, service reminders, renewal messaging, and performance feedback loops.
+
+Practical Goal: Execute these concrete phase actions: Map allowed customer communication; define segment evidence; prohibit sending without approval.
+
+Factory Component: Marketing Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 14 Sales Factory.; required table evidence: `Customers_Final`, `ServiceReports`, `InvoiceMavenDocuments`, `EmailLog`, `AppMenu`; future campaign/consent tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Marketing Agent `UNKNOWN`..
+
+Required Outputs: Segment definitions; campaign approval rules; reminder workflow specs; opt-out/consent requirements.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map allowed customer communication; define segment evidence; prohibit sending without approval. -> produce required outputs: Segment definitions; campaign approval rules; reminder workflow specs; opt-out/consent requirements. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: No customer message without approval and verified contact data. Practical verification: Generate a campaign candidate list in documentation/sandbox mode only. Completion evidence: Marketing workflows are permission-aware and non-production by default.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Marketing map, communication rules, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Campaign/notification rules feed Communication Factory.
+
+Next Phase Trigger: Campaign/notification rules feed Communication Factory.
 Deliverables: Segment definitions; campaign approval rules; reminder workflow specs; opt-out/consent requirements.
 Required Tables: `Customers_Final`, `ServiceReports`, `InvoiceMavenDocuments`, `EmailLog`, `AppMenu`; future campaign/consent tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Marketing Agent `UNKNOWN`.
@@ -695,6 +1341,44 @@ Mission Breakdown:
 ## Phase 16 - Communication Factory
 
 Objective: Unify email, messaging, notifications, alerts, document delivery, and future omnichannel workflows.
+
+Business Goal: Advance Tal AI Operating System readiness by using Communication Factory to support this verified objective: Unify email, messaging, notifications, alerts, document delivery, and future omnichannel workflows.
+
+Practical Goal: Execute these concrete phase actions: Map current `EmailSender` behavior; define channel boundaries; require approval before sending.
+
+Factory Component: Communication Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 15 Marketing Factory.; required table evidence: `EmailLog`, `ServiceReports`, `BusinessDocuments`, `ApprovalsLog`, `AppMenu`; future message log tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `APPS_SCRIPT_AGENT`, `PROJECT_BRAIN_AGENT`, future Communication Agent `UNKNOWN`..
+
+Required Outputs: Communication channel map; delivery approval rules; message templates; audit requirements.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools; read-only pps-script/* inspection; no clasp push; no deploy; no setup functions.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`; `apps-script/*` read-only when source evidence is needed.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map current `EmailSender` behavior; define channel boundaries; require approval before sending. -> produce required outputs: Communication channel map; delivery approval rules; message templates; audit requirements. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`; `apps-script/*` read-only when source evidence is needed. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Recipient, content, source record, and approval are verified before send. Practical verification: Draft one message from a service report and block actual send. Completion evidence: Communication workflows are auditable and approval-gated.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Communication map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Communication events can support inventory/service/procurement flows.
+
+Next Phase Trigger: Communication events can support inventory/service/procurement flows.
 Deliverables: Communication channel map; delivery approval rules; message templates; audit requirements.
 Required Tables: `EmailLog`, `ServiceReports`, `BusinessDocuments`, `ApprovalsLog`, `AppMenu`; future message log tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `APPS_SCRIPT_AGENT`, `PROJECT_BRAIN_AGENT`, future Communication Agent `UNKNOWN`.
@@ -716,6 +1400,44 @@ Mission Breakdown:
 ## Phase 17 - Inventory & Procurement Factory
 
 Objective: Automate parts catalog, stock tracking, supplier orders, purchase recommendations, forecasts, and service-linked inventory updates.
+
+Business Goal: Advance Tal AI Operating System readiness by using Inventory & Procurement Factory to support this verified objective: Automate parts catalog, stock tracking, supplier orders, purchase recommendations, forecasts, and service-linked inventory updates.
+
+Practical Goal: Execute these concrete phase actions: Map catalog and stock fields; identify consumption sources; define purchase approval gates.
+
+Factory Component: Inventory & Procurement Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 16 Communication Factory and service/finance data.; required table evidence: `ProductsCatalog`, `InventoryStock`, `SuppliersProducts`, `InvoiceMavenItems`, `PartsUsed`, `ReportEquipmentItems`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Inventory Agent `UNKNOWN`..
+
+Required Outputs: Inventory entity map; procurement workflow specs; supplier mapping; reorder rules.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map catalog and stock fields; identify consumption sources; define purchase approval gates. -> produce required outputs: Inventory entity map; procurement workflow specs; supplier mapping; reorder rules. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: No supplier order or stock write without approval. Practical verification: Generate one reorder recommendation from stock/service evidence. Completion evidence: Inventory recommendations are source-backed and non-writing by default.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Inventory map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Role and assignment needs can feed HR Factory.
+
+Next Phase Trigger: Role and assignment needs can feed HR Factory.
 Deliverables: Inventory entity map; procurement workflow specs; supplier mapping; reorder rules.
 Required Tables: `ProductsCatalog`, `InventoryStock`, `SuppliersProducts`, `InvoiceMavenItems`, `PartsUsed`, `ReportEquipmentItems`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Inventory Agent `UNKNOWN`.
@@ -737,6 +1459,44 @@ Mission Breakdown:
 ## Phase 18 - HR Factory
 
 Objective: Support employee records, technician assignments, onboarding, training, schedules, KPIs, and role-based access.
+
+Business Goal: Advance Tal AI Operating System readiness by using HR Factory to support this verified objective: Support employee records, technician assignments, onboarding, training, schedules, KPIs, and role-based access.
+
+Practical Goal: Execute these concrete phase actions: Map technician fields; define missing HR tables as `UNKNOWN`; design role/access requirements without creating production schema.
+
+Factory Component: HR Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 17 Inventory & Procurement Factory.; required table evidence: Current technician fields exist in `ServiceReports`; future employee/role/schedule tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future HR Agent `UNKNOWN`..
+
+Required Outputs: HR data requirements; technician assignment map; access role map; training workflow specs.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map technician fields; define missing HR tables as `UNKNOWN`; design role/access requirements without creating production schema. -> produce required outputs: HR data requirements; technician assignment map; access role map; training workflow specs. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: No employee schema or permission change without approval. Practical verification: Trace technician assignment evidence from `ServiceReports`. Completion evidence: HR requirements are documented with current gaps explicit.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: HR map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: User/customer access needs feed Customer Portal.
+
+Next Phase Trigger: User/customer access needs feed Customer Portal.
 Deliverables: HR data requirements; technician assignment map; access role map; training workflow specs.
 Required Tables: Current technician fields exist in `ServiceReports`; future employee/role/schedule tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future HR Agent `UNKNOWN`.
@@ -758,6 +1518,44 @@ Mission Breakdown:
 ## Phase 19 - Customer Portal
 
 Objective: Provide customer access to service reports, quotes, invoices, approvals, equipment history, schedules, and support requests.
+
+Business Goal: Advance Tal AI Operating System readiness by using Customer Portal to support this verified objective: Provide customer access to service reports, quotes, invoices, approvals, equipment history, schedules, and support requests.
+
+Practical Goal: Execute these concrete phase actions: Define customer-visible data; protect private/internal fields; design read-only first.
+
+Factory Component: Customer Portal.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 18 HR roles and Phase 8 UI platform.; required table evidence: `Customers_Final`, `ServiceReports`, `ReportEquipmentItems`, `BusinessDocuments`, `BusinessDocumentItems`, `InvoiceMavenDocuments`; future portal user/access tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Portal Agent `UNKNOWN`, future `QA_AGENT`..
+
+Required Outputs: Portal role model; customer data contract; document access rules; approval UX rules.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`; AppSheet manual/exported evidence only if available; otherwise `UNKNOWN`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Define customer-visible data; protect private/internal fields; design read-only first. -> produce required outputs: Portal role model; customer data contract; document access rules; approval UX rules. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`; AppSheet manual/exported evidence only if available; otherwise `UNKNOWN`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Customer can access only approved records and documents. Practical verification: Simulate customer view for one service report without exposing internal data. Completion evidence: Portal data boundaries are explicit and permission-gated.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Portal map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Portal access needs feed AI Governance.
+
+Next Phase Trigger: Portal access needs feed AI Governance.
 Deliverables: Portal role model; customer data contract; document access rules; approval UX rules.
 Required Tables: `Customers_Final`, `ServiceReports`, `ReportEquipmentItems`, `BusinessDocuments`, `BusinessDocumentItems`, `InvoiceMavenDocuments`; future portal user/access tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Portal Agent `UNKNOWN`, future `QA_AGENT`.
@@ -779,6 +1577,44 @@ Mission Breakdown:
 ## Phase 20 - AI Governance Factory
 
 Objective: Define AI approval policies, permissions, audit logs, agent boundaries, risk scoring, escalation, and safe production controls.
+
+Business Goal: Advance Tal AI Operating System readiness by using AI Governance Factory to support this verified objective: Define AI approval policies, permissions, audit logs, agent boundaries, risk scoring, escalation, and safe production controls.
+
+Practical Goal: Execute these concrete phase actions: Map AI actions to risk levels; define blocked actions; require evidence before recommendations.
+
+Factory Component: AI Governance Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 19 Customer Portal.; required table evidence: `ApprovalsLog`, `SecretAccessLog`, `AutomationRegistry`, `SystemHealthLog`; future AI governance tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `ORCHESTRATOR_AGENT`, `PROJECT_BRAIN_AGENT`, all active/future agents..
+
+Required Outputs: AI policy registry; risk scoring rules; approval matrix; agent permission map.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map AI actions to risk levels; define blocked actions; require evidence before recommendations. -> produce required outputs: AI policy registry; risk scoring rules; approval matrix; agent permission map. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: AI cannot approve its own production, financial, customer-facing, schema, or deployment actions. Practical verification: Attempt to classify a Maven draft action; result must require human approval. Completion evidence: AI authority boundaries are enforceable and documented.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Governance map, agent registry, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: AI governance supports AI Chairman.
+
+Next Phase Trigger: AI governance supports AI Chairman.
 Deliverables: AI policy registry; risk scoring rules; approval matrix; agent permission map.
 Required Tables: `ApprovalsLog`, `SecretAccessLog`, `AutomationRegistry`, `SystemHealthLog`; future AI governance tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `ORCHESTRATOR_AGENT`, `PROJECT_BRAIN_AGENT`, all active/future agents.
@@ -800,6 +1636,44 @@ Mission Breakdown:
 ## Phase 21 - AI Chairman Factory
 
 Objective: Create strategic AI governance for cross-company status, risks, performance, priorities, and decisions.
+
+Business Goal: Advance Tal AI Operating System readiness by using AI Chairman Factory to support this verified objective: Create strategic AI governance for cross-company status, risks, performance, priorities, and decisions.
+
+Practical Goal: Execute these concrete phase actions: Define advisory-only scope; block production authority; connect to roadmap and KPIs.
+
+Factory Component: AI Chairman Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 20 AI Governance Factory.; required table evidence: `AutomationRegistry`, `SystemHealthLog`, `ApprovalsLog`; future strategy/scorecard tables `UNKNOWN`.; required agent evidence: future AI Chairman Agent `UNKNOWN`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`..
+
+Required Outputs: Chairman decision model; priority review process; escalation rules; advisory output template.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Define advisory-only scope; block production authority; connect to roadmap and KPIs. -> produce required outputs: Chairman decision model; priority review process; escalation rules; advisory output template. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Chairman output is advisory and cites evidence. Practical verification: Review one proposed phase and produce approve/defer recommendation without execution. Completion evidence: Strategic advisory layer is evidence-based and non-executing.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Governance docs, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Strategic review enables controlled improvement loops.
+
+Next Phase Trigger: Strategic review enables controlled improvement loops.
 Deliverables: Chairman decision model; priority review process; escalation rules; advisory output template.
 Required Tables: `AutomationRegistry`, `SystemHealthLog`, `ApprovalsLog`; future strategy/scorecard tables `UNKNOWN`.
 Required Agents: future AI Chairman Agent `UNKNOWN`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`.
@@ -821,6 +1695,44 @@ Mission Breakdown:
 ## Phase 22 - Self Evolving Enterprise
 
 Objective: Enable agents to identify gaps, propose upgrades, validate impacts, and request approval before implementation.
+
+Business Goal: Advance Tal AI Operating System readiness by using Self Evolving Enterprise to support this verified objective: Enable agents to identify gaps, propose upgrades, validate impacts, and request approval before implementation.
+
+Practical Goal: Execute these concrete phase actions: Convert findings into proposals; prevent automatic self-modification.
+
+Factory Component: Self Evolving Enterprise.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 21 AI Chairman Factory.; required table evidence: `AutomationRegistry`, `HealthCheckRegistry`, `SystemHealthLog`, `ApprovalsLog`; future improvement backlog tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, future AI Chairman Agent `UNKNOWN`, future discovery agents `UNKNOWN`..
+
+Required Outputs: Improvement loop contract; proposal template; impact validation rules; approval gate.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Convert findings into proposals; prevent automatic self-modification. -> produce required outputs: Improvement loop contract; proposal template; impact validation rules; approval gate. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: No code/schema/workflow change occurs automatically. Practical verification: Turn one known gap into a proposal with no implementation. Completion evidence: Improvement loop is proposal-only until approval.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Lessons, roadmap, Project Brain, checkpoint.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Improvement proposals need durable knowledge/memory.
+
+Next Phase Trigger: Improvement proposals need durable knowledge/memory.
 Deliverables: Improvement loop contract; proposal template; impact validation rules; approval gate.
 Required Tables: `AutomationRegistry`, `HealthCheckRegistry`, `SystemHealthLog`, `ApprovalsLog`; future improvement backlog tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, future AI Chairman Agent `UNKNOWN`, future discovery agents `UNKNOWN`.
@@ -842,6 +1754,44 @@ Mission Breakdown:
 ## Phase 23 - Knowledge & Memory Factory
 
 Objective: Build durable organizational memory across customers, equipment, decisions, documents, lessons, incidents, pricing, and workflows.
+
+Business Goal: Advance Tal AI Operating System readiness by using Knowledge & Memory Factory to support this verified objective: Build durable organizational memory across customers, equipment, decisions, documents, lessons, incidents, pricing, and workflows.
+
+Practical Goal: Execute these concrete phase actions: Map knowledge domains; define what belongs in Project Brain versus business data.
+
+Factory Component: Knowledge & Memory Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 22 Self Evolving Enterprise.; required table evidence: `Customers_Final`, `ReportEquipmentItems`, `ServiceReports`, `BusinessDocuments`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`; future knowledge tables `UNKNOWN`.; required agent evidence: `PROJECT_BRAIN_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, future Knowledge Agent `UNKNOWN`..
+
+Required Outputs: Knowledge model; memory update rules; retrieval rules; citation requirements.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map knowledge domains; define what belongs in Project Brain versus business data. -> produce required outputs: Knowledge model; memory update rules; retrieval rules; citation requirements. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Knowledge answer cites source and avoids stale memory. Practical verification: Answer one equipment/customer history question from documented data sources. Completion evidence: Knowledge storage and retrieval boundaries are defined.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Project Brain, memory maps, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Knowledge model requires data governance.
+
+Next Phase Trigger: Knowledge model requires data governance.
 Deliverables: Knowledge model; memory update rules; retrieval rules; citation requirements.
 Required Tables: `Customers_Final`, `ReportEquipmentItems`, `ServiceReports`, `BusinessDocuments`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`; future knowledge tables `UNKNOWN`.
 Required Agents: `PROJECT_BRAIN_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, future Knowledge Agent `UNKNOWN`.
@@ -863,6 +1813,44 @@ Mission Breakdown:
 ## Phase 24 - Data Governance Factory
 
 Objective: Govern data models, ownership, schema changes, retention, privacy, access, lineage, backups, and migration rules.
+
+Business Goal: Advance Tal AI Operating System readiness by using Data Governance Factory to support this verified objective: Govern data models, ownership, schema changes, retention, privacy, access, lineage, backups, and migration rules.
+
+Practical Goal: Execute these concrete phase actions: Assign owner/consumer/update rule per data area; require approval before schema changes.
+
+Factory Component: Data Governance Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 23 Knowledge & Memory Factory.; required table evidence: All verified existing tables; future governance metadata tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Data Governance Agent `UNKNOWN`..
+
+Required Outputs: Data ownership matrix; schema change process; retention/access policy; lineage map.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Assign owner/consumer/update rule per data area; require approval before schema changes. -> produce required outputs: Data ownership matrix; schema change process; retention/access policy; lineage map. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Schema change request includes impact, rollback, approval, and affected workflows. Practical verification: Produce governance record for `ServiceReports` or `AutomationCommands`. Completion evidence: Data changes are governed and traceable.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Data map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Governed data supports Document Factory.
+
+Next Phase Trigger: Governed data supports Document Factory.
 Deliverables: Data ownership matrix; schema change process; retention/access policy; lineage map.
 Required Tables: All verified existing tables; future governance metadata tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Data Governance Agent `UNKNOWN`.
@@ -884,6 +1872,44 @@ Mission Breakdown:
 ## Phase 25 - Document Factory
 
 Objective: Generate, verify, store, retrieve, and route service reports, quotes, invoices, purchase orders, summaries, contracts, and internal reports.
+
+Business Goal: Advance Tal AI Operating System readiness by using Document Factory to support this verified objective: Generate, verify, store, retrieve, and route service reports, quotes, invoices, purchase orders, summaries, contracts, and internal reports.
+
+Practical Goal: Execute these concrete phase actions: Map document lifecycle; preserve Drive save and Maven approval gates.
+
+Factory Component: Document Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 24 Data Governance Factory.; required table evidence: `ServiceReports`, `BusinessDocuments`, `BusinessDocumentItems`, `InvoiceMavenDocuments`, `EmailLog`, `ApprovalsLog`; future document registry tables `UNKNOWN`.; required agent evidence: `MAVEN_AGENT`, `APPS_SCRIPT_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`..
+
+Required Outputs: Document type registry; generation contracts; storage rules; verification rules.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools; read-only pps-script/* inspection; no clasp push; no deploy; no setup functions.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`; `apps-script/*` read-only when source evidence is needed.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map document lifecycle; preserve Drive save and Maven approval gates. -> produce required outputs: Document type registry; generation contracts; storage rules; verification rules. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`; `apps-script/*` read-only when source evidence is needed. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: No document creation or customer send without approval. Practical verification: Generate a document specification from one source record, not a production document. Completion evidence: Document lifecycle is verified and approval-gated.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Document map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Verified documents support AI training examples.
+
+Next Phase Trigger: Verified documents support AI training examples.
 Deliverables: Document type registry; generation contracts; storage rules; verification rules.
 Required Tables: `ServiceReports`, `BusinessDocuments`, `BusinessDocumentItems`, `InvoiceMavenDocuments`, `EmailLog`, `ApprovalsLog`; future document registry tables `UNKNOWN`.
 Required Agents: `MAVEN_AGENT`, `APPS_SCRIPT_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`.
@@ -905,6 +1931,44 @@ Mission Breakdown:
 ## Phase 26 - AI Training Factory
 
 Objective: Create safe training and feedback loops using approved data, examples, evaluations, review, and versioned behavior.
+
+Business Goal: Advance Tal AI Operating System readiness by using AI Training Factory to support this verified objective: Create safe training and feedback loops using approved data, examples, evaluations, review, and versioned behavior.
+
+Practical Goal: Execute these concrete phase actions: Define approved examples; exclude secrets/private data unless approved; create eval-only workflow.
+
+Factory Component: AI Training Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 25 Document Factory.; required table evidence: `AIDraftSuggestions`, `BusinessDocuments`, `BusinessDocumentItems`, `ApprovalsLog`; future eval/training tables `UNKNOWN`.; required agent evidence: `AI_DRAFT_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Evaluation Agent `UNKNOWN`..
+
+Required Outputs: Training data policy; evaluation set; prompt/model version rules; feedback workflow.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Define approved examples; exclude secrets/private data unless approved; create eval-only workflow. -> produce required outputs: Training data policy; evaluation set; prompt/model version rules; feedback workflow. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Training sample has approval and no sensitive leakage. Practical verification: Evaluate one AI draft recommendation against expected output. Completion evidence: Training/evaluation loop is governed and versioned.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: AI Draft docs, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Training tools require MCP connector standards.
+
+Next Phase Trigger: Training tools require MCP connector standards.
 Deliverables: Training data policy; evaluation set; prompt/model version rules; feedback workflow.
 Required Tables: `AIDraftSuggestions`, `BusinessDocuments`, `BusinessDocumentItems`, `ApprovalsLog`; future eval/training tables `UNKNOWN`.
 Required Agents: `AI_DRAFT_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Evaluation Agent `UNKNOWN`.
@@ -926,6 +1990,44 @@ Mission Breakdown:
 ## Phase 27 - MCP Ecosystem Factory
 
 Objective: Standardize MCP connectors for GitHub, Google, Supabase, n8n, filesystem, browser, business APIs, observability, and future platforms.
+
+Business Goal: Advance Tal AI Operating System readiness by using MCP Ecosystem Factory to support this verified objective: Standardize MCP connectors for GitHub, Google, Supabase, n8n, filesystem, browser, business APIs, observability, and future platforms.
+
+Practical Goal: Execute these concrete phase actions: Inventory connectors; classify scopes; require approval for external writes.
+
+Factory Component: MCP Ecosystem Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 26 AI Training Factory.; required table evidence: `SecretAccessLog`, `ApprovalsLog`, `AutomationRegistry`; future connector registry tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `GIT_AGENT`, `PROJECT_BRAIN_AGENT`, future MCP Agent `UNKNOWN`..
+
+Required Outputs: Connector registry; permission model; read/write classification; audit rules.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools; sandbox/design tooling only after approval; no infrastructure creation unless separately approved.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Inventory connectors; classify scopes; require approval for external writes. -> produce required outputs: Connector registry; permission model; read/write classification; audit rules. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Connector cannot access secrets or write externally without approval. Practical verification: Demonstrate connector read path and blocked write path. Completion evidence: MCP use is permissioned and auditable.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Connector map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Standard connectors support sandbox/testing.
+
+Next Phase Trigger: Standard connectors support sandbox/testing.
 Deliverables: Connector registry; permission model; read/write classification; audit rules.
 Required Tables: `SecretAccessLog`, `ApprovalsLog`, `AutomationRegistry`; future connector registry tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `GIT_AGENT`, `PROJECT_BRAIN_AGENT`, future MCP Agent `UNKNOWN`.
@@ -947,6 +2049,44 @@ Mission Breakdown:
 ## Phase 28 - Sandbox & Testing Factory
 
 Objective: Provide safe test environments, test data, simulations, dry runs, regression checks, and approval gates.
+
+Business Goal: Advance Tal AI Operating System readiness by using Sandbox & Testing Factory to support this verified objective: Provide safe test environments, test data, simulations, dry runs, regression checks, and approval gates.
+
+Practical Goal: Execute these concrete phase actions: Define non-production targets; create dry-run expectations; prevent test from touching production.
+
+Factory Component: Sandbox & Testing Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 27 MCP Ecosystem Factory.; required table evidence: `SystemHealthLog`, `HealthCheckRegistry`, `AutomationRegistry`; future test case tables `UNKNOWN`.; required agent evidence: future `QA_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`..
+
+Required Outputs: Sandbox policy; test data rules; dry-run framework; regression checklist.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools; dry-run/test documentation tools; no repair actions.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Define non-production targets; create dry-run expectations; prevent test from touching production. -> produce required outputs: Sandbox policy; test data rules; dry-run framework; regression checklist. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Test environment cannot mutate production systems. Practical verification: Simulate AutomationCommands flow without creating a command. Completion evidence: Safe testing is repeatable before production work.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Test scenarios, Project Brain, roadmap, checkpoint.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Testable data supports BI metrics.
+
+Next Phase Trigger: Testable data supports BI metrics.
 Deliverables: Sandbox policy; test data rules; dry-run framework; regression checklist.
 Required Tables: `SystemHealthLog`, `HealthCheckRegistry`, `AutomationRegistry`; future test case tables `UNKNOWN`.
 Required Agents: future `QA_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`.
@@ -968,6 +2108,44 @@ Mission Breakdown:
 ## Phase 29 - Business Intelligence Factory
 
 Objective: Create dashboards, metrics, forecasts, anomaly detection, service profitability, customer health, and executive summaries.
+
+Business Goal: Advance Tal AI Operating System readiness by using Business Intelligence Factory to support this verified objective: Create dashboards, metrics, forecasts, anomaly detection, service profitability, customer health, and executive summaries.
+
+Practical Goal: Execute these concrete phase actions: Define metrics from verified fields; separate read-only analytics from operational writes.
+
+Factory Component: Business Intelligence Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 28 Sandbox & Testing Factory.; required table evidence: `ServiceReports`, `BusinessDocuments`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, `ProductsCatalog`, `SyncLog`, `SystemHealthLog`; future BI tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future BI Agent `UNKNOWN`..
+
+Required Outputs: KPI catalog; data mart design; dashboard specs; anomaly rules.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Define metrics from verified fields; separate read-only analytics from operational writes. -> produce required outputs: KPI catalog; data mart design; dashboard specs; anomaly rules. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: KPI formula cites source fields and handles missing data. Practical verification: Calculate one documented KPI from sample evidence. Completion evidence: BI metrics are traceable and non-invasive.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: KPI map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: BI signals feed Command Center.
+
+Next Phase Trigger: BI signals feed Command Center.
 Deliverables: KPI catalog; data mart design; dashboard specs; anomaly rules.
 Required Tables: `ServiceReports`, `BusinessDocuments`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, `ProductsCatalog`, `SyncLog`, `SystemHealthLog`; future BI tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future BI Agent `UNKNOWN`.
@@ -989,6 +2167,44 @@ Mission Breakdown:
 ## Phase 30 - AI Enterprise Command Center
 
 Objective: Create central command interface for system status, approvals, agents, workflows, incidents, metrics, and operations.
+
+Business Goal: Advance Tal AI Operating System readiness by using AI Enterprise Command Center to support this verified objective: Create central command interface for system status, approvals, agents, workflows, incidents, metrics, and operations.
+
+Practical Goal: Execute these concrete phase actions: Aggregate existing status sources; define read-only status first; gate command execution.
+
+Factory Component: AI Enterprise Command Center.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 29 BI Factory.; required table evidence: `SystemHealthLog`, `AutomationRegistry`, `ApprovalsLog`, `BusinessDocumentLog`, `SyncLog`, `ErrorLog`; future command center tables `UNKNOWN`.; required agent evidence: `ORCHESTRATOR_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Command Center Agent `UNKNOWN`..
+
+Required Outputs: Command center information architecture; approval queue spec; incident/status dashboard spec.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Aggregate existing status sources; define read-only status first; gate command execution. -> produce required outputs: Command center information architecture; approval queue spec; incident/status dashboard spec. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Dashboard cannot execute production actions without approval. Practical verification: Show one status view and one blocked action path. Completion evidence: Command center is status-first and approval-gated.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Command center map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Command center state feeds Digital Twin Factory.
+
+Next Phase Trigger: Command center state feeds Digital Twin Factory.
 Deliverables: Command center information architecture; approval queue spec; incident/status dashboard spec.
 Required Tables: `SystemHealthLog`, `AutomationRegistry`, `ApprovalsLog`, `BusinessDocumentLog`, `SyncLog`, `ErrorLog`; future command center tables `UNKNOWN`.
 Required Agents: `ORCHESTRATOR_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Command Center Agent `UNKNOWN`.
@@ -1010,6 +2226,44 @@ Mission Breakdown:
 ## Phase 31 - Digital Twin Factory
 
 Objective: Model current and future systems as digital twins for AppSheet, Sheets, workflows, data models, automations, customers, equipment, and operations.
+
+Business Goal: Advance Tal AI Operating System readiness by using Digital Twin Factory to support this verified objective: Model current and future systems as digital twins for AppSheet, Sheets, workflows, data models, automations, customers, equipment, and operations.
+
+Practical Goal: Execute these concrete phase actions: Convert existing maps into structured twin models; mark unknowns; validate against live read-only metadata.
+
+Factory Component: Digital Twin Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 30 Command Center.; required table evidence: All verified current tables; future twin metadata tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Digital Twin Agent `UNKNOWN`..
+
+Required Outputs: Digital twin model registry; entity maps; workflow simulations; dependency graph.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Convert existing maps into structured twin models; mark unknowns; validate against live read-only metadata. -> produce required outputs: Digital twin model registry; entity maps; workflow simulations; dependency graph. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Twin object cites current source and conflict status. Practical verification: Simulate ServiceReports -> BusinessDocuments -> AutomationCommands path. Completion evidence: Twin accurately represents current and future comparison state.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Maps, Project Brain, roadmap, checkpoint.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Twin state feeds observability.
+
+Next Phase Trigger: Twin state feeds observability.
 Deliverables: Digital twin model registry; entity maps; workflow simulations; dependency graph.
 Required Tables: All verified current tables; future twin metadata tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Digital Twin Agent `UNKNOWN`.
@@ -1031,6 +2285,44 @@ Mission Breakdown:
 ## Phase 32 - Enterprise Observability Factory
 
 Objective: Track logs, traces, workflow outcomes, agent actions, schema changes, integration failures, incidents, and health signals.
+
+Business Goal: Advance Tal AI Operating System readiness by using Enterprise Observability Factory to support this verified objective: Track logs, traces, workflow outcomes, agent actions, schema changes, integration failures, incidents, and health signals.
+
+Practical Goal: Execute these concrete phase actions: Map existing logs; identify missing signals; define read-only incident reporting.
+
+Factory Component: Enterprise Observability Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 31 Digital Twin Factory.; required table evidence: `SystemHealthLog`, `SyncLog`, `ErrorLog`, `BusinessDocumentLog`, `AutomationRegistry`, `HealthCheckRegistry`; future observability tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Observability Agent `UNKNOWN`..
+
+Required Outputs: Observability signal catalog; log routing design; incident taxonomy; alert rules.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools; dry-run/test documentation tools; no repair actions.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map existing logs; identify missing signals; define read-only incident reporting. -> produce required outputs: Observability signal catalog; log routing design; incident taxonomy; alert rules. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Signal has source, severity, owner, and no auto-repair unless approved. Practical verification: Classify one Maven sync error from `ErrorLog` contract. Completion evidence: Observability signals are actionable and safe.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Observability map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Observability supports autonomous discovery.
+
+Next Phase Trigger: Observability supports autonomous discovery.
 Deliverables: Observability signal catalog; log routing design; incident taxonomy; alert rules.
 Required Tables: `SystemHealthLog`, `SyncLog`, `ErrorLog`, `BusinessDocumentLog`, `AutomationRegistry`, `HealthCheckRegistry`; future observability tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Observability Agent `UNKNOWN`.
@@ -1052,6 +2344,44 @@ Mission Breakdown:
 ## Phase 33 - Autonomous Discovery Factory
 
 Objective: Allow approved agents to discover undocumented files, schemas, workflows, patterns, risks, and improvements.
+
+Business Goal: Advance Tal AI Operating System readiness by using Autonomous Discovery Factory to support this verified objective: Allow approved agents to discover undocumented files, schemas, workflows, patterns, risks, and improvements.
+
+Practical Goal: Execute these concrete phase actions: Define read-only discovery tasks; classify findings; route changes to approval.
+
+Factory Component: Autonomous Discovery Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 32 Observability Factory.; required table evidence: `AutomationRegistry`, `HealthCheckRegistry`, `SystemHealthLog`; future discovery registry tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Discovery Agent `UNKNOWN`..
+
+Required Outputs: Discovery permission policy; discovery result template; source search protocol; unknown-resolution workflow.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Define read-only discovery tasks; classify findings; route changes to approval. -> produce required outputs: Discovery permission policy; discovery result template; source search protocol; unknown-resolution workflow. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Discovery cannot write or execute production actions. Practical verification: Resolve one `UNKNOWN` field from repository sources or keep `UNKNOWN`. Completion evidence: Discovery turns unknowns into verified findings without side effects.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Maps, Project Brain, roadmap, lessons.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Discovery outputs feed revenue optimization.
+
+Next Phase Trigger: Discovery outputs feed revenue optimization.
 Deliverables: Discovery permission policy; discovery result template; source search protocol; unknown-resolution workflow.
 Required Tables: `AutomationRegistry`, `HealthCheckRegistry`, `SystemHealthLog`; future discovery registry tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Discovery Agent `UNKNOWN`.
@@ -1073,6 +2403,44 @@ Mission Breakdown:
 ## Phase 34 - Revenue Optimization Factory
 
 Objective: Analyze pricing, service history, conversion, customer segments, follow-up timing, and revenue leakage.
+
+Business Goal: Advance Tal AI Operating System readiness by using Revenue Optimization Factory to support this verified objective: Analyze pricing, service history, conversion, customer segments, follow-up timing, and revenue leakage.
+
+Practical Goal: Execute these concrete phase actions: Map price and service history; generate recommendations with source evidence and approval flags.
+
+Factory Component: Revenue Optimization Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 33 Discovery Factory.; required table evidence: `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, `BusinessDocuments`, `ProductsCatalog`, `ServiceReports`, `Customers_Final`.; required agent evidence: `AI_DRAFT_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Revenue Agent `UNKNOWN`..
+
+Required Outputs: Revenue KPI list; pricing analysis rules; leakage detection; recommendation workflow.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map price and service history; generate recommendations with source evidence and approval flags. -> produce required outputs: Revenue KPI list; pricing analysis rules; leakage detection; recommendation workflow. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Recommendation cites price/history source and marks uncertainty. Practical verification: Detect one possible pricing inconsistency without changing documents. Completion evidence: Revenue recommendations are evidence-backed and non-executing.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Revenue map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Recommendations can be assigned to AI office workers.
+
+Next Phase Trigger: Recommendations can be assigned to AI office workers.
 Deliverables: Revenue KPI list; pricing analysis rules; leakage detection; recommendation workflow.
 Required Tables: `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, `BusinessDocuments`, `ProductsCatalog`, `ServiceReports`, `Customers_Final`.
 Required Agents: `AI_DRAFT_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Revenue Agent `UNKNOWN`.
@@ -1094,6 +2462,44 @@ Mission Breakdown:
 ## Phase 35 - AI Office Workers Factory
 
 Objective: Create AI worker roles for admin operations, document handling, follow-up, finance preparation, scheduling, and coordination.
+
+Business Goal: Advance Tal AI Operating System readiness by using AI Office Workers Factory to support this verified objective: Create AI worker roles for admin operations, document handling, follow-up, finance preparation, scheduling, and coordination.
+
+Practical Goal: Execute these concrete phase actions: Define worker task specs and forbid unapproved external writes.
+
+Factory Component: AI Office Workers Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 34 Revenue Optimization Factory.; required table evidence: `AutomationRegistry`, `ApprovalsLog`, `EmailLog`, `BusinessDocuments`; future worker task tables `UNKNOWN`.; required agent evidence: `ORCHESTRATOR_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, future AI Office Worker agents `UNKNOWN`..
+
+Required Outputs: Worker role definitions; task boundaries; approval gates; escalation paths.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Define worker task specs and forbid unapproved external writes. -> produce required outputs: Worker role definitions; task boundaries; approval gates; escalation paths. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Worker cannot send, create, deploy, or update production without approval. Practical verification: Worker drafts a follow-up task but does not send it. Completion evidence: Worker roles are bounded and auditable.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Agent registry, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Worker patterns support technician-specific AI.
+
+Next Phase Trigger: Worker patterns support technician-specific AI.
 Deliverables: Worker role definitions; task boundaries; approval gates; escalation paths.
 Required Tables: `AutomationRegistry`, `ApprovalsLog`, `EmailLog`, `BusinessDocuments`; future worker task tables `UNKNOWN`.
 Required Agents: `ORCHESTRATOR_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, future AI Office Worker agents `UNKNOWN`.
@@ -1115,6 +2521,44 @@ Mission Breakdown:
 ## Phase 36 - AI Technician Factory
 
 Objective: Support technicians with equipment knowledge, troubleshooting, service history, recommended parts, checklists, reports, and safety guidance.
+
+Business Goal: Advance Tal AI Operating System readiness by using AI Technician Factory to support this verified objective: Support technicians with equipment knowledge, troubleshooting, service history, recommended parts, checklists, reports, and safety guidance.
+
+Practical Goal: Execute these concrete phase actions: Map equipment/service history; produce recommendations with confidence and source notes.
+
+Factory Component: AI Technician Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 35 AI Office Workers Factory.; required table evidence: `ServiceReports`, `ReportEquipmentItems`, `PartsUsed`, `ProductsCatalog`, `InventoryStock`, `InspectionItems`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Technician Agent `UNKNOWN`..
+
+Required Outputs: Technician assistant scope; equipment knowledge map; checklist rules; recommendation output format.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map equipment/service history; produce recommendations with confidence and source notes. -> produce required outputs: Technician assistant scope; equipment knowledge map; checklist rules; recommendation output format. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Recommendation cites service history and does not override technician judgment. Practical verification: Produce one equipment maintenance recommendation from mapped fields. Completion evidence: Technician guidance is evidence-backed and bounded.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Service/equipment maps, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Technician and office workflows combine into Company OS.
+
+Next Phase Trigger: Technician and office workflows combine into Company OS.
 Deliverables: Technician assistant scope; equipment knowledge map; checklist rules; recommendation output format.
 Required Tables: `ServiceReports`, `ReportEquipmentItems`, `PartsUsed`, `ProductsCatalog`, `InventoryStock`, `InspectionItems`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Technician Agent `UNKNOWN`.
@@ -1136,6 +2580,44 @@ Mission Breakdown:
 ## Phase 37 - Company Operating System
 
 Objective: Unify operational modules into company OS with data, workflows, agents, dashboards, approvals, documents, and governance.
+
+Business Goal: Advance Tal AI Operating System readiness by using Company Operating System to support this verified objective: Unify operational modules into company OS with data, workflows, agents, dashboards, approvals, documents, and governance.
+
+Practical Goal: Execute these concrete phase actions: Map modules and dependencies; define system-of-record per domain; prevent premature migration.
+
+Factory Component: Company Operating System.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 36 AI Technician Factory.; required table evidence: All verified business tables plus future OS tables `UNKNOWN`.; required agent evidence: All active governance agents plus future department agents `UNKNOWN`..
+
+Required Outputs: Company OS module map; integration matrix; shared permission model; operating dashboard spec.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map modules and dependencies; define system-of-record per domain; prevent premature migration. -> produce required outputs: Company OS module map; integration matrix; shared permission model; operating dashboard spec. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Integration does not create duplicate system of record. Practical verification: Trace one customer-service-finance workflow across modules. Completion evidence: Modules integrate through governed interfaces.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Architecture map, Project Brain, roadmap.
+
+Agent Responsible: UNKNOWN
+
+Review Agent: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Company OS patterns become reusable factories.
+
+Next Phase Trigger: Company OS patterns become reusable factories.
 Deliverables: Company OS module map; integration matrix; shared permission model; operating dashboard spec.
 Required Tables: All verified business tables plus future OS tables `UNKNOWN`.
 Required Agents: All active governance agents plus future department agents `UNKNOWN`.
@@ -1157,6 +2639,44 @@ Mission Breakdown:
 ## Phase 38 - AI Factory of Factories
 
 Objective: Create reusable patterns, templates, agents, workflows, schemas, and deployment models for safe business factories.
+
+Business Goal: Advance Tal AI Operating System readiness by using AI Factory of Factories to support this verified objective: Create reusable patterns, templates, agents, workflows, schemas, and deployment models for safe business factories.
+
+Practical Goal: Execute these concrete phase actions: Extract reusable patterns from completed factories; validate before reuse.
+
+Factory Component: AI Factory of Factories.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 37 Company OS.; required table evidence: `AutomationRegistry`, `HealthCheckRegistry`, `SystemHealthLog`; future template registry tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Factory Agent `UNKNOWN`..
+
+Required Outputs: Factory template set; reuse rules; generation checklist; approval gates.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Extract reusable patterns from completed factories; validate before reuse. -> produce required outputs: Factory template set; reuse rules; generation checklist; approval gates. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Template does not bypass source-of-truth or approval rules. Practical verification: Convert one workflow spec into a reusable template. Completion evidence: Templates are reusable with evidence and constraints.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Template maps, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Reusable patterns support enterprise architecture factory.
+
+Next Phase Trigger: Reusable patterns support enterprise architecture factory.
 Deliverables: Factory template set; reuse rules; generation checklist; approval gates.
 Required Tables: `AutomationRegistry`, `HealthCheckRegistry`, `SystemHealthLog`; future template registry tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Factory Agent `UNKNOWN`.
@@ -1178,6 +2698,44 @@ Mission Breakdown:
 ## Phase 39 - Enterprise Architecture Factory
 
 Objective: Maintain architecture maps, dependency graphs, source-of-truth rules, target comparisons, migration plans, and decision records.
+
+Business Goal: Advance Tal AI Operating System readiness by using Enterprise Architecture Factory to support this verified objective: Maintain architecture maps, dependency graphs, source-of-truth rules, target comparisons, migration plans, and decision records.
+
+Practical Goal: Execute these concrete phase actions: Keep architecture evidence current; require architecture review for new components.
+
+Factory Component: Enterprise Architecture Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 38 AI Factory of Factories.; required table evidence: `AutomationRegistry`; future architecture registry tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, `GIT_AGENT`..
+
+Required Outputs: Architecture registry; dependency graph; ADR process; target/current comparison process.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Keep architecture evidence current; require architecture review for new components. -> produce required outputs: Architecture registry; dependency graph; ADR process; target/current comparison process. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Architecture claim cites source and reuse decision. Practical verification: Classify one target component as `EXISTS`, `PARTIAL`, or `MISSING`. Completion evidence: Architecture state is traceable and reviewable.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Architecture docs, maps, decision log proposals, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Architecture maps feed business process factory.
+
+Next Phase Trigger: Architecture maps feed business process factory.
 Deliverables: Architecture registry; dependency graph; ADR process; target/current comparison process.
 Required Tables: `AutomationRegistry`; future architecture registry tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, `GIT_AGENT`.
@@ -1199,6 +2757,44 @@ Mission Breakdown:
 ## Phase 40 - Business Process Factory
 
 Objective: Map, optimize, automate, and monitor business processes across departments with versioned workflows and approval gates.
+
+Business Goal: Advance Tal AI Operating System readiness by using Business Process Factory to support this verified objective: Map, optimize, automate, and monitor business processes across departments with versioned workflows and approval gates.
+
+Practical Goal: Execute these concrete phase actions: Document process start/end, owner, inputs, outputs, approvals, risks, and metrics.
+
+Factory Component: Business Process Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 39 Enterprise Architecture Factory.; required table evidence: `AutomationRegistry`, `AutomationCommands`, `BusinessDocumentLog`, `SystemHealthLog`; future process tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Process Agent `UNKNOWN`..
+
+Required Outputs: Process catalog; process versioning rules; automation candidates; monitoring rules.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Document process start/end, owner, inputs, outputs, approvals, risks, and metrics. -> produce required outputs: Process catalog; process versioning rules; automation candidates; monitoring rules. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Process has owner, trigger, output, exception path, and metric. Practical verification: Map one end-to-end BusinessDocuments process. Completion evidence: Processes are versioned and automation-ready.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Process map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Process visibility supports customer success.
+
+Next Phase Trigger: Process visibility supports customer success.
 Deliverables: Process catalog; process versioning rules; automation candidates; monitoring rules.
 Required Tables: `AutomationRegistry`, `AutomationCommands`, `BusinessDocumentLog`, `SystemHealthLog`; future process tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Process Agent `UNKNOWN`.
@@ -1220,6 +2816,44 @@ Mission Breakdown:
 ## Phase 41 - Customer Success Factory
 
 Objective: Track customer health, service quality, open issues, communication, follow-ups, retention, and maintenance opportunities.
+
+Business Goal: Advance Tal AI Operating System readiness by using Customer Success Factory to support this verified objective: Track customer health, service quality, open issues, communication, follow-ups, retention, and maintenance opportunities.
+
+Practical Goal: Execute these concrete phase actions: Define customer health from service and finance evidence; draft follow-ups only with approval.
+
+Factory Component: Customer Success Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 40 Business Process Factory.; required table evidence: `Customers_Final`, `ServiceReports`, `ReportEquipmentItems`, `BusinessDocuments`, `EmailLog`, `InvoiceMavenDocuments`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Customer Success Agent `UNKNOWN`..
+
+Required Outputs: Customer health model; follow-up workflow; service quality metrics; retention alerts.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Define customer health from service and finance evidence; draft follow-ups only with approval. -> produce required outputs: Customer health model; follow-up workflow; service quality metrics; retention alerts. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Customer recommendation cites evidence and does not send automatically. Practical verification: Produce one customer health summary from mapped sources. Completion evidence: Customer success actions are traceable and approval-gated.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Customer success map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Customer/supplier relationship model supports partner ecosystem.
+
+Next Phase Trigger: Customer/supplier relationship model supports partner ecosystem.
 Deliverables: Customer health model; follow-up workflow; service quality metrics; retention alerts.
 Required Tables: `Customers_Final`, `ServiceReports`, `ReportEquipmentItems`, `BusinessDocuments`, `EmailLog`, `InvoiceMavenDocuments`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Customer Success Agent `UNKNOWN`.
@@ -1241,6 +2875,44 @@ Mission Breakdown:
 ## Phase 42 - Partner Ecosystem Factory
 
 Objective: Manage suppliers, contractors, partners, integrations, procurement relationships, and partner performance.
+
+Business Goal: Advance Tal AI Operating System readiness by using Partner Ecosystem Factory to support this verified objective: Manage suppliers, contractors, partners, integrations, procurement relationships, and partner performance.
+
+Practical Goal: Execute these concrete phase actions: Map suppliers and products; define partner performance evidence; approval-gate partner communications/orders.
+
+Factory Component: Partner Ecosystem Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 41 Customer Success Factory.; required table evidence: `SuppliersProducts`, `InvoiceMavenItems`, `ProductsCatalog`, `InventoryStock`; future partner tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Partner Agent `UNKNOWN`..
+
+Required Outputs: Partner registry design; supplier performance metrics; integration rules; procurement relationship map.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map suppliers and products; define partner performance evidence; approval-gate partner communications/orders. -> produce required outputs: Partner registry design; supplier performance metrics; integration rules; procurement relationship map. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Partner action has source, approval, and no automatic order. Practical verification: Summarize one supplier/product relationship. Completion evidence: Partner workflows are governed and measurable.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Partner map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Supplier/product data feeds Product Factory.
+
+Next Phase Trigger: Supplier/product data feeds Product Factory.
 Deliverables: Partner registry design; supplier performance metrics; integration rules; procurement relationship map.
 Required Tables: `SuppliersProducts`, `InvoiceMavenItems`, `ProductsCatalog`, `InventoryStock`; future partner tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Partner Agent `UNKNOWN`.
@@ -1262,6 +2934,44 @@ Mission Breakdown:
 ## Phase 43 - Product Factory
 
 Objective: Manage products, service packages, parts, pricing, bundles, compatibility, lifecycle, and productized offerings.
+
+Business Goal: Advance Tal AI Operating System readiness by using Product Factory to support this verified objective: Manage products, service packages, parts, pricing, bundles, compatibility, lifecycle, and productized offerings.
+
+Practical Goal: Execute these concrete phase actions: Map catalog to Maven items and service usage; identify duplicates and price gaps.
+
+Factory Component: Product Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 42 Partner Ecosystem Factory.; required table evidence: `ProductsCatalog`, `InvoiceMavenItems`, `InvoiceMavenDocumentItems`, `SuppliersProducts`, `InventoryStock`, `PartsUsed`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Product Agent `UNKNOWN`..
+
+Required Outputs: Product model; package rules; compatibility map; pricing governance.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map catalog to Maven items and service usage; identify duplicates and price gaps. -> produce required outputs: Product model; package rules; compatibility map; pricing governance. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Product recommendation cites catalog/history/supplier evidence. Practical verification: Reconcile one product across `ProductsCatalog` and `InvoiceMavenItems`. Completion evidence: Product data supports service, sales, and inventory safely.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Product map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Product/equipment knowledge supports Compressor Expert.
+
+Next Phase Trigger: Product/equipment knowledge supports Compressor Expert.
 Deliverables: Product model; package rules; compatibility map; pricing governance.
 Required Tables: `ProductsCatalog`, `InvoiceMavenItems`, `InvoiceMavenDocumentItems`, `SuppliersProducts`, `InventoryStock`, `PartsUsed`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Product Agent `UNKNOWN`.
@@ -1283,6 +2993,44 @@ Mission Breakdown:
 ## Phase 44 - Compressor Expert Factory
 
 Objective: Build domain expert layer for compressor models, maintenance intervals, parts, service types, failure patterns, and technician guidance.
+
+Business Goal: Advance Tal AI Operating System readiness by using Compressor Expert Factory to support this verified objective: Build domain expert layer for compressor models, maintenance intervals, parts, service types, failure patterns, and technician guidance.
+
+Practical Goal: Execute these concrete phase actions: Extract equipment patterns from reports; define guidance with confidence and source evidence.
+
+Factory Component: Compressor Expert Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 43 Product Factory.; required table evidence: `ReportEquipmentItems`, `ServiceReports`, `PartsUsed`, `ProductsCatalog`, `InspectionItems`, `Lists`.; required agent evidence: future Compressor Expert Agent `UNKNOWN`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`..
+
+Required Outputs: Compressor knowledge model; maintenance rules; parts compatibility; failure pattern catalog.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Extract equipment patterns from reports; define guidance with confidence and source evidence. -> produce required outputs: Compressor knowledge model; maintenance rules; parts compatibility; failure pattern catalog. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Expert output separates evidence from recommendation. Practical verification: Produce one maintenance interval recommendation with source records. Completion evidence: Compressor knowledge is evidence-backed and technician-approved.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Compressor knowledge map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Domain knowledge feeds Tal AI Master Brain.
+
+Next Phase Trigger: Domain knowledge feeds Tal AI Master Brain.
 Deliverables: Compressor knowledge model; maintenance rules; parts compatibility; failure pattern catalog.
 Required Tables: `ReportEquipmentItems`, `ServiceReports`, `PartsUsed`, `ProductsCatalog`, `InspectionItems`, `Lists`.
 Required Agents: future Compressor Expert Agent `UNKNOWN`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`.
@@ -1304,6 +3052,44 @@ Mission Breakdown:
 ## Phase 45 - Tal AI Master Brain
 
 Objective: Connect project memory, business memory, architecture, agents, workflows, data, and decisions.
+
+Business Goal: Advance Tal AI Operating System readiness by using Tal AI Master Brain to support this verified objective: Connect project memory, business memory, architecture, agents, workflows, data, and decisions.
+
+Practical Goal: Execute these concrete phase actions: Define what memory is authoritative; connect Project Brain to business facts without mixing stale and live sources.
+
+Factory Component: Tal AI Master Brain.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 44 Compressor Expert Factory.; required table evidence: All verified operational and governance tables; future master brain tables `UNKNOWN`.; required agent evidence: `PROJECT_BRAIN_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, future Master Brain Agent `UNKNOWN`..
+
+Required Outputs: Master knowledge architecture; cross-domain retrieval rules; source citation rules; governance link map.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Define what memory is authoritative; connect Project Brain to business facts without mixing stale and live sources. -> produce required outputs: Master knowledge architecture; cross-domain retrieval rules; source citation rules; governance link map. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Answer cites correct source and identifies stale/conflicting sources. Practical verification: Answer "what is current phase and protected systems?" from documented sources. Completion evidence: Master Brain can retrieve governed answers without assumption.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Project Brain master, roadmap, maps, checkpoint.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Master Brain supports platform capabilities.
+
+Next Phase Trigger: Master Brain supports platform capabilities.
 Deliverables: Master knowledge architecture; cross-domain retrieval rules; source citation rules; governance link map.
 Required Tables: All verified operational and governance tables; future master brain tables `UNKNOWN`.
 Required Agents: `PROJECT_BRAIN_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, future Master Brain Agent `UNKNOWN`.
@@ -1325,6 +3111,44 @@ Mission Breakdown:
 ## Phase 46 - Platform Factory
 
 Objective: Develop reusable platform capabilities for tenants, authentication, permissions, integrations, configuration, deployment, observability, and admin.
+
+Business Goal: Advance Tal AI Operating System readiness by using Platform Factory to support this verified objective: Develop reusable platform capabilities for tenants, authentication, permissions, integrations, configuration, deployment, observability, and admin.
+
+Practical Goal: Execute these concrete phase actions: Design platform services from approved requirements; do not deploy or create infrastructure without approval.
+
+Factory Component: Platform Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 45 Tal AI Master Brain.; required table evidence: Future platform tables `UNKNOWN`; current references: `SecretAccessLog`, `ApprovalsLog`, `AutomationRegistry`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Platform Agent `UNKNOWN`..
+
+Required Outputs: Platform capability map; tenant/auth/permission design; integration and deployment policy.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools; sandbox/design tooling only after approval; no infrastructure creation unless separately approved.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Design platform services from approved requirements; do not deploy or create infrastructure without approval. -> produce required outputs: Platform capability map; tenant/auth/permission design; integration and deployment policy. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Platform capability has tenant, permission, audit, rollback, and approval model. Practical verification: Walk one admin permission scenario. Completion evidence: Platform capabilities are designed before implementation.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Platform architecture, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Platform services support Template Factory.
+
+Next Phase Trigger: Platform services support Template Factory.
 Deliverables: Platform capability map; tenant/auth/permission design; integration and deployment policy.
 Required Tables: Future platform tables `UNKNOWN`; current references: `SecretAccessLog`, `ApprovalsLog`, `AutomationRegistry`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Platform Agent `UNKNOWN`.
@@ -1346,6 +3170,44 @@ Mission Breakdown:
 ## Phase 47 - Template Factory
 
 Objective: Create reusable templates for documents, workflows, agents, tables, dashboards, prompts, tests, reports, and deployment patterns.
+
+Business Goal: Advance Tal AI Operating System readiness by using Template Factory to support this verified objective: Create reusable templates for documents, workflows, agents, tables, dashboards, prompts, tests, reports, and deployment patterns.
+
+Practical Goal: Execute these concrete phase actions: Convert proven specs into reusable templates; attach validation and forbidden actions.
+
+Factory Component: Template Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 46 Platform Factory.; required table evidence: Future template registry tables `UNKNOWN`; current docs and maps as source evidence.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Template Agent `UNKNOWN`..
+
+Required Outputs: Template registry design; template validation rules; reuse instructions.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Convert proven specs into reusable templates; attach validation and forbidden actions. -> produce required outputs: Template registry design; template validation rules; reuse instructions. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Template includes required inputs, actions, validation, output, and approval gates. Practical verification: Instantiate one documentation template with sample values. Completion evidence: Templates are reusable and governed.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Template docs, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Templates can be distributed through marketplace.
+
+Next Phase Trigger: Templates can be distributed through marketplace.
 Deliverables: Template registry design; template validation rules; reuse instructions.
 Required Tables: Future template registry tables `UNKNOWN`; current docs and maps as source evidence.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Template Agent `UNKNOWN`.
@@ -1367,6 +3229,44 @@ Mission Breakdown:
 ## Phase 48 - Enterprise Marketplace
 
 Objective: Enable reusable modules, agents, templates, integrations, workflows, and capabilities to be selected and deployed across companies.
+
+Business Goal: Advance Tal AI Operating System readiness by using Enterprise Marketplace to support this verified objective: Enable reusable modules, agents, templates, integrations, workflows, and capabilities to be selected and deployed across companies.
+
+Practical Goal: Execute these concrete phase actions: Define catalog item contract; require sandbox validation before deployment.
+
+Factory Component: Enterprise Marketplace.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 47 Template Factory.; required table evidence: Future marketplace tables `UNKNOWN`; current references: `AutomationRegistry`, `ApprovalsLog`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Marketplace Agent `UNKNOWN`..
+
+Required Outputs: Marketplace catalog design; module metadata; installation approval process; compatibility checks.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Define catalog item contract; require sandbox validation before deployment. -> produce required outputs: Marketplace catalog design; module metadata; installation approval process; compatibility checks. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Marketplace item cannot deploy without approval and compatibility evidence. Practical verification: Evaluate one template as a marketplace candidate. Completion evidence: Marketplace distribution is controlled and auditable.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Marketplace map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Marketplace items can include AI research outputs.
+
+Next Phase Trigger: Marketplace items can include AI research outputs.
 Deliverables: Marketplace catalog design; module metadata; installation approval process; compatibility checks.
 Required Tables: Future marketplace tables `UNKNOWN`; current references: `AutomationRegistry`, `ApprovalsLog`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Marketplace Agent `UNKNOWN`.
@@ -1388,6 +3288,44 @@ Mission Breakdown:
 ## Phase 49 - AI Research Factory
 
 Objective: Experiment with models, prompts, evaluations, automation patterns, agent workflows, and BI methods in a safe sandbox.
+
+Business Goal: Advance Tal AI Operating System readiness by using AI Research Factory to support this verified objective: Experiment with models, prompts, evaluations, automation patterns, agent workflows, and BI methods in a safe sandbox.
+
+Practical Goal: Execute these concrete phase actions: Run sandbox-only experiments; record results; never promote to production without approval.
+
+Factory Component: AI Research Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 48 Enterprise Marketplace.; required table evidence: Future experiment tables `UNKNOWN`; current references: `AIDraftSuggestions`, `ApprovalsLog`, Project Brain docs.; required agent evidence: `AI_DRAFT_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Research Agent `UNKNOWN`..
+
+Required Outputs: Research protocol; experiment registry design; evaluation reports; promotion criteria.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Run sandbox-only experiments; record results; never promote to production without approval. -> produce required outputs: Research protocol; experiment registry design; evaluation reports; promotion criteria. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Experiment uses approved data and cannot write production. Practical verification: Run/document one prompt evaluation with non-production output. Completion evidence: Research outputs are evaluated and promotion-gated.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Research notes, lessons, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Validated research feeds autonomous business workflows.
+
+Next Phase Trigger: Validated research feeds autonomous business workflows.
 Deliverables: Research protocol; experiment registry design; evaluation reports; promotion criteria.
 Required Tables: Future experiment tables `UNKNOWN`; current references: `AIDraftSuggestions`, `ApprovalsLog`, Project Brain docs.
 Required Agents: `AI_DRAFT_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Research Agent `UNKNOWN`.
@@ -1409,6 +3347,44 @@ Mission Breakdown:
 ## Phase 50 - Autonomous Business Factory
 
 Objective: Move toward approved autonomous operations where agents recommend, simulate, validate, and execute bounded tasks under governance.
+
+Business Goal: Advance Tal AI Operating System readiness by using Autonomous Business Factory to support this verified objective: Move toward approved autonomous operations where agents recommend, simulate, validate, and execute bounded tasks under governance.
+
+Practical Goal: Execute these concrete phase actions: Define autonomy levels; keep high-risk actions approval-gated; validate with simulations first.
+
+Factory Component: Autonomous Business Factory.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 49 AI Research Factory.; required table evidence: `AutomationRegistry`, `ApprovalsLog`, `SystemHealthLog`; future autonomy tables `UNKNOWN`.; required agent evidence: `ORCHESTRATOR_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, future autonomous worker agents `UNKNOWN`..
+
+Required Outputs: Autonomy level model; bounded execution rules; simulation requirements; escalation paths.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Define autonomy levels; keep high-risk actions approval-gated; validate with simulations first. -> produce required outputs: Autonomy level model; bounded execution rules; simulation requirements; escalation paths. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Autonomous action is bounded, reversible, monitored, and approved. Practical verification: Simulate a low-risk internal task without production write. Completion evidence: Autonomy is controlled by policy and evidence.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Autonomy policy, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Autonomous decisions need knowledge graph context.
+
+Next Phase Trigger: Autonomous decisions need knowledge graph context.
 Deliverables: Autonomy level model; bounded execution rules; simulation requirements; escalation paths.
 Required Tables: `AutomationRegistry`, `ApprovalsLog`, `SystemHealthLog`; future autonomy tables `UNKNOWN`.
 Required Agents: `ORCHESTRATOR_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, future autonomous worker agents `UNKNOWN`.
@@ -1430,6 +3406,44 @@ Mission Breakdown:
 ## Phase 51 - Global Knowledge Graph
 
 Objective: Connect companies, customers, equipment, documents, service events, products, workflows, decisions, and outcomes.
+
+Business Goal: Advance Tal AI Operating System readiness by using Global Knowledge Graph to support this verified objective: Connect companies, customers, equipment, documents, service events, products, workflows, decisions, and outcomes.
+
+Practical Goal: Execute these concrete phase actions: Map nodes and edges from verified sources; preserve source lineage.
+
+Factory Component: Global Knowledge Graph.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 50 Autonomous Business Factory.; required table evidence: All verified business/governance tables; future graph tables `UNKNOWN`.; required agent evidence: `PROJECT_BRAIN_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, future Knowledge Graph Agent `UNKNOWN`..
+
+Required Outputs: Graph entity model; relationship map; source lineage rules; query examples.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Map nodes and edges from verified sources; preserve source lineage. -> produce required outputs: Graph entity model; relationship map; source lineage rules; query examples. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Every graph edge has source table/file and confidence. Practical verification: Map customer -> equipment -> service report -> business document relationship. Completion evidence: Graph relationships are traceable and non-duplicative.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Knowledge graph map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Graph context supports Digital Board.
+
+Next Phase Trigger: Graph context supports Digital Board.
 Deliverables: Graph entity model; relationship map; source lineage rules; query examples.
 Required Tables: All verified business/governance tables; future graph tables `UNKNOWN`.
 Required Agents: `PROJECT_BRAIN_AGENT`, `INFRASTRUCTURE_MANAGER_AGENT`, future Knowledge Graph Agent `UNKNOWN`.
@@ -1451,6 +3465,44 @@ Mission Breakdown:
 ## Phase 52 - Digital Board of Directors
 
 Objective: Create strategic advisory layer with AI board roles for finance, operations, risk, sales, customers, technology, and governance.
+
+Business Goal: Advance Tal AI Operating System readiness by using Digital Board of Directors to support this verified objective: Create strategic advisory layer with AI board roles for finance, operations, risk, sales, customers, technology, and governance.
+
+Practical Goal: Execute these concrete phase actions: Define board roles as advisory; require evidence from KPIs and maps.
+
+Factory Component: Digital Board of Directors.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 51 Global Knowledge Graph.; required table evidence: BI, health, finance, customer, and operations sources; future board tables `UNKNOWN`.; required agent evidence: future board agents `UNKNOWN`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`..
+
+Required Outputs: Board role definitions; advisory report templates; meeting cadence; decision escalation rules.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Define board roles as advisory; require evidence from KPIs and maps. -> produce required outputs: Board role definitions; advisory report templates; meeting cadence; decision escalation rules. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Board cannot approve or execute production actions. Practical verification: Produce one risk advisory from health/roadmap evidence. Completion evidence: Board outputs are evidence-backed recommendations only.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Board governance docs, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Board scenarios feed Enterprise Simulator.
+
+Next Phase Trigger: Board scenarios feed Enterprise Simulator.
 Deliverables: Board role definitions; advisory report templates; meeting cadence; decision escalation rules.
 Required Tables: BI, health, finance, customer, and operations sources; future board tables `UNKNOWN`.
 Required Agents: future board agents `UNKNOWN`, `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`.
@@ -1472,6 +3524,44 @@ Mission Breakdown:
 ## Phase 53 - Enterprise Simulator
 
 Objective: Simulate business decisions, workflow changes, pricing, staffing, inventory, service load, and migration impact before execution.
+
+Business Goal: Advance Tal AI Operating System readiness by using Enterprise Simulator to support this verified objective: Simulate business decisions, workflow changes, pricing, staffing, inventory, service load, and migration impact before execution.
+
+Practical Goal: Execute these concrete phase actions: Build scenario models from verified data; keep simulation separate from production action.
+
+Factory Component: Enterprise Simulator.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 52 Digital Board of Directors.; required table evidence: Relevant domain tables by scenario; future simulation tables `UNKNOWN`.; required agent evidence: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Simulator Agent `UNKNOWN`..
+
+Required Outputs: Simulation model catalog; scenario inputs; impact report format; approval-to-execute rules.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Build scenario models from verified data; keep simulation separate from production action. -> produce required outputs: Simulation model catalog; scenario inputs; impact report format; approval-to-execute rules. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: Simulation distinguishes assumptions from verified data. Practical verification: Simulate one migration or pricing scenario with documented assumptions. Completion evidence: Simulations support decisions without executing changes.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Simulation map, Project Brain, roadmap.
+
+Agent Responsible: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Review Agent: `PROJECT_BRAIN_AGENT` validates memory impact; human approval reviews production-impacting decisions.
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Simulator supports Tal AI Operating System decisions.
+
+Next Phase Trigger: Simulator supports Tal AI Operating System decisions.
 Deliverables: Simulation model catalog; scenario inputs; impact report format; approval-to-execute rules.
 Required Tables: Relevant domain tables by scenario; future simulation tables `UNKNOWN`.
 Required Agents: `INFRASTRUCTURE_MANAGER_AGENT`, `PROJECT_BRAIN_AGENT`, future Simulator Agent `UNKNOWN`.
@@ -1493,6 +3583,44 @@ Mission Breakdown:
 ## Phase 54 - Tal AI Operating System
 
 Objective: Unify all factories into a full AI operating system for business management, automation, governance, knowledge, execution, and continuous improvement.
+
+Business Goal: Advance Tal AI Operating System readiness by using Tal AI Operating System to support this verified objective: Unify all factories into a full AI operating system for business management, automation, governance, knowledge, execution, and continuous improvement.
+
+Practical Goal: Execute these concrete phase actions: Integrate only approved modules; validate end-to-end governance; run staged release with rollback.
+
+Factory Component: Tal AI Operating System.
+
+Required Inputs: Pre-Mission Review output; current roadmap/current task evidence; dependencies: Phase 53 Enterprise Simulator and all required predecessor modules.; required table evidence: All approved platform/business/governance tables; current verified tables remain source references until migrated.; required agent evidence: All approved agents; future OS agents `UNKNOWN`..
+
+Required Outputs: OS architecture; module integration map; governance model; operating procedures; release/rollback plan.
+
+Tools Used: file read/search with `rg`; `git status --short`; `git diff`; Pre-Mission Review template; no production-write tools.
+
+Source Files: `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`.
+
+Execution Flow: START -> run Pre-Mission Review -> read source files -> verify existing assets and required inputs -> execute phase actions: Integrate only approved modules; validate end-to-end governance; run staged release with rollback. -> produce required outputs: OS architecture; module integration map; governance model; operating procedures; release/rollback plan. -> run validation procedure -> propose brain updates -> END.
+
+Decision Logic: If existing assets cover the need, reuse or extend them. If required input evidence is missing, mark it UNKNOWN and stop for discovery. If the phase requires production, schema, customer-facing, financial, deployment, setup, Drive, Maven, AppSheet, Google Sheets, or Apps Script writes, stop and request explicit approval. If validation fails, use the recovery procedure before moving forward.
+
+Evidence Required: Source citations for objective, dependencies, tables, agents, actions, validation, and outputs; evidence must include `PROJECT_OPERATING_PROTOCOL.md`; `PROJECT_INDEX.md`; `project-brain/roadmap/ROADMAP.md`; `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`; `agents/PRE_MISSION_REVIEW_SYSTEM.md`; `agents/INFRASTRUCTURE_MANAGER_AGENT.md`; `agents/AGENT_REGISTRY.md`; `data-sources/tools/SHEETS_REGISTRY.md`; `project-brain/PROJECT_BRAIN_MASTER.md`; `project-brain/current/CURRENT_TASK.md`; `project-brain/maps/*`. Missing or unverified evidence remains UNKNOWN.
+
+Validation Procedure: Run these validation checks: End-to-end process has source-of-truth, approval, audit, rollback, health, and verification. Practical verification: Run one full sandbox workflow from intake to output verification and brain update proposal. Completion evidence: Operating system functions as governed, auditable, modular platform.
+
+Approval Rules: Documentation-only work may proceed within mission scope. Any production-impacting action, external write, schema change, deployment, setup function, Maven document action, AppSheet production edit, Google Sheets write, Drive permission/file change, customer email, queue retry/repair, or migration execution requires explicit human approval before action.
+
+Failure Conditions: Stop if required source files are missing, source hierarchy conflicts cannot be resolved, required input evidence is UNKNOWN and blocks output, validation fails, protected systems would be changed without approval, or the responsible/review agents cannot verify the output.
+
+Recovery Procedure: Stop execution -> record failed validation or missing evidence -> mark unresolved facts UNKNOWN -> route to Discovery or Infrastructure Manager -> recommend the smallest read-only next step -> update or propose Project Brain notes only after evidence is verified.
+
+Brain Updates: Master Brain, roadmap, architecture, maps, registries, checkpoint.
+
+Agent Responsible: UNKNOWN
+
+Review Agent: `INFRASTRUCTURE_MANAGER_AGENT`
+
+Completion Test: The phase is complete only when outputs exist, validation passes, practical verification is evidence-backed, brain updates are completed or proposed, no protected system was modified without approval, and next phase trigger is satisfied: Continuous improvement loop, not a new phase, unless approved by roadmap.
+
+Next Phase Trigger: Continuous improvement loop, not a new phase, unless approved by roadmap.
 Deliverables: OS architecture; module integration map; governance model; operating procedures; release/rollback plan.
 Required Tables: All approved platform/business/governance tables; current verified tables remain source references until migrated.
 Required Agents: All approved agents; future OS agents `UNKNOWN`.
