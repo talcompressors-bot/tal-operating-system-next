@@ -1,11 +1,13 @@
 # NEXT SESSION
 
-Status: Current session closeout checkpoint  
+Status: Final session closeout checkpoint  
 Date: 2026-06-16  
 Mode: Documentation only
 
 This file is a handoff checkpoint. Official current-state sources remain:
 
+- `PROJECT_OPERATING_PROTOCOL.md`
+- `PROJECT_INDEX.md`
 - `project-brain/current/CURRENT_TASK.md`
 - `project-brain/roadmap/ROADMAP.md`
 - `project-brain/PROJECT_BRAIN_MASTER.md`
@@ -21,10 +23,10 @@ This file is a handoff checkpoint. Official current-state sources remain:
 - PHASE 1 - Digital Twin Foundation: CURRENT.
 - Infrastructure Manager: ACTIVE.
 - Pre-Mission Review System: ACTIVE.
-- Factory Operating System documentation layer: created and pushed in commit `70facc0cc8dfb466948b0b2dc29dfd2ff24d026d`.
-- Factory Control Center Agent: created and pushed in commit `70facc0cc8dfb466948b0b2dc29dfd2ff24d026d`.
-- Factory Asset Registry: created in `project-brain/registries/FACTORY_ASSET_REGISTRY.md`; not committed yet at closeout.
-- AI Draft is validated for preview simulation only, not production draft creation.
+- Factory Control Center Agent: ACTIVE draft.
+- Factory Asset Registry: created and committed.
+- AI Draft is validated for read-only recommendation simulations only.
+- AI Draft is not approved for production draft creation, Maven creation, customer sending, invoice finalization, or payment status changes.
 
 Protected systems remain unchanged:
 
@@ -38,6 +40,16 @@ Protected systems remain unchanged:
 
 ## 2. Completed Today
 
+- Product Matching Audit.
+- Alias Registry Design.
+- Alias Registry Build.
+- Equipment Registry POC.
+- Service Kit Registry Build.
+- Pricing Intelligence Model.
+- AI Draft Pricing POC.
+
+Earlier completed session documentation work:
+
 - Factory Operating System documentation layer.
 - Factory Control Center Agent.
 - Factory Asset Registry.
@@ -45,44 +57,83 @@ Protected systems remain unchanged:
 - AI Draft Real Design.
 - AI Draft POC.
 
-## 3. AI Draft POC Results
+## 3. Key Results
 
-- Reports processed: 10.
-- Reports: 5847-5856.
-- Usable draft simulations: 7/10.
-- Average confidence: 63.8.
-- Production-ready automatic drafts: 0/10.
-- NeedsPriceApproval required: 10/10.
+- AI Draft generated 20/20 simulated recommendations.
+- Reports processed in latest pricing POC: 20 most recent completed/signed service reports.
+- Average confidence: 56.8%.
+- Production-ready drafts: 0/20.
+- Approval required: 20/20.
+- Main blocker: knowledge registry maturity.
 - No table writes.
 - No Maven call.
+- No Apps Script changes.
 - No deploy.
 
-## 4. Main Blocker
+## 4. Current Architecture Status
 
-AI Draft cannot safely become production-automatic yet because of:
+Current intended AI Draft architecture:
 
-- Pricing confidence.
-- Product/model matching.
-- Historical price normalization.
-- Customer ID mismatch between `ServiceReports` and Maven.
+```text
+ServiceReports
+-> Alias Registry
+-> Equipment Registry
+-> Service Kit Registry
+-> Pricing Engine
+-> BusinessDocuments
+-> Maven Draft
+```
 
-## 5. Highest Priority Next Mission
+Current status:
 
-`PRODUCT-MATCHING-AUDIT`
+- `ServiceReports` and `ReportEquipmentItems` contain enough data for preview recommendations.
+- Alias Registry exists as a design/report output only; not implemented as a table.
+- Equipment Registry exists as a POC/report output only; not implemented as a table.
+- Service Kit Registry exists as a candidate report only; not implemented as a table.
+- Pricing Engine exists as a design/report output only; not implemented in runtime.
+- `BusinessDocuments` output remains design/simulation only for AI Draft.
+- Maven Draft remains approval-gated and was not called.
+
+## 5. Current Highest Priority
+
+`ALIAS-REGISTRY-IMPLEMENTATION-PLAN`
 
 Purpose:
 
-Audit whether product names, compressor models, part descriptions, SKUs, service phrases, and historical Maven item descriptions can be matched reliably enough to support AI Draft pricing confidence.
+Create the implementation plan for turning validated alias candidates into a safe, governed Alias Registry without writing to production systems until approved.
 
-## 6. Recommended Next Missions
+## 6. Next Recommended Missions
 
-1. `PRODUCT-MATCHING-AUDIT`
-2. `ALIAS_REGISTRY`
-3. `CONFIDENCE_ENGINE`
-4. `AI_DRAFT_RUNTIME_PLAN`
+1. `ALIAS-REGISTRY-IMPLEMENTATION-PLAN`
+2. `EQUIPMENT-REGISTRY-IMPLEMENTATION-PLAN`
+3. `SERVICE-KIT-REGISTRY-IMPLEMENTATION-PLAN`
+4. `PRICING-REGISTRY-IMPLEMENTATION-PLAN`
 5. `AI_DRAFT_IMPLEMENTATION_PLAN`
 
-## 7. Exact Next-Session Startup Prompt
+## 7. Open Risks
+
+- Alias candidates are not yet stored in a governed registry.
+- Equipment models such as `GA26FF` still lack exact catalog and Maven service-kit matches.
+- Service-kit rows are still candidate-only and approval-gated.
+- Pricing confidence is limited by generic historical item names, wide price ranges, and missing quantities.
+- Small-service catalog pricing includes malformed rows that must not be used for auto-pricing.
+- Labor hours are often missing or bundled into service descriptions.
+- Travel/visit inclusion is inconsistent across historical rows.
+- Dryer models need a separate service/repair registry from compressor service kits.
+- Customer IDs in `ServiceReports` do not reliably match Maven customer IDs.
+- Any production AI Draft write path must protect Apps Script, Google Sheets, AppSheet, Maven, Drive, and AutomationCommands.
+
+## 8. Open Questions
+
+- Should Alias Registry be implemented as a Google Sheet table, repository markdown registry, or both?
+- What approval workflow should promote alias candidates from `NEEDS_REVIEW` to active?
+- Should model aliases and parts aliases live in one registry or separate registries?
+- Which registry owns dryer-specific repair/service mappings?
+- Should AI Draft create `BusinessDocuments` rows directly, or first create a separate `AIDraftSuggestions` review layer?
+- What confidence threshold is acceptable for prefilled prices if `NeedsPriceApproval` remains true?
+- Who approves catalog price cleanup for malformed ProductsCatalog rows?
+
+## 9. Exact Startup Prompt For Next Session
 
 ```text
 Start next Codex session for TalCompressors-ServiceReports-AI.
@@ -104,33 +155,27 @@ Read first:
 14. agents/AI_DRAFT_AGENT.md
 
 Mission:
-PRODUCT-MATCHING-AUDIT
+ALIAS-REGISTRY-IMPLEMENTATION-PLAN
 
 Goal:
-Audit actual product/model/item matching quality for AI Draft pricing.
+Create the implementation plan for the first production-ready Alias Registry using the completed Product Matching Audit, Alias Registry Design, Alias Registry Build, Equipment Registry POC, Service Kit Registry Build, Pricing Intelligence Model, and AI Draft Pricing POC.
 
-Use read-only evidence only.
-Do not modify Apps Script.
-Do not modify Google Sheets.
-Do not modify AppSheet.
-Do not call Maven.
-Do not deploy.
-Do not commit unless explicitly requested.
-
-Start by running Pre-Mission Review.
-Then compare:
-- ReportEquipmentItems equipment models and service descriptions
-- ProductsCatalog SKU/ProductName/ProductDescription
-- InvoiceMavenDocumentItems ItemDescription/UnitPrice
-- InventoryStock ProductID/SKU/ProductName
+Rules:
+- Run Pre-Mission Review first.
+- Documentation and planning only unless explicitly approved.
+- Do not modify Apps Script.
+- Do not modify Google Sheets.
+- Do not modify AppSheet.
+- Do not call Maven.
+- Do not deploy.
+- Do not commit unless explicitly requested.
 
 Output:
-Product Matching Audit Report with match rates, gaps, alias candidates, normalization needs, pricing-confidence impact, and next safe action.
+Alias Registry Implementation Plan with proposed storage location, columns, validation rules, approval process, migration steps, backout plan, audit checks, and next safe implementation step.
 ```
 
 ## Closeout Notes
 
-- Factory Asset Registry exists as an uncommitted documentation file.
-- `NEXT_SESSION.md` is updated as this closeout checkpoint.
-- No production systems were intentionally modified.
-- No Apps Script, Google Sheets, AppSheet, Maven, Drive, deploy, or setup actions were performed during closeout.
+- The latest AI Draft Pricing POC showed useful recommendation coverage but no production-ready automatic drafts.
+- The next work should mature registries before runtime implementation.
+- No production systems were intentionally modified during closeout.
