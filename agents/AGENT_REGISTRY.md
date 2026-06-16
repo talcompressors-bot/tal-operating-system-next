@@ -25,6 +25,11 @@ Status: Active
 Priority: Critical
 Role: Enforce source-of-truth, reuse-before-create, registry awareness, and safe architecture review before new components or production-impacting work.
 
+### PRE_MISSION_REVIEW_SYSTEM
+Status: Active
+Priority: Critical
+Role: Mandatory review gate before every mission. Defines who answers, who audits, what evidence is required, and how Infrastructure Manager approves or rejects mission execution.
+
 ### GIT_AGENT
 Status: Active
 Priority: High
