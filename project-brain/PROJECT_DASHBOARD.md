@@ -1,7 +1,7 @@
 # PROJECT DASHBOARD
 
 Last updated: 2026-06-21
-Mode: shutdown state, documentation only
+Mode: project brain sync
 
 ## Current Project Status
 
@@ -9,15 +9,22 @@ The repository now contains a Next.js shadow app for the Tal Compressors service
 
 The Next.js app is not production. It is a shadow/development implementation used to validate UI shape, routing, and data access without touching production systems.
 
+PostgreSQL V1 scope is approved, and the full V1 Prisma schema file exists at `prisma/schema.prisma`.
+
 ## Current Verified State
 
 - Next.js shadow app exists.
 - Hebrew RTL UI exists.
 - ServiceReports list and detail screens exist.
 - Adapter reads local snapshot JSON.
-- GitHub push completed.
+- Commit `108b756 Add full PostgreSQL V1 Prisma schema` exists and was pushed to `origin/main`.
+- `project-brain/migration/POSTGRESQL_V1_SCOPE.md` is approved as the PostgreSQL V1 scope boundary.
+- Full `prisma/schema.prisma` exists.
+- Prisma has not been installed.
+- No database has been created.
+- No migration has been run.
 - Production AppSheet and Google Sheets were untouched.
-- No Maven, AppSheet, Google Sheets, Prisma, or database writes were performed as part of shutdown documentation.
+- No Maven, AppSheet, Google Sheets, Prisma runtime, or database writes were performed.
 
 ## Live Read-Only Validation Completed
 
@@ -31,19 +38,13 @@ Read-only validation confirmed live source row counts:
 
 ## Migration Decision State
 
-The earlier Phase 1 Prisma subset was rejected as too narrow and documented. The next schema review must cover the full Tal Operating System scope before Prisma generation or database implementation.
+The earlier Phase 1 Prisma subset was rejected as too narrow and documented. The approved PostgreSQL V1 scope now covers the full Tal Operating System V1 boundary, and the full Prisma schema has been generated as a schema file only.
 
 ## Current Active Goal
 
-Create and review:
+Prisma validation -> PostgreSQL environment setup -> first shadow import.
 
-- `project-brain/migration/POSTGRESQL_V1_SCOPE.md`
-
-Goal:
-
-- Define the full PostgreSQL V1 scope for the Tal Operating System.
-- Review the complete schema boundary before creating Prisma files.
-- Keep AppSheet and Google Sheets as production until explicit cutover approval.
+This is still shadow migration work. AppSheet and Google Sheets remain production until explicit cutover approval.
 
 ## Phase Status
 
@@ -54,13 +55,15 @@ Goal:
 | Snapshot adapter | EXISTS | Reads local snapshot JSON for safe development. |
 | Live read-only validation | COMPLETED | Counts verified for Customers, ServiceReports, and ReportEquipmentItems. |
 | Phase 1 Prisma subset | REJECTED | Too narrow for the real Tal Operating System schema. |
-| PostgreSQL V1 | NEXT REVIEW | Needs full scope document before Prisma or DB work. |
+| PostgreSQL V1 scope | APPROVED | `POSTGRESQL_V1_SCOPE.md` defines the full V1 boundary. |
+| Prisma schema | EXISTS | `prisma/schema.prisma` created and committed in `108b756`; not validated yet. |
+| Prisma install | NOT STARTED | No packages installed. |
+| PostgreSQL database | NOT STARTED | No DB created and no migration run. |
 
 ## Hard Rules For Next Session
 
-- Documentation only until the next active goal is approved.
-- No Prisma generation.
-- No database creation or migration.
+- Validate Prisma before any database work.
+- No database creation or migration until validation and explicit approval.
 - No Google Sheets writes.
 - No AppSheet changes.
 - No Maven calls.
@@ -68,4 +71,4 @@ Goal:
 
 ## Highest-Value Next Task
 
-Draft `project-brain/migration/POSTGRESQL_V1_SCOPE.md` as the full Tal Operating System schema review, using today's findings and the existing migration documents as inputs.
+Run Prisma validation when approved, then set up the PostgreSQL shadow environment, then perform the first shadow import.
