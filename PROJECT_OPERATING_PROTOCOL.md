@@ -4,6 +4,42 @@ Status: Official v1
 Scope: TalCompressors-ServiceReports-AI repository and related project governance  
 Purpose: Governance and execution rules for safe work in this project
 
+## Critical Safety Rule: Next.js Shadow Development
+
+The current Next.js work must remain isolated and shadow/development only.
+
+AppSheet remains production until Liad explicitly approves official migration.
+
+Do not modify:
+
+- `apps-script/*`
+- AppSheet logic
+- Google Sheets structure
+- Maven integration
+- existing report templates
+- existing webhooks
+- existing production workflows
+
+Allowed Next.js shadow-development areas:
+
+- `app/*`
+- `prisma/*`
+- `package.json`
+- Next.js UI mock pages
+- `project-brain/migration/*`
+
+Forbidden unless Liad explicitly approves official migration work:
+
+- changing existing Apps Script files
+- changing existing report generation
+- changing existing Maven sync
+- changing live Google Sheets
+- triggering AppSheet actions
+- running Maven write actions
+- replacing existing workflows
+
+Goal: build the new Next.js system side-by-side while the existing AppSheet system remains production.
+
 ## 1. Purpose
 
 This protocol defines how work starts, how current state is verified, how priorities are chosen, how changes are approved, how implementation is performed, how results are verified, and how project memory is updated.
