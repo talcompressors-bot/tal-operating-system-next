@@ -304,7 +304,8 @@ Columns:
 |---|---|---|---|
 | `id` | UUID | PK | Next.js |
 | `appsheet_item_id` | TEXT | UNIQUE, NOT NULL | `ReportEquipmentItems.ItemID` |
-| `service_report_id` | UUID | FK -> `service_reports(id)` NOT NULL | `ReportEquipmentItems.ReportID` |
+| `service_report_id` | UUID | FK -> `service_reports(id)` NULL | resolved parent service report |
+| `source_report_id` | TEXT | NULL | original `ReportEquipmentItems.ReportID` |
 | `equipment_number` | TEXT | NULL | equipment number |
 | `equipment_type` | TEXT | NULL | equipment type |
 | `equipment_subtype` | TEXT | NULL | equipment subtype |
@@ -329,9 +330,25 @@ Indexes:
 - PK: `report_equipment_items(id)`
 - UNIQUE: `report_equipment_items(appsheet_item_id)`
 - INDEX: `report_equipment_items(service_report_id)`
+- INDEX: `report_equipment_items(source_report_id)`
 - INDEX: `report_equipment_items(equipment_model)`
 - INDEX: `report_equipment_items(serial_number)`
 - INDEX: `report_equipment_items(compressor_category)`
+
+Validation note:
+
+- Read-only validation found 9 `ReportEquipmentItems` rows missing `ReportID`.
+- Read-only validation found 25 `ReportEquipmentItems` rows where `ReportID` is not found in `ServiceReports`.
+- No `ReportCounter` / source report number could be recovered for orphan rows.
+- These rows are likely old/test/deleted parent reports or legacy remnants.
+
+Import rule:
+
+- Import all `ReportEquipmentItems`.
+- Link rows with valid source `ReportID` to `service_reports`.
+- Preserve the original source `ReportID` in `source_report_id`.
+- Preserve orphan rows with `service_report_id = NULL`.
+- Record each missing/unmatched parent as an import validation/import issue.
 
 ---
 
@@ -1297,8 +1314,8 @@ Do not generate Prisma until these are reviewed:
 5. Which Hebrew enum/status values map to each English enum?
 6. Should Drive file/folder IDs remain on `service_reports`, or move to a separate `document_files` table later?
 7. Should `EmailLog` be modeled now or kept as raw imported logs until schema is verified?
+8. What import issue table/model should be used to record missing/unmatched `ReportEquipmentItems.ReportID` parent links?
 
 ## Next Step
 
 Review this file, then update `PRISMA_SCHEMA_PLAN.md` with final model names and relation decisions. Only after review should `schema.prisma` be generated.
-

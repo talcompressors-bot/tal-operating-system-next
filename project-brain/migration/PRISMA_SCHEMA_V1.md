@@ -25,6 +25,7 @@ This file is a review artifact. It is not an executable Prisma schema yet.
 | Hebrew status mapping | Adds source status text fields where status values may need preservation. |
 | Drive files | Drive file/folder fields remain on `ServiceReport`. |
 | `EmailLog` | Included as read-only/flexible log model with nullable relations and `rawSource Json?`. |
+| `ReportEquipmentItem` orphan handling | `serviceReportId` is nullable/import-tolerant, and original source `ReportID` is preserved as `sourceReportId`. |
 
 ---
 
@@ -259,7 +260,8 @@ model ServiceReport {
 model ReportEquipmentItem {
   id                         String        @id @default(uuid()) @db.Uuid
   appsheetItemId              String        @unique @map("appsheet_item_id")
-  serviceReportId             String        @map("service_report_id") @db.Uuid
+  serviceReportId             String?       @map("service_report_id") @db.Uuid
+  sourceReportId              String?       @map("source_report_id")
   equipmentNumber             String?       @map("equipment_number")
   equipmentType               String?       @map("equipment_type")
   equipmentSubtype            String?       @map("equipment_subtype")
@@ -275,15 +277,31 @@ model ReportEquipmentItem {
   createdAt                   DateTime      @default(now()) @map("created_at") @db.Timestamptz
   updatedAt                   DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
 
-  serviceReport               ServiceReport @relation(fields: [serviceReportId], references: [id])
+  serviceReport               ServiceReport? @relation(fields: [serviceReportId], references: [id])
 
   @@index([serviceReportId])
+  @@index([sourceReportId])
   @@index([equipmentModel])
   @@index([serialNumber])
   @@index([compressorCategory])
   @@map("report_equipment_items")
 }
 ```
+
+Validation note:
+
+- Read-only validation found 9 `ReportEquipmentItems` rows missing `ReportID`.
+- Read-only validation found 25 `ReportEquipmentItems` rows where `ReportID` is not found in `ServiceReports`.
+- No `ReportCounter` / source report number could be recovered for orphan rows.
+- These rows are likely old/test/deleted parent reports or legacy remnants.
+
+Import rule:
+
+- Import all `ReportEquipmentItems`.
+- Link rows with valid source `ReportID` to `ServiceReport`.
+- Preserve the original source `ReportID` in `sourceReportId`.
+- Preserve orphan rows with `serviceReportId = null`.
+- Record each missing/unmatched parent as an import validation/import issue.
 
 ## `PartUsed`
 
@@ -934,4 +952,4 @@ BusinessDocument
 4. Confirm whether `BusinessDocument.mavenDocumentId` should point to the created Maven document only, while `MavenDocument.businessDocumentId` tracks imported linked documents.
 5. Confirm `processingCommandId` remains scalar-only in V1.
 6. Keep `Payment`, `Receipt`, and `ReceiptStatus` out of active V1 unless Phase 2 is explicitly approved.
-
+7. Keep `ReportEquipmentItem.serviceReportId` nullable and preserve source `ReportID` separately as `sourceReportId` because live validation found orphan equipment rows.

@@ -34,7 +34,15 @@ Required schema correction:
 
 - `ReportEquipmentItems` to `ServiceReports` must be nullable/import-tolerant in V1.
 - Reason: live validation found equipment rows with missing or unmatched `ReportID`.
+- Preserve the original source `ReportID` in `source_report_id`.
 - Import behavior must preserve these rows, keep `rawSource`, and record import issues instead of rejecting the full import.
+
+Detailed orphan equipment findings:
+
+- 9 `ReportEquipmentItems` rows are missing `ReportID`.
+- 25 `ReportEquipmentItems` rows have `ReportID` values not found in `ServiceReports`.
+- No `ReportCounter` / source report number could be recovered for orphan rows.
+- The orphan rows are likely old/test/deleted parent reports or legacy remnants.
 
 ## 1. V1 Business Domains
 
@@ -68,7 +76,7 @@ Phase 1 means active PostgreSQL V1 schema coverage for read-first shadow migrati
 |---|---|---|
 | `customers` | `Customers_Final` | Active V1. Preserve `CustomerID`, import all 763 confirmed rows, retain full `raw_source`. |
 | `service_reports` | `ServiceReports` | Active V1. Preserve `ReportID`, `ReportCounter`, Hebrew/source status text, Drive fields, and full `raw_source`. |
-| `report_equipment_items` | `ReportEquipmentItems` | Active V1 with nullable/import-tolerant `service_report_id`. Preserve all 108 confirmed rows, including orphan/missing parent rows. |
+| `report_equipment_items` | `ReportEquipmentItems` | Active V1 with nullable/import-tolerant `service_report_id`. Preserve source `ReportID` in `source_report_id`. Preserve all 108 confirmed rows, including orphan/missing parent rows. |
 | `parts_used` | `PartsUsed` | V1 read-only/flexible. Nullable source ID and nullable relations until the real schema is verified. |
 | `products` | `ProductsCatalog` | Active V1. Preserve product source IDs, SKU, pricing, status text, and raw rows. |
 | `inventory_stocks` | `InventoryStock` | V1 read-only/reference. Link to products when reliable; preserve source quantity state. |
@@ -128,7 +136,7 @@ Relationships must be designed for legacy import tolerance. Source records shoul
 Required relationships:
 
 - `customers` -> `service_reports`
-- `service_reports` -> `report_equipment_items`, nullable/import-tolerant on the child side
+- `service_reports` -> `report_equipment_items`, nullable/import-tolerant on the child side; preserve original source `ReportID` in `report_equipment_items.source_report_id`
 - `service_reports` -> `parts_used`, nullable/import-tolerant
 - `products` -> `parts_used`, nullable/import-tolerant
 - `products` -> `inventory_stocks`
@@ -187,7 +195,10 @@ Required import behavior:
 - Do not mutate production AppSheet, Google Sheets, Maven, Drive, Apps Script, or email state.
 - Do not execute imported `AutomationCommands`; import them as history/state only.
 - Do not deduplicate or merge customers automatically.
-- Do not reject `ReportEquipmentItems` rows with missing/unmatched `ReportID`; preserve them and report issues.
+- Import all `ReportEquipmentItems`.
+- Link rows with valid source `ReportID` to `ServiceReport`.
+- Preserve original source `ReportID` in `source_report_id`.
+- Do not reject `ReportEquipmentItems` rows with missing/unmatched `ReportID`; preserve them with `serviceReportId = null` and record import validation/import issues.
 
 Minimum validation required before import code:
 
@@ -243,7 +254,7 @@ Approved PostgreSQL V1 scope is the full Tal Operating System V1 business schema
 - It includes customer, service, equipment, parts, product, inventory reference/audit, AI draft, business document, automation, Maven, approval, email log, sync state/log, and error log domains.
 - It excludes payments and receipts from active V1 and keeps them in Phase 2.
 - It excludes duplicate, legacy, UI-only, procurement, security, and governance registry sheets from the active first Prisma schema.
-- It requires `ReportEquipmentItems.serviceReport` to be nullable/import-tolerant.
+- It requires `ReportEquipmentItems.serviceReport` to be nullable/import-tolerant and original source `ReportID` to be preserved in `source_report_id`.
 - It keeps all production systems untouched until separate explicit approvals.
 
 Next approved step after this document is reviewed: generate the official Prisma schema from the approved V1 scope, with no database creation or import until the next approval gate.
