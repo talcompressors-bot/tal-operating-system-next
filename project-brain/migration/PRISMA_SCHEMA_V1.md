@@ -1,0 +1,937 @@
+# PRISMA SCHEMA V1
+
+Created: 2026-06-21  
+Status: Draft for review  
+Target: PostgreSQL  
+Rule: Documentation only. Do not generate `schema.prisma` yet.
+
+## Purpose
+
+Define the proposed Prisma V1 schema for the Next.js migration based on:
+
+- `project-brain/migration/DATABASE_SCHEMA_V1.md`
+- `project-brain/migration/ARCHITECTURE_DECISIONS.md`
+
+This file is a review artifact. It is not an executable Prisma schema yet.
+
+## Applied Architecture Decisions
+
+| Decision | Applied In This Draft |
+|---|---|
+| BusinessDocuments / AutomationCommands relation | `AutomationCommand.businessDocumentId` is the enforced relation. `BusinessDocument.processingCommandId` remains scalar only. |
+| `parts_used` | Included as flexible/import-tolerant with nullable source ID and `rawSource Json?`. |
+| Payments / Receipts | Excluded from active V1 Prisma implementation. Documented as V2 only. |
+| Maven external IDs | Uses explicit `mavenCustomerExternalId`, `mavenDocumentExternalId`, and `mavenItemExternalId`. |
+| Hebrew status mapping | Adds source status text fields where status values may need preservation. |
+| Drive files | Drive file/folder fields remain on `ServiceReport`. |
+| `EmailLog` | Included as read-only/flexible log model with nullable relations and `rawSource Json?`. |
+
+---
+
+# 1. Prisma Datasource Target
+
+```prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+```
+
+---
+
+# 2. Prisma Enums
+
+```prisma
+enum SourceSystem {
+  APPSHEET
+  GOOGLE_SHEETS
+  APPS_SCRIPT
+  MAVEN
+  NEXTJS
+  AI
+  MANUAL
+  UNKNOWN
+}
+
+enum ServiceReportStatus {
+  DRAFT
+  OPEN
+  SIGNED
+  SENT
+  CLOSED
+  CANCELLED
+  UNKNOWN
+}
+
+enum BusinessDocumentType {
+  QUOTE
+  INVOICE
+  RECEIPT
+  SERVICE_DOCUMENT
+  CREDIT_NOTE
+  OTHER
+  UNKNOWN
+}
+
+enum BusinessDocumentStatus {
+  DRAFT_RECOMMENDED
+  WAITING_USER_APPROVAL
+  APPROVED
+  DRAFT_REQUEST_RECEIVED
+  MAVEN_DRAFT_REQUESTED
+  MAVEN_DRAFT_CREATED
+  READY_TO_SEND
+  SENT_TO_CUSTOMER
+  CANCELLED
+  ERROR
+  UNKNOWN
+}
+
+enum ApprovalStatus {
+  NOT_REQUIRED
+  PENDING
+  APPROVED
+  REJECTED
+  NEEDS_MORE_INFO
+  UNKNOWN
+}
+
+enum AutomationCommandStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  ERROR
+  CANCELLED
+  SKIPPED
+}
+
+enum AutomationCommandType {
+  CREATE_MAVEN_DRAFT
+  SYNC_MAVEN_DOCUMENTS
+  SAVE_SERVICE_REPORT_TO_DRIVE
+  SEND_REPORT_EMAIL
+  DEDUCT_INVENTORY
+  CREATE_RECEIPT_DRAFT
+  UNKNOWN
+}
+
+enum AiConfidenceLevel {
+  HIGH
+  MEDIUM
+  LOW
+  UNKNOWN
+}
+
+enum MatchSource {
+  PRODUCTS_CATALOG
+  MAVEN_HISTORY
+  SAME_CUSTOMER_HISTORY
+  SAME_EQUIPMENT_HISTORY
+  SIMILAR_SERVICE_HISTORY
+  AI_ESTIMATE
+  FIXED_RULE
+  MANUAL
+  UNKNOWN
+}
+
+enum InventoryTransactionType {
+  RESERVE
+  DEDUCT
+  RELEASE
+  ADJUST
+  RECOUNT
+}
+
+enum MavenSyncStatus {
+  IMPORTED
+  SKIPPED
+  SYNCED
+  ERROR
+  STALE
+  UNKNOWN
+}
+
+enum PaymentMethod {
+  BANK_TRANSFER
+  CREDIT_CARD
+  CHECK
+  CASH
+  OTHER
+  UNKNOWN
+}
+```
+
+Note: `ReceiptStatus` is intentionally excluded from active V1 because receipts are V2.
+
+---
+
+# 3. Active V1 Prisma Models
+
+## `Customer`
+
+```prisma
+model Customer {
+  id                  String               @id @default(uuid()) @db.Uuid
+  appsheetCustomerId  String               @unique @map("appsheet_customer_id")
+  name                String
+  contactName         String?              @map("contact_name")
+  phonePrimary        String?              @map("phone_primary")
+  emailPrimary        String?              @map("email_primary")
+  address             String?
+  businessId          String?              @map("business_id")
+  isActive            Boolean              @default(true) @map("is_active")
+  rawSource           Json?                @map("raw_source")
+  sourceSystem        SourceSystem         @default(APPSHEET) @map("source_system")
+  createdAt           DateTime             @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt           DateTime             @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  serviceReports      ServiceReport[]
+  aiDraftSuggestions  AiDraftSuggestion[]
+  businessDocuments   BusinessDocument[]
+  mavenCustomers      MavenCustomer[]
+  mavenDocuments      MavenDocument[]
+  mavenDocumentItems  MavenDocumentItem[]
+
+  @@index([name])
+  @@index([businessId])
+  @@index([emailPrimary])
+  @@map("customers")
+}
+```
+
+## `ServiceReport`
+
+```prisma
+model ServiceReport {
+  id                       String                @id @default(uuid()) @db.Uuid
+  appsheetReportId          String                @unique @map("appsheet_report_id")
+  reportCounter             Int?                  @unique @map("report_counter")
+  reportNumberText          String?               @map("report_number_text")
+  customerId                String?               @map("customer_id") @db.Uuid
+  serviceDate               DateTime?             @map("service_date") @db.Date
+  serviceTime               DateTime?             @map("service_time") @db.Time
+  technicianName            String?               @map("technician_name")
+  reportType                String?               @map("report_type")
+  equipmentType             String?               @map("equipment_type")
+  serviceType               String?               @map("service_type")
+  serviceDescription        String?               @map("service_description")
+  workPerformed             String?               @map("work_performed")
+  technicianSummary         String?               @map("technician_summary")
+  recommendations           String?
+  technicianWorkHours       Decimal?              @map("technician_work_hours") @db.Decimal(10, 2)
+  status                    ServiceReportStatus   @default(UNKNOWN)
+  sourceStatusText          String?               @map("source_status_text")
+  clientSignatureData       String?               @map("client_signature_data")
+  technicianSignatureData   String?               @map("technician_signature_data")
+  signedHtmlFileUrl         String?               @map("signed_html_file_url")
+  customerFolderId          String?               @map("customer_folder_id")
+  reportDriveFileId         String?               @map("report_drive_file_id")
+  businessDraftCreated      Boolean               @default(false) @map("business_draft_created")
+  draftDocumentType         String?               @map("draft_document_type")
+  mavenDocumentCreated      Boolean               @default(false) @map("maven_document_created")
+  mavenSentToCustomer       Boolean               @default(false) @map("maven_sent_to_customer")
+  rawSource                 Json?                 @map("raw_source")
+  createdAt                 DateTime              @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt                 DateTime              @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  customer                  Customer?             @relation(fields: [customerId], references: [id])
+  equipmentItems            ReportEquipmentItem[]
+  partsUsed                 PartUsed[]
+  aiDraftSuggestions        AiDraftSuggestion[]
+  businessDocuments         BusinessDocument[]
+  emailLogs                 EmailLog[]
+
+  @@index([customerId])
+  @@index([serviceDate])
+  @@index([status])
+  @@index([businessDraftCreated])
+  @@map("service_reports")
+}
+```
+
+## `ReportEquipmentItem`
+
+```prisma
+model ReportEquipmentItem {
+  id                         String        @id @default(uuid()) @db.Uuid
+  appsheetItemId              String        @unique @map("appsheet_item_id")
+  serviceReportId             String        @map("service_report_id") @db.Uuid
+  equipmentNumber             String?       @map("equipment_number")
+  equipmentType               String?       @map("equipment_type")
+  equipmentSubtype            String?       @map("equipment_subtype")
+  equipmentModel              String?       @map("equipment_model")
+  serialNumber                String?       @map("serial_number")
+  compressorCategory          String?       @map("compressor_category")
+  serviceDescription          String?       @map("service_description")
+  currentHours                Decimal?      @map("current_hours") @db.Decimal(12, 2)
+  nextService                 String?       @map("next_service")
+  systemStatus                String?       @map("system_status")
+  technicianRecommendations   String?       @map("technician_recommendations")
+  rawSource                   Json?         @map("raw_source")
+  createdAt                   DateTime      @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt                   DateTime      @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  serviceReport               ServiceReport @relation(fields: [serviceReportId], references: [id])
+
+  @@index([serviceReportId])
+  @@index([equipmentModel])
+  @@index([serialNumber])
+  @@index([compressorCategory])
+  @@map("report_equipment_items")
+}
+```
+
+## `PartUsed`
+
+Flexible/import-tolerant V1 model. The source AppSheet/Sheet schema must be verified before any write path is built.
+
+```prisma
+model PartUsed {
+  id                  String         @id @default(uuid()) @db.Uuid
+  appsheetPartId       String?        @unique @map("appsheet_part_id")
+  serviceReportId      String?        @map("service_report_id") @db.Uuid
+  productId            String?        @map("product_id") @db.Uuid
+  partName             String?        @map("part_name")
+  partSku              String?        @map("part_sku")
+  quantity             Decimal?       @db.Decimal(12, 3)
+  equipmentReference   String?        @map("equipment_reference")
+  matchSource          MatchSource    @default(UNKNOWN) @map("match_source")
+  matchConfidence      Int?           @map("match_confidence")
+  needsUserApproval    Boolean        @default(true) @map("needs_user_approval")
+  rawSource            Json?          @map("raw_source")
+  createdAt            DateTime       @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt            DateTime       @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  serviceReport        ServiceReport? @relation(fields: [serviceReportId], references: [id])
+  product              Product?       @relation(fields: [productId], references: [id])
+
+  @@index([serviceReportId])
+  @@index([productId])
+  @@index([partSku])
+  @@index([matchSource, matchConfidence])
+  @@map("parts_used")
+}
+```
+
+## `Product`
+
+```prisma
+model Product {
+  id                    String                 @id @default(uuid()) @db.Uuid
+  appsheetProductId      String                 @unique @map("appsheet_product_id")
+  sku                   String?                @unique
+  name                  String
+  description           String?
+  category              String?
+  subcategory           String?
+  brand                 String?
+  supplier              String?
+  purchasePrice         Decimal?               @map("purchase_price") @db.Decimal(12, 2)
+  sellingPrice          Decimal?               @map("selling_price") @db.Decimal(12, 2)
+  currency              String                 @default("ILS")
+  compatibleEquipment   String?                @map("compatible_equipment")
+  status                String?
+  sourceStatusText      String?                @map("source_status_text")
+  sourceSystem          SourceSystem           @default(APPSHEET) @map("source_system")
+  rawSource             Json?                  @map("raw_source")
+  createdAt             DateTime               @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt             DateTime               @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  partsUsed             PartUsed[]
+  inventoryStocks       InventoryStock[]
+  inventoryTransactions InventoryTransaction[]
+  businessDocumentItems BusinessDocumentItem[]
+  mavenItems            MavenItem[]
+
+  @@index([name])
+  @@index([category, subcategory])
+  @@index([status])
+  @@map("products")
+}
+```
+
+## `InventoryStock`
+
+```prisma
+model InventoryStock {
+  id                    String                 @id @default(uuid()) @db.Uuid
+  appsheetStockId        String                 @unique @map("appsheet_stock_id")
+  productId             String                 @map("product_id") @db.Uuid
+  sku                   String?
+  currentQuantity       Decimal                @default(0) @map("current_quantity") @db.Decimal(12, 3)
+  minimumQuantity       Decimal                @default(0) @map("minimum_quantity") @db.Decimal(12, 3)
+  reservedQuantity      Decimal                @default(0) @map("reserved_quantity") @db.Decimal(12, 3)
+  availableQuantity     Decimal                @default(0) @map("available_quantity") @db.Decimal(12, 3)
+  warehouseLocation     String?                @map("warehouse_location")
+  status                String?
+  sourceStatusText      String?                @map("source_status_text")
+  lastSourceUpdateAt    DateTime?              @map("last_source_update_at") @db.Timestamptz
+  rawSource             Json?                  @map("raw_source")
+  createdAt             DateTime               @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt             DateTime               @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  product               Product                @relation(fields: [productId], references: [id])
+  inventoryTransactions InventoryTransaction[]
+
+  @@index([productId])
+  @@index([sku])
+  @@index([status])
+  @@map("inventory_stocks")
+}
+```
+
+## `InventoryTransaction`
+
+```prisma
+model InventoryTransaction {
+  id                     String                   @id @default(uuid()) @db.Uuid
+  inventoryStockId        String                   @map("inventory_stock_id") @db.Uuid
+  productId               String                   @map("product_id") @db.Uuid
+  businessDocumentId      String?                  @map("business_document_id") @db.Uuid
+  businessDocumentItemId  String?                  @map("business_document_item_id") @db.Uuid
+  type                   InventoryTransactionType
+  quantity               Decimal                  @db.Decimal(12, 3)
+  reason                 String?
+  idempotencyKey          String                   @unique @map("idempotency_key")
+  approvedBy             String?                  @map("approved_by")
+  approvedAt             DateTime?                @map("approved_at") @db.Timestamptz
+  createdAt              DateTime                 @default(now()) @map("created_at") @db.Timestamptz
+
+  inventoryStock          InventoryStock           @relation(fields: [inventoryStockId], references: [id])
+  product                 Product                  @relation(fields: [productId], references: [id])
+  businessDocument        BusinessDocument?        @relation(fields: [businessDocumentId], references: [id])
+  businessDocumentItem    BusinessDocumentItem?    @relation(fields: [businessDocumentItemId], references: [id])
+
+  @@index([productId])
+  @@index([businessDocumentId])
+  @@index([type, createdAt])
+  @@map("inventory_transactions")
+}
+```
+
+## `AiDraftSuggestion`
+
+```prisma
+model AiDraftSuggestion {
+  id                         String                @id @default(uuid()) @db.Uuid
+  appsheetSuggestionId         String?               @unique @map("appsheet_suggestion_id")
+  customerId                 String?               @map("customer_id") @db.Uuid
+  serviceReportId             String?               @map("service_report_id") @db.Uuid
+  relatedBusinessDocumentId   String?               @map("related_business_document_id") @db.Uuid
+  sourceType                 String?               @map("source_type")
+  suggestedDocumentType       BusinessDocumentType   @default(UNKNOWN) @map("suggested_document_type")
+  suggestedTitle              String?               @map("suggested_title")
+  suggestedItems              Json?                 @map("suggested_items")
+  suggestedNotes              String?               @map("suggested_notes")
+  sourceSummary               String?               @map("source_summary")
+  confidenceLevel             AiConfidenceLevel     @default(UNKNOWN) @map("confidence_level")
+  requiresApproval            Boolean               @default(true) @map("requires_approval")
+  approvalStatus              ApprovalStatus        @default(PENDING) @map("approval_status")
+  approvedBy                 String?               @map("approved_by")
+  approvedAt                 DateTime?             @map("approved_at") @db.Timestamptz
+  aiReasoning                 String?               @map("ai_reasoning")
+  suggestedTotalAmount        Decimal?              @map("suggested_total_amount") @db.Decimal(12, 2)
+  suggestedPriority           String?               @map("suggested_priority")
+  status                     String?
+  sourceStatusText            String?               @map("source_status_text")
+  rawSource                  Json?                 @map("raw_source")
+  createdAt                  DateTime              @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt                  DateTime              @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  customer                   Customer?             @relation(fields: [customerId], references: [id])
+  serviceReport              ServiceReport?        @relation(fields: [serviceReportId], references: [id])
+  relatedBusinessDocument    BusinessDocument?     @relation("RelatedBusinessDocumentSuggestion", fields: [relatedBusinessDocumentId], references: [id])
+  businessDocuments          BusinessDocument[]    @relation("BusinessDocumentAiDraft")
+
+  @@index([customerId])
+  @@index([serviceReportId])
+  @@index([approvalStatus])
+  @@index([confidenceLevel])
+  @@map("ai_draft_suggestions")
+}
+```
+
+## `BusinessDocument`
+
+```prisma
+model BusinessDocument {
+  id                         String                   @id @default(uuid()) @db.Uuid
+  appsheetBusinessDocumentId  String                   @unique @map("appsheet_business_document_id")
+  customerId                 String?                  @map("customer_id") @db.Uuid
+  serviceReportId             String?                  @map("service_report_id") @db.Uuid
+  aiDraftSuggestionId         String?                  @map("ai_draft_suggestion_id") @db.Uuid
+  sourceReportCounter         Int?                     @map("source_report_counter")
+  sourceDocumentId            String?                  @map("source_document_id")
+  documentTypeSuggested       BusinessDocumentType      @default(UNKNOWN) @map("document_type_suggested")
+  documentTypeSelected        BusinessDocumentType      @default(UNKNOWN) @map("document_type_selected")
+  aiReasoning                 String?                  @map("ai_reasoning")
+  status                     BusinessDocumentStatus    @default(UNKNOWN)
+  sourceStatusText            String?                  @map("source_status_text")
+  draftTitle                  String?                  @map("draft_title")
+  description                 String?
+  itemsJson                   Json?                    @map("items_json")
+  subtotalAmount              Decimal?                 @map("subtotal_amount") @db.Decimal(12, 2)
+  vatAmount                   Decimal?                 @map("vat_amount") @db.Decimal(12, 2)
+  totalAmount                 Decimal?                 @map("total_amount") @db.Decimal(12, 2)
+  currency                    String                   @default("ILS")
+  approvalStatus              ApprovalStatus           @default(PENDING) @map("approval_status")
+  approvedBy                  String?                  @map("approved_by")
+  approvedAt                  DateTime?                @map("approved_at") @db.Timestamptz
+  mavenDocumentId             String?                  @map("maven_document_id") @db.Uuid
+  mavenDocumentNumber         String?                  @map("maven_document_number")
+  mavenPdfLink                String?                  @map("maven_pdf_link")
+  sendByEmail                 Boolean                  @default(false) @map("send_by_email")
+  sendByWhatsapp              Boolean                  @default(false) @map("send_by_whatsapp")
+  selectedEmails              String?                  @map("selected_emails")
+  selectedPhones              String?                  @map("selected_phones")
+  sendStatus                  String?                  @map("send_status")
+  sendApprovedBy              String?                  @map("send_approved_by")
+  sendApprovedAt              DateTime?                @map("send_approved_at") @db.Timestamptz
+  processingCommandId         String?                  @map("processing_command_id") @db.Uuid
+  processingStartedAt         DateTime?                @map("processing_started_at") @db.Timestamptz
+  sourceSystem                SourceSystem             @default(APPSHEET) @map("source_system")
+  notes                       String?
+  rawSource                   Json?                    @map("raw_source")
+  createdAt                   DateTime                 @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt                   DateTime                 @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  customer                    Customer?                @relation(fields: [customerId], references: [id])
+  serviceReport               ServiceReport?           @relation(fields: [serviceReportId], references: [id])
+  aiDraftSuggestion           AiDraftSuggestion?       @relation("BusinessDocumentAiDraft", fields: [aiDraftSuggestionId], references: [id])
+  mavenDocument               MavenDocument?           @relation("BusinessDocumentMavenDocument", fields: [mavenDocumentId], references: [id])
+  relatedAiDraftSuggestions   AiDraftSuggestion[]      @relation("RelatedBusinessDocumentSuggestion")
+  items                       BusinessDocumentItem[]
+  logs                        BusinessDocumentLog[]
+  automationCommands          AutomationCommand[]
+  inventoryTransactions       InventoryTransaction[]
+  emailLogs                   EmailLog[]
+  linkedMavenDocuments        MavenDocument[]          @relation("LinkedBusinessDocumentMavenDocuments")
+
+  @@index([customerId])
+  @@index([serviceReportId])
+  @@index([status])
+  @@index([approvalStatus])
+  @@index([processingCommandId])
+  @@index([mavenDocumentNumber])
+  @@map("business_documents")
+}
+```
+
+Note: `processingCommandId` is intentionally scalar-only in V1. The enforced command relation is `AutomationCommand.businessDocumentId`.
+
+## `BusinessDocumentItem`
+
+```prisma
+model BusinessDocumentItem {
+  id                     String                   @id @default(uuid()) @db.Uuid
+  appsheetItemId          String?                  @unique @map("appsheet_item_id")
+  businessDocumentId      String                   @map("business_document_id") @db.Uuid
+  productId              String?                  @map("product_id") @db.Uuid
+  itemName               String                   @map("item_name")
+  description            String?
+  quantity               Decimal                  @db.Decimal(12, 3)
+  unitPrice              Decimal?                 @map("unit_price") @db.Decimal(12, 2)
+  totalPrice             Decimal?                 @map("total_price") @db.Decimal(12, 2)
+  source                 MatchSource              @default(UNKNOWN)
+  itemType               String?                  @map("item_type")
+  needsPriceApproval     Boolean                  @default(false) @map("needs_price_approval")
+  matchConfidence        Int?                     @map("match_confidence")
+  rawSource              Json?                    @map("raw_source")
+  createdAt              DateTime                 @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt              DateTime                 @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  businessDocument       BusinessDocument         @relation(fields: [businessDocumentId], references: [id])
+  product                Product?                 @relation(fields: [productId], references: [id])
+  inventoryTransactions  InventoryTransaction[]
+
+  @@index([businessDocumentId])
+  @@index([productId])
+  @@index([needsPriceApproval])
+  @@map("business_document_items")
+}
+```
+
+## `BusinessDocumentLog`
+
+```prisma
+model BusinessDocumentLog {
+  id                  String             @id @default(uuid()) @db.Uuid
+  appsheetLogId        String?            @unique @map("appsheet_log_id")
+  businessDocumentId   String?            @map("business_document_id") @db.Uuid
+  action              String
+  performedBy          String?            @map("performed_by")
+  result              String?
+  notes               String?
+  rawData             Json?              @map("raw_data")
+  createdAt           DateTime           @default(now()) @map("created_at") @db.Timestamptz
+
+  businessDocument     BusinessDocument?  @relation(fields: [businessDocumentId], references: [id])
+
+  @@index([businessDocumentId])
+  @@index([action])
+  @@index([createdAt])
+  @@map("business_document_logs")
+}
+```
+
+## `AutomationCommand`
+
+```prisma
+model AutomationCommand {
+  id                   String                  @id @default(uuid()) @db.Uuid
+  appsheetCommandId     String?                 @unique @map("appsheet_command_id")
+  businessDocumentId    String?                 @map("business_document_id") @db.Uuid
+  commandName           String?                 @map("command_name")
+  commandType           AutomationCommandType   @map("command_type")
+  status               AutomationCommandStatus @default(PENDING)
+  requestedBy           String?                 @map("requested_by")
+  requestedAt           DateTime?               @map("requested_at") @db.Timestamptz
+  result               String?
+  completedAt           DateTime?               @map("completed_at") @db.Timestamptz
+  processedAt           DateTime?               @map("processed_at") @db.Timestamptz
+  errorMessage          String?                 @map("error_message")
+  notes                String?
+  idempotencyKey        String?                 @unique @map("idempotency_key")
+  payload              Json?
+  rawSource            Json?                   @map("raw_source")
+  createdAt            DateTime                @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt            DateTime                @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  businessDocument      BusinessDocument?       @relation(fields: [businessDocumentId], references: [id])
+
+  @@index([status])
+  @@index([commandType])
+  @@index([businessDocumentId])
+  @@index([requestedAt])
+  @@map("automation_commands")
+}
+```
+
+## `MavenCustomer`
+
+```prisma
+model MavenCustomer {
+  id                        String          @id @default(uuid()) @db.Uuid
+  mavenCustomerExternalId    String          @unique @map("maven_customer_external_id")
+  customerId                String?         @map("customer_id") @db.Uuid
+  name                      String?
+  businessId                String?         @map("business_id")
+  phone                     String?
+  email                     String?
+  address                   String?
+  city                      String?
+  syncStatus                MavenSyncStatus @default(UNKNOWN) @map("sync_status")
+  rawJson                   Json?           @map("raw_json")
+  lastSyncAt                DateTime?       @map("last_sync_at") @db.Timestamptz
+  notes                     String?
+  createdAt                 DateTime        @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt                 DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  customer                  Customer?       @relation(fields: [customerId], references: [id])
+  mavenDocuments            MavenDocument[]
+
+  @@index([customerId])
+  @@index([name])
+  @@index([businessId])
+  @@map("maven_customers")
+}
+```
+
+## `MavenDocument`
+
+```prisma
+model MavenDocument {
+  id                       String                @id @default(uuid()) @db.Uuid
+  mavenDocumentExternalId   String                @unique @map("maven_document_external_id")
+  businessDocumentId        String?               @map("business_document_id") @db.Uuid
+  customerId               String?               @map("customer_id") @db.Uuid
+  mavenCustomerId           String?               @map("maven_customer_id") @db.Uuid
+  documentNumber            String?               @map("document_number")
+  documentType              BusinessDocumentType   @default(UNKNOWN) @map("document_type")
+  documentTypeText          String?               @map("document_type_text")
+  documentDate              DateTime?             @map("document_date") @db.Date
+  totalAmount               Decimal?              @map("total_amount") @db.Decimal(12, 2)
+  vatAmount                 Decimal?              @map("vat_amount") @db.Decimal(12, 2)
+  status                   String?
+  sourceStatusText          String?               @map("source_status_text")
+  paymentStatus             String?               @map("payment_status")
+  paymentMethod             PaymentMethod         @default(UNKNOWN) @map("payment_method")
+  paidDate                  DateTime?             @map("paid_date") @db.Date
+  pdfLink                   String?               @map("pdf_link")
+  documentYear              Int?                  @map("document_year")
+  documentMonth             Int?                  @map("document_month")
+  customerNameClean         String?               @map("customer_name_clean")
+  syncStatus                MavenSyncStatus       @default(UNKNOWN) @map("sync_status")
+  rawJson                   Json?                 @map("raw_json")
+  lastSyncAt                DateTime?             @map("last_sync_at") @db.Timestamptz
+  notes                     String?
+  createdAt                 DateTime              @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt                 DateTime              @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  businessDocument          BusinessDocument?     @relation("LinkedBusinessDocumentMavenDocuments", fields: [businessDocumentId], references: [id])
+  customer                  Customer?             @relation(fields: [customerId], references: [id])
+  mavenCustomer             MavenCustomer?        @relation(fields: [mavenCustomerId], references: [id])
+  businessDocumentMavenLink BusinessDocument[]    @relation("BusinessDocumentMavenDocument")
+  items                     MavenDocumentItem[]
+
+  @@index([documentNumber])
+  @@index([customerId])
+  @@index([documentDate])
+  @@index([documentType])
+  @@index([paymentStatus])
+  @@index([businessDocumentId])
+  @@map("maven_documents")
+}
+```
+
+## `MavenDocumentItem`
+
+```prisma
+model MavenDocumentItem {
+  id                String               @id @default(uuid()) @db.Uuid
+  mavenItemRowId     String               @unique @map("maven_item_row_id")
+  mavenDocumentId    String               @map("maven_document_id") @db.Uuid
+  customerId        String?              @map("customer_id") @db.Uuid
+  documentNumber     String?              @map("document_number")
+  documentDate       DateTime?            @map("document_date") @db.Date
+  documentType       BusinessDocumentType  @default(UNKNOWN) @map("document_type")
+  itemDescription    String?              @map("item_description")
+  quantity          Decimal?             @db.Decimal(12, 3)
+  unitPrice          Decimal?             @map("unit_price") @db.Decimal(12, 2)
+  lineTotal          Decimal?             @map("line_total") @db.Decimal(12, 2)
+  currency          String               @default("ILS")
+  rawItem            Json?                @map("raw_item")
+  importedAt         DateTime?            @map("imported_at") @db.Timestamptz
+  createdAt          DateTime             @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt          DateTime             @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  mavenDocument      MavenDocument        @relation(fields: [mavenDocumentId], references: [id])
+  customer           Customer?            @relation(fields: [customerId], references: [id])
+
+  @@index([mavenDocumentId])
+  @@index([customerId])
+  @@index([itemDescription])
+  @@index([documentDate])
+  @@map("maven_document_items")
+}
+```
+
+## `MavenItem`
+
+```prisma
+model MavenItem {
+  id                    String          @id @default(uuid()) @db.Uuid
+  mavenItemExternalId    String          @unique @map("maven_item_external_id")
+  productId             String?         @map("product_id") @db.Uuid
+  sku                   String?
+  externalItemNumber     String?         @map("external_item_number")
+  itemName              String?         @map("item_name")
+  itemDescription       String?         @map("item_description")
+  unitPrice             Decimal?        @map("unit_price") @db.Decimal(12, 2)
+  purchasePrice         Decimal?        @map("purchase_price") @db.Decimal(12, 2)
+  currency              String          @default("ILS")
+  stockQuantity         Decimal?        @map("stock_quantity") @db.Decimal(12, 3)
+  syncStatus            MavenSyncStatus @default(UNKNOWN) @map("sync_status")
+  rawJson               Json?           @map("raw_json")
+  lastSyncAt            DateTime?       @map("last_sync_at") @db.Timestamptz
+  notes                 String?
+  createdAt             DateTime        @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt             DateTime        @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  product               Product?        @relation(fields: [productId], references: [id])
+
+  @@index([productId])
+  @@index([sku])
+  @@index([itemName])
+  @@map("maven_items")
+}
+```
+
+## `Approval`
+
+```prisma
+model Approval {
+  id                  String         @id @default(uuid()) @db.Uuid
+  appsheetApprovalId   String?        @unique @map("appsheet_approval_id")
+  actionType          String         @map("action_type")
+  relatedTable        String?        @map("related_table")
+  relatedId           String?        @map("related_id") @db.Uuid
+  status              ApprovalStatus @default(PENDING)
+  approvedBy          String?        @map("approved_by")
+  notes               String?
+  createdAt           DateTime       @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([actionType])
+  @@index([relatedTable, relatedId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("approvals")
+}
+```
+
+## `EmailLog`
+
+Read-only/flexible V1 model. Source columns must be verified before enabling any email send/resend workflow.
+
+```prisma
+model EmailLog {
+  id                  String             @id @default(uuid()) @db.Uuid
+  serviceReportId      String?            @map("service_report_id") @db.Uuid
+  businessDocumentId   String?            @map("business_document_id") @db.Uuid
+  recipientEmails      String?            @map("recipient_emails")
+  subject             String?
+  status              String?
+  sourceStatusText     String?            @map("source_status_text")
+  errorMessage         String?            @map("error_message")
+  rawSource           Json?              @map("raw_source")
+  sentAt              DateTime?          @map("sent_at") @db.Timestamptz
+  createdAt           DateTime           @default(now()) @map("created_at") @db.Timestamptz
+
+  serviceReport        ServiceReport?     @relation(fields: [serviceReportId], references: [id])
+  businessDocument     BusinessDocument?  @relation(fields: [businessDocumentId], references: [id])
+
+  @@index([serviceReportId])
+  @@index([businessDocumentId])
+  @@index([sentAt])
+  @@index([status])
+  @@map("email_logs")
+}
+```
+
+## `SyncState`
+
+```prisma
+model SyncState {
+  id         String   @id @default(uuid()) @db.Uuid
+  source     String
+  key        String
+  value      String?
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@unique([source, key])
+  @@index([updatedAt])
+  @@map("sync_states")
+}
+```
+
+## `SyncLog`
+
+```prisma
+model SyncLog {
+  id            String          @id @default(uuid()) @db.Uuid
+  source        String
+  addedCount     Int             @default(0) @map("added_count")
+  skippedCount   Int             @default(0) @map("skipped_count")
+  status        MavenSyncStatus @default(UNKNOWN)
+  notes         String?
+  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([source])
+  @@index([status])
+  @@index([createdAt])
+  @@map("sync_logs")
+}
+```
+
+## `ErrorLog`
+
+```prisma
+model ErrorLog {
+  id             String   @id @default(uuid()) @db.Uuid
+  source         String
+  functionName    String?  @map("function_name")
+  errorMessage    String   @map("error_message")
+  rawError       Json?    @map("raw_error")
+  status         String?
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz
+
+  @@index([source])
+  @@index([functionName])
+  @@index([status])
+  @@index([createdAt])
+  @@map("error_logs")
+}
+```
+
+---
+
+# 4. Excluded From Active V1
+
+The following database concepts remain documented in `DATABASE_SCHEMA_V1.md` but are not part of active V1 Prisma implementation:
+
+## `Payment`
+
+Status: V2 / Phase 2 only.
+
+Reason:
+
+- Automatic receipts are a separate phase.
+- No confirmed AppSheet source table exists.
+- Receipt matching rules are not finalized.
+
+## `Receipt`
+
+Status: V2 / Phase 2 only.
+
+Reason:
+
+- Depends on `Payment`.
+- Requires duplicate prevention and approval flow design.
+- Must not be enabled during the Phase 1 service-report-to-draft migration.
+
+## `ReceiptStatus`
+
+Status: V2 / Phase 2 enum only.
+
+Reason:
+
+- No active V1 model uses it after excluding `Payment` and `Receipt`.
+
+---
+
+# 5. Relation Summary
+
+```text
+Customer
+-> ServiceReport
+-> ReportEquipmentItem
+-> PartUsed
+
+Customer
+-> AiDraftSuggestion
+-> BusinessDocument
+-> BusinessDocumentItem
+-> AutomationCommand
+
+Product
+-> PartUsed
+-> BusinessDocumentItem
+-> InventoryStock
+-> InventoryTransaction
+-> MavenItem
+
+BusinessDocument
+-> MavenDocument
+-> MavenDocumentItem
+
+ServiceReport
+-> EmailLog
+BusinessDocument
+-> EmailLog
+```
+
+---
+
+# 6. Notes Before Generating `schema.prisma`
+
+1. Verify `PartsUsed` source columns before enabling any write path.
+2. Verify `EmailLog` source columns before final Prisma generation.
+3. Confirm Hebrew status mappings and importer behavior.
+4. Confirm whether `BusinessDocument.mavenDocumentId` should point to the created Maven document only, while `MavenDocument.businessDocumentId` tracks imported linked documents.
+5. Confirm `processingCommandId` remains scalar-only in V1.
+6. Keep `Payment`, `Receipt`, and `ReceiptStatus` out of active V1 unless Phase 2 is explicitly approved.
+
