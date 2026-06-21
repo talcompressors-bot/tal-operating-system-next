@@ -3,8 +3,8 @@ import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Tal Compressors Service Reports",
-  description: "Read-only service reports migration shell",
+  title: "טל מדחסים - דוחות שירות",
+  description: "מערכת פיתוח לקריאת דוחות שירות",
 };
 
 export default function RootLayout({
@@ -13,14 +13,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="he" dir="rtl">
       <body>
         <header className="site-header">
           <Link href="/" className="brand">
-            Tal Compressors
+            טל מדחסים
           </Link>
-          <nav aria-label="Main navigation">
-            <Link href="/service-reports">Service Reports</Link>
+          <nav aria-label="ניווט ראשי">
+            <Link href="/service-reports">דוחות שירות</Link>
           </nav>
         </header>
         <main>{children}</main>

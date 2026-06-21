@@ -7,11 +7,11 @@ export default function ServiceReportsPage() {
   return (
     <section className="page-shell">
       <div>
-        <p className="eyebrow">Read-only mock data</p>
-        <h1>Service Reports</h1>
+        <p className="eyebrow">תצוגת פיתוח - נתוני דוגמה</p>
+        <h1>דוחות שירות</h1>
         <p className="lede">
-          Realistic service report table for the first visible Tal Operating
-          System slice. Rows open mock detail pages.
+          טבלת דוחות שירות לקריאה בלבד עבור גרסת הפיתוח הראשונה של מערכת טל.
+          כל שורה פותחת דף פירוט לדוח.
         </p>
       </div>
 
@@ -19,11 +19,11 @@ export default function ServiceReportsPage() {
         <table>
           <thead>
             <tr>
-              <th>Report Number</th>
-              <th>Customer</th>
-              <th>Date</th>
-              <th>Technician</th>
-              <th>Status</th>
+              <th>מספר דוח</th>
+              <th>לקוח</th>
+              <th>תאריך</th>
+              <th>טכנאי</th>
+              <th>סטטוס</th>
             </tr>
           </thead>
           <tbody>

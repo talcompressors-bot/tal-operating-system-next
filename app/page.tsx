@@ -2,32 +2,32 @@ import Link from "next/link";
 
 const modules = [
   {
-    title: "Service Reports",
-    description: "Browse technician service reports and equipment details.",
+    title: "דוחות שירות",
+    description: "צפייה בדוחות טכנאים, פרטי לקוח וציוד מטופל.",
     href: "/service-reports",
     active: true,
   },
   {
-    title: "Business Documents",
-    description: "Quotes, invoices, and draft document workflow.",
+    title: "מסמכים עסקיים",
+    description: "הצעות מחיר, חשבוניות ותהליך טיוטות מסמכים.",
     href: "#",
     active: false,
   },
   {
-    title: "Customers",
-    description: "Customer records, contact details, and service history.",
+    title: "לקוחות",
+    description: "כרטיסי לקוח, פרטי קשר והיסטוריית שירות.",
     href: "#",
     active: false,
   },
   {
-    title: "Inventory",
-    description: "Parts, stock levels, and SKU matching.",
+    title: "ציוד / מלאי",
+    description: "ציוד, חלקים, מלאי והתאמת מקטים.",
     href: "#",
     active: false,
   },
   {
-    title: "AI Drafts",
-    description: "AI-assisted draft suggestions for service follow-up.",
+    title: "טיוטות AI",
+    description: "הצעות טיוטה חכמות להמשך טיפול לאחר שירות.",
     href: "#",
     active: false,
   },
@@ -37,11 +37,11 @@ export default function HomePage() {
   return (
     <section className="page-shell">
       <div>
-        <p className="eyebrow">Tal Operating System</p>
-        <h1>Operations dashboard</h1>
+        <p className="eyebrow">מערכת ההפעלה של טל</p>
+        <h1>לוח בקרה תפעולי</h1>
         <p className="lede">
-          First visible version using mock data only. Service Reports is the
-          active read-only module.
+          גרסת פיתוח ראשונה עם נתוני דוגמה בלבד. דוחות שירות הוא המודול הפעיל
+          לקריאה בלבד.
         </p>
       </div>
 
@@ -53,7 +53,7 @@ export default function HomePage() {
                 <h2>{module.title}</h2>
                 <p>{module.description}</p>
               </div>
-              <span>{module.active ? "Open" : "Coming soon"}</span>
+              <span>{module.active ? "פתיחה" : "בקרוב"}</span>
             </article>
           );
 

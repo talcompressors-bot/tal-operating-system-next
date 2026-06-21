@@ -29,37 +29,37 @@ export default async function ServiceReportDetailPage({
     <section className="page-shell">
       <div className="detail-header">
         <div>
-          <p className="eyebrow">Service Report</p>
-          <h1>Report #{report.reportNumber}</h1>
+          <p className="eyebrow">דוח שירות</p>
+          <h1>דוח #{report.reportNumber}</h1>
           <p className="lede">{report.customer}</p>
         </div>
         <Link className="button secondary" href="/service-reports">
-          Back to list
+          חזרה לרשימה
         </Link>
       </div>
 
       <div className="detail-grid">
         <section className="info-panel">
-          <h2>Report Details</h2>
+          <h2>פרטי הדוח</h2>
           <dl>
             <div>
-              <dt>Report Number</dt>
+              <dt>מספר דוח</dt>
               <dd>{report.reportNumber}</dd>
             </div>
             <div>
-              <dt>Customer</dt>
+              <dt>לקוח</dt>
               <dd>{report.customer}</dd>
             </div>
             <div>
-              <dt>Service Date</dt>
+              <dt>תאריך שירות</dt>
               <dd>{report.serviceDate}</dd>
             </div>
             <div>
-              <dt>Technician</dt>
+              <dt>טכנאי</dt>
               <dd>{report.technician}</dd>
             </div>
             <div>
-              <dt>Status</dt>
+              <dt>סטטוס</dt>
               <dd>
                 <span className={`status ${report.status.toLowerCase()}`}>
                   {report.status}
@@ -70,17 +70,17 @@ export default async function ServiceReportDetailPage({
         </section>
 
         <section className="info-panel wide">
-          <h2>Description</h2>
+          <h2>תיאור השירות</h2>
           <p>{report.description}</p>
         </section>
 
         <section className="info-panel wide">
-          <h2>Recommendations</h2>
+          <h2>המלצות</h2>
           <p>{report.recommendations}</p>
         </section>
 
         <section className="info-panel wide">
-          <h2>Equipment</h2>
+          <h2>ציוד</h2>
           <div className="equipment-list">
             {report.equipment.map((item) => (
               <article key={item.id} className="equipment-item">
@@ -89,7 +89,7 @@ export default async function ServiceReportDetailPage({
                     {item.equipmentNumber} · {item.type}
                   </h3>
                   <p>
-                    {item.model} · Serial {item.serialNumber}
+                    {item.model} · מס סידורי {item.serialNumber}
                   </p>
                 </div>
                 <span className="equipment-status">{item.status}</span>
