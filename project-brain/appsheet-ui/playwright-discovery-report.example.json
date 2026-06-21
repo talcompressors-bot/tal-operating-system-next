@@ -1,0 +1,17 @@
+{
+  "status": "BLOCKED_MISSING_APPSHEET_URL",
+  "generatedAt": "2026-06-21T00:00:00.000Z",
+  "appUrlConfigured": false,
+  "message": "Set APPSHEET_APP_URL and run scripts/playwright/appsheet-discovery.ts to generate playwright-discovery-report.json.",
+  "views": [],
+  "screenshots": [],
+  "skippedActions": [],
+  "blockers": [
+    {
+      "type": "MISSING_ENV",
+      "field": "APPSHEET_APP_URL",
+      "instruction": "Set APPSHEET_APP_URL to the existing AppSheet application URL. Do not commit secrets or passwords."
+    }
+  ]
+}
+

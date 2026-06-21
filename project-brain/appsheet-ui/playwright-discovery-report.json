@@ -1,0 +1,29 @@
+{
+  "status": "COMPLETED",
+  "generatedAt": "2026-06-21T07:43:10.283Z",
+  "appUrlConfigured": true,
+  "startUrl": "https://www.appsheet.com/start/aad8284e-d02d-492d-8d2d-5beb4095eef4",
+  "cdpEndpoint": "http://127.0.0.1:9222",
+  "views": [
+    {
+      "id": "001",
+      "url": "https://www.appsheet.com/start/aad8284e-d02d-492d-8d2d-5beb4095eef4?platform=desktop",
+      "title": "AppSheet",
+      "viewNameGuess": "@-webkit-keyframes aspinnerfade { 0%{background-color:#1D7FCF} 1%{background-color:#3dbfea} 11%{background-color:#3dbfea} 21%{background-color:#1D7FCF} 100%{background-color:#1D7FCF} } @keyframes aspinnerfade { 0%{background-color:#1D7FCF} ",
+      "visibleText": [
+        "@-webkit-keyframes aspinnerfade { 0%{background-color:#1D7FCF} 1%{background-color:#3dbfea} 11%{background-color:#3dbfea} 21%{background-color:#1D7FCF} 100%{background-color:#1D7FCF} } @keyframes aspinnerfade { 0%{background-color:#1D7FCF} ",
+        "This app is in test mode. Please ask the app creator to run a deployment check. We've added a delay to ensure that you see this message. A plan upgrade is needed. Please inform the app creator. We've added a delay to ensure that you see thi"
+      ],
+      "buttons": [],
+      "fields": [],
+      "links": [],
+      "listOrCardText": [],
+      "screenshot": "screenshots/appsheet-cdp-view-001.png"
+    }
+  ],
+  "screenshots": [
+    "screenshots/appsheet-cdp-view-001.png"
+  ],
+  "skippedActions": [],
+  "blockers": []
+}
