@@ -1,0 +1,12 @@
+{
+  "metadata": {
+    "snapshotName": "service-reports-snapshot",
+    "createdAt": "",
+    "source": "manual-read-only-export",
+    "sourceSpreadsheet": "ServiceApp_FIX",
+    "notes": "Empty placeholder. Real exported rows not added yet."
+  },
+  "customers": [],
+  "serviceReports": [],
+  "reportEquipmentItems": []
+}
