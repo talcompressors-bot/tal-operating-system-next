@@ -1,49 +1,53 @@
 # TASK BOARD
 
 Last updated: 2026-06-21
+Mode: shutdown state, documentation only
 
 ## NOW
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Run AppSheet UI discovery with real URL | Capture live views/actions/screens safely | `playwright-discovery-report.json` contains discovered views or login blocker | No production write approval; URL/session approval needed |
-| Review scanner output and fill AppSheet UI inventory | Convert raw scan to migration-ready map | `APPSHEET_UI_INVENTORY.md` has one row per discovered screen | No |
-| Update AppSheet-to-Next screen map from evidence | Create route/component plan | `APPSHEET_TO_NEXT_SCREEN_MAP.md` references discovered screens | No |
+| Draft `POSTGRESQL_V1_SCOPE.md` | Define the full Tal Operating System PostgreSQL V1 boundary | Scope includes all major operating domains before Prisma work begins | No for documentation |
+| Review full schema scope | Replace the rejected narrow Phase 1 Prisma subset with a complete V1 review | Open decisions and excluded/V2 areas are explicit | No for documentation |
+| Preserve shadow-only safety rules | Keep Next.js separate from production AppSheet/Sheets | Docs clearly state no production writes or cutover | No |
 
 ## NEXT
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Confirm canonical repo root | Avoid writing docs to wrong outer/nested path | Liad confirms root; docs remain under selected repo | No |
-| Audit AppSheet actions/bots manually if Playwright cannot see them | Fill migration gaps | Actions/bots marked discovered or UNKNOWN | No production changes |
-| Separate BusinessDocuments status map from AutomationCommands status | Reduce implementation ambiguity | Status lifecycle doc or section created | No |
-| Create receipts requirements map | Define Phase 2 scope from evidence | Receipt sources, triggers, and blockers documented | No |
-
-## BACKLOG
-
-| Task | Goal | Test / Done | Approval Needed |
-|---|---|---|---|
-| Design Maven create-draft payload builder | Bridge approved draft rows to Maven | Payload schema and validation plan documented | Yes before code |
-| Analyze Drive auto-save bug | Identify smallest safe fix | Root-cause hypothesis and test plan documented | Yes before code |
-| Analyze Maven sync stuck bug | Identify smallest safe fix | Error pattern and incremental plan documented | Yes before code |
-| Consolidate duplicate AI Draft docs | Reduce conflicting instructions | Cleanup diff only touches docs | No for docs; yes if changing code |
-| Build Next.js scaffold | Start migration implementation | App runs locally with mapped routes | Yes, because it begins new app work |
+| Map full Tal Operating System entities | Include service reports, customers, equipment, documents, automation, inventory, receipts/payments, users, logs, and governance | Entity list reviewed against migration docs and live source evidence | No for documentation |
+| Decide PostgreSQL V1 included vs deferred scope | Avoid starting Prisma from an incomplete model set | Each domain marked V1, V1 read-only, V2, or excluded | No for documentation |
+| Define snapshot adapter contract | Keep local JSON snapshot reads stable for shadow development | Adapter inputs, outputs, timestamp, and row-count checks documented | No |
+| Document Hebrew RTL UI requirements | Preserve current Next.js UI direction | RTL, Hebrew labels, and status/source text preservation documented | No |
 
 ## DONE
 
 | Task | Evidence |
 |---|---|
-| Governance Foundation completed | `project-brain/roadmap/ROADMAP.md`, `project-brain/current/CURRENT_TASK.md` |
-| Sheets registry populated | `data-sources/tools/SHEETS_REGISTRY.md` |
-| AI Draft read-only preview validated as concept | `project-brain/checkpoints/NEXT_SESSION.md`, `AI_DRAFT_RUNTIME_BLUEPRINT.md` |
-| Project control map created | This mission's `PROJECT_DASHBOARD.md`, traceability, inventory, gaps, task board, next tasks, n8n map |
+| Next.js shadow app created | App exists as shadow/development implementation only |
+| Hebrew RTL UI created | Next.js UI supports Hebrew RTL direction |
+| ServiceReports list/detail created | Shadow app includes ServiceReports list and detail screens |
+| Snapshot JSON adapter created | Adapter reads local snapshot JSON instead of production sources |
+| Live read-only validation completed | `Customers_Final = 763`, `ServiceReports = 62`, `ReportEquipmentItems = 108` |
+| GitHub push completed | Latest shadow-app/documentation work pushed |
+| Production protected | AppSheet and Google Sheets untouched |
+| Narrow Phase 1 Prisma subset rejected | Documented as too narrow for Tal Operating System V1 |
 
-## BLOCKED
+## BLOCKED / NOT STARTED
 
 | Task | Blocker | Next Unblock Step |
 |---|---|---|
-| Live AppSheet Playwright scan | Missing `APPSHEET_APP_URL` and login/session state | Set env var and run scanner |
-| Real AppSheet action/bot migration map | AppSheet definitions are not exported in repo | Use scanner plus manual AppSheet export/review |
-| Production AI Draft -> Maven | Requires approval and missing payload/create API contract | Approve design-only Maven payload audit |
-| Automatic receipts | No source data, workflow, or table contract found | Approve receipts requirements discovery |
+| Prisma generation | Full PostgreSQL V1 scope not reviewed | Complete `POSTGRESQL_V1_SCOPE.md` first |
+| Database setup/migration | Scope and schema not approved | Finish full schema review and receive approval |
+| Production integration | Shadow app is not approved for production | Keep AppSheet/Sheets production until explicit cutover approval |
+| Maven write flow | Not part of shutdown work | Requires separate design and approval |
 
+## Rules
+
+- Documentation only.
+- No code.
+- No Prisma.
+- No database.
+- No Google Sheets.
+- No AppSheet.
+- No Maven.
