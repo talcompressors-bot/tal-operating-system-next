@@ -81,6 +81,19 @@ Approved.
 ## 2026-06-22
 
 Decision:
+`315b8cc Fix reality check commit model` is classified as the Last Implementation Commit.
+
+Reason:
+The commit changed governance behavior by introducing the two-commit Reality Check model. It is an implementation/governance commit, not closeout metadata. Last Closeout Commit remains `653f370 Sync project brain after reality check hardening`.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-22
+
+Decision:
 `hey codex` must sync from GitHub before reading Project Brain when the working tree is clean, and Project Reality Check must compare live Git against Project Brain recorded commits.
 
 Reason:

@@ -131,9 +131,9 @@ This section is the living navigation screen. It summarizes current reality only
 | Current milestone | Startup remote sync, shutdown path, and Reality Check commit comparison enforced | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Current task | Prepare PostgreSQL/Supabase shadow environment planning after consolidation | `project-brain/CURRENT_TASK.md` |
 | Next approved task | PostgreSQL/Supabase shadow environment planning, not implementation | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Last Implementation Commit | `670f4c8 Harden codex startup and reality check sync` | Git history; `project-brain/CURRENT_TASK.md` |
+| Last Implementation Commit | `315b8cc Fix reality check commit model` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `653f370 Sync project brain after reality check hardening` | Git history; `project-brain/CURRENT_TASK.md` |
-| Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
+| Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
 | Blocked/forbidden actions | No production writes, Prisma migration, DB creation, Sheets/AppSheet/Maven actions, new planning/control files, new agents, or implementation before Reality Check | `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md` |
 | Evidence links | Current task, task board, decisions, system map, migration scope, Prisma schema, protocol | Canonical file links below |
 
