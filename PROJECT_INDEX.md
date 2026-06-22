@@ -131,7 +131,7 @@ This section is the living navigation screen. It summarizes current reality only
 | Current milestone | Supabase staging-first plan documented; env placeholder and secret ignore rules prepared; Supabase project creation still requires authenticated access | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Current task | Create Supabase staging project through an authenticated Supabase path and place staging secret values outside git | `project-brain/CURRENT_TASK.md` |
 | Next approved task | Create `talcompressors-next-staging` and configure real staging secret values outside git only; no schema push, migration, import, production cutover, or AppSheet/Sheets/Maven changes | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Last Implementation Commit | `d1d6f88 Document Supabase staging-first shadow plan` | Git history; `project-brain/CURRENT_TASK.md` |
+| Last Implementation Commit | `fc1dfa8 Prepare Supabase staging env placeholders` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
 | Blocked/forbidden actions | No production writes, Prisma migration, DB creation, Sheets/AppSheet/Maven actions, new planning/control files, new agents, or implementation before Reality Check | `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md` |

@@ -49,7 +49,7 @@ Mode: Supabase staging-first shadow environment planning, documentation only
 | Closeout commit loop prevention documented | Closeout-only metadata commits do not require another Project Brain sync just to record their own hash |
 | Master map and agent routing added | Commit `2963977 Add master map and agent routing`; classified as governance implementation because it changed project routing behavior |
 | Supabase staging-first shadow plan approved | Commit `d1d6f88 Document Supabase staging-first shadow plan`; use `talcompressors-next-staging` first and `talcompressors-next-prod` production shadow only after staging validation; local PostgreSQL is not first target |
-| Staging env placeholder and secret ignore prepared | `.env.staging.example` contains required env names only; `.gitignore` blocks real `.env` files while allowing examples; Supabase project creation remains pending authenticated access |
+| Staging env placeholder and secret ignore prepared | Commit `fc1dfa8 Prepare Supabase staging env placeholders`; `.env.staging.example` contains required env names only; `.gitignore` blocks real `.env` files while allowing examples; Supabase project creation remains pending authenticated access |
 
 ## BLOCKED / NOT STARTED
 

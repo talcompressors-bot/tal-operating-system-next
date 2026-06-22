@@ -3,6 +3,19 @@
 ## 2026-06-22
 
 Decision:
+`fc1dfa8 Prepare Supabase staging env placeholders` is classified as the Last Implementation Commit.
+
+Reason:
+The commit changed repository setup by adding staging env placeholders and secret ignore rules. It is an implementation/setup commit, not closeout metadata. Last Closeout Commit remains `8114210 Sync project brain commit model state`.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-22
+
+Decision:
 Real Supabase staging secret values must remain outside git; repository may contain env example placeholders with names only.
 
 Reason:
