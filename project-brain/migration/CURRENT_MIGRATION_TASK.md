@@ -19,8 +19,9 @@ The migration is no longer at Phase 0 project audit. A Next.js shadow app exists
 - Production AppSheet and Google Sheets were untouched.
 - Live read-only validation completed:
   - `Customers_Final = 763`
-  - `ServiceReports = 62`
-  - `ReportEquipmentItems = 108`
+  - `ServiceReports = 63`
+  - `ReportEquipmentItems = 109`
+  - Reason: read-only Wave 1 export validation found legitimate business data added after the original baseline.
 - `project-brain/migration/POSTGRESQL_V1_SCOPE.md` is approved.
 - Full `prisma/schema.prisma` exists.
 - Prisma has not been installed.

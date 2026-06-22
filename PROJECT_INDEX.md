@@ -162,7 +162,7 @@ This map is a navigation summary only. The visual map is view-only and is not a 
 | Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |
 | Dependency order | Governance and Project Brain state -> system map/source review -> PostgreSQL V1 scope -> data migration planning -> Supabase staging-first plan -> approved staging project/secrets -> Prisma reconciliation approval -> approved staging schema push -> read-only schema verification -> Wave 1 dry-run/import validation -> Waves 2-4 discovery/import approvals -> production shadow approval -> Server Actions/offline sync | `project-brain/TASK_BOARD.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md`, `project-brain/migration/DATA_MIGRATION_PLAN.md` |
-| Import waves | Wave 1 service-report core; Wave 2 product/AI/business-document support; Wave 3 Maven-origin and sync observability; Wave 4 inventory/procurement/reference/governance | `project-brain/migration/DATA_MIGRATION_PLAN.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md` |
+| Import waves | Structured `WAVE_ID` blocks define Wave 1 service-report core, Wave 2 service workflow, Wave 3 Maven data, and Wave 4 extended operations for agent-readable planning | `project-brain/migration/DATA_MIGRATION_PLAN.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md` |
 | System map | Current legacy and target system navigation | `project-brain/maps/SYSTEM_MAP.md` |
 
 ```mermaid

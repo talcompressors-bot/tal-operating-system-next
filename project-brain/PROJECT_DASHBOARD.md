@@ -33,8 +33,8 @@ Read-only validation confirmed live source row counts:
 | Source | Rows |
 |---|---:|
 | `Customers_Final` | 763 |
-| `ServiceReports` | 62 |
-| `ReportEquipmentItems` | 108 |
+| `ServiceReports` | 63 |
+| `ReportEquipmentItems` | 109 |
 
 ## Migration Decision State
 

@@ -35,23 +35,271 @@ Recommended import order:
 
 # Import Waves Plan
 
-Import waves are dependency gates for dry-run validation and later approved import execution. They do not approve import by themselves.
+Import waves are dependency gates for dry-run validation and later approved import execution. They do not approve import by themselves. This section is structured for Codex, AI agents, future automation, and Project Brain indexing.
 
-| Wave | Source Sheets | Target PostgreSQL Tables | Purpose |
-|---|---|---|---|
-| Wave 1 | `Customers_Final`, `ServiceReports`, `ReportEquipmentItems` | `customers`, `service_reports`, `report_equipment_items` | Core service-report dataset. This is the minimal first dry-run scope and the minimum data wave required before Next.js can replace AppSheet for service report screens. |
-| Wave 2 | `ProductsCatalog`, `PartsUsed`, `AIDraftSuggestions`, `BusinessDocuments`, `BusinessDocumentItems`, `BusinessDocumentLog`, `ApprovalsLog`, `EmailLog` | `products`, `parts_used`, `ai_draft_suggestions`, `business_documents`, `business_document_items`, `business_document_logs`, `approvals`, `email_logs` | Product, parts, AI draft, business-document, approval, and communication support data. |
-| Wave 3 | `InvoiceMavenCustomers`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, `InvoiceMavenItems`, any other Maven-origin tabs, `SyncState`, `SyncLog`, `ErrorLog` | `maven_customers`, `maven_documents`, `maven_document_items`, `maven_items`, to-classify Maven-origin targets, `sync_states`, `sync_logs`, `error_logs` | Maven-origin history/reference data and sync observability. |
-| Wave 4 | `InventoryStock`, `SuppliersProducts`, `InspectionItems`, `Lists`, `AppMenu`, governance/security sheets | `inventory_stocks`, future procurement/inspection/reference/UI/governance/security targets | Extended/future operational, procurement, reference, UI, governance, and security scope. |
+WAVE_ID: WAVE_1_CORE
+STATUS: APPROVED
+PRIORITY: HIGH
+AGENT_OWNER:
 
-Historical/config-only sheets are excluded unless later approved: `Customers2`, `PDF_Template`, `SetupGuide`, `AppSheet_Formulas`, `ServiceReport_Form_View`.
+* INFRASTRUCTURE_MANAGER_AGENT
+* PROJECT_BRAIN_AGENT
+* ORCHESTRATOR_AGENT
 
-Wave dependencies:
+OBJECTIVE:
+Import core service-report data required for Next.js service-report replacement.
 
-1. Wave 1 must pass dry-run validation before any service-report replacement/cutover planning.
-2. Wave 2 depends on Wave 1 because products, parts, AI drafts, business documents, approvals, and email logs link back to customers and service reports.
-3. Wave 3 depends on Wave 1 for customer matching and may depend on Wave 2 where Maven documents link to business documents or product/catalog data.
-4. Wave 4 depends on the earlier waves and requires separate approval for extended/future targets.
+SOURCES:
+
+* Customers_Final
+* ServiceReports
+* ReportEquipmentItems
+
+TARGET_TABLES:
+
+* customers
+* service_reports
+* report_equipment_items
+
+DEPENDENCIES:
+
+* None
+
+BLOCKERS:
+
+* Dry-run report approval
+
+FORBIDDEN:
+
+* Production import
+* Maven import
+* Inventory import
+* AppSheet or Google Sheets mutation
+
+SUCCESS_CRITERIA:
+
+* Row counts validated: Customers_Final = 763, ServiceReports = 63, ReportEquipmentItems = 109
+* Parent links validated
+* Legacy/test rows excluded
+* Staging import completed after explicit approval
+
+BASELINE_REASON:
+Read-only Wave 1 export validation found legitimate business data added after the original baseline.
+
+NEXT_WAVE:
+WAVE_2_SERVICE_WORKFLOW
+
+---
+
+WAVE_ID: WAVE_2_SERVICE_WORKFLOW
+STATUS: APPROVED
+PRIORITY: HIGH
+AGENT_OWNER:
+
+* INFRASTRUCTURE_MANAGER_AGENT
+* PROJECT_BRAIN_AGENT
+* ORCHESTRATOR_AGENT
+
+OBJECTIVE:
+Import product, parts, AI draft, business-document, approval, and communication support data required for service workflow continuity.
+
+SOURCES:
+
+* ProductsCatalog
+* PartsUsed
+* AIDraftSuggestions
+* BusinessDocuments
+* BusinessDocumentItems
+* BusinessDocumentLog
+* ApprovalsLog
+* EmailLog
+
+TARGET_TABLES:
+
+* products
+* parts_used
+* ai_draft_suggestions
+* business_documents
+* business_document_items
+* business_document_logs
+* approvals
+* email_logs
+
+DEPENDENCIES:
+
+* WAVE_1_CORE completed and validated
+* PartsUsed real schema verified
+* EmailLog real schema verified
+* Status and enum mappings reviewed
+
+BLOCKERS:
+
+* Wave 1 dry-run/import validation not approved
+* PartsUsed schema unknown
+* EmailLog schema unknown
+
+FORBIDDEN:
+
+* Production import
+* Maven write actions
+* Business document automation execution
+* Email sending
+* AppSheet or Google Sheets mutation
+
+SUCCESS_CRITERIA:
+
+* Product and SKU uniqueness validated
+* PartsUsed and EmailLog schemas classified
+* Business document parent links validated
+* AI draft and approval status values mapped
+* Staging import completed after explicit approval
+
+NEXT_WAVE:
+WAVE_3_MAVEN_DATA
+
+---
+
+WAVE_ID: WAVE_3_MAVEN_DATA
+STATUS: APPROVED
+PRIORITY: MEDIUM
+AGENT_OWNER:
+
+* INFRASTRUCTURE_MANAGER_AGENT
+* MAVEN_AGENT
+* PROJECT_BRAIN_AGENT
+* ORCHESTRATOR_AGENT
+
+OBJECTIVE:
+Discover, classify, and import Maven-origin history/reference data and sync observability after service workflow dependencies are understood.
+
+SOURCES:
+
+* InvoiceMavenCustomers
+* InvoiceMavenDocuments
+* InvoiceMavenDocumentItems
+* InvoiceMavenItems
+* Any other Maven-origin Google Sheets tab
+* SyncState
+* SyncLog
+* ErrorLog
+
+TARGET_TABLES:
+
+* maven_customers
+* maven_documents
+* maven_document_items
+* maven_items
+* to-classify Maven-origin targets
+* sync_states
+* sync_logs
+* error_logs
+
+DEPENDENCIES:
+
+* WAVE_1_CORE completed and validated
+* Maven-origin tab discovery completed
+* Customer matching rules reviewed
+* BusinessDocument link fields reviewed
+* Product and SKU link rules reviewed
+
+BLOCKERS:
+
+* Maven-origin source inventory incomplete
+* Unknown Maven-to-customer links
+* Unknown Maven-to-business-document links
+* Unknown Maven-to-product links
+
+FORBIDDEN:
+
+* Production import
+* Maven document creation or modification
+* Maven sync execution
+* Receipt or payment workflow changes
+* AppSheet or Google Sheets mutation
+
+SUCCESS_CRITERIA:
+
+* Every Maven-origin tab discovered
+* Every Maven-origin tab classified as active V1 import, later V1 import, or future/historical only
+* Maven customer, document, item, and sync links validated
+* Staging import completed after explicit approval
+
+NEXT_WAVE:
+WAVE_4_EXTENDED_OPERATIONS
+
+---
+
+WAVE_ID: WAVE_4_EXTENDED_OPERATIONS
+STATUS: APPROVED
+PRIORITY: LOW
+AGENT_OWNER:
+
+* INFRASTRUCTURE_MANAGER_AGENT
+* PROJECT_BRAIN_AGENT
+* ORCHESTRATOR_AGENT
+
+OBJECTIVE:
+Classify and plan extended/future operational, procurement, reference, UI, governance, and security data after core service and Maven data are validated.
+
+SOURCES:
+
+* InventoryStock
+* SuppliersProducts
+* InspectionItems
+* Lists
+* AppMenu
+* Governance/security sheets
+
+TARGET_TABLES:
+
+* inventory_stocks
+* future procurement targets
+* future inspection targets
+* future reference targets
+* future UI/navigation targets
+* future governance/security targets
+
+DEPENDENCIES:
+
+* WAVE_1_CORE completed and validated
+* WAVE_2_SERVICE_WORKFLOW completed or explicitly deferred
+* WAVE_3_MAVEN_DATA completed or explicitly deferred
+* Extended target schema approved
+
+BLOCKERS:
+
+* Procurement scope not approved
+* Inspection schema unknown
+* Governance/security model not approved
+* UI/config import rules not approved
+
+FORBIDDEN:
+
+* Production import
+* Inventory mutation
+* Procurement write workflow
+* Governance/security table import without security model
+* AppSheet or Google Sheets mutation
+
+SUCCESS_CRITERIA:
+
+* Extended source tabs classified
+* Future target tables approved or deferred
+* Security/governance handling approved where needed
+* Staging import completed after explicit approval, or sources explicitly deferred
+
+NEXT_WAVE:
+NONE
+
+---
+
+EXCLUDED_UNLESS_LATER_APPROVED:
+
+* Customers2
+* PDF_Template
+* SetupGuide
+* AppSheet_Formulas
+* ServiceReport_Form_View
 
 ---
 

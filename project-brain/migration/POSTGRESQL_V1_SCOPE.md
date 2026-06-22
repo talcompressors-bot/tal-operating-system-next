@@ -27,8 +27,10 @@ The latest read-only validation corrected the known source counts:
 | Source | Confirmed Rows |
 |---|---:|
 | `Customers_Final` | 763 |
-| `ServiceReports` | 62 |
-| `ReportEquipmentItems` | 108 |
+| `ServiceReports` | 63 |
+| `ReportEquipmentItems` | 109 |
+
+Reason: read-only Wave 1 export validation found legitimate business data added after the original baseline.
 
 Required schema correction:
 
@@ -194,16 +196,248 @@ Special relationship decisions:
 
 Import strategy must be staged, idempotent, and shadow-only.
 
-Import waves:
+Import waves are defined in AI-agent-readable form. `project-brain/migration/DATA_MIGRATION_PLAN.md` is the canonical detailed owner for full wave fields.
 
-| Wave | Source Sheets | Target PostgreSQL Tables | Gate |
-|---|---|---|---|
-| Wave 1 | `Customers_Final`, `ServiceReports`, `ReportEquipmentItems` | `customers`, `service_reports`, `report_equipment_items` | Required before Next.js can replace AppSheet for service reports, along with UI/write-path/cutover approvals. |
-| Wave 2 | `ProductsCatalog`, `PartsUsed`, `AIDraftSuggestions`, `BusinessDocuments`, `BusinessDocumentItems`, `BusinessDocumentLog`, `ApprovalsLog`, `EmailLog` | `products`, `parts_used`, `ai_draft_suggestions`, `business_documents`, `business_document_items`, `business_document_logs`, `approvals`, `email_logs` | Depends on Wave 1. |
-| Wave 3 | `InvoiceMavenCustomers`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, `InvoiceMavenItems`, any other Maven-origin tabs, `SyncState`, `SyncLog`, `ErrorLog` | `maven_customers`, `maven_documents`, `maven_document_items`, `maven_items`, to-classify Maven-origin targets, `sync_states`, `sync_logs`, `error_logs` | Depends on Wave 1 and Maven-origin discovery; may depend on Wave 2 links to `BusinessDocuments` and products. |
-| Wave 4 | `InventoryStock`, `SuppliersProducts`, `InspectionItems`, `Lists`, `AppMenu`, governance/security sheets | `inventory_stocks`, future procurement/inspection/reference/UI/governance/security targets | Extended/future scope; separate approval required. |
+WAVE_ID: WAVE_1_CORE
+STATUS: APPROVED
+PRIORITY: HIGH
+AGENT_OWNER:
 
-Historical/config-only sheets are excluded unless later approved: `Customers2`, `PDF_Template`, `SetupGuide`, `AppSheet_Formulas`, `ServiceReport_Form_View`.
+* INFRASTRUCTURE_MANAGER_AGENT
+* PROJECT_BRAIN_AGENT
+* ORCHESTRATOR_AGENT
+
+OBJECTIVE:
+Import core service-report data required for Next.js service-report replacement.
+
+SOURCES:
+
+* Customers_Final
+* ServiceReports
+* ReportEquipmentItems
+
+TARGET_TABLES:
+
+* customers
+* service_reports
+* report_equipment_items
+
+DEPENDENCIES:
+
+* None
+
+BLOCKERS:
+
+* Dry-run report approval
+
+FORBIDDEN:
+
+* Production import
+* Maven import
+* Inventory import
+
+SUCCESS_CRITERIA:
+
+* Row counts validated
+* Parent links validated
+* Legacy/test rows excluded
+* Staging import completed
+
+NEXT_WAVE:
+WAVE_2_SERVICE_WORKFLOW
+
+---
+
+WAVE_ID: WAVE_2_SERVICE_WORKFLOW
+STATUS: APPROVED
+PRIORITY: HIGH
+AGENT_OWNER:
+
+* INFRASTRUCTURE_MANAGER_AGENT
+* PROJECT_BRAIN_AGENT
+* ORCHESTRATOR_AGENT
+
+OBJECTIVE:
+Import service workflow support data for product, parts, AI draft, business documents, approvals, and email traceability.
+
+SOURCES:
+
+* ProductsCatalog
+* PartsUsed
+* AIDraftSuggestions
+* BusinessDocuments
+* BusinessDocumentItems
+* BusinessDocumentLog
+* ApprovalsLog
+* EmailLog
+
+TARGET_TABLES:
+
+* products
+* parts_used
+* ai_draft_suggestions
+* business_documents
+* business_document_items
+* business_document_logs
+* approvals
+* email_logs
+
+DEPENDENCIES:
+
+* WAVE_1_CORE
+
+BLOCKERS:
+
+* Wave 1 dry-run/import validation not approved
+* PartsUsed schema unknown
+* EmailLog schema unknown
+
+FORBIDDEN:
+
+* Production import
+* Maven write actions
+* Business document automation execution
+* Email sending
+
+SUCCESS_CRITERIA:
+
+* Product and SKU uniqueness validated
+* PartsUsed and EmailLog schemas classified
+* Business document parent links validated
+* Staging import completed
+
+NEXT_WAVE:
+WAVE_3_MAVEN_DATA
+
+---
+
+WAVE_ID: WAVE_3_MAVEN_DATA
+STATUS: APPROVED
+PRIORITY: MEDIUM
+AGENT_OWNER:
+
+* INFRASTRUCTURE_MANAGER_AGENT
+* MAVEN_AGENT
+* PROJECT_BRAIN_AGENT
+* ORCHESTRATOR_AGENT
+
+OBJECTIVE:
+Discover, classify, and import Maven-origin history/reference data and sync observability.
+
+SOURCES:
+
+* InvoiceMavenCustomers
+* InvoiceMavenDocuments
+* InvoiceMavenDocumentItems
+* InvoiceMavenItems
+* Any other Maven-origin Google Sheets tab
+* SyncState
+* SyncLog
+* ErrorLog
+
+TARGET_TABLES:
+
+* maven_customers
+* maven_documents
+* maven_document_items
+* maven_items
+* to-classify Maven-origin targets
+* sync_states
+* sync_logs
+* error_logs
+
+DEPENDENCIES:
+
+* WAVE_1_CORE
+* Maven-origin tab discovery
+* Customer, BusinessDocument, and Product link review
+
+BLOCKERS:
+
+* Maven-origin source inventory incomplete
+* Unknown Maven links
+
+FORBIDDEN:
+
+* Production import
+* Maven document creation or modification
+* Maven sync execution
+
+SUCCESS_CRITERIA:
+
+* Every Maven-origin tab discovered and classified
+* Maven links validated
+* Staging import completed
+
+NEXT_WAVE:
+WAVE_4_EXTENDED_OPERATIONS
+
+---
+
+WAVE_ID: WAVE_4_EXTENDED_OPERATIONS
+STATUS: APPROVED
+PRIORITY: LOW
+AGENT_OWNER:
+
+* INFRASTRUCTURE_MANAGER_AGENT
+* PROJECT_BRAIN_AGENT
+* ORCHESTRATOR_AGENT
+
+OBJECTIVE:
+Classify extended/future operational, procurement, reference, UI, governance, and security data.
+
+SOURCES:
+
+* InventoryStock
+* SuppliersProducts
+* InspectionItems
+* Lists
+* AppMenu
+* Governance/security sheets
+
+TARGET_TABLES:
+
+* inventory_stocks
+* future procurement targets
+* future inspection targets
+* future reference targets
+* future UI/navigation targets
+* future governance/security targets
+
+DEPENDENCIES:
+
+* WAVE_1_CORE
+* WAVE_2_SERVICE_WORKFLOW completed or explicitly deferred
+* WAVE_3_MAVEN_DATA completed or explicitly deferred
+
+BLOCKERS:
+
+* Extended target schema not approved
+* Governance/security model not approved
+
+FORBIDDEN:
+
+* Production import
+* Inventory mutation
+* Procurement write workflow
+* Governance/security import without security model
+
+SUCCESS_CRITERIA:
+
+* Extended source tabs classified
+* Future target tables approved or deferred
+* Staging import completed or sources explicitly deferred
+
+NEXT_WAVE:
+NONE
+
+EXCLUDED_UNLESS_LATER_APPROVED:
+
+* Customers2
+* PDF_Template
+* SetupGuide
+* AppSheet_Formulas
+* ServiceReport_Form_View
 
 Recommended order:
 
@@ -273,7 +507,7 @@ Shadow rules:
 
 The first shadow database success criteria:
 
-- Counts match confirmed live validation for `Customers_Final` = 763 and `ServiceReports` = 62; `ReportEquipmentItems` imported count equals only rows linked to real `ServiceReports`.
+- Counts match confirmed live validation for `Customers_Final` = 763, `ServiceReports` = 63, and `ReportEquipmentItems` = 109; `ReportEquipmentItems` imported count equals only rows linked to real `ServiceReports`.
 - Legacy/test `ReportEquipmentItems` rows excluded from import are reported in validation output.
 - Service report list/detail screens can be validated against shadow data without production writes.
 - Business document, AI draft, Maven, inventory, and audit tables exist in scope before Prisma is generated.

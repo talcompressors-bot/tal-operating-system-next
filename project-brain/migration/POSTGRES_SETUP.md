@@ -150,7 +150,9 @@ Approved staging-first flow:
 8. Run read-only staging import only after separate import approval.
 9. Validate staging counts:
    - `Customers_Final` = 763
-   - `ServiceReports` = 62
+   - `ServiceReports` = 63
+   - `ReportEquipmentItems` = 109
+   - Wave 1 baseline was updated because read-only export validation found legitimate business data added after the original baseline
    - `ReportEquipmentItems` imports only rows linked to real `ServiceReports`
    - legacy/test rows intentionally excluded from import are reported
 
