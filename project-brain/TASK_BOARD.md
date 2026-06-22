@@ -1,18 +1,19 @@
 # TASK BOARD
 
 Last updated: 2026-06-22
-Mode: Supabase staging Wave 1 import closed-loop validation, no Wave 2 work
+Mode: Wave 2 service workflow planning/discovery approved; no Wave 2 import
 
 ## NOW
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Next approval gate | Decide whether to approve Wave 2 planning/discovery after Wave 1 read/display validation PASS | No Wave 2 import, Maven work, production shadow, DB write, schema change, or source-system action begins without explicit approval | Yes |
+| Wave 2 planning/discovery | Define source exports, schema blockers, parent-link checks, enum/status mappings, dry-run report format, and next approval gate for Wave 2 service workflow data | Planning is documented; no Wave 2 source export, dry-run execution, import, Maven work, production shadow, DB write, schema change, or source-system action begins without explicit approval | No, approved for planning/discovery only |
 
 ## NEXT
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
+| Wave 2 source export and dry-run approval | Export approved Wave 2 source CSVs and run read-only dry-run validation | ProductsCatalog, PartsUsed, AIDraftSuggestions, BusinessDocuments, BusinessDocumentItems, BusinessDocumentLog, ApprovalsLog, EmailLog exports exist locally; dry-run report shows row counts, uniqueness, parent links, status mappings, and blockers | Yes before reading/exporting live source data or running dry-run |
 | Second-stage Maven dry-run discovery | Confirm all Maven-origin Sheets and their links before import | Known `InvoiceMaven*` tabs plus any other Sheets tabs storing Maven imported/synced/created data are documented with purpose, target table, Customer/BusinessDocument/Product links, and active V1/later V1/future-historical classification | Yes before Maven history import |
 | Import Waves execution planning | Sequence source imports by dependency wave | Agent-readable blocks define `WAVE_1_CORE`, `WAVE_2_SERVICE_WORKFLOW`, `WAVE_3_MAVEN_DATA`, and `WAVE_4_EXTENDED_OPERATIONS` with owners, dependencies, blockers, forbidden actions, and success criteria | Yes before real import |
 | Supabase production shadow setup | Create `talcompressors-next-prod` only after staging validation passes | Production shadow project exists; no production cutover and no AppSheet/Sheets/Maven changes | Yes after staging validation |
@@ -64,6 +65,7 @@ Mode: Supabase staging Wave 1 import closed-loop validation, no Wave 2 work
 | Autonomous agent orchestration governance created | Commit `a28da7b Create autonomous agent orchestration governance`; Codex is the main Orchestrator for AUTO_ALLOWED work, routes tasks to existing agent owners, validates, updates Project Brain, commits/pushes safe scoped work, and stops only at APPROVAL_REQUIRED gates |
 | Wave 1 read/display mapping fixes validated | Commit `fd76610 Fix Wave 1 service report display mapping`; service dates fall back to `raw_source` service date without DB writes; pending-signature source status maps to `Pending Signature`; missing source status displays as `Status Missing`; sparse equipment rows render safe fallbacks; read-only staging validation found 63 reports, 75 equipment rows, 0 unknown dates, 29 pending-signature statuses, 32 signed statuses, 2 status-missing rows, 0 unknown statuses, and 0 sparse fallback failures; read-only HTTP validation returned 200 for `/service-reports` and `/service-reports/acd1133d` with 63 links |
 | Project tree reporting required | Commit `7f63193 Require project tree reporting`; every Reality Check, Approval Gate, Autonomous Completion Report, and `by codex` closeout must include Project Tree Position from `PROJECT_INDEX.md` |
+| Wave 2 planning/discovery gate approved | Liad approved Wave 2 planning/discovery only; scope is documentation/source-readiness planning and excludes Wave 2 import, DB writes, schema changes, Maven actions, production shadow, and source-system changes |
 
 ## BLOCKED / NOT STARTED
 
@@ -71,7 +73,8 @@ Mode: Supabase staging Wave 1 import closed-loop validation, no Wave 2 work
 |---|---|---|
 | Database migration | Migrations are not part of current staging shadow path | Separate approval required before any Prisma migrate workflow |
 | Additional schema push | Staging schema is already applied; further schema changes need separate approval | Approve any schema change separately before another db push |
-| Wave 2 import/discovery | Wave 2 is not approved | Request explicit Wave 2 gate approval |
+| Wave 2 source export/dry-run | Wave 2 planning/discovery is approved, but source export and dry-run execution are not approved yet | Request explicit Wave 2 read-only source export and dry-run approval |
+| Wave 2 import | Wave 2 import is not approved | Request explicit import approval only after Wave 2 dry-run PASS |
 | Production integration | Shadow app is not approved for production | Keep AppSheet/Sheets production until explicit cutover approval |
 | Maven write flow | Not part of current work | Requires separate design and approval |
 | New planning/control files | Existing-file audit is required first | Search existing files and prove no owner file already exists |

@@ -3,6 +3,19 @@
 ## 2026-06-22
 
 Decision:
+Wave 2 service workflow planning/discovery is approved.
+
+Reason:
+Wave 1 staging import, PostgreSQL read switch, and read/display mapping validation have passed. The next safe step is planning/discovery for Wave 2 service workflow data only: source export list, schema blockers, parent-link checks, enum/status mapping needs, dry-run report format, and next approval gate. This approval does not permit Wave 2 source export, dry-run execution, import, DB writes, schema changes, Maven actions, AppSheet changes, Google Sheets mutations, Apps Script changes, production shadow setup, or production cutover.
+
+Status:
+Approved for planning/discovery only.
+
+---
+
+## 2026-06-22
+
+Decision:
 `7f63193 Require project tree reporting` is classified as the Last Implementation Commit.
 
 Reason:

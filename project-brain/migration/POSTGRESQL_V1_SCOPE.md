@@ -316,6 +316,17 @@ WAVE_3_MAVEN_DATA
 
 ---
 
+Wave 2 planning/discovery status:
+
+- Approved for planning/discovery only.
+- Not approved for source export, dry-run execution, import, DB write, schema change, Maven action, AppSheet change, Google Sheets mutation, Apps Script change, production shadow setup, or production cutover.
+- Required Wave 2 source exports before dry-run: `ProductsCatalog.csv`, `PartsUsed.csv`, `AIDraftSuggestions.csv`, `BusinessDocuments.csv`, `BusinessDocumentItems.csv`, `BusinessDocumentLog.csv`, `ApprovalsLog.csv`, and `EmailLog.csv`.
+- Current local exports contain Wave 1 only: `Customers_Final.csv`, `ServiceReports.csv`, and `ReportEquipmentItems.csv`.
+- Known blockers: `PartsUsed` and `EmailLog` schemas are incomplete in `SHEETS_REGISTRY.md`; actual Wave 2 row counts are not captured locally; status/enum mapping requires source-value inventory.
+- Next gate: approve Wave 2 read-only source export and dry-run validation only.
+
+---
+
 WAVE_ID: WAVE_3_MAVEN_DATA
 STATUS: APPROVED
 PRIORITY: MEDIUM

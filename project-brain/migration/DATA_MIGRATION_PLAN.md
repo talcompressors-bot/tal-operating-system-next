@@ -163,6 +163,111 @@ WAVE_3_MAVEN_DATA
 
 ---
 
+# Wave 2 Planning / Discovery
+
+Status:
+Approved for planning/discovery only.
+
+Approval scope:
+No source export, dry-run execution, import, DB write, schema change, Maven action, AppSheet change, Google Sheets mutation, Apps Script change, production shadow setup, or production cutover is approved by this planning step.
+
+Exact Wave 2 source files required before dry-run:
+
+* `data-sources/exports/ProductsCatalog.csv`
+* `data-sources/exports/PartsUsed.csv`
+* `data-sources/exports/AIDraftSuggestions.csv`
+* `data-sources/exports/BusinessDocuments.csv`
+* `data-sources/exports/BusinessDocumentItems.csv`
+* `data-sources/exports/BusinessDocumentLog.csv`
+* `data-sources/exports/ApprovalsLog.csv`
+* `data-sources/exports/EmailLog.csv`
+
+Current local export status:
+
+* Wave 1 exports exist locally: `Customers_Final.csv`, `ServiceReports.csv`, `ReportEquipmentItems.csv`
+* Wave 2 exports are not present locally.
+* Existing `scripts/import-dry-run.ts` includes Wave 2 source configs, but `tsx` is not installed in local dependencies; running it through `npx tsx` attempted a network fetch and failed. Do not install tooling without approval.
+
+Wave 2 target tables:
+
+* `products`
+* `parts_used`
+* `ai_draft_suggestions`
+* `business_documents`
+* `business_document_items`
+* `business_document_logs`
+* `approvals`
+* `email_logs`
+
+Discovery blockers:
+
+* `PartsUsed` row-1 schema is incomplete in `SHEETS_REGISTRY.md`.
+* `EmailLog` row-1 schema is incomplete in `SHEETS_REGISTRY.md`.
+* Actual row counts for all Wave 2 sources are not captured in local exports.
+* Source enum/status values for AI draft, business documents, approvals, command-adjacent workflow, and email logs require mapping before import.
+* Business document and AI draft relationships must be checked before any import.
+
+Required dry-run checks after approval:
+
+* Row count for every Wave 2 source.
+* Primary key uniqueness:
+  * `ProductsCatalog.ProductID`
+  * `ProductsCatalog.SKU`
+  * `AIDraftSuggestions.SuggestionID`
+  * `BusinessDocuments.BusinessDocumentId`
+  * `BusinessDocumentItems.ItemID`
+  * `BusinessDocumentLog.LogID`
+  * `ApprovalsLog.ApprovalID`
+* Flexible schema classification for `PartsUsed` and `EmailLog`.
+* Parent-link checks:
+  * `PartsUsed.ReportID` -> `ServiceReports.ReportID`, if present
+  * `PartsUsed.ProductID` -> `ProductsCatalog.ProductID`, if present
+  * `AIDraftSuggestions.CustomerID` -> `Customers_Final.CustomerID`
+  * `AIDraftSuggestions.SourceReportID` or equivalent -> `ServiceReports.ReportID`
+  * `AIDraftSuggestions.RelatedBusinessDocumentID` -> `BusinessDocuments.BusinessDocumentId`, if present
+  * `BusinessDocuments.CustomerId` -> `Customers_Final.CustomerID`
+  * `BusinessDocuments.SourceReportId` -> `ServiceReports.ReportID`
+  * `BusinessDocumentItems.DocumentID` -> `BusinessDocuments.BusinessDocumentId`
+  * `BusinessDocumentItems.ProductID` -> `ProductsCatalog.ProductID`, if present
+  * `BusinessDocumentLog.DocumentID` -> `BusinessDocuments.BusinessDocumentId`
+  * `EmailLog.ReportID` -> `ServiceReports.ReportID`, if present
+  * `EmailLog.BusinessDocumentId` -> `BusinessDocuments.BusinessDocumentId`, if present
+* JSON parse checks:
+  * `AIDraftSuggestions.SuggestedItems`
+  * `BusinessDocuments.ItemsJson`
+  * `BusinessDocumentLog.RawData`
+* Date/decimal parse checks for created/updated/approved/sent timestamps and amount/price/quantity fields.
+* Status and enum inventory:
+  * `Product.Status`
+  * `AIDraftSuggestions.ConfidenceLevel`
+  * `AIDraftSuggestions.ApprovalStatus`
+  * `BusinessDocuments.DocumentStatus`
+  * `BusinessDocuments.ApprovalStatus`
+  * `BusinessDocuments.DocumentTypeSuggested`
+  * `BusinessDocuments.DocumentTypeSelected`
+  * `BusinessDocumentItems.Source`
+  * `ApprovalsLog.Status`
+  * `ApprovalsLog.ActionType`
+  * `EmailLog.Status`
+
+Wave 2 dry-run report must include:
+
+* Source file presence and row counts.
+* Unique key results.
+* Parent-link pass/warn/fail summary.
+* Flexible schema findings for `PartsUsed` and `EmailLog`.
+* JSON/date/decimal parse findings.
+* Status/enum value inventory.
+* Import readiness: PASS / WARN / FAIL.
+* Explicit forbidden-action confirmation: no DB write, no import, no migration, no Supabase write, no Google Sheets mutation, no AppSheet change, no Maven action, no Apps Script change, no production action.
+
+Next approval gate:
+Approve Wave 2 read-only source export and dry-run validation only.
+
+After that approval, Codex may create local ignored CSV exports for the eight Wave 2 source tabs and run read-only dry-run validation. It still may not import data, write to Supabase, change schema, run Prisma db push/migrate, touch production, mutate Google Sheets/AppSheet/Maven/Apps Script, or begin Wave 3.
+
+---
+
 WAVE_ID: WAVE_3_MAVEN_DATA
 STATUS: APPROVED
 PRIORITY: MEDIUM

@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-22
-Mode: Supabase staging Wave 1 import closed-loop validation, no Wave 2 work
+Mode: Wave 2 service workflow planning/discovery approved; no Wave 2 import
 
 ## Canonical Role
 
@@ -11,11 +11,11 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 service workflow planning/discovery is approved, limited to documentation/source-readiness planning only.
 
 ## Current Milestone
 
-Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, and Wave 1 read/display mapping fixes are complete.
+Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, and Wave 2 planning/discovery gate approval are complete.
 
 ## Last Implementation Commit
 
@@ -82,11 +82,13 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Current Task
 
-Stop at next approval gate before Wave 2 or production-shadow work.
+Prepare Wave 2 service workflow planning/discovery only.
 
 ## Next Approved Task
 
-Approval gate only: decide whether to approve Wave 2 planning/discovery. Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes, schema changes, or source-system actions until Liad explicitly approves that later gate.
+Wave 2 planning/discovery only. Identify required source exports, schema blockers, parent-link checks, enum/status mapping needs, dry-run report format, and the exact approval gate before any Wave 2 source export or dry-run execution.
+
+Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes, schema changes, or source-system actions until Liad explicitly approves that later gate.
 
 ## Approved Architecture Decisions In Force
 
