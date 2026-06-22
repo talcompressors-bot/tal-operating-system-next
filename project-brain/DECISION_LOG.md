@@ -3,6 +3,19 @@
 ## 2026-06-22
 
 Decision:
+`d1d6f88 Document Supabase staging-first shadow plan` is classified as the Last Implementation Commit.
+
+Reason:
+The commit changed approved project governance and migration planning by making Supabase Staging the first shadow target and Supabase Production Shadow the second target after staging validation. It is an implementation/governance commit, not closeout metadata. Last Closeout Commit remains `8114210 Sync project brain commit model state`.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-22
+
+Decision:
 Use Supabase Staging first, then Supabase Production Shadow. Do not use local PostgreSQL as the first target.
 
 Reason:

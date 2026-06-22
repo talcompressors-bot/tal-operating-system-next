@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, and Supabas
 
 ## Last Implementation Commit
 
-`2963977 Add master map and agent routing`
+`d1d6f88 Document Supabase staging-first shadow plan`
 
 ## Last Closeout Commit
 
@@ -47,6 +47,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, and Supabas
 - Reality Check now compares live Git against Project Brain recorded commits, and `hey codex` now fast-forwards from `origin/main` before reading Project Brain when the working tree is clean.
 - `2963977 Add master map and agent routing` is classified as the latest governance implementation commit because it changed project governance/routing behavior.
 - `8114210 Sync project brain commit model state` is classified as the latest closeout metadata/state-sync commit.
+- `d1d6f88 Document Supabase staging-first shadow plan` is classified as the latest governance implementation commit because it changed the approved Supabase shadow environment sequence.
 - Supabase staging-first shadow plan is approved: use `talcompressors-next-staging` first, then `talcompressors-next-prod` as production shadow only after staging validation passes.
 - Local PostgreSQL is not the first target.
 
