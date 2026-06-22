@@ -127,11 +127,11 @@ This section is the living navigation screen. It summarizes current reality only
 
 | Field | Current Reality | Canonical Evidence |
 |---|---|---|
-| Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging-first shadow environment planning is approved | `project-brain/CURRENT_TASK.md` |
-| Current milestone | Prisma reconciliation for Supabase staging completed and validated; Supabase project creation still requires authenticated access | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Current task | Create Supabase staging project through an authenticated Supabase path and place staging secret values outside git | `project-brain/CURRENT_TASK.md` |
-| Next approved task | Create `talcompressors-next-staging` and configure real staging secret values outside git only; no schema push, migration, import, production cutover, or AppSheet/Sheets/Maven changes | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Last Implementation Commit | `9a81290 Reconcile Prisma schema for Supabase staging` | Git history; `project-brain/CURRENT_TASK.md` |
+| Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied and verified; import dry-run validation is next | `project-brain/CURRENT_TASK.md` |
+| Current milestone | Supabase staging project/secrets prepared outside git; Prisma schema pushed to staging; read-only schema verification passed | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current task | Prepare staging import dry-run validation without writing data | `project-brain/CURRENT_TASK.md` |
+| Next approved task | Run or build staging import dry-run validation only after approval; no real import, migration, schema change, production action, or AppSheet/Sheets/Maven change | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Last Implementation Commit | `b6b709b Reclassify ReportEquipmentItems exclusions` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
 | Blocked/forbidden actions | No production writes, Prisma migration, DB creation, Sheets/AppSheet/Maven actions, new planning/control files, new agents, or implementation before Reality Check | `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md` |
@@ -155,13 +155,13 @@ This map is a navigation summary only. The visual map is view-only and is not a 
 
 | Area | Current Status | Canonical Owner |
 |---|---|---|
-| Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging-first shadow environment plan approved | `project-brain/CURRENT_TASK.md` |
+| Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied and verified; import dry-run validation is next | `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model | `project-brain/TASK_BOARD.md` |
-| Current task | Create `talcompressors-next-staging` through an authenticated Supabase path and keep real secret values outside git | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Next approved task | Authenticated Supabase staging project creation and out-of-git secret value setup only | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current task | Prepare staging import dry-run validation without writing data | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Next approved task | Staging import dry-run validation only after approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |
-| Dependency order | Governance and Project Brain state -> system map/source review -> PostgreSQL V1 scope -> data migration planning -> Supabase staging-first plan -> approved staging project/secrets -> Prisma reconciliation approval -> approved staging schema push -> approved import validation -> production shadow approval -> Server Actions/offline sync | `project-brain/TASK_BOARD.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md`, `project-brain/migration/DATA_MIGRATION_PLAN.md` |
+| Dependency order | Governance and Project Brain state -> system map/source review -> PostgreSQL V1 scope -> data migration planning -> Supabase staging-first plan -> approved staging project/secrets -> Prisma reconciliation approval -> approved staging schema push -> read-only schema verification -> import dry-run validation -> real import approval -> production shadow approval -> Server Actions/offline sync | `project-brain/TASK_BOARD.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md`, `project-brain/migration/DATA_MIGRATION_PLAN.md` |
 | System map | Current legacy and target system navigation | `project-brain/maps/SYSTEM_MAP.md` |
 
 ```mermaid

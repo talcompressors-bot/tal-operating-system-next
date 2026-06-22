@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-22
-Mode: Supabase staging-first shadow environment planning, documentation only
+Mode: Supabase staging import dry-run validation planning, no data writes
 
 ## Canonical Role
 
@@ -11,15 +11,15 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. Supabase staging-first shadow environment plan is approved.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Import dry-run validation is next.
 
 ## Current Milestone
 
-Startup remote sync, shutdown path, Reality Check commit comparison, and Supabase staging-first shadow plan are enforced.
+Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, and read-only schema verification are complete.
 
 ## Last Implementation Commit
 
-`9a81290 Reconcile Prisma schema for Supabase staging`
+`b6b709b Reclassify ReportEquipmentItems exclusions`
 
 ## Last Closeout Commit
 
@@ -35,9 +35,10 @@ Startup remote sync, shutdown path, Reality Check commit comparison, and Supabas
 - Full `prisma/schema.prisma` exists.
 - Prisma tooling was added and committed in `00e2067 Add Prisma validation tooling`.
 - Prisma schema validation completed successfully with Prisma v6.19.3 using a process-only placeholder `DATABASE_URL`.
-- No PostgreSQL database has been created.
-- No migration has been run.
-- No DB push has been run.
+- Supabase staging project `talcompressors-next-staging` exists and real staging secrets were placed outside git in ignored local env storage.
+- No Prisma migration has been run.
+- Supabase staging schema push completed with `prisma db push` after explicit staging-only approval.
+- Read-only staging schema verification passed: 21 public tables found, no missing/extra V1 tables, indexes and relations matched the approved V1 design.
 - Production AppSheet and Google Sheets remain untouched.
 - Maven remains untouched.
 - Project Brain Consolidation Phase 1-3 completed.
@@ -50,20 +51,22 @@ Startup remote sync, shutdown path, Reality Check commit comparison, and Supabas
 - `d1d6f88 Document Supabase staging-first shadow plan` is classified as the latest governance implementation commit because it changed the approved Supabase shadow environment sequence.
 - `fc1dfa8 Prepare Supabase staging env placeholders` is classified as the latest implementation/setup commit because it added staging env placeholders and secret ignore rules.
 - `9a81290 Reconcile Prisma schema for Supabase staging` is classified as the latest implementation/schema commit because it added `DIRECT_URL`, `ReportEquipmentItem.reportCounter`, and the report counter index.
-- Prisma validation passed after reconciliation with process-only placeholder `DATABASE_URL` and `DIRECT_URL`; no generate, DB push, migration, import, or Supabase connection was run.
+- `b6b709b Reclassify ReportEquipmentItems exclusions` is classified as the latest implementation/planning commit because it changed approved migration planning language and import classification for excluded `ReportEquipmentItems` rows.
+- Prisma validation passed after reconciliation with process-only placeholder `DATABASE_URL` and `DIRECT_URL`.
+- Prisma generate completed against local staging env values after explicit approval.
 - Supabase staging-first shadow plan is approved: use `talcompressors-next-staging` first, then `talcompressors-next-prod` as production shadow only after staging validation passes.
 - Local PostgreSQL is not the first target.
 - Staging env placeholder file `.env.staging.example` was prepared with names only: `NEXT_PUBLIC_APP_ENV`, `DATABASE_URL`, and `DIRECT_URL`.
 - `.gitignore` blocks real `.env` files while allowing env example files.
-- Supabase staging project creation is not complete because no authenticated Supabase CLI/API/browser path is available in this environment.
+- Known excluded `ReportEquipmentItems` rows are classified as historical test data, not business data, no recovery required, excluded by design: 9 rows missing `ReportID` and 25 rows with unmatched `ReportID`.
 
 ## Current Task
 
-Create Supabase staging project `talcompressors-next-staging` through an authenticated Supabase path and place real staging secret values outside git.
+Prepare staging import dry-run validation without writing data.
 
 ## Next Approved Task
 
-Authenticated Supabase staging project creation and out-of-git secret value setup only.
+Staging import dry-run validation only after explicit approval.
 
 ## Approved Architecture Decisions In Force
 
@@ -86,7 +89,7 @@ Authenticated Supabase staging project creation and out-of-git secret value setu
 - Required env variable names are `DATABASE_URL`, `DIRECT_URL`, and `NEXT_PUBLIC_APP_ENV`.
 - Optional future Supabase env names are `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`; do not add them until Supabase client features require them.
 - Prisma is reconciled for `DIRECT_URL` and `ReportEquipmentItem.reportCounter`; any DB push still requires separate approval.
-- Staging validation must confirm `Customers_Final = 763`, `ServiceReports = 62`, and `ReportEquipmentItems` imports only rows linked to real `ServiceReports`; legacy/test rows intentionally excluded from import must be reported.
+- Staging validation must confirm `Customers_Final = 763`, `ServiceReports = 62`, and `ReportEquipmentItems` imports only rows linked to real `ServiceReports`; legacy/test rows intentionally excluded from import must be reported as historical test data, not business data, no recovery required, excluded by design.
 - Use Server Actions by default for internal Next.js write flows.
 - Design field workflows offline-first with conflict review.
 
@@ -106,13 +109,13 @@ Authenticated Supabase staging project creation and out-of-git secret value setu
 
 ## Blocked / Forbidden Actions
 
-- No code implementation during consolidation cleanup.
+- No code implementation unless explicitly approved for dry-run validation.
 - No Prisma migration.
-- No DB creation.
-- No `prisma db push`.
-- No Supabase setup until explicitly approved.
-- No schema push.
-- No import.
+- No additional DB creation.
+- No additional `prisma db push`.
+- No Supabase production setup.
+- No additional schema push.
+- No real import.
 - No production cutover.
 - No PostgreSQL/Supabase environment implementation during planning.
 - No Google Sheets writes.

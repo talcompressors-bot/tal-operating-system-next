@@ -3,6 +3,19 @@
 ## 2026-06-22
 
 Decision:
+`b6b709b Reclassify ReportEquipmentItems exclusions` is classified as the Last Implementation Commit.
+
+Reason:
+The commit changed approved migration planning language and import classification for known excluded `ReportEquipmentItems` rows. The 9 rows missing `ReportID` and 25 rows with unmatched `ReportID` are historical test data, not business data, require no recovery, and are excluded by design. It is an implementation/planning commit, not closeout metadata. Last Closeout Commit remains `8114210 Sync project brain commit model state`.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-22
+
+Decision:
 `9a81290 Reconcile Prisma schema for Supabase staging` is classified as the Last Implementation Commit.
 
 Reason:

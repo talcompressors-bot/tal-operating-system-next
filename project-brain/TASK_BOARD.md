@@ -1,22 +1,21 @@
 # TASK BOARD
 
 Last updated: 2026-06-22
-Mode: Supabase staging-first shadow environment planning, documentation only
+Mode: Supabase staging import dry-run validation planning, no data writes
 
 ## NOW
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Supabase staging-first shadow environment planning | Document staging-first plan and implementation gates without implementation | `talcompressors-next-staging` first, `talcompressors-next-prod` production shadow after staging validation; no DB creation, migration, Prisma command, schema push, import, or Supabase setup has run | Yes before implementation |
+| Import dry-run validation planning | Prepare first staging import validation without writing data | Import order, source counts, uniqueness checks, parent-link checks, excluded `ReportEquipmentItems` classification, and approval gate are defined | Yes before dry-run execution or script work |
 
 ## NEXT
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Supabase staging project creation and secret setup | Create `talcompressors-next-staging` and configure real staging secret values outside git | Staging project exists; `DATABASE_URL`, `DIRECT_URL`, and `NEXT_PUBLIC_APP_ENV` values are stored outside git; no schema push, migration, import, or production cutover | Yes |
-| Prisma staging validation gate | Validate reconciled schema only when approved | Reconciled schema validation has passed; no generate, schema push, migration, import, or Supabase connection | Yes before further Prisma commands |
+| Staging import dry-run validation | Validate source counts, uniqueness, parent links, enum/status mappings, and excluded legacy/test rows without writing data | Dry-run report shows pass/fail, blockers, warnings, and excluded `ReportEquipmentItems` counts | Yes |
 | Supabase production shadow setup | Create `talcompressors-next-prod` only after staging validation passes | Production shadow project exists; no production cutover and no AppSheet/Sheets/Maven changes | Yes after staging validation |
-| Import mapping and import validation | Map source rows to PostgreSQL and validate exclusions before import | `ReportEquipmentItems` imports only rows linked to real `ServiceReports`; legacy/test exclusions are reported | Yes before running import |
+| Real staging import | Import validated V1 data into Supabase staging | Requires approved dry-run report; legacy/test `ReportEquipmentItems` rows remain excluded by design | Yes before running import |
 | Server Actions architecture | Make internal Next.js write flows use Server Actions by default | Approvals, AI draft approval, BusinessDocument creation, ServiceReport shadow updates, import review, queue commands, PostgreSQL mutations, and offline sync actions have Server Action paths | Yes before write implementation |
 | Offline queue/PWA sync | Support field work without internet | Local pending actions sync automatically; conflicts are logged for review and not silently overwritten | Yes before sync implementation |
 | VPS/Remote Development planning | Select an open full development environment for remote work | Candidate supports terminal, full repo, Git/GitHub, Codex CLI, VS Code Server/browser IDE, Next.js, Prisma/PostgreSQL, future agents, SSH, mobile/tablet access, secrets, backups, and rollback | Yes before provisioning |
@@ -51,15 +50,19 @@ Mode: Supabase staging-first shadow environment planning, documentation only
 | Supabase staging-first shadow plan approved | Commit `d1d6f88 Document Supabase staging-first shadow plan`; use `talcompressors-next-staging` first and `talcompressors-next-prod` production shadow only after staging validation; local PostgreSQL is not first target |
 | Staging env placeholder and secret ignore prepared | Commit `fc1dfa8 Prepare Supabase staging env placeholders`; `.env.staging.example` contains required env names only; `.gitignore` blocks real `.env` files while allowing examples; Supabase project creation remains pending authenticated access |
 | Prisma schema reconciled for Supabase staging | Commit `9a81290 Reconcile Prisma schema for Supabase staging`; added `DIRECT_URL`, `ReportEquipmentItem.reportCounter`, and `@@index([reportCounter])`; validation passed with process-only placeholders |
+| Supabase staging project and secrets prepared | `talcompressors-next-staging` exists; real `DATABASE_URL`, `DIRECT_URL`, and `NEXT_PUBLIC_APP_ENV` values are stored outside git in ignored local env storage |
+| Prisma generate completed for staging | Prisma Client generated with local staging env values after explicit approval; no DB write was performed by generate |
+| Supabase staging schema pushed | Staging-only `prisma db push` completed after explicit approval; no migration, seed, import, production action, AppSheet/Sheets/Maven action, or code change occurred |
+| Staging schema verification completed | Read-only verification found 21 public V1 tables, no missing/extra V1 tables, and approved indexes/relations/enums present |
+| ReportEquipmentItems exclusion terminology updated | Commit `b6b709b Reclassify ReportEquipmentItems exclusions`; 9 rows missing `ReportID` and 25 unmatched `ReportID` rows are classified as historical test data, not business data, no recovery required, excluded by design |
 
 ## BLOCKED / NOT STARTED
 
 | Task | Blocker | Next Unblock Step |
 |---|---|---|
-| Supabase staging project creation | Requires authenticated Supabase CLI/API/browser access | Create `talcompressors-next-staging` through authenticated Supabase path; keep real secret values outside git |
-| Database migration | No PostgreSQL environment has been created; no migration approval | Approve environment first, then migration plan |
-| Schema push | Prisma reconciliation is complete but no DB push is approved | Approve staging schema application separately after authenticated Supabase staging exists |
-| Import execution | Shadow environment and import validation are not complete | Prepare staging environment and validate import mapping first |
+| Database migration | Migrations are not part of current staging shadow path | Separate approval required before any Prisma migrate workflow |
+| Additional schema push | Staging schema is already applied; further schema changes need separate approval | Approve any schema change separately before another db push |
+| Import execution | Import dry-run validation is not complete | Approve and run dry-run validation first |
 | Production integration | Shadow app is not approved for production | Keep AppSheet/Sheets production until explicit cutover approval |
 | Maven write flow | Not part of current work | Requires separate design and approval |
 | New planning/control files | Existing-file audit is required first | Search existing files and prove no owner file already exists |
