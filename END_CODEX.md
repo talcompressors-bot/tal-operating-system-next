@@ -44,14 +44,14 @@ When the user says `by codex`, run this workflow:
    - `project-brain/CURRENT_TASK.md`
    - `project-brain/TASK_BOARD.md`
    - `project-brain/DECISION_LOG.md` if decisions changed
-   - Last Closeout Commit = the closeout commit being created, when possible, or clearly state pending closeout commit
+   - Last Closeout Commit only for meaningful closeout/state-sync milestones, not every closeout metadata commit
    - Last Implementation Commit only when actual implementation changed
 9. Verify no forbidden systems were touched.
 10. Verify next approved task is clear.
 11. Commit only approved files.
 12. Push to `origin/main`.
 13. Confirm clean `git status --short --branch`.
-14. Confirm Git and Project Brain are synchronized.
+14. Confirm whether follow-up sync is required. Closeout-only metadata commits do not require another sync just to record their own hash.
 15. Print next `hey codex` startup point.
 
 ---
@@ -75,7 +75,7 @@ Update or confirm:
 - Project Reality Check
 - Live Git latest commit
 - Last Implementation Commit
-- Last Closeout Commit
+- Last Closeout Commit, if present
 - Commit mismatch status
 - Current Task
 - Task Board
@@ -136,7 +136,7 @@ Push only the approved commit to `origin/main`.
 
 Confirm clean `git status --short --branch`.
 
-Confirm Git and Project Brain are synchronized before final output.
+Final output must say: closeout commit created; no follow-up sync required unless implementation or governance state changed.
 
 ---
 

@@ -47,7 +47,7 @@ When the user says `hey codex`:
 6. Only then read `PROJECT_INDEX.md`, `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md`, and `project-brain/TASK_BOARD.md`.
 7. Produce Project Reality Check using the live Git commit as the latest commit source.
 8. Show live Git latest commit, Last Implementation Commit, and Last Closeout Commit.
-9. If live Git latest commit is recorded as either Last Implementation Commit or Last Closeout Commit, continue. If not, report mismatch and recommend state sync before implementation.
+9. Continue if live Git latest commit is recorded as Last Implementation Commit or Last Closeout Commit, or if live Git latest commit is only a closeout/state-sync metadata commit newer than Last Closeout Commit. If live Git contains unclassified implementation, code, schema, or governance behavior changes, report mismatch and recommend state sync before implementation.
 10. Continue from next approved task only.
 11. Do not invent new tasks.
 
@@ -85,7 +85,7 @@ Project Reality Check:
 - Current task
 - Next approved task
 - Last Implementation Commit
-- Last Closeout Commit
+- Last Closeout Commit, if present
 - Live Git latest commit
 - Git working state
 - Commit comparison between live Git, Last Implementation Commit, and Last Closeout Commit in `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`
@@ -98,7 +98,7 @@ Project Reality Check must always run:
 - `git fetch origin` and `git pull --ff-only origin main` when the working tree is clean and this is a new `hey codex` session
 - `git log -1 --oneline`
 
-If live Git latest commit equals Last Closeout Commit, Project Brain is synchronized. If live Git latest commit is a closeout-only metadata commit newer than Last Implementation Commit, do not request another sync when it is recorded as Last Closeout Commit. If live Git latest commit is not recorded as either Last Implementation Commit or Last Closeout Commit, report the mismatch clearly and do not continue implementation until the mismatch is acknowledged.
+If live Git latest commit equals Last Closeout Commit, Project Brain is synchronized. If live Git latest commit is a closeout/state-sync metadata commit newer than Last Closeout Commit, do not request another sync just to record that newest closeout hash. Only report a blocking mismatch when live Git has unclassified implementation, code, schema, or governance behavior changes not reflected in Project Brain.
 
 No implementation task may start until the Project Reality Check is shown.
 

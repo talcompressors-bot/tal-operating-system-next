@@ -251,7 +251,7 @@ When the user says `hey codex`, Codex must:
 6. Only then read `PROJECT_INDEX.md`, `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md`, and `project-brain/TASK_BOARD.md`.
 7. Produce Project Reality Check using the live Git commit as the source for latest commit.
 8. Show live Git latest commit, Last Implementation Commit, and Last Closeout Commit.
-9. If live Git latest commit is recorded as either Last Implementation Commit or Last Closeout Commit, continue. If not, report mismatch and recommend state sync before implementation.
+9. Continue if live Git latest commit is recorded as Last Implementation Commit or Last Closeout Commit, or if live Git latest commit is only a closeout/state-sync metadata commit newer than Last Closeout Commit. If live Git contains unclassified implementation, code, schema, or governance behavior changes, report mismatch and recommend state sync before implementation.
 10. Continue from next approved task only.
 11. Do not invent new tasks.
 
@@ -279,7 +279,7 @@ Project Reality Check must include:
 - current task
 - next approved task
 - Last Implementation Commit
-- Last Closeout Commit
+- Last Closeout Commit, if present
 - live Git latest commit
 - Git working state
 - commit comparison between live Git, Last Implementation Commit, and Last Closeout Commit in `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`
@@ -296,9 +296,9 @@ Project Reality Check must compare:
 
 If live Git latest commit equals the recorded Last Closeout Commit, the repository and Project Brain are synchronized.
 
-If live Git latest commit is ahead of Last Implementation Commit only because it is a closeout-only metadata commit, it is OK when recorded as Last Closeout Commit.
+If live Git latest commit is newer than Last Closeout Commit but is only a closeout/state-sync metadata commit, do not block work and do not require another sync just to record that newest closeout hash.
 
-If live Git latest commit is not recorded as either Last Implementation Commit or Last Closeout Commit:
+Only block if live Git has unclassified implementation, product code, schema, or governance behavior changes not reflected in Project Brain:
 
 - report the mismatch clearly
 - recommend sync before implementation during `hey codex`
@@ -329,14 +329,14 @@ When the user says `by codex`, Codex must:
    - `project-brain/CURRENT_TASK.md`
    - `project-brain/TASK_BOARD.md`
    - `project-brain/DECISION_LOG.md` if decisions changed
-   - Last Closeout Commit = the closeout commit being created, when possible, or clearly state pending closeout commit
+   - Last Closeout Commit only for meaningful closeout/state-sync milestones, not every closeout metadata commit
    - Last Implementation Commit only when actual implementation changed
 9. Verify no forbidden systems were touched.
 10. Verify next approved task is clear.
 11. Commit only approved files.
 12. Push to `origin/main`.
 13. Confirm clean `git status --short --branch`.
-14. Confirm Git and Project Brain are synchronized.
+14. Confirm whether follow-up sync is required. Closeout-only metadata commits do not require another sync just to record their own hash.
 15. Print next `hey codex` startup point.
 
 At session close or handoff:

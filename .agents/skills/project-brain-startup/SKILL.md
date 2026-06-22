@@ -53,17 +53,17 @@ Then compare:
 
 - latest Git commit
 - Last Implementation Commit written in `PROJECT_INDEX.md`
-- Last Closeout Commit written in `PROJECT_INDEX.md`
+- Last Closeout Commit written in `PROJECT_INDEX.md`, if present
 - Last Implementation Commit written in `project-brain/CURRENT_TASK.md`
-- Last Closeout Commit written in `project-brain/CURRENT_TASK.md`
+- Last Closeout Commit written in `project-brain/CURRENT_TASK.md`, if present
 
 For `hey codex`, produce Project Reality Check using the live Git commit as the source for latest commit. Show live Git latest commit, Last Implementation Commit, and Last Closeout Commit.
 
 If live Git latest commit equals Last Closeout Commit, Project Brain is synchronized.
 
-If live Git latest commit is a closeout-only metadata commit newer than Last Implementation Commit, do not request another sync when it is recorded as Last Closeout Commit.
+If live Git latest commit is a closeout/state-sync metadata commit newer than Last Closeout Commit, do not request another sync just to record that newest closeout hash.
 
-If live Git latest commit is not recorded as either Last Implementation Commit or Last Closeout Commit, report the mismatch clearly, recommend state sync before implementation, and do not continue implementation until the mismatch is acknowledged.
+Only block if live Git has unclassified implementation, product code, schema, or governance behavior changes not reflected in Project Brain. In that case, report the mismatch clearly, recommend state sync before implementation, and do not continue implementation until the mismatch is acknowledged.
 
 For architecture, schema, migration, source-of-truth, or future-platform work, relevant task-specific docs include:
 
@@ -144,9 +144,9 @@ Project Reality Check:
 3. Next approved task
 4. Live Git latest commit
 5. Last Implementation Commit recorded in `PROJECT_INDEX.md`
-6. Last Closeout Commit recorded in `PROJECT_INDEX.md`
+6. Last Closeout Commit recorded in `PROJECT_INDEX.md`, if present
 7. Last Implementation Commit recorded in `project-brain/CURRENT_TASK.md`
-8. Last Closeout Commit recorded in `project-brain/CURRENT_TASK.md`
+8. Last Closeout Commit recorded in `project-brain/CURRENT_TASK.md`, if present
 9. Commit comparison result
 10. Git working state
 11. Blocked or forbidden actions

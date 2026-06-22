@@ -64,7 +64,8 @@ PostgreSQL/Supabase shadow environment planning, not implementation.
 - `hey codex` must fetch and fast-forward from `origin/main` before reading Project Brain when the working tree is clean.
 - Project Reality Check must compare live Git latest commit against Last Implementation Commit and Last Closeout Commit recorded in `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`.
 - If live Git latest commit equals Last Closeout Commit, Project Brain is synchronized even when Last Implementation Commit is older.
-- Last Implementation Commit changes only when actual implementation changed; Last Closeout Commit tracks closeout-only metadata commits.
+- If live Git latest commit is a closeout/state-sync metadata commit newer than Last Closeout Commit, it does not require another sync just to record its own hash.
+- Last Implementation Commit changes only when actual implementation changed; Last Closeout Commit is an optional marker for the last meaningful closeout/state-sync milestone, not every closeout commit.
 - `PROJECT_OPERATING_PROTOCOL.md` is the highest authority/governor.
 - `project-brain/CURRENT_TASK.md` is the canonical current task/current phase/next task source.
 - `project-brain/TASK_BOARD.md` is the canonical task board/progress map.
