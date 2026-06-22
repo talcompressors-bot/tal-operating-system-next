@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-22
-Mode: PostgreSQL/Supabase shadow environment planning, documentation only
+Mode: Supabase staging-first shadow environment planning, documentation only
 
 ## Canonical Role
 
@@ -11,11 +11,11 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. PostgreSQL/Supabase shadow environment planning is next.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging-first shadow environment plan is approved.
 
 ## Current Milestone
 
-Startup remote sync, shutdown path, and Reality Check commit comparison are enforced.
+Startup remote sync, shutdown path, Reality Check commit comparison, and Supabase staging-first shadow plan are enforced.
 
 ## Last Implementation Commit
 
@@ -47,14 +47,16 @@ Startup remote sync, shutdown path, and Reality Check commit comparison are enfo
 - Reality Check now compares live Git against Project Brain recorded commits, and `hey codex` now fast-forwards from `origin/main` before reading Project Brain when the working tree is clean.
 - `2963977 Add master map and agent routing` is classified as the latest governance implementation commit because it changed project governance/routing behavior.
 - `8114210 Sync project brain commit model state` is classified as the latest closeout metadata/state-sync commit.
+- Supabase staging-first shadow plan is approved: use `talcompressors-next-staging` first, then `talcompressors-next-prod` as production shadow only after staging validation passes.
+- Local PostgreSQL is not the first target.
 
 ## Current Task
 
-Prepare PostgreSQL/Supabase shadow environment planning after consolidation. This is planning only, not implementation.
+Prepare Supabase staging project creation and secret setup approval after planning. This is documentation/state planning only until implementation is explicitly approved.
 
 ## Next Approved Task
 
-PostgreSQL/Supabase shadow environment planning, not implementation.
+Supabase staging project creation and secret setup only after approval.
 
 ## Approved Architecture Decisions In Force
 
@@ -73,6 +75,11 @@ PostgreSQL/Supabase shadow environment planning, not implementation.
 - No new planning file, map, dashboard, control center, protocol, agent, or roadmap may be created before searching existing files and proving no existing file already serves that purpose.
 - Import only `ReportEquipmentItems` linked to real `ServiceReports`; exclude legacy/test equipment rows; do not modify Google Sheets/AppSheet; keep the internal FK nullable.
 - Derive nullable `ReportEquipmentItem.reportCounter` during PostgreSQL import by joining through `ServiceReports.ReportCounter`; never use it as a primary relationship key.
+- Use Supabase Staging first, then Supabase Production Shadow only after staging validation passes; do not use local PostgreSQL as first target.
+- Required env variable names are `DATABASE_URL`, `DIRECT_URL`, and `NEXT_PUBLIC_APP_ENV`.
+- Optional future Supabase env names are `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`; do not add them until Supabase client features require them.
+- Before any DB push, reconcile Prisma with `DIRECT_URL` and `ReportEquipmentItem.reportCounter`.
+- Staging validation must confirm `Customers_Final = 763`, `ServiceReports = 62`, and `ReportEquipmentItems` imports only rows linked to real `ServiceReports`; excluded orphan equipment rows must be reported.
 - Use Server Actions by default for internal Next.js write flows.
 - Design field workflows offline-first with conflict review.
 
@@ -97,6 +104,9 @@ PostgreSQL/Supabase shadow environment planning, not implementation.
 - No DB creation.
 - No `prisma db push`.
 - No Supabase setup until explicitly approved.
+- No schema push.
+- No import.
+- No production cutover.
 - No PostgreSQL/Supabase environment implementation during planning.
 - No Google Sheets writes.
 - No AppSheet changes.
@@ -107,6 +117,6 @@ PostgreSQL/Supabase shadow environment planning, not implementation.
 
 ## Done When
 
-- PostgreSQL/Supabase shadow environment planning scope is clear.
+- Supabase staging-first shadow environment planning scope is clear.
 - No implementation, migration, DB creation, or Prisma command has run.
 - Approval requirements are explicit before any environment setup.

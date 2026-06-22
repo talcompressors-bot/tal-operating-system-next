@@ -231,6 +231,12 @@ Minimum validation required before import code:
 
 PostgreSQL V1 must begin as a shadow database.
 
+Approved environment sequence:
+
+- Use Supabase Staging first: `talcompressors-next-staging`.
+- Use Supabase Production Shadow second: `talcompressors-next-prod`, only after staging validation passes.
+- Do not use local PostgreSQL as the first target.
+
 Shadow rules:
 
 - Production remains AppSheet, Google Sheets, Apps Script, Drive, Maven, and existing email workflows.
@@ -240,10 +246,14 @@ Shadow rules:
 - No Maven draft, invoice, receipt, email, Drive file, or AppSheet action may be triggered from the shadow database.
 - Imported automation commands are historical/trace records until a separate worker design is approved.
 - Snapshot/local JSON development remains valid for UI work while PostgreSQL is not approved.
+- Required env variable names are `DATABASE_URL`, `DIRECT_URL`, and `NEXT_PUBLIC_APP_ENV`.
+- Optional future Supabase env names are `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`; do not add them until Supabase client features require them.
+- Prisma must reconcile `DIRECT_URL` and `ReportEquipmentItem.reportCounter` before any DB push.
+- No schema push, migration, import, production cutover, or AppSheet/Sheets/Maven change is approved by this scope.
 
 The first shadow database success criteria:
 
-- Counts match confirmed live validation for `Customers_Final` and `ServiceReports`; `ReportEquipmentItems` imported count equals only rows linked to real `ServiceReports`.
+- Counts match confirmed live validation for `Customers_Final` = 763 and `ServiceReports` = 62; `ReportEquipmentItems` imported count equals only rows linked to real `ServiceReports`.
 - Legacy/test `ReportEquipmentItems` rows excluded from import are reported in validation output.
 - Service report list/detail screens can be validated against shadow data without production writes.
 - Business document, AI draft, Maven, inventory, and audit tables exist in scope before Prisma is generated.
@@ -257,8 +267,12 @@ No gate implies permission for the next gate. Each gate requires explicit review
 | Scope approval | Generating official `schema.prisma`. |
 | Prisma approval | Creating migrations or applying database schema. |
 | Database approval | Creating or connecting a PostgreSQL database. |
+| Supabase staging approval | Creating `talcompressors-next-staging` and setting staging secrets. |
+| Prisma reconciliation approval | Updating Prisma for `DIRECT_URL` and `ReportEquipmentItem.reportCounter` before any DB push. |
+| Staging schema approval | Applying schema to Supabase staging. |
 | Import design approval | Writing or running migration/import scripts. |
 | Read-only import approval | Loading any live source data into shadow PostgreSQL. |
+| Production shadow approval | Creating `talcompressors-next-prod` after staging validation passes. |
 | UI shadow approval | Switching Next.js from local JSON snapshots to PostgreSQL reads. |
 | Write-path design approval | Creating any PostgreSQL-backed workflow that writes business state. |
 | Automation worker approval | Processing commands from PostgreSQL. |
@@ -281,7 +295,7 @@ Approved PostgreSQL V1 scope is the full Tal Operating System V1 business schema
 Next active implementation order after this documentation update:
 
 1. Prisma validate.
-2. PostgreSQL/Supabase environment.
+2. Supabase staging project creation and secret setup after approval.
 3. Import mapping and import validation.
 4. Server Actions architecture.
 5. Offline queue/PWA sync.

@@ -1,19 +1,21 @@
 # TASK BOARD
 
 Last updated: 2026-06-22
-Mode: PostgreSQL/Supabase shadow environment planning, documentation only
+Mode: Supabase staging-first shadow environment planning, documentation only
 
 ## NOW
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| PostgreSQL/Supabase shadow environment planning | Define the planning scope for the next shadow environment step without implementation | Planning boundaries are clear; no DB creation, migration, Prisma command, or Supabase setup has run | Yes before implementation |
+| Supabase staging-first shadow environment planning | Document staging-first plan and implementation gates without implementation | `talcompressors-next-staging` first, `talcompressors-next-prod` production shadow after staging validation; no DB creation, migration, Prisma command, schema push, import, or Supabase setup has run | Yes before implementation |
 
 ## NEXT
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| PostgreSQL/Supabase shadow environment implementation | Create the shadow PostgreSQL environment only after planning and explicit approval | Shadow DB environment exists; no production cutover; no migration until separately approved | Yes |
+| Supabase staging project creation and secret setup | Create `talcompressors-next-staging` and configure required secret names only after approval | Staging project exists with `DATABASE_URL`, `DIRECT_URL`, and `NEXT_PUBLIC_APP_ENV`; no schema push, migration, import, or production cutover | Yes |
+| Prisma staging reconciliation | Prepare hosted Supabase schema readiness before DB push | `DIRECT_URL` and `ReportEquipmentItem.reportCounter` reconciled before any DB push | Yes before code/schema edits |
+| Supabase production shadow setup | Create `talcompressors-next-prod` only after staging validation passes | Production shadow project exists; no production cutover and no AppSheet/Sheets/Maven changes | Yes after staging validation |
 | Import mapping and import validation | Map source rows to PostgreSQL and validate exclusions before import | `ReportEquipmentItems` imports only rows linked to real `ServiceReports`; legacy/test exclusions are reported | Yes before running import |
 | Server Actions architecture | Make internal Next.js write flows use Server Actions by default | Approvals, AI draft approval, BusinessDocument creation, ServiceReport shadow updates, import review, queue commands, PostgreSQL mutations, and offline sync actions have Server Action paths | Yes before write implementation |
 | Offline queue/PWA sync | Support field work without internet | Local pending actions sync automatically; conflicts are logged for review and not silently overwritten | Yes before sync implementation |
@@ -46,14 +48,16 @@ Mode: PostgreSQL/Supabase shadow environment planning, documentation only
 | Project Brain commit model state synced | Commit `8114210 Sync project brain commit model state`; classified as closeout metadata/state sync only |
 | Closeout commit loop prevention documented | Closeout-only metadata commits do not require another Project Brain sync just to record their own hash |
 | Master map and agent routing added | Commit `2963977 Add master map and agent routing`; classified as governance implementation because it changed project routing behavior |
+| Supabase staging-first shadow plan approved | Use `talcompressors-next-staging` first and `talcompressors-next-prod` production shadow only after staging validation; local PostgreSQL is not first target |
 
 ## BLOCKED / NOT STARTED
 
 | Task | Blocker | Next Unblock Step |
 |---|---|---|
-| PostgreSQL/Supabase environment implementation | Environment setup requires explicit approval after planning | Approve shadow PostgreSQL setup after planning |
+| Supabase staging project creation | Environment setup requires explicit approval after planning | Approve staging project creation and secret setup only |
 | Database migration | No PostgreSQL environment has been created; no migration approval | Approve environment first, then migration plan |
-| Import execution | Shadow environment and import validation are not complete | Prepare environment and validate import mapping first |
+| Schema push | Prisma reconciliation is required first; no DB push is approved | Approve `DIRECT_URL` and `ReportEquipmentItem.reportCounter` reconciliation first |
+| Import execution | Shadow environment and import validation are not complete | Prepare staging environment and validate import mapping first |
 | Production integration | Shadow app is not approved for production | Keep AppSheet/Sheets production until explicit cutover approval |
 | Maven write flow | Not part of current work | Requires separate design and approval |
 | New planning/control files | Existing-file audit is required first | Search existing files and prove no owner file already exists |
@@ -65,6 +69,9 @@ Mode: PostgreSQL/Supabase shadow environment planning, documentation only
 - No code implementation.
 - No Prisma commands.
 - No database creation or migration.
+- No schema push.
+- No import.
+- No production cutover.
 - No Google Sheets.
 - No AppSheet.
 - No Maven.

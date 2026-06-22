@@ -3,6 +3,19 @@
 ## 2026-06-22
 
 Decision:
+Use Supabase Staging first, then Supabase Production Shadow. Do not use local PostgreSQL as the first target.
+
+Reason:
+The approved shadow environment path should validate the real hosted deployment target before production shadow setup. Staging project `talcompressors-next-staging` is first; production shadow project `talcompressors-next-prod` follows only after staging validation passes. Required env variable names are `DATABASE_URL`, `DIRECT_URL`, and `NEXT_PUBLIC_APP_ENV`; optional future Supabase env names are `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`. Before any DB push, Prisma must reconcile `DIRECT_URL` and `ReportEquipmentItem.reportCounter`.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-22
+
+Decision:
 `2963977 Add master map and agent routing` is classified as the Last Implementation Commit.
 
 Reason:

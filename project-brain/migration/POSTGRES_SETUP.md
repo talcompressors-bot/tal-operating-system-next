@@ -7,13 +7,13 @@ Rule: Planning only. No database changes yet.
 
 ## Goal
 
-Prepare the real PostgreSQL environment for the first Next.js migration slice:
+Prepare the Supabase staging-first PostgreSQL shadow environment for the first Next.js migration slice:
 
 - `Customer`
 - `ServiceReport`
 - `ReportEquipmentItem`
 
-No Maven, AI, inventory, receipts, or production workflow writes are included in this setup.
+No Maven, AI, inventory, receipts, import execution, schema push, migration, production cutover, or production workflow writes are included in this setup.
 
 ---
 
@@ -21,19 +21,25 @@ No Maven, AI, inventory, receipts, or production workflow writes are included in
 
 Use Supabase as the hosted PostgreSQL provider.
 
+Approved architecture decision:
+
+- Use Supabase Staging first.
+- Use Supabase Production Shadow only after staging validation passes.
+- Do not use local PostgreSQL as the first target.
+
 Recommended projects:
 
 | Environment | Supabase Project | Purpose | Access |
 |---|---|---|---|
-| Local | Local PostgreSQL or Supabase local dev | Developer testing | Developer only |
-| Staging | `talcompressors-next-staging` | Test imports, schema changes, UI verification | Restricted team access |
-| Production | `talcompressors-next-prod` | Real migrated app data | Strict owner/admin access |
+| Staging | `talcompressors-next-staging` | First shadow target for schema readiness, import validation, and UI verification | Restricted team access |
+| Production Shadow | `talcompressors-next-prod` | Production shadow only after staging validation passes; no cutover | Strict owner/admin access |
 
 ## Project Rules
 
-- Never point local development at production.
-- Run first imports into local or staging only.
-- Production receives schema/data only after manual approval.
+- Never point staging work at production shadow.
+- Run first schema readiness and import validation against staging only after explicit approval.
+- Production shadow receives schema/data only after staging validation and manual approval.
+- No schema push, migration, import, production cutover, AppSheet/Sheets/Maven change, or production workflow write is approved by this plan.
 - Supabase Row Level Security can stay disabled initially if the app uses only server-side access, but must be reviewed before exposing authenticated users.
 - Keep service-role keys server-side only.
 
@@ -58,16 +64,6 @@ SUPABASE_SERVICE_ROLE_KEY=
 ```
 
 Do not add optional Supabase API variables until the app actually uses Supabase client features.
-
-## Local `.env.local`
-
-Example:
-
-```text
-NEXT_PUBLIC_APP_ENV=local
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/talcompressors_next_dev?schema=public"
-DIRECT_URL="postgresql://postgres:postgres@localhost:5432/talcompressors_next_dev?schema=public"
-```
 
 ## Staging `.env`
 
@@ -138,47 +134,50 @@ Migrations should wait until the schema and import flow are stable.
 
 ---
 
-# 4. Local Development Strategy
+# 4. Staging First Strategy
 
-Recommended local flow:
+Approved staging-first flow:
 
-1. Install PostgreSQL locally or use Docker/Supabase local dev.
-2. Create database:
+1. Create Supabase staging project `talcompressors-next-staging` only after approval.
+2. Store staging secrets outside git.
+3. Configure required env variable names only: `DATABASE_URL`, `DIRECT_URL`, and `NEXT_PUBLIC_APP_ENV`.
+4. Do not configure optional Supabase API env variables until Supabase client features require them.
+5. Reconcile Prisma before any DB push:
+   - add/use `DIRECT_URL` through `directUrl = env("DIRECT_URL")`
+   - add nullable `ReportEquipmentItem.reportCounter` as display/search/audit metadata
+6. Validate staging only after separate Prisma command approval.
+7. Apply schema to staging only after separate DB push approval.
+8. Run read-only staging import only after separate import approval.
+9. Validate staging counts:
+   - `Customers_Final` = 763
+   - `ServiceReports` = 62
+   - `ReportEquipmentItems` imports only rows linked to real `ServiceReports`
+   - excluded orphan equipment rows are reported
 
-```text
-talcompressors_next_dev
-```
-
-3. Add `.env.local` with local `DATABASE_URL` and `DIRECT_URL`.
-4. Run Prisma validation.
-5. Generate Prisma client.
-6. Push the minimal schema locally.
-7. Import only the three Phase 1 tables into local database.
-8. Run the Next.js app against local data.
-
-## Local Data Rules
+## Staging Data Rules
 
 - Use approved read-only source exports or approved read-only live reads.
-- Import only `Customers_Final`, `ServiceReports`, and `ReportEquipmentItems`.
+- Import only after explicit read-only import approval.
 - Store raw source rows in `rawSource`.
-- Do not connect local app to production AppSheet, Maven, Apps Script, Gmail, or Drive write paths.
+- Do not connect staging app to production AppSheet, Maven, Apps Script, Gmail, or Drive write paths.
+- Do not execute imported `AutomationCommands`.
 
 ---
 
 # 5. Production Strategy
 
-Production should be introduced only after local and staging pass.
+Production shadow should be introduced only after staging validation passes.
 
 ## Production Promotion Steps
 
-1. Create Supabase production project.
+1. Create Supabase production shadow project `talcompressors-next-prod`.
 2. Store production secrets outside git.
 3. Confirm `schema.prisma` contains only approved models.
-4. Apply schema using approved method.
+4. Apply schema using approved method only after staging validation and production shadow approval.
 5. Run a dry-run import report first.
 6. Run production import only after approval.
 7. Verify row counts and sample records.
-8. Deploy Next.js with production `DATABASE_URL`.
+8. Deploy Next.js with production shadow `DATABASE_URL` only after explicit approval.
 
 ## Production Access Rules
 
@@ -186,7 +185,7 @@ Production should be introduced only after local and staging pass.
 - Do not expose `DATABASE_URL` to the browser.
 - Do not use Supabase service role key in client components.
 - Keep first production module read-only.
-- No production write workflows until explicitly approved.
+- No production cutover or production write workflows until explicitly approved.
 
 ---
 
@@ -237,14 +236,14 @@ Recommended minimum:
 
 Before actual implementation starts:
 
-1. Choose local PostgreSQL method.
-2. Create `.env.local`.
-3. Install Prisma packages.
-4. Add `directUrl` to `schema.prisma`.
-5. Validate Prisma schema.
-6. Generate Prisma client.
-7. Push schema to local database only.
-8. Build read-only import for three Phase 1 source tables.
+1. Approve Supabase staging project creation.
+2. Create `talcompressors-next-staging`.
+3. Store staging secrets outside git.
+4. Configure required env variable names only: `DATABASE_URL`, `DIRECT_URL`, and `NEXT_PUBLIC_APP_ENV`.
+5. Reconcile Prisma `DIRECT_URL`.
+6. Reconcile `ReportEquipmentItem.reportCounter`.
+7. Validate Prisma schema only after separate Prisma command approval.
+8. Push schema to staging only after separate DB push approval.
+9. Build and run read-only import only after separate import approval.
 
 Stop here until implementation is explicitly approved.
-
