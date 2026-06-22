@@ -9,6 +9,12 @@ Use this skill to establish the current project state before analysis, planning,
 
 ## First Rule
 
+Every Codex task or session must begin by reading `PROJECT_INDEX.md`.
+
+If `PROJECT_INDEX.md` has not been read first, STOP. Do not analyze, plan, propose, or implement until `PROJECT_INDEX.md` is read.
+
+If the task conflicts with `PROJECT_INDEX.md` or `PROJECT_OPERATING_PROTOCOL.md`, STOP and report the conflict.
+
 Do not write or change code before reading Project Brain context.
 
 Do not assume project structure, current task, stable systems, or active IDs from memory. Read the repository files first.
@@ -38,9 +44,14 @@ Use `project-brain/CURRENT_TASK.md` as the active current-task, current phase, a
 
 Treat `project-brain/current/CURRENT_TASK.md` as a retired compatibility path only.
 
-If ChatGPT or Codex memory conflicts with Project Brain files, Project Brain wins.
+Project Brain wins over ChatGPT memory, Codex memory, previous chat summaries, and assumptions.
 
-Before creating any new planning file, map, dashboard, control center, protocol, agent, or roadmap, search existing files and prove no existing file already serves that purpose.
+Before proposing or creating any new planning file, agent, map, dashboard, protocol, roadmap, or control system:
+
+1. Read `PROJECT_INDEX.md`.
+2. Identify whether an existing canonical owner already exists.
+3. Reuse the existing owner if available.
+4. If no owner exists, report the gap and ask approval before creating anything new.
 
 ## Preserve Important IDs
 
@@ -95,11 +106,13 @@ When this skill is used for startup or project-state recovery, respond with:
 Project Reality Check:
 
 1. Current phase
-2. Last known commit
-3. Current task
-4. Next approved task
+2. Current task
+3. Next approved task
+4. Last verified commit
 5. Blocked or forbidden actions
-6. Files relevant to the requested work
+6. Canonical files relevant to the requested work
 7. Approval needed, if any
 
 No implementation task may start until the Project Reality Check is shown.
+
+If the Project Reality Check cannot be produced, STOP.

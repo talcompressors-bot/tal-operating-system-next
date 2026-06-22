@@ -13,6 +13,10 @@ When activated:
 - project-brain/TASK_BOARD.md
 - relevant task-specific docs
 
+If `PROJECT_INDEX.md` has not been read first, STOP. Do not analyze, plan, propose, or implement until `PROJECT_INDEX.md` is read.
+
+If the task conflicts with `PROJECT_INDEX.md` or `PROJECT_OPERATING_PROTOCOL.md`, STOP and report the conflict.
+
 Checkpoint rule:
 
 - Checkpoints are historical context only.
@@ -22,8 +26,12 @@ Checkpoint rule:
 
 Memory rule:
 
-- If ChatGPT or Codex memory conflicts with Project Brain files, Project Brain wins.
-- Before creating any new planning file, map, dashboard, control center, protocol, agent, or roadmap, search existing files and prove no existing file already serves that purpose.
+- Project Brain wins over ChatGPT memory, Codex memory, previous chat summaries, and assumptions.
+- Before proposing or creating any new planning file, agent, map, dashboard, protocol, roadmap, or control system:
+  1. Read `PROJECT_INDEX.md`.
+  2. Identify whether an existing canonical owner already exists.
+  3. Reuse the existing owner if available.
+  4. If no owner exists, report the gap and ask approval before creating anything new.
 
 Infrastructure Manager routing rule:
 
@@ -38,13 +46,15 @@ before specialist agents.
 Project Reality Check:
 
 - Current phase
-- Last known commit
 - Current task
 - Next approved task
+- Last verified commit
 - Blocked or forbidden actions
-- Files relevant to the requested work
+- Canonical files relevant to the requested work
 
 No implementation task may start until the Project Reality Check is shown.
+
+If the Project Reality Check cannot be produced, STOP.
 
 3. Rules:
 

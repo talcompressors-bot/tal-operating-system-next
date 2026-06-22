@@ -126,8 +126,14 @@ This is an operational document. It is not the future-state vision document.
 6. Human approval is required before production-impacting, customer-facing, financial, schema, deployment, or external-write actions.
 7. Stable production flows must be protected.
 8. Unknown IDs must remain `UNKNOWN`; never invent identifiers.
-9. If ChatGPT or Codex memory conflicts with Project Brain files, Project Brain wins.
-10. Before creating any new planning file, map, dashboard, control center, protocol, agent, or roadmap, search existing files and prove no existing file already serves that purpose.
+9. Project Brain wins over ChatGPT memory, Codex memory, previous chat summaries, and assumptions.
+10. Every Codex task or session must begin by reading `PROJECT_INDEX.md`; if `PROJECT_INDEX.md` has not been read first, STOP.
+11. If the task conflicts with `PROJECT_INDEX.md` or `PROJECT_OPERATING_PROTOCOL.md`, STOP and report the conflict.
+12. Before proposing or creating any new planning file, agent, map, dashboard, protocol, roadmap, or control system:
+   - Read `PROJECT_INDEX.md`.
+   - Identify whether an existing canonical owner already exists.
+   - Reuse the existing owner if available.
+   - If no owner exists, report the gap and ask approval before creating anything new.
 
 ## 3. Project Purpose Summary
 
@@ -241,16 +247,22 @@ Before analysis, planning, code changes, schema work, deployment, or production 
 6. Run `git status --short`.
 7. Produce a short Project Reality Check.
 
+If `PROJECT_INDEX.md` has not been read first, STOP.
+
+If the task conflicts with `PROJECT_INDEX.md` or `PROJECT_OPERATING_PROTOCOL.md`, STOP and report the conflict.
+
 Project Reality Check must include:
 
 - current phase
-- last known commit
 - current task
 - next approved task
+- last verified commit
 - blocked or forbidden actions
-- files relevant to the requested work
+- canonical files relevant to the requested work
 
 No implementation task may start until the Project Reality Check is shown.
+
+If the Project Reality Check cannot be produced, STOP.
 
 ## 9. Shutdown Sequence
 
@@ -269,6 +281,13 @@ At session close or handoff:
 ## 10. Reuse Before Create Rule
 
 Before creating a file, table, registry, workflow, agent, script, or platform component, check whether an existing asset can solve the need.
+
+Before proposing or creating any new planning file, agent, map, dashboard, protocol, roadmap, or control system:
+
+1. Read `PROJECT_INDEX.md`.
+2. Identify whether an existing canonical owner already exists.
+3. Reuse the existing owner if available.
+4. If no owner exists, report the gap and ask approval before creating anything new.
 
 Required classification:
 
