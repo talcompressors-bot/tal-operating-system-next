@@ -3,6 +3,19 @@
 ## 2026-06-22
 
 Decision:
+`7f63193 Require project tree reporting` is classified as the Last Implementation Commit.
+
+Reason:
+The commit changed governance behavior by making Project Tree Position mandatory for every Reality Check, Approval Gate, Autonomous Completion Report, and `by codex` closeout. It also made Proof Requirement and Project Tree Position jointly mandatory for task completion. It is an implementation/governance commit, not closeout metadata. Last Closeout Commit remains `8114210 Sync project brain commit model state`.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-22
+
+Decision:
 `fd76610 Fix Wave 1 service report display mapping` is classified as the Last Implementation Commit.
 
 Reason:

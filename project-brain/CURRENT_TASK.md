@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`fd76610 Fix Wave 1 service report display mapping`
+`7f63193 Require project tree reporting`
 
 ## Last Closeout Commit
 
@@ -58,6 +58,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - `29331fb Read Wave 1 service reports from PostgreSQL` is classified as the latest implementation commit because it switched the Next.js service report list/detail screens from snapshot JSON to read-only PostgreSQL staging reads for Wave 1 data.
 - `a28da7b Create autonomous agent orchestration governance` is classified as the latest implementation/governance commit because it made Codex the main Orchestrator for safe work, routed tasks to existing agent owners, and defined the stop-only-at-approval-gates loop.
 - `fd76610 Fix Wave 1 service report display mapping` is classified as the latest implementation/read-display commit because it fixed Wave 1 service-report date fallback, pending-signature status display, missing-status fallback, and sparse equipment display without adding writes.
+- `7f63193 Require project tree reporting` is classified as the latest implementation/governance commit because it made Project Tree Position mandatory for Reality Checks, Approval Gates, Autonomous Completion Reports, and `by codex` closeout.
 - Prisma validation passed after reconciliation with process-only placeholder `DATABASE_URL` and `DIRECT_URL`.
 - Prisma generate completed against local staging env values after explicit approval.
 - Supabase staging-first shadow plan is approved: use `talcompressors-next-staging` first, then `talcompressors-next-prod` as production shadow only after staging validation passes.
