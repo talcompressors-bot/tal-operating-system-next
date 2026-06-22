@@ -101,35 +101,94 @@ AUTO_ALLOWED:
 
 AUTO_APPROVED:
 
+Git:
+
 - `git fetch`
 - `git pull --ff-only`
 - `git status`
 - `git log`
+- `git branch -vv`
+
+Read-only validation:
+
 - read-only validation
 - read-only database queries
 - read-only DB query
-- local tests
-- local TypeScript compile checks
-- local Next.js build checks
 - Prisma read-only queries
-- UI validation checks
-- Project Brain updates after completed safe work
-- safe documentation commits
-- safe read-only implementation commits after validation
+- staging read-only verification
+- count validation
+- relationship validation
+
+Local development:
+
+- local tests
+- TypeScript compile checks
+- Next.js build checks
+- Next.js local dev startup
+- local HTTP validation
+- Playwright read-only validation
+- screenshot generation for proof
+- HTML render validation
+- route validation
+
+Project Brain:
+
+- update Project Brain after completed safe work
+- update `project-brain/CURRENT_TASK.md`
+- update `project-brain/TASK_BOARD.md`
+- update `project-brain/DECISION_LOG.md`
+- update `PROJECT_INDEX.md` references
+- update migration plans
+- update wave progress
+
+Safe commits:
+
+- documentation-only commits
+- Project Brain commits
+- governance commits
+- read-only validation report commits
+- safe implementation commits after validation
+- `git push` of approved safe-scope work
 
 Do not ask Liad for approval when executing AUTO_APPROVED actions. Only stop for APPROVAL_REQUIRED gates.
 
 APPROVAL_REQUIRED:
 
 - `prisma/schema.prisma` changes
-- Prisma `db push` or migration
-- DB writes/imports
+- Prisma `db push`
+- Prisma `migrate`
+- DB writes
+- imports
+- seeds
 - Supabase project/settings changes
-- Google Sheets/AppSheet/Maven/Apps Script changes
+- Google Sheets changes
+- AppSheet changes
+- Maven changes
+- Apps Script changes
+- Drive writes
+- email/customer-facing actions
 - production deployment
-- email/Drive/customer-facing actions
-- deleting data/files
-- new agent/control architecture
+- production cutover
+- deleting business data
+- deleting source files
+- new agent architecture
+- new governance architecture
+
+Before stopping for approval, Codex must first verify whether the action is AUTO_APPROVED.
+
+If AUTO_APPROVED, continue working.
+
+If APPROVAL_REQUIRED, stop and present:
+
+- Project Tree
+- Current Position
+- what existed before
+- what changed
+- proof
+- impact
+- risk
+- exact approval requested
+- what will happen after approval
 
 Required loop:
 
@@ -268,11 +327,12 @@ CURRENT POSITION
 - Last Completed Task
 - Next Task
 
-PROJECT COMPLETION
+PROJECT COMPLETION MODEL
 
-- Estimated completion %
-- Completed Waves
-- Remaining Waves
+- Capability
+- Weight
+- Status
+- Progress contribution
 
 CRITICAL PATH
 
@@ -290,15 +350,67 @@ Current Project Tree Position:
 - Current Task: Stop at next approval gate before Wave 2 or production-shadow work
 - Last Completed Task: Wave 1 service-report core import, PostgreSQL read switch, and read/display mapping validation
 - Next Task: Approval gate for Wave 2 planning/discovery
-- Estimated completion %: 11%
-- Completed Waves: Wave 1 Service Report Core
-- Remaining Waves: Waves 2-9
+- Estimated completion %: 50%
+- Completion basis: capability-weighted evidence, not completed-waves / total-waves.
+- Governance / Project Brain / Git workflow: 15% / 15% COMPLETE
+- Supabase + Prisma Data Layer: 15% / 15% COMPLETE
+- Import Framework + Wave 1 Import: 10% / 10% COMPLETE
+- Wave 1 Service Reports UI: 10% / 10% COMPLETE
+- Wave 2 Workflow Layer: 0% / 15% CURRENT
+- Wave 3 Maven Knowledge Layer: 0% / 15% PENDING
+- Wave 4 Inventory Layer: 0% / 10% PENDING
+- Wave 5 Offline First: 0% / 5% PENDING
+- Wave 6 Automation Runtime: 0% / 3% PENDING
+- Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 0% / 2% PENDING
 - Critical Path: Wave 2 Service Workflow Layer -> Wave 3 Maven Knowledge Layer -> Wave 4 Inventory Layer -> Wave 5 Offline First -> Wave 6 Automation Runtime -> Wave 7 Production Shadow -> Wave 8 Production Cutover -> Wave 9 AppSheet Retirement
 - Next Approval Gate: approve or reject Wave 2 planning/discovery; approval is required because Wave 2 may affect service workflow planning and later data/import scope; after approval, Codex may perform approved Wave 2 planning/discovery only.
 
 Rule: a task is not considered complete unless Project Tree Position is reported.
 
 Rule: Proof Requirement and Project Tree Position are both mandatory.
+
+## Completion Model
+
+Progress percentage is evidence-based and capability-weighted. Do not calculate project progress as completed waves divided by total waves.
+
+Capability weights:
+
+- Governance / Project Brain / Git workflow: 15%
+- Supabase + Prisma Data Layer: 15%
+- Import Framework + Wave 1 Import: 10%
+- Wave 1 Service Reports UI: 10%
+- Wave 2 Workflow Layer: 15%
+- Wave 3 Maven Knowledge Layer: 15%
+- Wave 4 Inventory Layer: 10%
+- Wave 5 Offline First: 5%
+- Wave 6 Automation Runtime: 3%
+- Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 2%
+
+Every Reality Check, completion report, and approval gate must show:
+
+PROJECT COMPLETION MODEL
+
+- Capability
+- Weight
+- Status
+- Progress contribution
+
+Current evidence-based estimate:
+
+- Governance / Project Brain / Git workflow: 15% / 15% COMPLETE
+- Supabase + Prisma Data Layer: 15% / 15% COMPLETE
+- Import Framework + Wave 1 Import: 10% / 10% COMPLETE
+- Wave 1 Service Reports UI: 10% / 10% COMPLETE
+- Wave 2 Workflow Layer: 0% / 15% CURRENT
+- Wave 3 Maven Knowledge Layer: 0% / 15% PENDING
+- Wave 4 Inventory Layer: 0% / 10% PENDING
+- Wave 5 Offline First: 0% / 5% PENDING
+- Wave 6 Automation Runtime: 0% / 3% PENDING
+- Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 0% / 2% PENDING
+
+Current estimated completion: 50%.
+
+This estimate is valid only because the first four capabilities are complete by Project Brain evidence. If any of those capabilities are later found partial, estimate lower and explain why.
 
 | Area | Current Status | Canonical Owner |
 |---|---|---|

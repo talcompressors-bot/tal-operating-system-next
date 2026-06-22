@@ -527,35 +527,94 @@ AUTO_ALLOWED work may proceed without asking for another approval when it is the
 
 AUTO_APPROVED actions do not require Liad approval:
 
+Git:
+
 - `git fetch`
 - `git pull --ff-only`
 - `git status`
 - `git log`
+- `git branch -vv`
+
+Read-only validation:
+
 - read-only validation
 - read-only database queries
 - read-only DB query
-- local tests
-- local TypeScript compile checks
-- local Next.js build checks
 - Prisma read-only queries
-- UI validation checks
-- Project Brain updates after completed safe work
-- safe documentation commits
-- safe read-only implementation commits after validation
+- staging read-only verification
+- count validation
+- relationship validation
+
+Local development:
+
+- local tests
+- TypeScript compile checks
+- Next.js build checks
+- Next.js local dev startup
+- local HTTP validation
+- Playwright read-only validation
+- screenshot generation for proof
+- HTML render validation
+- route validation
+
+Project Brain:
+
+- update Project Brain after completed safe work
+- update `project-brain/CURRENT_TASK.md`
+- update `project-brain/TASK_BOARD.md`
+- update `project-brain/DECISION_LOG.md`
+- update `PROJECT_INDEX.md` references
+- update migration plans
+- update wave progress
+
+Safe commits:
+
+- documentation-only commits
+- Project Brain commits
+- governance commits
+- read-only validation report commits
+- safe implementation commits after validation
+- `git push` of approved safe-scope work
 
 Do not ask Liad for approval when executing AUTO_APPROVED actions. Only stop for APPROVAL_REQUIRED gates.
 
 APPROVAL_REQUIRED work must stop and request explicit approval before proceeding:
 
 - `prisma/schema.prisma` changes
-- Prisma `db push` or migration
-- DB writes or imports
-- Supabase project or settings changes
-- Google Sheets, AppSheet, Maven, or Apps Script changes
+- Prisma `db push`
+- Prisma `migrate`
+- DB writes
+- imports
+- seeds
+- Supabase project/settings changes
+- Google Sheets changes
+- AppSheet changes
+- Maven changes
+- Apps Script changes
+- Drive writes
+- email/customer-facing actions
 - production deployment
-- email, Drive, or customer-facing actions
-- deleting data or files
-- new agent or control architecture
+- production cutover
+- deleting business data
+- deleting source files
+- new agent architecture
+- new governance architecture
+
+Before stopping for approval, Codex must first verify whether the action is AUTO_APPROVED.
+
+If AUTO_APPROVED, continue working.
+
+If APPROVAL_REQUIRED, stop and present:
+
+- Project Tree
+- Current Position
+- what existed before
+- what changed
+- proof
+- impact
+- risk
+- exact approval requested
+- what will happen after approval
 
 Required autonomous loop:
 
@@ -604,7 +663,7 @@ Every Reality Check, Approval Gate, Autonomous Completion Report, and `by codex`
 
 - PROJECT TREE
 - CURRENT POSITION
-- PROJECT COMPLETION
+- PROJECT COMPLETION MODEL
 - CRITICAL PATH
 - NEXT APPROVAL GATE
 
@@ -612,9 +671,25 @@ Required content:
 
 - PROJECT TREE must show Waves 1-9 and their current statuses.
 - CURRENT POSITION must show Current Wave, Current Task, Last Completed Task, and Next Task.
-- PROJECT COMPLETION must show Estimated completion %, Completed Waves, and Remaining Waves.
+- PROJECT COMPLETION MODEL must show each capability, its weight, current status, and progress contribution.
+- Progress percentage must be evidence-based and capability-weighted, not completed waves divided by total waves.
 - CRITICAL PATH must show remaining waves required for project completion.
 - NEXT APPROVAL GATE must show the exact gate, why approval is required, and what happens after approval.
+
+Capability weights:
+
+- Governance / Project Brain / Git workflow: 15%
+- Supabase + Prisma Data Layer: 15%
+- Import Framework + Wave 1 Import: 10%
+- Wave 1 Service Reports UI: 10%
+- Wave 2 Workflow Layer: 15%
+- Wave 3 Maven Knowledge Layer: 15%
+- Wave 4 Inventory Layer: 10%
+- Wave 5 Offline First: 5%
+- Wave 6 Automation Runtime: 3%
+- Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 2%
+
+If all first four capabilities are complete, current estimated completion may be around 50%. If any are partial, estimate lower and explain why.
 
 A task is not considered complete unless Project Tree Position is reported.
 
