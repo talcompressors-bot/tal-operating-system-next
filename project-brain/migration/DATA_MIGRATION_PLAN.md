@@ -39,7 +39,7 @@ Recommended import order:
 |---|---|---:|---|---|---|---|---|
 | `customers` | `Customers_Final` | UNKNOWN | `CustomerID` | `Customer` | Import first. Preserve `CustomerID` as `appsheetCustomerId`; generate UUID `id`; map Hebrew name/contact/email/phone/address fields; keep full row in `rawSource`. | Normalize phone/email fields; handle multiple email/phone columns; confirm active flag mapping; preserve Hebrew source labels. | Critical |
 | `service_reports` | `ServiceReports` | UNKNOWN | `ReportID`; also `ReportCounter` human sequence | `ServiceReport` | Import after `Customer`. Resolve `CustomerID` to `Customer.id`; preserve report ID and counter; map Drive fields on the model; store source status text. | Map Hebrew status values to `ServiceReportStatus`; handle two blank headers; validate `ReportCounter` uniqueness; parse dates/times safely. | Critical |
-| `report_equipment_items` | `ReportEquipmentItems` | UNKNOWN | `ItemID`; parent `ReportID` | `ReportEquipmentItem` | Import after `ServiceReport`. Resolve `ReportID` to `ServiceReport.id`; preserve all equipment/service fields and `rawSource`. | Reject or quarantine rows with missing/unmatched `ReportID`; normalize numeric current-hours fields; preserve Hebrew equipment labels. | Critical |
+| `report_equipment_items` | `ReportEquipmentItems` | UNKNOWN | `ItemID`; parent `ReportID` | `ReportEquipmentItem` | Import after `ServiceReport`. Import only rows whose `ReportID` resolves to a real `ServiceReports.ReportID`; preserve source `ReportID` as `sourceReportId`; derive `reportCounter` by joining through `ServiceReports.ReportCounter`; preserve equipment/service fields and `rawSource`. | Exclude legacy/test rows with missing/unmatched `ReportID` from PostgreSQL import; do not clean Google Sheets; keep `serviceReportId` nullable as a safety rule; normalize numeric current-hours fields; preserve Hebrew equipment labels. | Critical |
 | `parts_used` | `PartsUsed` | UNKNOWN | UNKNOWN | `PartUsed` | Flexible/import-tolerant V1 import only. Import raw rows if usable columns are found; relations to `ServiceReport` and `Product` are nullable. | Verify real sheet schema first; identify report reference and part key; map SKU/name/quantity; retain raw data for unmapped fields. | High |
 | `products` | `ProductsCatalog` | UNKNOWN | `ProductID`; match key `SKU` | `Product` | Import before inventory and SKU matching. Preserve `ProductID`; keep SKU unique where present; store catalog status text. | Normalize SKU casing/spacing; detect duplicate SKUs; parse price/currency fields; map product status values. | High |
 | `inventory_stocks` | `InventoryStock` | UNKNOWN | `StockID`; references `ProductID`/`SKU` | `InventoryStock` | Import after `Product`. Resolve product by `ProductID` first, SKU second only if needed; preserve quantities as decimals. | Reconcile rows whose `ProductID` and `SKU` disagree; parse quantities; confirm available quantity formula vs imported value. | Medium |
@@ -98,5 +98,31 @@ These sheets exist in the registry but are not mapped to active Prisma V1 models
    - `BusinessDocumentItems.DocumentID` -> `BusinessDocuments.BusinessDocumentId`
    - `AutomationCommands.BusinessDocumentId` -> `BusinessDocuments.BusinessDocumentId`
    - `InvoiceMavenDocumentItems.MavenDocumentId` -> `InvoiceMavenDocuments.InvoiceMavenDocumentId`
-8. Decide whether V1 imports should be full reload, incremental, or staged shadow import.
+8. Confirm `ReportEquipmentItems` exclusion report format for legacy/test rows that are not linked to real `ServiceReports`.
+9. Decide whether V1 imports should be full reload, incremental, or staged shadow import.
 
+---
+
+# Approved Import Decisions
+
+## `ReportEquipmentItems`
+
+- Legacy/test `ReportEquipmentItems` rows created during equipment-add testing must not be imported to PostgreSQL.
+- Import only `ReportEquipmentItems` linked to real `ServiceReports`.
+- Do not modify Google Sheets or AppSheet to clean those rows.
+- Keep `ReportEquipmentItem.serviceReportId` nullable as a safety rule.
+- Preserve `ReportEquipmentItems.ReportID` as `sourceReportId`.
+- Derive `reportCounter` during import by joining `ReportEquipmentItems.ReportID` -> `ServiceReports.ReportID` -> `ServiceReports.ReportCounter`.
+- Do not add a `ReportCounter` column to Google Sheets or AppSheet.
+- `reportCounter` is display/search/audit metadata only.
+- `sourceReportId` remains the true source link.
+- `serviceReportId` remains the internal PostgreSQL FK.
+- Never use `reportCounter` as a primary relationship key.
+
+## Server Actions And Offline Sync
+
+- Internal Next.js write flows must use Server Actions by default.
+- Server Actions are the default sync target for offline queued app mutations.
+- PostgreSQL is the source of truth after successful sync.
+- Conflicts must be logged and require review; they must not be silently overwritten.
+- AppSheet and Google Sheets production remain untouched during the shadow phase.

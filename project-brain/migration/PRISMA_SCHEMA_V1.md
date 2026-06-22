@@ -25,7 +25,9 @@ This file is a review artifact. It is not an executable Prisma schema yet.
 | Hebrew status mapping | Adds source status text fields where status values may need preservation. |
 | Drive files | Drive file/folder fields remain on `ServiceReport`. |
 | `EmailLog` | Included as read-only/flexible log model with nullable relations and `rawSource Json?`. |
-| `ReportEquipmentItem` orphan handling | `serviceReportId` is nullable/import-tolerant, and original source `ReportID` is preserved as `sourceReportId`. |
+| `ReportEquipmentItem` import handling | Legacy/test rows are excluded unless linked to real `ServiceReports`; `serviceReportId` stays nullable as a safety rule; `sourceReportId` preserves the source link; `reportCounter` is derived display/search/audit metadata only. |
+| Server Actions first | Internal Next.js write flows use Server Actions by default; API routes are only for external webhooks, Maven callbacks, public endpoints, and third-party integrations. |
+| Offline first | Field work must support offline pending actions that sync later, with conflicts logged for review. |
 
 ---
 
@@ -262,6 +264,7 @@ model ReportEquipmentItem {
   appsheetItemId              String        @unique @map("appsheet_item_id")
   serviceReportId             String?       @map("service_report_id") @db.Uuid
   sourceReportId              String?       @map("source_report_id")
+  reportCounter               String?       @map("report_counter")
   equipmentNumber             String?       @map("equipment_number")
   equipmentType               String?       @map("equipment_type")
   equipmentSubtype            String?       @map("equipment_subtype")
@@ -281,6 +284,7 @@ model ReportEquipmentItem {
 
   @@index([serviceReportId])
   @@index([sourceReportId])
+  @@index([reportCounter])
   @@index([equipmentModel])
   @@index([serialNumber])
   @@index([compressorCategory])
@@ -288,20 +292,23 @@ model ReportEquipmentItem {
 }
 ```
 
-Validation note:
+Approved import note:
 
-- Read-only validation found 9 `ReportEquipmentItems` rows missing `ReportID`.
-- Read-only validation found 25 `ReportEquipmentItems` rows where `ReportID` is not found in `ServiceReports`.
-- No `ReportCounter` / source report number could be recovered for orphan rows.
-- These rows are likely old/test/deleted parent reports or legacy remnants.
+- Legacy/test `ReportEquipmentItems` rows created during equipment-add testing must not be imported to PostgreSQL.
+- Import only `ReportEquipmentItems` rows linked to real `ServiceReports`.
+- Keep `serviceReportId` nullable as a safety rule, even though the approved import excludes rows without a real parent report.
 
 Import rule:
 
-- Import all `ReportEquipmentItems`.
 - Link rows with valid source `ReportID` to `ServiceReport`.
 - Preserve the original source `ReportID` in `sourceReportId`.
-- Preserve orphan rows with `serviceReportId = null`.
-- Record each missing/unmatched parent as an import validation/import issue.
+- Derive `reportCounter` during import by joining `ReportEquipmentItems.ReportID` -> `ServiceReports.ReportID` -> `ServiceReports.ReportCounter`.
+- Do not add `ReportCounter` to Google Sheets or AppSheet.
+- Exclude rows with missing/unmatched `ReportID` from PostgreSQL import and report them in import validation output.
+- `reportCounter` is display/search/audit metadata only.
+- `sourceReportId` remains the true source link.
+- `serviceReportId` remains the internal PostgreSQL FK.
+- Never use `reportCounter` as a primary relationship key.
 
 ## `PartUsed`
 
@@ -952,4 +959,6 @@ BusinessDocument
 4. Confirm whether `BusinessDocument.mavenDocumentId` should point to the created Maven document only, while `MavenDocument.businessDocumentId` tracks imported linked documents.
 5. Confirm `processingCommandId` remains scalar-only in V1.
 6. Keep `Payment`, `Receipt`, and `ReceiptStatus` out of active V1 unless Phase 2 is explicitly approved.
-7. Keep `ReportEquipmentItem.serviceReportId` nullable and preserve source `ReportID` separately as `sourceReportId` because live validation found orphan equipment rows.
+7. Keep `ReportEquipmentItem.serviceReportId` nullable and preserve source `ReportID` separately as `sourceReportId`, but exclude legacy/test rows that are not linked to real `ServiceReports`.
+8. Add nullable `ReportEquipmentItem.reportCounter String?` as display/search/audit metadata derived during import; never use it as the relationship key.
+9. Do not modify `prisma/schema.prisma` until the documentation decisions are reviewed and the next implementation step is approved.

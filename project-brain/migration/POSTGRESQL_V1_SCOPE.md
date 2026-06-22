@@ -33,9 +33,11 @@ The latest read-only validation corrected the known source counts:
 Required schema correction:
 
 - `ReportEquipmentItems` to `ServiceReports` must be nullable/import-tolerant in V1.
-- Reason: live validation found equipment rows with missing or unmatched `ReportID`.
+- Reason: live validation found equipment rows with missing or unmatched `ReportID`, and Liad approved excluding those legacy/test rows from PostgreSQL import.
 - Preserve the original source `ReportID` in `source_report_id`.
-- Import behavior must preserve these rows, keep `rawSource`, and record import issues instead of rejecting the full import.
+- Add nullable `report_counter` for display/search/audit, derived during import from `ReportEquipmentItems.ReportID` -> `ServiceReports.ReportID` -> `ServiceReports.ReportCounter`.
+- Import behavior must import only equipment rows linked to real `ServiceReports`; missing/unmatched rows are reported in validation output and not imported.
+- Keep `service_report_id` nullable as a safety rule even though approved import excludes unlinked rows.
 
 Detailed orphan equipment findings:
 
@@ -43,6 +45,20 @@ Detailed orphan equipment findings:
 - 25 `ReportEquipmentItems` rows have `ReportID` values not found in `ServiceReports`.
 - No `ReportCounter` / source report number could be recovered for orphan rows.
 - The orphan rows are likely old/test/deleted parent reports or legacy remnants.
+- Do not modify Google Sheets or AppSheet to clean these rows.
+
+## Approved Architecture Decisions
+
+- All internal Next.js write flows must use Server Actions by default.
+- Server Actions apply to approvals, AI draft approval, `BusinessDocument` creation, `ServiceReport` shadow updates, import review actions, user-triggered queue commands, PostgreSQL mutations, and offline sync actions.
+- API routes are allowed only for external webhooks, Maven callbacks, public endpoints, and third-party integrations.
+- Field work must work without internet.
+- Local devices must store pending actions in an offline queue.
+- When internet returns, the queue syncs automatically.
+- Server Actions are the default sync target for internal app mutations.
+- PostgreSQL is the source of truth after successful sync.
+- Conflicts must be logged and require review, not silently overwritten.
+- AppSheet and Google Sheets production remain untouched during the shadow phase.
 
 ## 1. V1 Business Domains
 
@@ -76,7 +92,7 @@ Phase 1 means active PostgreSQL V1 schema coverage for read-first shadow migrati
 |---|---|---|
 | `customers` | `Customers_Final` | Active V1. Preserve `CustomerID`, import all 763 confirmed rows, retain full `raw_source`. |
 | `service_reports` | `ServiceReports` | Active V1. Preserve `ReportID`, `ReportCounter`, Hebrew/source status text, Drive fields, and full `raw_source`. |
-| `report_equipment_items` | `ReportEquipmentItems` | Active V1 with nullable/import-tolerant `service_report_id`. Preserve source `ReportID` in `source_report_id`. Preserve all 108 confirmed rows, including orphan/missing parent rows. |
+| `report_equipment_items` | `ReportEquipmentItems` | Active V1 with nullable/import-tolerant `service_report_id`. Import only rows linked to real `ServiceReports`; exclude legacy/test rows with missing/unmatched `ReportID`; preserve source `ReportID` in `source_report_id`; derive nullable `report_counter` for display/search/audit. |
 | `parts_used` | `PartsUsed` | V1 read-only/flexible. Nullable source ID and nullable relations until the real schema is verified. |
 | `products` | `ProductsCatalog` | Active V1. Preserve product source IDs, SKU, pricing, status text, and raw rows. |
 | `inventory_stocks` | `InventoryStock` | V1 read-only/reference. Link to products when reliable; preserve source quantity state. |
@@ -136,7 +152,7 @@ Relationships must be designed for legacy import tolerance. Source records shoul
 Required relationships:
 
 - `customers` -> `service_reports`
-- `service_reports` -> `report_equipment_items`, nullable/import-tolerant on the child side; preserve original source `ReportID` in `report_equipment_items.source_report_id`
+- `service_reports` -> `report_equipment_items`, nullable/import-tolerant on the child side as a safety rule; import only rows linked to real `ServiceReports`; preserve original source `ReportID` in `report_equipment_items.source_report_id`
 - `service_reports` -> `parts_used`, nullable/import-tolerant
 - `products` -> `parts_used`, nullable/import-tolerant
 - `products` -> `inventory_stocks`
@@ -168,6 +184,8 @@ Special relationship decisions:
 - `AutomationCommand.businessDocumentId` is the enforced command relationship.
 - Maven external IDs must be named clearly as external IDs, not confused with internal UUID primary keys.
 - All source rows must preserve raw JSON/source data for reconciliation.
+- `report_equipment_items.report_counter` is derived display/search/audit metadata only and must never be used as a primary relationship key.
+- `report_equipment_items.source_report_id` remains the true legacy source link; `report_equipment_items.service_report_id` remains the internal PostgreSQL FK.
 
 ## 6. Import Strategy
 
@@ -195,10 +213,11 @@ Required import behavior:
 - Do not mutate production AppSheet, Google Sheets, Maven, Drive, Apps Script, or email state.
 - Do not execute imported `AutomationCommands`; import them as history/state only.
 - Do not deduplicate or merge customers automatically.
-- Import all `ReportEquipmentItems`.
-- Link rows with valid source `ReportID` to `ServiceReport`.
+- Import only `ReportEquipmentItems` rows whose source `ReportID` links to a real `ServiceReport`.
+- Exclude legacy/test `ReportEquipmentItems` rows with missing/unmatched `ReportID` from PostgreSQL import and report them in import validation output.
 - Preserve original source `ReportID` in `source_report_id`.
-- Do not reject `ReportEquipmentItems` rows with missing/unmatched `ReportID`; preserve them with `serviceReportId = null` and record import validation/import issues.
+- Derive `report_counter` during import by joining through `ServiceReports.ReportCounter`.
+- Do not add `ReportCounter` to Google Sheets or AppSheet.
 
 Minimum validation required before import code:
 
@@ -224,8 +243,8 @@ Shadow rules:
 
 The first shadow database success criteria:
 
-- Counts match confirmed live validation for `Customers_Final`, `ServiceReports`, and `ReportEquipmentItems`.
-- Orphan/missing `ReportEquipmentItems` parent links are preserved and reported.
+- Counts match confirmed live validation for `Customers_Final` and `ServiceReports`; `ReportEquipmentItems` imported count equals only rows linked to real `ServiceReports`.
+- Legacy/test `ReportEquipmentItems` rows excluded from import are reported in validation output.
 - Service report list/detail screens can be validated against shadow data without production writes.
 - Business document, AI draft, Maven, inventory, and audit tables exist in scope before Prisma is generated.
 
@@ -254,7 +273,15 @@ Approved PostgreSQL V1 scope is the full Tal Operating System V1 business schema
 - It includes customer, service, equipment, parts, product, inventory reference/audit, AI draft, business document, automation, Maven, approval, email log, sync state/log, and error log domains.
 - It excludes payments and receipts from active V1 and keeps them in Phase 2.
 - It excludes duplicate, legacy, UI-only, procurement, security, and governance registry sheets from the active first Prisma schema.
-- It requires `ReportEquipmentItems.serviceReport` to be nullable/import-tolerant and original source `ReportID` to be preserved in `source_report_id`.
+- It requires `ReportEquipmentItems.serviceReport` to be nullable/import-tolerant as a safety rule, imports only rows linked to real `ServiceReports`, excludes legacy/test equipment rows, preserves original source `ReportID` in `source_report_id`, and derives nullable `report_counter` for display/search/audit only.
+- It uses Server Actions first for internal Next.js mutations and reserves API routes for external integration surfaces.
+- It requires offline-first field work with local pending actions, automatic sync, and conflict review.
 - It keeps all production systems untouched until separate explicit approvals.
 
-Next approved step after this document is reviewed: generate the official Prisma schema from the approved V1 scope, with no database creation or import until the next approval gate.
+Next active implementation order after this documentation update:
+
+1. Prisma validate.
+2. PostgreSQL/Supabase environment.
+3. Import mapping and import validation.
+4. Server Actions architecture.
+5. Offline queue/PWA sync.
