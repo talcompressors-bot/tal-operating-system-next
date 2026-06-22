@@ -113,7 +113,9 @@ The first dry-run must stay focused on the service-core source set:
 | Minimal first dry-run | `ServiceReports` | Service report parent records and `ReportCounter` source | Yes |
 | Minimal first dry-run | `ReportEquipmentItems` | Equipment/service child rows and approved legacy/test exclusion validation | Yes |
 
-Second-stage dry-run source discovery must confirm the existing Maven Sheets and how they link to customers and business documents before any import:
+Second-stage dry-run source discovery must confirm the existing Maven Sheets and how they link to customers and business documents before any import.
+
+Maven Data Scope rule: every Google Sheets tab that stores data imported, synced, or created from Maven is part of the project Maven Data Scope and must be discovered, mapped, and classified before import. Discovery must not stop at the four currently known `InvoiceMaven*` tabs.
 
 | Stage | Source Sheet | Target Model | Discovery Goal |
 |---|---|---|---|
@@ -121,8 +123,17 @@ Second-stage dry-run source discovery must confirm the existing Maven Sheets and
 | Second-stage Maven discovery | `InvoiceMavenDocuments` | `MavenDocument` | Confirm Maven document identifiers, customer links, document numbers, payment/status fields, and any link fields to `BusinessDocuments`. |
 | Second-stage Maven discovery | `InvoiceMavenDocumentItems` | `MavenDocumentItem` | Confirm item-row identifiers and parent link to `InvoiceMavenDocuments.InvoiceMavenDocumentId`. |
 | Second-stage Maven discovery | `InvoiceMavenItems` | `MavenItem` | Confirm Maven item identifiers, SKU/product references, and safe link options to `ProductsCatalog`. |
+| Second-stage Maven discovery | Any other Maven-origin Google Sheets tab | To classify | Discover tab name, purpose, expected target table, links to `Customers_Final` / `BusinessDocuments` / `ProductsCatalog`, and classify as active V1 import, later V1 import, or future/historical only. |
 
 Maven discovery is read-only. It must not create, modify, sync, or trigger Maven documents.
+
+For every Maven-origin tab, the discovery report must include:
+
+1. Sheet/tab name.
+2. Source purpose.
+3. Expected target table.
+4. Link to Customer, BusinessDocument, or Product if any.
+5. Import classification: active V1 import, later V1 import, or future/historical only.
 
 ---
 

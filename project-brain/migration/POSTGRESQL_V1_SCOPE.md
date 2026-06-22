@@ -230,8 +230,10 @@ Minimum validation required before import code:
 - Confirm Hebrew/source status mappings.
 - Confirm import issue taxonomy and import run tracking.
 - Keep minimal first dry-run limited to `Customers_Final`, `ServiceReports`, and `ReportEquipmentItems`.
-- Include `InvoiceMavenCustomers`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, and `InvoiceMavenItems` as second-stage dry-run discovery sources.
-- Second-stage Maven discovery must confirm where the Maven Sheets exist and how they link to `Customers_Final`, `BusinessDocuments`, `InvoiceMavenDocuments`, and `ProductsCatalog` before import.
+- Include `InvoiceMavenCustomers`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, and `InvoiceMavenItems` as known second-stage dry-run discovery sources.
+- Maven Data Scope includes every Google Sheets tab that stores data imported, synced, or created from Maven; discovery must also find any other Maven-origin Sheets tabs before import.
+- Second-stage Maven discovery must confirm where all Maven-origin Sheets exist and how they link to `Customers_Final`, `BusinessDocuments`, `InvoiceMavenDocuments`, and `ProductsCatalog` before import.
+- For every Maven-origin tab, report sheet/tab name, source purpose, expected target table, Customer/BusinessDocument/Product link if any, and classification as active V1 import, later V1 import, or future/historical only.
 - Maven discovery is read-only and must not create, modify, sync, or trigger Maven documents.
 
 ## 7. Shadow Database Strategy
