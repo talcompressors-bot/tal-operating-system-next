@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-22
-Mode: Project Brain consolidation, documentation only
+Mode: PostgreSQL/Supabase shadow environment planning, documentation only
 
 ## Canonical Role
 
@@ -11,15 +11,15 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation before PostgreSQL Environment.
+Project Brain Consolidation Phase 1-3 completed. PostgreSQL/Supabase shadow environment planning is next.
 
 ## Current Milestone
 
-Make `PROJECT_INDEX.md` the living project map and enforced navigation screen connected to existing canonical files.
+Startup path is enforced and retired current task references are cleaned.
 
 ## Last Verified Commit
 
-`00e2067 Add Prisma validation tooling`
+`9433855 Clean retired current task references`
 
 ## Real Current State
 
@@ -36,17 +36,17 @@ Make `PROJECT_INDEX.md` the living project map and enforced navigation screen co
 - No DB push has been run.
 - Production AppSheet and Google Sheets remain untouched.
 - Maven remains untouched.
-- Project Brain Phase 1 startup alignment updated the startup path to begin with `PROJECT_INDEX.md`.
+- Project Brain Consolidation Phase 1-3 completed.
+- Startup path is enforced through `PROJECT_INDEX.md`.
+- Retired current task references were cleaned in `9433855 Clean retired current task references`.
 
 ## Current Task
 
-Finish Project Brain consolidation cleanup so future Codex/ChatGPT sessions start from one enforced truth path.
+Prepare PostgreSQL/Supabase shadow environment planning after consolidation. This is planning only, not implementation.
 
 ## Next Approved Task
 
-After consolidation cleanup, prepare the PostgreSQL/Supabase shadow environment.
-
-PostgreSQL environment work is NEXT, not NOW.
+PostgreSQL/Supabase shadow environment planning, not implementation.
 
 ## Approved Architecture Decisions In Force
 
@@ -82,6 +82,7 @@ PostgreSQL environment work is NEXT, not NOW.
 - No DB creation.
 - No `prisma db push`.
 - No Supabase setup until explicitly approved.
+- No PostgreSQL/Supabase environment implementation during planning.
 - No Google Sheets writes.
 - No AppSheet changes.
 - No Maven actions.
@@ -91,8 +92,6 @@ PostgreSQL environment work is NEXT, not NOW.
 
 ## Done When
 
-- `PROJECT_INDEX.md` is a living project map with canonical links.
-- `project-brain/CURRENT_TASK.md` is the single active current-state source.
-- `project-brain/TASK_BOARD.md` shows Project Brain Consolidation as NOW and PostgreSQL Environment as NEXT.
-- `project-brain/DECISION_LOG.md` records the consolidation decisions.
-- `project-brain/PROJECT_BRAIN_MASTER.md` points active state to `PROJECT_INDEX.md` and this file without duplicating current task details.
+- PostgreSQL/Supabase shadow environment planning scope is clear.
+- No implementation, migration, DB creation, or Prisma command has run.
+- Approval requirements are explicit before any environment setup.
