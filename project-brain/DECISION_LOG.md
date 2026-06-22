@@ -81,6 +81,19 @@ Approved.
 ## 2026-06-22
 
 Decision:
+`hey codex` is the official startup command and `by codex` is the official shutdown command.
+
+Reason:
+Startup and closeout need repeatable automation. Startup must begin from `PROJECT_INDEX.md`, and shutdown must run Project Reality Check, Git review, canonical state updates when needed, approved-file commit, push to `origin/main`, clean status confirmation, and the next startup point.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-22
+
+Decision:
 Project Brain files win over ChatGPT/Codex memory when they conflict.
 
 Reason:

@@ -15,11 +15,11 @@ Project Brain Consolidation Phase 1-3 completed. PostgreSQL/Supabase shadow envi
 
 ## Current Milestone
 
-Startup path is enforced and retired current task references are cleaned.
+Startup and shutdown paths are enforced and retired current task references are cleaned.
 
 ## Last Verified Commit
 
-`9433855 Clean retired current task references`
+`e36c35e Implement hey codex and by codex workflow`
 
 ## Real Current State
 
@@ -39,6 +39,7 @@ Startup path is enforced and retired current task references are cleaned.
 - Project Brain Consolidation Phase 1-3 completed.
 - Startup path is enforced through `PROJECT_INDEX.md`.
 - Retired current task references were cleaned in `9433855 Clean retired current task references`.
+- Official startup command `hey codex` and shutdown command `by codex` were implemented in `e36c35e Implement hey codex and by codex workflow`.
 
 ## Current Task
 
@@ -51,6 +52,8 @@ PostgreSQL/Supabase shadow environment planning, not implementation.
 ## Approved Architecture Decisions In Force
 
 - `PROJECT_INDEX.md` is the mandatory startup entrypoint.
+- `hey codex` is the official startup command.
+- `by codex` is the official shutdown command.
 - `PROJECT_OPERATING_PROTOCOL.md` is the highest authority/governor.
 - `project-brain/CURRENT_TASK.md` is the canonical current task/current phase/next task source.
 - `project-brain/TASK_BOARD.md` is the canonical task board/progress map.

@@ -82,11 +82,11 @@ This section is the living navigation screen. It summarizes current reality only
 | Field | Current Reality | Canonical Evidence |
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; PostgreSQL Environment planning is next | `project-brain/CURRENT_TASK.md` |
-| Current milestone | Startup path enforced; retired current task references cleaned | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current milestone | Startup and shutdown paths enforced; retired current task references cleaned | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Current task | Prepare PostgreSQL/Supabase shadow environment planning after consolidation | `project-brain/CURRENT_TASK.md` |
 | Next approved task | PostgreSQL/Supabase shadow environment planning, not implementation | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Last verified commit | `9433855 Clean retired current task references` | Git history; `project-brain/CURRENT_TASK.md` |
-| Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3 | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
+| Last verified commit | `e36c35e Implement hey codex and by codex workflow` | Git history; `project-brain/CURRENT_TASK.md` |
+| Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
 | Blocked/forbidden actions | No production writes, Prisma migration, DB creation, Sheets/AppSheet/Maven actions, new planning/control files, new agents, or implementation before Reality Check | `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md` |
 | Evidence links | Current task, task board, decisions, system map, migration scope, Prisma schema, protocol | Canonical file links below |
 
