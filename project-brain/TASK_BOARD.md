@@ -82,8 +82,13 @@ Mode: Supabase staging Wave 1 import closed-loop validation, no Wave 2 work
 - Codex is the main Orchestrator and must route work to existing agent owners by role.
 - Codex must not ask Liad for every small step; it must work, validate, collect proof, update Project Brain, and stop only at meaningful APPROVAL_REQUIRED gates.
 - AUTO_ALLOWED work may proceed without routine confirmation when it is the next approved task: repo inspection, local tests/type checks, read-only DB queries, read-only UI validation, documentation updates, read-only UI/display mapping fixes, local validation reports, Project Brain updates after completed safe work, and safe/scoped commit-push after validation.
+- AUTO_APPROVED actions must run without asking Liad for approval: `git fetch`, `git pull --ff-only`, `git status`, `git log`, read-only validation, read-only database queries, read-only DB query, local tests, local TypeScript compile checks, local Next.js build checks, Prisma read-only queries, UI validation checks, Project Brain updates after completed safe work, safe documentation commits, and safe read-only implementation commits after validation.
+- Do not ask Liad for approval when executing AUTO_APPROVED actions; only stop for APPROVAL_REQUIRED gates.
 - APPROVAL_REQUIRED work must stop for explicit Liad approval: `prisma/schema.prisma`, Prisma `db push` or migration, DB writes/imports, Supabase project/settings changes, Google Sheets/AppSheet/Maven/Apps Script changes, production deployment, email/Drive/customer-facing actions, deleting data/files, and new agent/control architecture.
 - Approval-gate reports must include what was done, what was checked, proof, risks, requested approval, what happens after approval, and systems confirmed untouched.
+- Proof Requirement: before closing any completed task, Codex must provide what was wrong before, what changed, evidence, validation result, and user-visible impact.
+- Preferred evidence includes screenshots, Playwright screenshots, HTML render samples, before/after comparisons, and counts.
+- A task is not complete with only HTTP 200, PASS, or compile success; Codex must demonstrate the visible outcome whenever possible.
 - Documentation/state sync only for current Project Brain update unless Liad explicitly approves script changes.
 - No additional code implementation.
 - No Prisma commands.

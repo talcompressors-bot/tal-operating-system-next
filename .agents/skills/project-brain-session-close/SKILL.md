@@ -114,6 +114,26 @@ AUTO_ALLOWED work may be closed without extra ping-pong:
 - update Project Brain after completed safe work
 - commit/push safe documentation and read-only app changes after validation
 
+AUTO_APPROVED:
+
+- `git fetch`
+- `git pull --ff-only`
+- `git status`
+- `git log`
+- read-only validation
+- read-only database queries
+- read-only DB query
+- local tests
+- local TypeScript compile checks
+- local Next.js build checks
+- Prisma read-only queries
+- UI validation checks
+- Project Brain updates after completed safe work
+- safe documentation commits
+- safe read-only implementation commits after validation
+
+Do not ask Liad for approval when executing AUTO_APPROVED actions. Only stop for APPROVAL_REQUIRED gates.
+
 APPROVAL_REQUIRED work must stop and request explicit approval:
 
 - `prisma/schema.prisma` changes
@@ -138,6 +158,20 @@ Closeout loop:
 Codex is the main Orchestrator at closeout. It should complete safe closeout autonomously and ask Liad only at meaningful gates.
 
 Approval-gate output must include what was done, what was checked, proof of success, risks, requested approval, what will happen after approval, and systems confirmed untouched.
+
+Proof Requirement:
+
+Before closing any completed task, Codex must provide:
+
+1. What was wrong before
+2. What changed
+3. Evidence
+4. Validation result
+5. User-visible impact
+
+Preferred evidence includes screenshots, Playwright screenshots, HTML render samples, before/after comparisons, and counts.
+
+A task is not considered complete with only HTTP 200, PASS, or compile success. Codex must demonstrate the visible outcome whenever possible.
 
 ## Git Rules
 
