@@ -17,9 +17,13 @@ Project Brain Consolidation Phase 1-3 completed. PostgreSQL/Supabase shadow envi
 
 Startup remote sync, shutdown path, and Reality Check commit comparison are enforced.
 
-## Last Verified Commit
+## Last Implementation Commit
 
 `670f4c8 Harden codex startup and reality check sync`
+
+## Last Closeout Commit
+
+`653f370 Sync project brain after reality check hardening`
 
 ## Real Current State
 
@@ -56,7 +60,9 @@ PostgreSQL/Supabase shadow environment planning, not implementation.
 - `hey codex` is the official startup command.
 - `by codex` is the official shutdown command.
 - `hey codex` must fetch and fast-forward from `origin/main` before reading Project Brain when the working tree is clean.
-- Project Reality Check must compare live Git latest commit against commits recorded in `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`.
+- Project Reality Check must compare live Git latest commit against Last Implementation Commit and Last Closeout Commit recorded in `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`.
+- If live Git latest commit equals Last Closeout Commit, Project Brain is synchronized even when Last Implementation Commit is older.
+- Last Implementation Commit changes only when actual implementation changed; Last Closeout Commit tracks closeout-only metadata commits.
 - `PROJECT_OPERATING_PROTOCOL.md` is the highest authority/governor.
 - `project-brain/CURRENT_TASK.md` is the canonical current task/current phase/next task source.
 - `project-brain/TASK_BOARD.md` is the canonical task board/progress map.

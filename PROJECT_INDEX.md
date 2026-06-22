@@ -44,8 +44,10 @@ Project Reality Check must include:
 - current phase
 - live Git latest commit from `git log -1 --oneline`
 - Git working state from `git status --short --branch`
-- last verified commit recorded in `PROJECT_INDEX.md`
-- last verified commit recorded in `project-brain/CURRENT_TASK.md`
+- Last Implementation Commit recorded in `PROJECT_INDEX.md`
+- Last Closeout Commit recorded in `PROJECT_INDEX.md`
+- Last Implementation Commit recorded in `project-brain/CURRENT_TASK.md`
+- Last Closeout Commit recorded in `project-brain/CURRENT_TASK.md`
 - current task
 - next approved task
 - blocked or forbidden actions
@@ -59,10 +61,16 @@ Project Reality Check must always run:
 Then compare:
 
 - latest Git commit
-- last verified commit written in `PROJECT_INDEX.md`
-- last verified commit written in `project-brain/CURRENT_TASK.md`
+- Last Closeout Commit written in `PROJECT_INDEX.md`
+- Last Implementation Commit written in `PROJECT_INDEX.md`
+- Last Closeout Commit written in `project-brain/CURRENT_TASK.md`
+- Last Implementation Commit written in `project-brain/CURRENT_TASK.md`
 
-If any mismatch exists:
+If live Git latest commit equals the recorded Last Closeout Commit, the repository and Project Brain are synchronized.
+
+If live Git latest commit is ahead of the Last Implementation Commit only because it is a closeout-only metadata commit, it is OK when recorded as Last Closeout Commit.
+
+If live Git latest commit is not recorded as either Last Implementation Commit or Last Closeout Commit:
 
 - report the mismatch clearly
 - recommend sync before implementation during `hey codex`
@@ -80,8 +88,8 @@ When the user says `hey codex`:
 5. After a successful pull, run `git log -1 --oneline`.
 6. Only then read `PROJECT_INDEX.md`, `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md`, and `project-brain/TASK_BOARD.md`.
 7. Produce Project Reality Check using the live Git commit as the source for latest commit.
-8. Show live Git latest commit and Project Brain recorded commit.
-9. If mismatch exists, report it and recommend state sync before implementation.
+8. Show live Git latest commit, Last Implementation Commit, and Last Closeout Commit.
+9. If live Git latest commit is recorded as either Last Implementation Commit or Last Closeout Commit, continue. If not, report mismatch and recommend state sync before implementation.
 10. Continue from next approved task only.
 11. Do not invent new tasks.
 
@@ -90,15 +98,17 @@ When the user says `by codex`:
 1. Run Project Reality Check.
 2. Run `git status --short --branch`.
 3. Run `git log -1 --oneline`.
-4. Compare live Git latest commit against Project Brain recorded commits.
+4. Compare live Git latest commit against Last Implementation Commit and Last Closeout Commit.
 5. Identify changed files.
 6. Summarize completed work.
 7. Summarize uncommitted changes.
-8. Update canonical state files to the latest Git commit when needed and approved:
+8. Update canonical state files when needed and approved:
    - `PROJECT_INDEX.md`
    - `project-brain/CURRENT_TASK.md`
    - `project-brain/TASK_BOARD.md`
    - `project-brain/DECISION_LOG.md` if decisions changed
+   - Last Closeout Commit = the closeout commit being created, when possible, or clearly state pending closeout commit
+   - Last Implementation Commit only when actual implementation changed
 9. Verify no forbidden systems were touched.
 10. Verify next approved task is clear.
 11. Commit only approved files.
@@ -121,7 +131,8 @@ This section is the living navigation screen. It summarizes current reality only
 | Current milestone | Startup remote sync, shutdown path, and Reality Check commit comparison enforced | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Current task | Prepare PostgreSQL/Supabase shadow environment planning after consolidation | `project-brain/CURRENT_TASK.md` |
 | Next approved task | PostgreSQL/Supabase shadow environment planning, not implementation | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Last verified commit | `670f4c8 Harden codex startup and reality check sync` | Git history; `project-brain/CURRENT_TASK.md` |
+| Last Implementation Commit | `670f4c8 Harden codex startup and reality check sync` | Git history; `project-brain/CURRENT_TASK.md` |
+| Last Closeout Commit | `653f370 Sync project brain after reality check hardening` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
 | Blocked/forbidden actions | No production writes, Prisma migration, DB creation, Sheets/AppSheet/Maven actions, new planning/control files, new agents, or implementation before Reality Check | `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md` |
 | Evidence links | Current task, task board, decisions, system map, migration scope, Prisma schema, protocol | Canonical file links below |

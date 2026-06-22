@@ -46,8 +46,8 @@ When the user says `hey codex`:
 5. After a successful pull, run `git log -1 --oneline`.
 6. Only then read `PROJECT_INDEX.md`, `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md`, and `project-brain/TASK_BOARD.md`.
 7. Produce Project Reality Check using the live Git commit as the latest commit source.
-8. Show live Git latest commit and Project Brain recorded commit.
-9. If mismatch exists, report it and recommend state sync before implementation.
+8. Show live Git latest commit, Last Implementation Commit, and Last Closeout Commit.
+9. If live Git latest commit is recorded as either Last Implementation Commit or Last Closeout Commit, continue. If not, report mismatch and recommend state sync before implementation.
 10. Continue from next approved task only.
 11. Do not invent new tasks.
 
@@ -84,10 +84,11 @@ Project Reality Check:
 - Current phase
 - Current task
 - Next approved task
-- Last verified commit
+- Last Implementation Commit
+- Last Closeout Commit
 - Live Git latest commit
 - Git working state
-- Commit comparison between live Git, `PROJECT_INDEX.md`, and `project-brain/CURRENT_TASK.md`
+- Commit comparison between live Git, Last Implementation Commit, and Last Closeout Commit in `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`
 - Blocked or forbidden actions
 - Canonical files relevant to the requested work
 
@@ -97,7 +98,7 @@ Project Reality Check must always run:
 - `git fetch origin` and `git pull --ff-only origin main` when the working tree is clean and this is a new `hey codex` session
 - `git log -1 --oneline`
 
-If live Git and Project Brain recorded commits do not match, report the mismatch clearly and do not continue implementation until the mismatch is acknowledged.
+If live Git latest commit equals Last Closeout Commit, Project Brain is synchronized. If live Git latest commit is a closeout-only metadata commit newer than Last Implementation Commit, do not request another sync when it is recorded as Last Closeout Commit. If live Git latest commit is not recorded as either Last Implementation Commit or Last Closeout Commit, report the mismatch clearly and do not continue implementation until the mismatch is acknowledged.
 
 No implementation task may start until the Project Reality Check is shown.
 

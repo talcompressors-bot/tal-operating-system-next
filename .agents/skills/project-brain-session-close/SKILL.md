@@ -62,15 +62,17 @@ Follow this order:
 1. Run Project Reality Check.
 2. Run `git status --short --branch`.
 3. Run `git log -1 --oneline`.
-4. Compare live Git latest commit against Project Brain recorded commits in `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`.
+4. Compare live Git latest commit against Last Implementation Commit and Last Closeout Commit in `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`.
 5. Identify changed files.
 6. Summarize completed work.
 7. Summarize uncommitted changes.
-8. Update canonical state files to the latest Git commit when needed and approved:
+8. Update canonical state files when needed and approved:
    - `PROJECT_INDEX.md`
    - `project-brain/CURRENT_TASK.md`
    - `project-brain/TASK_BOARD.md`
    - `project-brain/DECISION_LOG.md` if decisions changed
+   - Last Closeout Commit = the closeout commit being created, when possible, or clearly state pending closeout commit
+   - Last Implementation Commit only when actual implementation changed
 9. Verify no forbidden systems were touched.
 10. Verify next approved task is clear.
 11. Commit only approved files.
@@ -102,7 +104,7 @@ Before suggesting a commit message:
 
 1. Run `git status --short --branch`.
 2. Run `git log -1 --oneline`.
-3. Compare live Git latest commit against Project Brain recorded commits.
+3. Compare live Git latest commit against Last Implementation Commit and Last Closeout Commit.
 4. Review relevant diffs.
 5. Separate files changed by this session from unrelated existing changes when possible.
 6. Report untracked files.
@@ -141,7 +143,8 @@ Changed Files
 Verification
 - ...
 - Live Git latest commit:
-- Project Brain recorded commit:
+- Last Implementation Commit:
+- Last Closeout Commit:
 - Commit mismatch status:
 
 Known Active IDs

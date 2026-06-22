@@ -35,15 +35,17 @@ When the user says `by codex`, run this workflow:
 1. Run Project Reality Check.
 2. Run `git status --short --branch`.
 3. Run `git log -1 --oneline`.
-4. Compare live Git latest commit against Project Brain recorded commits in `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`.
+4. Compare live Git latest commit against Last Implementation Commit and Last Closeout Commit in `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`.
 5. Identify changed files.
 6. Summarize completed work.
 7. Summarize uncommitted changes.
-8. Update canonical state files to the latest Git commit when needed and approved:
+8. Update canonical state files when needed and approved:
    - `PROJECT_INDEX.md`
    - `project-brain/CURRENT_TASK.md`
    - `project-brain/TASK_BOARD.md`
    - `project-brain/DECISION_LOG.md` if decisions changed
+   - Last Closeout Commit = the closeout commit being created, when possible, or clearly state pending closeout commit
+   - Last Implementation Commit only when actual implementation changed
 9. Verify no forbidden systems were touched.
 10. Verify next approved task is clear.
 11. Commit only approved files.
@@ -72,7 +74,8 @@ Update or confirm:
 
 - Project Reality Check
 - Live Git latest commit
-- Project Brain recorded commit
+- Last Implementation Commit
+- Last Closeout Commit
 - Commit mismatch status
 - Current Task
 - Task Board
@@ -88,7 +91,8 @@ Update or confirm:
 - Current phase
 - Current task
 - Next approved task
-- Last verified commit
+- Last Implementation Commit
+- Last Closeout Commit
 - Latest Git commit
 - Whether Git and Project Brain are synchronized
 - What was tested

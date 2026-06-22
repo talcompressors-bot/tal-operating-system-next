@@ -52,10 +52,18 @@ Project Reality Check must always run:
 Then compare:
 
 - latest Git commit
-- last verified commit written in `PROJECT_INDEX.md`
-- last verified commit written in `project-brain/CURRENT_TASK.md`
+- Last Implementation Commit written in `PROJECT_INDEX.md`
+- Last Closeout Commit written in `PROJECT_INDEX.md`
+- Last Implementation Commit written in `project-brain/CURRENT_TASK.md`
+- Last Closeout Commit written in `project-brain/CURRENT_TASK.md`
 
-For `hey codex`, produce Project Reality Check using the live Git commit as the source for latest commit. Show both the live Git latest commit and the Project Brain recorded commit. If any mismatch exists, report it clearly, recommend state sync before implementation, and do not continue implementation until the mismatch is acknowledged.
+For `hey codex`, produce Project Reality Check using the live Git commit as the source for latest commit. Show live Git latest commit, Last Implementation Commit, and Last Closeout Commit.
+
+If live Git latest commit equals Last Closeout Commit, Project Brain is synchronized.
+
+If live Git latest commit is a closeout-only metadata commit newer than Last Implementation Commit, do not request another sync when it is recorded as Last Closeout Commit.
+
+If live Git latest commit is not recorded as either Last Implementation Commit or Last Closeout Commit, report the mismatch clearly, recommend state sync before implementation, and do not continue implementation until the mismatch is acknowledged.
 
 For architecture, schema, migration, source-of-truth, or future-platform work, relevant task-specific docs include:
 
@@ -135,13 +143,15 @@ Project Reality Check:
 2. Current task
 3. Next approved task
 4. Live Git latest commit
-5. Last verified commit recorded in `PROJECT_INDEX.md`
-6. Last verified commit recorded in `project-brain/CURRENT_TASK.md`
-7. Commit comparison result
-8. Git working state
-9. Blocked or forbidden actions
-10. Canonical files relevant to the requested work
-11. Approval needed, if any
+5. Last Implementation Commit recorded in `PROJECT_INDEX.md`
+6. Last Closeout Commit recorded in `PROJECT_INDEX.md`
+7. Last Implementation Commit recorded in `project-brain/CURRENT_TASK.md`
+8. Last Closeout Commit recorded in `project-brain/CURRENT_TASK.md`
+9. Commit comparison result
+10. Git working state
+11. Blocked or forbidden actions
+12. Canonical files relevant to the requested work
+13. Approval needed, if any
 
 No implementation task may start until the Project Reality Check is shown.
 

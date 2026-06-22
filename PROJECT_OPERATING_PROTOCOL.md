@@ -250,8 +250,8 @@ When the user says `hey codex`, Codex must:
 5. After a successful pull, run `git log -1 --oneline`.
 6. Only then read `PROJECT_INDEX.md`, `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md`, and `project-brain/TASK_BOARD.md`.
 7. Produce Project Reality Check using the live Git commit as the source for latest commit.
-8. Show live Git latest commit and Project Brain recorded commit.
-9. If mismatch exists, report it and recommend state sync before implementation.
+8. Show live Git latest commit, Last Implementation Commit, and Last Closeout Commit.
+9. If live Git latest commit is recorded as either Last Implementation Commit or Last Closeout Commit, continue. If not, report mismatch and recommend state sync before implementation.
 10. Continue from next approved task only.
 11. Do not invent new tasks.
 
@@ -278,20 +278,27 @@ Project Reality Check must include:
 - current phase
 - current task
 - next approved task
-- last verified commit
+- Last Implementation Commit
+- Last Closeout Commit
 - live Git latest commit
 - Git working state
-- commit comparison between live Git, `PROJECT_INDEX.md`, and `project-brain/CURRENT_TASK.md`
+- commit comparison between live Git, Last Implementation Commit, and Last Closeout Commit in `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`
 - blocked or forbidden actions
 - canonical files relevant to the requested work
 
 Project Reality Check must compare:
 
 - latest Git commit from `git log -1 --oneline`
-- last verified commit written in `PROJECT_INDEX.md`
-- last verified commit written in `project-brain/CURRENT_TASK.md`
+- Last Implementation Commit written in `PROJECT_INDEX.md`
+- Last Closeout Commit written in `PROJECT_INDEX.md`
+- Last Implementation Commit written in `project-brain/CURRENT_TASK.md`
+- Last Closeout Commit written in `project-brain/CURRENT_TASK.md`
 
-If any mismatch exists:
+If live Git latest commit equals the recorded Last Closeout Commit, the repository and Project Brain are synchronized.
+
+If live Git latest commit is ahead of Last Implementation Commit only because it is a closeout-only metadata commit, it is OK when recorded as Last Closeout Commit.
+
+If live Git latest commit is not recorded as either Last Implementation Commit or Last Closeout Commit:
 
 - report the mismatch clearly
 - recommend sync before implementation during `hey codex`
@@ -313,15 +320,17 @@ When the user says `by codex`, Codex must:
 1. Run Project Reality Check.
 2. Run `git status --short --branch`.
 3. Run `git log -1 --oneline`.
-4. Compare live Git latest commit against Project Brain recorded commits.
+4. Compare live Git latest commit against Last Implementation Commit and Last Closeout Commit.
 5. Identify changed files.
 6. Summarize completed work.
 7. Summarize uncommitted changes.
-8. Update canonical state files to the latest Git commit when needed and approved:
+8. Update canonical state files when needed and approved:
    - `PROJECT_INDEX.md`
    - `project-brain/CURRENT_TASK.md`
    - `project-brain/TASK_BOARD.md`
    - `project-brain/DECISION_LOG.md` if decisions changed
+   - Last Closeout Commit = the closeout commit being created, when possible, or clearly state pending closeout commit
+   - Last Implementation Commit only when actual implementation changed
 9. Verify no forbidden systems were touched.
 10. Verify next approved task is clear.
 11. Commit only approved files.
