@@ -11,7 +11,7 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation and now requires commit/push before PostgreSQL-backed read validation.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read validation is the active task.
 
 ## Current Milestone
 
@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`9efa017 Refactor import planning and update Wave 1 baseline`
+`3abf7d3 Record Wave 1 staging import pass`
 
 ## Last Closeout Commit
 
@@ -54,6 +54,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - `b6b709b Reclassify ReportEquipmentItems exclusions` is classified as the latest implementation/planning commit because it changed approved migration planning language and import classification for excluded `ReportEquipmentItems` rows.
 - `c11c460 Document import waves plan` is classified as an implementation/planning commit because it changed approved migration planning by defining Waves 1-4 and the Wave 1 gate for service-report replacement readiness.
 - `9efa017 Refactor import planning and update Wave 1 baseline` is classified as the latest implementation/planning commit because it refactored Import Waves into agent-readable structured blocks, recorded Wave ownership/blockers/success criteria, and updated Wave 1 baseline counts after read-only source validation found legitimate new business data.
+- `3abf7d3 Record Wave 1 staging import pass` is classified as the latest implementation/import commit because it added the Wave 1 staging import script, recorded validation PASS, and documented PostgreSQL staging counts and excluded legacy/test rows.
 - Prisma validation passed after reconciliation with process-only placeholder `DATABASE_URL` and `DIRECT_URL`.
 - Prisma generate completed against local staging env values after explicit approval.
 - Supabase staging-first shadow plan is approved: use `talcompressors-next-staging` first, then `talcompressors-next-prod` as production shadow only after staging validation passes.
@@ -72,11 +73,11 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Current Task
 
-Commit Wave 1 staging import script plus Project Brain closed-loop sync.
+Wave 1 Next.js PostgreSQL read validation.
 
 ## Next Approved Task
 
-Wave 1 Next.js read validation / service report screens from PostgreSQL staging data. Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, or production shadow setup until Liad explicitly approves that later gate.
+Validate service report list/detail screens from PostgreSQL staging data. Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, or production shadow setup until Liad explicitly approves that later gate.
 
 ## Approved Architecture Decisions In Force
 
@@ -139,7 +140,7 @@ Wave 1 Next.js read validation / service report screens from PostgreSQL staging 
 
 ## Done When
 
-- Wave 1 import script is committed/pushed.
-- Wave 1 Project Brain closed-loop sync is committed/pushed.
-- Git status is clean after closeout.
-- Next gate is Wave 1 Next.js read validation from PostgreSQL staging data and does not imply Wave 2 approval.
+- `/service-reports` reads PostgreSQL staging data and shows 63 service reports.
+- Service report detail pages resolve by stable source report ID.
+- Linked equipment rows render from PostgreSQL staging data.
+- No write path, import, migration, schema push, source-system change, or production action is added.

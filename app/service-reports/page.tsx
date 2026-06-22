@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { getServiceReportList } from "./service-report-adapter";
 
-export default function ServiceReportsPage() {
-  const serviceReports = getServiceReportList();
+export const dynamic = "force-dynamic";
+
+export default async function ServiceReportsPage() {
+  const serviceReports = await getServiceReportList();
 
   return (
     <section className="page-shell">

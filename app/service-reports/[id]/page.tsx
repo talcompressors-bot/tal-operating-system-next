@@ -1,9 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  getServiceReportById,
-  getServiceReportStaticParams,
-} from "../service-report-adapter";
+import { getServiceReportById } from "../service-report-adapter";
 
 type ServiceReportDetailPageProps = {
   params: Promise<{
@@ -11,15 +8,13 @@ type ServiceReportDetailPageProps = {
   }>;
 };
 
-export function generateStaticParams() {
-  return getServiceReportStaticParams();
-}
+export const dynamic = "force-dynamic";
 
 export default async function ServiceReportDetailPage({
   params,
 }: ServiceReportDetailPageProps) {
   const { id } = await params;
-  const report = getServiceReportById(id);
+  const report = await getServiceReportById(id);
 
   if (!report) {
     notFound();

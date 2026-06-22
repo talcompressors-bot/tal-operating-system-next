@@ -129,9 +129,9 @@ This section is the living navigation screen. It summarizes current reality only
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, and Wave 1 staging import passed closed-loop validation | `project-brain/CURRENT_TASK.md` |
 | Current milestone | Wave 1 core import completed in Supabase staging with validation PASS | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Current task | Commit Wave 1 staging import script plus Project Brain closed-loop sync; do not continue to Wave 2 | `project-brain/CURRENT_TASK.md` |
+| Current task | Wave 1 Next.js read validation: validate service report screens from PostgreSQL staging data | `project-brain/CURRENT_TASK.md` |
 | Next approved task | Wave 1 Next.js read validation: validate service report screens from PostgreSQL staging data; Wave 2 import is not approved | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Last Implementation Commit | `9efa017 Refactor import planning and update Wave 1 baseline` | Git history; `project-brain/CURRENT_TASK.md` |
+| Last Implementation Commit | `3abf7d3 Record Wave 1 staging import pass` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
 | Blocked/forbidden actions | No production writes, Prisma migration, DB creation, Sheets/AppSheet/Maven actions, new planning/control files, new agents, or implementation before Reality Check | `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md` |
@@ -157,7 +157,7 @@ This map is a navigation summary only. The visual map is view-only and is not a 
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, and Wave 1 staging import passed closed-loop validation | `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model | `project-brain/TASK_BOARD.md` |
-| Current task | Commit Wave 1 staging import script plus Project Brain closed-loop sync | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current task | Wave 1 Next.js read validation: validate service report screens from PostgreSQL staging data | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Next approved task | Wave 1 Next.js read validation: validate service report screens from PostgreSQL staging data; Wave 2 import is not approved | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |

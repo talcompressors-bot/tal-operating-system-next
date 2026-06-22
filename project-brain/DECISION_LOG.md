@@ -3,6 +3,19 @@
 ## 2026-06-22
 
 Decision:
+`3abf7d3 Record Wave 1 staging import pass` is classified as the Last Implementation Commit.
+
+Reason:
+The commit added the approved Wave 1 staging import script and recorded Wave 1 PostgreSQL staging validation PASS with `customers = 763`, `service_reports = 63`, `report_equipment_items = 75`, and 34 excluded legacy/test `ReportEquipmentItems` rows. It is an implementation/import commit, not closeout metadata. Last Closeout Commit remains `8114210 Sync project brain commit model state`.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-22
+
+Decision:
 `9efa017 Refactor import planning and update Wave 1 baseline` is classified as the Last Implementation Commit.
 
 Reason:

@@ -1,6 +1,5 @@
-import snapshot from "./snapshot/service-reports.snapshot.json";
-
-type SnapshotRow = Record<string, unknown>;
+import type { ReportEquipmentItem, ServiceReport } from "@prisma/client";
+import { prisma } from "../../lib/prisma";
 
 type ServiceReportStatus = "Open" | "Signed" | "Sent" | "Closed" | "UNKNOWN";
 
@@ -14,7 +13,7 @@ type EquipmentRow = {
   notes: string;
 };
 
-type ServiceReport = {
+export type ServiceReportView = {
   id: string;
   reportNumber: string;
   customer: string;
@@ -26,29 +25,10 @@ type ServiceReport = {
   equipment: EquipmentRow[];
 };
 
-const customers = snapshot.customers as SnapshotRow[];
-const serviceReportRows = snapshot.serviceReports as SnapshotRow[];
-const equipmentRows = snapshot.reportEquipmentItems as SnapshotRow[];
-
-function readText(row: SnapshotRow | undefined, fields: string[]) {
-  if (!row) {
-    return "";
-  }
-
-  for (const field of fields) {
-    const value = row[field];
-
-    if (value !== undefined && value !== null) {
-      const text = String(value).trim();
-
-      if (text) {
-        return text;
-      }
-    }
-  }
-
-  return "";
-}
+type ServiceReportWithWave1Relations = ServiceReport & {
+  customer: { name: string } | null;
+  equipmentItems: ReportEquipmentItem[];
+};
 
 function normalizeStatus(status: string): ServiceReportStatus {
   const cleanStatus = status.trim().toLowerCase();
@@ -61,72 +41,76 @@ function normalizeStatus(status: string): ServiceReportStatus {
   return "UNKNOWN";
 }
 
-function findCustomer(customerId: string) {
-  return customers.find(
-    (customer) => readText(customer, ["CustomerID"]) === customerId,
-  );
+function formatDate(date: Date | null) {
+  if (!date) {
+    return "";
+  }
+
+  return date.toISOString().slice(0, 10);
 }
 
-function findEquipmentRows(reportId: string) {
-  return equipmentRows.filter(
-    (item) => readText(item, ["ReportID"]) === reportId,
-  );
+function readText(value: unknown, fallback = "") {
+  if (value === undefined || value === null) {
+    return fallback;
+  }
+
+  const text = String(value).trim();
+  return text || fallback;
 }
 
-function mapEquipmentRow(item: SnapshotRow): EquipmentRow {
+function mapEquipmentRow(item: ReportEquipmentItem): EquipmentRow {
   return {
-    id: readText(item, ["ItemID"]) || "unknown-equipment",
-    equipmentNumber:
-      readText(item, ["מספר ציוד"]) || "UNKNOWN EQUIPMENT",
-    type: readText(item, ["סוג ציוד"]),
-    model: readText(item, ["דגם הציוד"]),
-    serialNumber: readText(item, ["מס סידורי"]),
-    status: readText(item, ["מצב מערכת"]) || "UNKNOWN",
-    notes:
-      readText(item, ["סיכום והמלצות טכנאי"]) ||
-      readText(item, ["תיאור השירות"]),
+    id: item.appsheetItemId,
+    equipmentNumber: readText(item.equipmentNumber, "UNKNOWN EQUIPMENT"),
+    type: readText(item.equipmentType),
+    model: readText(item.equipmentModel),
+    serialNumber: readText(item.serialNumber),
+    status: readText(item.systemStatus, "UNKNOWN"),
+    notes: readText(item.technicianRecommendations) || readText(item.serviceDescription),
   };
 }
 
-function mapServiceReport(row: SnapshotRow): ServiceReport {
-  const reportId = readText(row, ["ReportID"]);
-  const customerId = readText(row, ["CustomerID"]);
-  const customer = findCustomer(customerId);
-
+function mapServiceReport(report: ServiceReportWithWave1Relations): ServiceReportView {
   return {
-    id: reportId || "unknown-report",
+    id: report.appsheetReportId,
     reportNumber:
-      readText(row, ["ReportCounter"]) ||
-      readText(row, ["מספר דוח"]) ||
-      reportId ||
-      "UNKNOWN",
-    customer:
-      readText(customer, ["שם לקוח"]) ||
-      readText(row, ["שם לקוח"]) ||
-      "UNKNOWN CUSTOMER",
-    serviceDate: readText(row, ["תאריך שירות"]),
-    technician: readText(row, ["טכנאי"]) || "UNKNOWN TECHNICIAN",
-    status: normalizeStatus(readText(row, ["סטטוס דוח"])),
-    description: readText(row, ["תיאור השירות"]),
-    recommendations:
-      readText(row, ["המלצות ללקוח"]) ||
-      readText(row, ["סיכום טכנאי"]),
-    equipment: findEquipmentRows(reportId).map(mapEquipmentRow),
+      readText(report.reportCounter) ||
+      readText(report.reportNumberText) ||
+      report.appsheetReportId,
+    customer: readText(report.customer?.name, "UNKNOWN CUSTOMER"),
+    serviceDate: formatDate(report.serviceDate),
+    technician: readText(report.technicianName, "UNKNOWN TECHNICIAN"),
+    status: normalizeStatus(report.status),
+    description: readText(report.serviceDescription),
+    recommendations: readText(report.recommendations) || readText(report.technicianSummary),
+    equipment: report.equipmentItems.map(mapEquipmentRow),
   };
 }
 
-const serviceReports = serviceReportRows.map(mapServiceReport);
+export async function getServiceReportList() {
+  const serviceReports = await prisma.serviceReport.findMany({
+    include: {
+      customer: { select: { name: true } },
+      equipmentItems: {
+        orderBy: [{ equipmentNumber: "asc" }, { appsheetItemId: "asc" }],
+      },
+    },
+    orderBy: [{ reportCounter: "desc" }, { appsheetReportId: "asc" }],
+  });
 
-export function getServiceReportList() {
-  return serviceReports;
+  return serviceReports.map(mapServiceReport);
 }
 
-export function getServiceReportById(id: string) {
-  return serviceReports.find((report) => report.id === id);
-}
+export async function getServiceReportById(id: string) {
+  const report = await prisma.serviceReport.findUnique({
+    where: { appsheetReportId: id },
+    include: {
+      customer: { select: { name: true } },
+      equipmentItems: {
+        orderBy: [{ equipmentNumber: "asc" }, { appsheetItemId: "asc" }],
+      },
+    },
+  });
 
-export function getServiceReportStaticParams() {
-  return serviceReports.map((report) => ({
-    id: report.id,
-  }));
+  return report ? mapServiceReport(report) : undefined;
 }
