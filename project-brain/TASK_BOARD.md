@@ -89,6 +89,9 @@ Mode: Supabase staging Wave 1 import closed-loop validation, no Wave 2 work
 - Proof Requirement: before closing any completed task, Codex must provide what was wrong before, what changed, evidence, validation result, and user-visible impact.
 - Preferred evidence includes screenshots, Playwright screenshots, HTML render samples, before/after comparisons, and counts.
 - A task is not complete with only HTTP 200, PASS, or compile success; Codex must demonstrate the visible outcome whenever possible.
+- Mandatory Project Tree Reporting: every Reality Check, Approval Gate, Autonomous Completion Report, and `by codex` closeout must include PROJECT TREE, CURRENT POSITION, PROJECT COMPLETION, CRITICAL PATH, and NEXT APPROVAL GATE using the canonical project tree from `PROJECT_INDEX.md`.
+- A task is not considered complete unless Project Tree Position is reported.
+- Proof Requirement and Project Tree Position are both mandatory.
 - Documentation/state sync only for current Project Brain update unless Liad explicitly approves script changes.
 - No additional code implementation.
 - No Prisma commands.

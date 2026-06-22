@@ -203,6 +203,20 @@ Preferred evidence includes screenshots, Playwright screenshots, HTML render sam
 
 A task is not considered complete with only HTTP 200, PASS, or compile success. Codex must demonstrate the visible outcome whenever possible.
 
+Mandatory Project Tree Reporting:
+
+Every Reality Check, Approval Gate, Autonomous Completion Report, and `by codex` closeout must include these headings using the canonical project tree from `PROJECT_INDEX.md`:
+
+- PROJECT TREE
+- CURRENT POSITION
+- PROJECT COMPLETION
+- CRITICAL PATH
+- NEXT APPROVAL GATE
+
+A task is not considered complete unless Project Tree Position is reported.
+
+Proof Requirement and Project Tree Position are both mandatory.
+
 ## Forbidden
 
 - Do not rewrite stable flows.

@@ -598,6 +598,28 @@ Preferred evidence includes screenshots, Playwright screenshots, HTML render sam
 
 A task is not considered complete with only HTTP 200, PASS, or compile success. Codex must demonstrate the visible outcome whenever possible.
 
+Mandatory Project Tree Reporting:
+
+Every Reality Check, Approval Gate, Autonomous Completion Report, and `by codex` closeout must include these headings using the canonical project tree from `PROJECT_INDEX.md`:
+
+- PROJECT TREE
+- CURRENT POSITION
+- PROJECT COMPLETION
+- CRITICAL PATH
+- NEXT APPROVAL GATE
+
+Required content:
+
+- PROJECT TREE must show Waves 1-9 and their current statuses.
+- CURRENT POSITION must show Current Wave, Current Task, Last Completed Task, and Next Task.
+- PROJECT COMPLETION must show Estimated completion %, Completed Waves, and Remaining Waves.
+- CRITICAL PATH must show remaining waves required for project completion.
+- NEXT APPROVAL GATE must show the exact gate, why approval is required, and what happens after approval.
+
+A task is not considered complete unless Project Tree Position is reported.
+
+Proof Requirement and Project Tree Position are both mandatory.
+
 Protected systems check must explicitly cover Google Sheets, AppSheet, Maven, Apps Script, production deployment/cutover, DB writes/imports, Prisma schema/migration/db push, Supabase project/settings, email, Drive, customer-facing actions, and file/data deletion.
 
 ## 19. Change Management Process

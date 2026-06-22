@@ -236,6 +236,70 @@ Canonical file links:
 
 This map is a navigation summary only. The visual map is view-only and is not a source of truth. Source of truth remains `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, and `project-brain/roadmap/ROADMAP.md`.
 
+## Canonical Project Tree
+
+Every Reality Check, Approval Gate, Autonomous Completion Report, and `by codex` closeout must include Project Tree Position using this canonical tree and these exact headings:
+
+PROJECT TREE
+PROJECT
+├─ Wave 1 Service Report Core
+│  STATUS: COMPLETE ✓
+├─ Wave 2 Service Workflow Layer
+│  STATUS: CURRENT
+├─ Wave 3 Maven Knowledge Layer
+│  STATUS: PENDING
+├─ Wave 4 Inventory Layer
+│  STATUS: PENDING
+├─ Wave 5 Offline First
+│  STATUS: PENDING
+├─ Wave 6 Automation Runtime
+│  STATUS: PENDING
+├─ Wave 7 Production Shadow
+│  STATUS: PENDING
+├─ Wave 8 Production Cutover
+│  STATUS: PENDING
+└─ Wave 9 AppSheet Retirement
+   STATUS: PENDING
+
+CURRENT POSITION
+
+- Current Wave
+- Current Task
+- Last Completed Task
+- Next Task
+
+PROJECT COMPLETION
+
+- Estimated completion %
+- Completed Waves
+- Remaining Waves
+
+CRITICAL PATH
+
+- Remaining waves required for project completion
+
+NEXT APPROVAL GATE
+
+- Exact gate
+- Why approval is required
+- What happens after approval
+
+Current Project Tree Position:
+
+- Current Wave: Wave 2 Service Workflow Layer
+- Current Task: Stop at next approval gate before Wave 2 or production-shadow work
+- Last Completed Task: Wave 1 service-report core import, PostgreSQL read switch, and read/display mapping validation
+- Next Task: Approval gate for Wave 2 planning/discovery
+- Estimated completion %: 11%
+- Completed Waves: Wave 1 Service Report Core
+- Remaining Waves: Waves 2-9
+- Critical Path: Wave 2 Service Workflow Layer -> Wave 3 Maven Knowledge Layer -> Wave 4 Inventory Layer -> Wave 5 Offline First -> Wave 6 Automation Runtime -> Wave 7 Production Shadow -> Wave 8 Production Cutover -> Wave 9 AppSheet Retirement
+- Next Approval Gate: approve or reject Wave 2 planning/discovery; approval is required because Wave 2 may affect service workflow planning and later data/import scope; after approval, Codex may perform approved Wave 2 planning/discovery only.
+
+Rule: a task is not considered complete unless Project Tree Position is reported.
+
+Rule: Proof Requirement and Project Tree Position are both mandatory.
+
 | Area | Current Status | Canonical Owner |
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
