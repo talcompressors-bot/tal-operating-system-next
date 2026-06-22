@@ -7,13 +7,12 @@ Mode: Supabase staging Wave 1 import closed-loop validation, no Wave 2 work
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Wave 1 read/display mapping fixes | Fix service report display issues found after PostgreSQL read switch | Fix dates missing because `service_date` is null for all 63 reports; map source status `ממתין חתימה` instead of showing `UNKNOWN`; add safe display handling for sparse equipment fields | Yes before implementation |
+| Next approval gate | Decide whether to approve Wave 2 planning/discovery after Wave 1 read/display validation PASS | No Wave 2 import, Maven work, production shadow, DB write, schema change, or source-system action begins without explicit approval | Yes |
 
 ## NEXT
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Wave 1 read/display validation closeout | Review and commit mapping fixes plus Project Brain state sync | `/service-reports` and `/service-reports/acd1133d` still return HTTP 200, 63 links render, and no Wave 2 work begins during closeout | Yes |
 | Second-stage Maven dry-run discovery | Confirm all Maven-origin Sheets and their links before import | Known `InvoiceMaven*` tabs plus any other Sheets tabs storing Maven imported/synced/created data are documented with purpose, target table, Customer/BusinessDocument/Product links, and active V1/later V1/future-historical classification | Yes before Maven history import |
 | Import Waves execution planning | Sequence source imports by dependency wave | Agent-readable blocks define `WAVE_1_CORE`, `WAVE_2_SERVICE_WORKFLOW`, `WAVE_3_MAVEN_DATA`, and `WAVE_4_EXTENDED_OPERATIONS` with owners, dependencies, blockers, forbidden actions, and success criteria | Yes before real import |
 | Supabase production shadow setup | Create `talcompressors-next-prod` only after staging validation passes | Production shadow project exists; no production cutover and no AppSheet/Sheets/Maven changes | Yes after staging validation |
@@ -63,6 +62,7 @@ Mode: Supabase staging Wave 1 import closed-loop validation, no Wave 2 work
 | Wave 1 PostgreSQL read implemented | Commit `29331fb Read Wave 1 service reports from PostgreSQL`; Next.js service report list/detail screens read Wave 1 PostgreSQL staging data |
 | Post-import Wave 1 review completed | `/service-reports` HTTP 200; `/service-reports/acd1133d` HTTP 200; 63 service report links rendered; counts `customers = 763`, `service_reports = 63`, `report_equipment_items = 75`; validation PASS; issues recorded for date, status, and sparse equipment display |
 | Autonomous agent orchestration governance created | Commit `a28da7b Create autonomous agent orchestration governance`; Codex is the main Orchestrator for AUTO_ALLOWED work, routes tasks to existing agent owners, validates, updates Project Brain, commits/pushes safe scoped work, and stops only at APPROVAL_REQUIRED gates |
+| Wave 1 read/display mapping fixes validated | Service dates fall back to `raw_source` service date without DB writes; pending-signature source status maps to `Pending Signature`; missing source status displays as `Status Missing`; sparse equipment rows render safe fallbacks; read-only staging validation found 63 reports, 75 equipment rows, 0 unknown dates, 29 pending-signature statuses, 32 signed statuses, 2 status-missing rows, 0 unknown statuses, and 0 sparse fallback failures; read-only HTTP validation returned 200 for `/service-reports` and `/service-reports/acd1133d` with 63 links |
 
 ## BLOCKED / NOT STARTED
 
@@ -70,7 +70,7 @@ Mode: Supabase staging Wave 1 import closed-loop validation, no Wave 2 work
 |---|---|---|
 | Database migration | Migrations are not part of current staging shadow path | Separate approval required before any Prisma migrate workflow |
 | Additional schema push | Staging schema is already applied; further schema changes need separate approval | Approve any schema change separately before another db push |
-| Wave 2 import/discovery | Wave 2 is not approved | Complete Wave 1 read/display mapping fixes first, then request explicit Wave 2 gate approval |
+| Wave 2 import/discovery | Wave 2 is not approved | Request explicit Wave 2 gate approval |
 | Production integration | Shadow app is not approved for production | Keep AppSheet/Sheets production until explicit cutover approval |
 | Maven write flow | Not part of current work | Requires separate design and approval |
 | New planning/control files | Existing-file audit is required first | Search existing files and prove no owner file already exists |

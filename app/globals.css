@@ -222,12 +222,22 @@ tr:last-child td {
   color: #17603a;
 }
 
+.status.pending-signature {
+  background: #fff4d6;
+  color: #805900;
+}
+
 .status.sent {
   background: #e7f0fb;
   color: #194f85;
 }
 
 .status.closed {
+  background: #edf0f4;
+  color: #4d5968;
+}
+
+.status.status-missing {
   background: #edf0f4;
   color: #4d5968;
 }

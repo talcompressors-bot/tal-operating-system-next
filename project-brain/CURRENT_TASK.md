@@ -11,11 +11,11 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read validation passed with display mapping issues to fix.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes.
 
 ## Current Milestone
 
-Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, and Wave 1 staging import execution are complete.
+Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, and Wave 1 read/display mapping fixes are complete.
 
 ## Last Implementation Commit
 
@@ -74,14 +74,17 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - No Google Sheets writes, AppSheet changes, Maven changes, Apps Script changes, production actions, migrations, schema changes, Prisma db push, seed, or Wave 2/3/4 import occurred during Wave 1 import execution.
 - Post-import Wave 1 Next.js review passed: `/service-reports` returned HTTP 200, `/service-reports/acd1133d` returned HTTP 200, 63 service report links rendered, and Prisma readback counts were `customers = 763`, `service_reports = 63`, and `report_equipment_items = 75`.
 - Post-import Wave 1 display issues found: `service_date` is null for all 63 reports so dates are missing in UI; status mapping is incomplete because source status `ממתין חתימה` displays as `UNKNOWN`; some equipment fields are sparse, but sample report `acd1133d` renders equipment correctly.
+- Wave 1 read/display mapping fixes completed and validated: service dates fall back to `raw_source` service date without DB writes; pending-signature source status maps to `Pending Signature`; missing source status displays as `Status Missing` instead of `UNKNOWN`; sparse equipment rows render safe fallbacks; sample report `acd1133d` renders with equipment details.
+- Read-only staging validation after mapping fixes: `service_reports = 63`, `report_equipment_items = 75`, unknown dates `0`, pending-signature statuses `29`, signed statuses `32`, status-missing rows `2`, unknown statuses `0`, sparse fallback failures `0`.
+- Read-only HTTP validation after mapping fixes: `/service-reports` HTTP 200, `/service-reports/acd1133d` HTTP 200, 63 service report links rendered, pending-signature display present, no `UNKNOWN DATE`, no `UNKNOWN` status display, sample detail date fallback present, and sample equipment subtitle present.
 
 ## Current Task
 
-Fix Wave 1 read/display mapping issues only.
+Stop at next approval gate before Wave 2 or production-shadow work.
 
 ## Next Approved Task
 
-Fix Wave 1 read/display mapping issues only: service date display, pending-signature status mapping for `ממתין חתימה`, and sparse equipment display handling. Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, or production shadow setup until Liad explicitly approves that later gate.
+Approval gate only: decide whether to approve Wave 2 planning/discovery. Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes, schema changes, or source-system actions until Liad explicitly approves that later gate.
 
 ## Approved Architecture Decisions In Force
 
@@ -126,7 +129,7 @@ Fix Wave 1 read/display mapping issues only: service date display, pending-signa
 
 ## Blocked / Forbidden Actions
 
-- No additional code implementation unless explicitly approved.
+- No additional code implementation beyond validated AUTO_ALLOWED read/display mapping fixes unless explicitly approved.
 - No Prisma migration.
 - No additional DB creation.
 - No additional `prisma db push`.
@@ -145,7 +148,6 @@ Fix Wave 1 read/display mapping issues only: service date display, pending-signa
 
 ## Done When
 
-- Service dates display correctly or approved fallback source is used without DB writes.
-- Source status `ממתין חתימה` no longer displays as `UNKNOWN`.
-- Sparse equipment fields render with clear safe fallbacks.
+- Wave 1 read/display mapping fixes are committed and pushed.
+- Project Brain records the final implementation commit hash for the mapping fix.
 - No write path, import, migration, schema push, source-system change, or production action is added.

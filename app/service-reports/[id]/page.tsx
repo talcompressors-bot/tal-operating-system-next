@@ -56,7 +56,7 @@ export default async function ServiceReportDetailPage({
             <div>
               <dt>סטטוס</dt>
               <dd>
-                <span className={`status ${report.status.toLowerCase()}`}>
+                <span className={`status ${report.statusClassName}`}>
                   {report.status}
                 </span>
               </dd>
@@ -83,9 +83,7 @@ export default async function ServiceReportDetailPage({
                   <h3>
                     {item.equipmentNumber} · {item.type}
                   </h3>
-                  <p>
-                    {item.model} · מס סידורי {item.serialNumber}
-                  </p>
+                  <p>{item.subtitle}</p>
                 </div>
                 <span className="equipment-status">{item.status}</span>
                 <p>{item.notes}</p>

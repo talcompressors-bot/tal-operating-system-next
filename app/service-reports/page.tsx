@@ -40,7 +40,7 @@ export default async function ServiceReportsPage() {
                 <td>{report.serviceDate}</td>
                 <td>{report.technician}</td>
                 <td>
-                  <span className={`status ${report.status.toLowerCase()}`}>
+                  <span className={`status ${report.statusClassName}`}>
                     {report.status}
                   </span>
                 </td>
