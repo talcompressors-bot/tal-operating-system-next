@@ -23,7 +23,7 @@ Startup remote sync, shutdown path, and Reality Check commit comparison are enfo
 
 ## Last Closeout Commit
 
-`653f370 Sync project brain after reality check hardening`
+`8114210 Sync project brain commit model state`
 
 ## Real Current State
 
@@ -46,6 +46,7 @@ Startup remote sync, shutdown path, and Reality Check commit comparison are enfo
 - Official startup command `hey codex` and shutdown command `by codex` were implemented in `e36c35e Implement hey codex and by codex workflow`.
 - Reality Check now compares live Git against Project Brain recorded commits, and `hey codex` now fast-forwards from `origin/main` before reading Project Brain when the working tree is clean.
 - `315b8cc Fix reality check commit model` is classified as the latest governance implementation commit because it changed Reality Check behavior.
+- `8114210 Sync project brain commit model state` is classified as the latest closeout metadata/state-sync commit.
 
 ## Current Task
 

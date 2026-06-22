@@ -43,6 +43,7 @@ Mode: PostgreSQL/Supabase shadow environment planning, documentation only
 | Startup and shutdown workflow enforcement implemented | Commit `e36c35e Implement hey codex and by codex workflow`; `hey codex` starts from `PROJECT_INDEX.md`; `by codex` runs closeout, approved commit, push, and next startup point |
 | Reality Check Git sync hardening implemented | Commit `670f4c8 Harden codex startup and reality check sync`; `hey codex` fast-forwards from `origin/main` before Project Brain reads when clean; Reality Check compares live Git with Project Brain recorded commits |
 | Two-commit Reality Check model implemented | Commit `315b8cc Fix reality check commit model`; governance tracks Last Implementation Commit separately from Last Closeout Commit to prevent closeout metadata loops |
+| Project Brain commit model state synced | Commit `8114210 Sync project brain commit model state`; classified as closeout metadata/state sync only |
 
 ## BLOCKED / NOT STARTED
 
