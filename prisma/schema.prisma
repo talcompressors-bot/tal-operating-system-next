@@ -1,6 +1,7 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
@@ -204,6 +205,7 @@ model ReportEquipmentItem {
   appsheetItemId             String         @unique @map("appsheet_item_id")
   serviceReportId            String?        @map("service_report_id") @db.Uuid
   sourceReportId             String?        @map("source_report_id")
+  reportCounter              String?        @map("report_counter")
   equipmentNumber            String?        @map("equipment_number")
   equipmentType              String?        @map("equipment_type")
   equipmentSubtype           String?        @map("equipment_subtype")
@@ -223,6 +225,7 @@ model ReportEquipmentItem {
 
   @@index([serviceReportId])
   @@index([sourceReportId])
+  @@index([reportCounter])
   @@index([equipmentModel])
   @@index([serialNumber])
   @@index([compressorCategory])
