@@ -3,6 +3,19 @@
 ## 2026-06-22
 
 Decision:
+`9a81290 Reconcile Prisma schema for Supabase staging` is classified as the Last Implementation Commit.
+
+Reason:
+The commit changed executable Prisma schema by adding Supabase staging `DIRECT_URL` support and the approved `ReportEquipmentItem.reportCounter` field/index. It is an implementation/schema commit, not closeout metadata. Last Closeout Commit remains `8114210 Sync project brain commit model state`.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-22
+
+Decision:
 `fc1dfa8 Prepare Supabase staging env placeholders` is classified as the Last Implementation Commit.
 
 Reason:

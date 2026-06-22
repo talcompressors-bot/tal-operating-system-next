@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, and Supabas
 
 ## Last Implementation Commit
 
-`fc1dfa8 Prepare Supabase staging env placeholders`
+`9a81290 Reconcile Prisma schema for Supabase staging`
 
 ## Last Closeout Commit
 
@@ -49,6 +49,8 @@ Startup remote sync, shutdown path, Reality Check commit comparison, and Supabas
 - `8114210 Sync project brain commit model state` is classified as the latest closeout metadata/state-sync commit.
 - `d1d6f88 Document Supabase staging-first shadow plan` is classified as the latest governance implementation commit because it changed the approved Supabase shadow environment sequence.
 - `fc1dfa8 Prepare Supabase staging env placeholders` is classified as the latest implementation/setup commit because it added staging env placeholders and secret ignore rules.
+- `9a81290 Reconcile Prisma schema for Supabase staging` is classified as the latest implementation/schema commit because it added `DIRECT_URL`, `ReportEquipmentItem.reportCounter`, and the report counter index.
+- Prisma validation passed after reconciliation with process-only placeholder `DATABASE_URL` and `DIRECT_URL`; no generate, DB push, migration, import, or Supabase connection was run.
 - Supabase staging-first shadow plan is approved: use `talcompressors-next-staging` first, then `talcompressors-next-prod` as production shadow only after staging validation passes.
 - Local PostgreSQL is not the first target.
 - Staging env placeholder file `.env.staging.example` was prepared with names only: `NEXT_PUBLIC_APP_ENV`, `DATABASE_URL`, and `DIRECT_URL`.
@@ -83,7 +85,7 @@ Authenticated Supabase staging project creation and out-of-git secret value setu
 - Use Supabase Staging first, then Supabase Production Shadow only after staging validation passes; do not use local PostgreSQL as first target.
 - Required env variable names are `DATABASE_URL`, `DIRECT_URL`, and `NEXT_PUBLIC_APP_ENV`.
 - Optional future Supabase env names are `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`; do not add them until Supabase client features require them.
-- Before any DB push, reconcile Prisma with `DIRECT_URL` and `ReportEquipmentItem.reportCounter`.
+- Prisma is reconciled for `DIRECT_URL` and `ReportEquipmentItem.reportCounter`; any DB push still requires separate approval.
 - Staging validation must confirm `Customers_Final = 763`, `ServiceReports = 62`, and `ReportEquipmentItems` imports only rows linked to real `ServiceReports`; excluded orphan equipment rows must be reported.
 - Use Server Actions by default for internal Next.js write flows.
 - Design field workflows offline-first with conflict review.
