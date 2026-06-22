@@ -3,6 +3,19 @@
 ## 2026-06-22
 
 Decision:
+`29331fb Read Wave 1 service reports from PostgreSQL` is classified as the Last Implementation Commit.
+
+Reason:
+The commit changed Next.js service report list/detail behavior from local snapshot JSON to read-only PostgreSQL staging reads for Wave 1 data. Post-import review passed with `/service-reports` HTTP 200, `/service-reports/acd1133d` HTTP 200, 63 service report links rendered, and counts `customers = 763`, `service_reports = 63`, `report_equipment_items = 75`. Display issues remain: all 63 `service_date` values are null so dates are missing, source status `ממתין חתימה` displays as `UNKNOWN`, and some equipment fields are sparse. It is an implementation commit, not closeout metadata. Last Closeout Commit remains `8114210 Sync project brain commit model state`.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-22
+
+Decision:
 `3abf7d3 Record Wave 1 staging import pass` is classified as the Last Implementation Commit.
 
 Reason:

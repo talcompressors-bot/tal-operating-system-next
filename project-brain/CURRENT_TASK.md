@@ -11,7 +11,7 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read validation is the active task.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read validation passed with display mapping issues to fix.
 
 ## Current Milestone
 
@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`3abf7d3 Record Wave 1 staging import pass`
+`29331fb Read Wave 1 service reports from PostgreSQL`
 
 ## Last Closeout Commit
 
@@ -55,6 +55,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - `c11c460 Document import waves plan` is classified as an implementation/planning commit because it changed approved migration planning by defining Waves 1-4 and the Wave 1 gate for service-report replacement readiness.
 - `9efa017 Refactor import planning and update Wave 1 baseline` is classified as the latest implementation/planning commit because it refactored Import Waves into agent-readable structured blocks, recorded Wave ownership/blockers/success criteria, and updated Wave 1 baseline counts after read-only source validation found legitimate new business data.
 - `3abf7d3 Record Wave 1 staging import pass` is classified as the latest implementation/import commit because it added the Wave 1 staging import script, recorded validation PASS, and documented PostgreSQL staging counts and excluded legacy/test rows.
+- `29331fb Read Wave 1 service reports from PostgreSQL` is classified as the latest implementation commit because it switched the Next.js service report list/detail screens from snapshot JSON to read-only PostgreSQL staging reads for Wave 1 data.
 - Prisma validation passed after reconciliation with process-only placeholder `DATABASE_URL` and `DIRECT_URL`.
 - Prisma generate completed against local staging env values after explicit approval.
 - Supabase staging-first shadow plan is approved: use `talcompressors-next-staging` first, then `talcompressors-next-prod` as production shadow only after staging validation passes.
@@ -70,14 +71,16 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - Wave 1 excluded legacy/test `ReportEquipmentItems` counts were `9` missing `ReportID` and `25` unmatched `ReportID`; total excluded by design was `34`.
 - Wave 1 validation result was `PASS`; validation report and import manifest were generated under ignored local path `data-sources/exports/import-runs/`.
 - No Google Sheets writes, AppSheet changes, Maven changes, Apps Script changes, production actions, migrations, schema changes, Prisma db push, seed, or Wave 2/3/4 import occurred during Wave 1 import execution.
+- Post-import Wave 1 Next.js review passed: `/service-reports` returned HTTP 200, `/service-reports/acd1133d` returned HTTP 200, 63 service report links rendered, and Prisma readback counts were `customers = 763`, `service_reports = 63`, and `report_equipment_items = 75`.
+- Post-import Wave 1 display issues found: `service_date` is null for all 63 reports so dates are missing in UI; status mapping is incomplete because source status `ממתין חתימה` displays as `UNKNOWN`; some equipment fields are sparse, but sample report `acd1133d` renders equipment correctly.
 
 ## Current Task
 
-Wave 1 Next.js PostgreSQL read validation.
+Fix Wave 1 read/display mapping issues only.
 
 ## Next Approved Task
 
-Validate service report list/detail screens from PostgreSQL staging data. Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, or production shadow setup until Liad explicitly approves that later gate.
+Fix Wave 1 read/display mapping issues only: service date display, pending-signature status mapping for `ממתין חתימה`, and sparse equipment display handling. Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, or production shadow setup until Liad explicitly approves that later gate.
 
 ## Approved Architecture Decisions In Force
 
@@ -140,7 +143,7 @@ Validate service report list/detail screens from PostgreSQL staging data. Do not
 
 ## Done When
 
-- `/service-reports` reads PostgreSQL staging data and shows 63 service reports.
-- Service report detail pages resolve by stable source report ID.
-- Linked equipment rows render from PostgreSQL staging data.
+- Service dates display correctly or approved fallback source is used without DB writes.
+- Source status `ממתין חתימה` no longer displays as `UNKNOWN`.
+- Sparse equipment fields render with clear safe fallbacks.
 - No write path, import, migration, schema push, source-system change, or production action is added.
