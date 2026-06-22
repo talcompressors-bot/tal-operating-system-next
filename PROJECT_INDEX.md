@@ -127,10 +127,10 @@ This section is the living navigation screen. It summarizes current reality only
 
 | Field | Current Reality | Canonical Evidence |
 |---|---|---|
-| Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied and verified; import dry-run validation is next | `project-brain/CURRENT_TASK.md` |
-| Current milestone | Supabase staging project/secrets prepared outside git; Prisma schema pushed to staging; read-only schema verification passed | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Current task | Prepare staging import dry-run validation without writing data | `project-brain/CURRENT_TASK.md` |
-| Next approved task | Run or build staging import dry-run validation only after approval; no real import, migration, schema change, production action, or AppSheet/Sheets/Maven change | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, and Wave 1 staging import passed closed-loop validation | `project-brain/CURRENT_TASK.md` |
+| Current milestone | Wave 1 core import completed in Supabase staging with validation PASS | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current task | Commit Wave 1 staging import script plus Project Brain closed-loop sync; do not continue to Wave 2 | `project-brain/CURRENT_TASK.md` |
+| Next approved task | Wave 1 Next.js read validation: validate service report screens from PostgreSQL staging data; Wave 2 import is not approved | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Last Implementation Commit | `9efa017 Refactor import planning and update Wave 1 baseline` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
@@ -155,10 +155,10 @@ This map is a navigation summary only. The visual map is view-only and is not a 
 
 | Area | Current Status | Canonical Owner |
 |---|---|---|
-| Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied and verified; import dry-run validation is next | `project-brain/CURRENT_TASK.md` |
+| Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, and Wave 1 staging import passed closed-loop validation | `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model | `project-brain/TASK_BOARD.md` |
-| Current task | Prepare staging import dry-run validation without writing data | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Next approved task | Staging import dry-run validation only after approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current task | Commit Wave 1 staging import script plus Project Brain closed-loop sync | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Next approved task | Wave 1 Next.js read validation: validate service report screens from PostgreSQL staging data; Wave 2 import is not approved | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |
 | Dependency order | Governance and Project Brain state -> system map/source review -> PostgreSQL V1 scope -> data migration planning -> Supabase staging-first plan -> approved staging project/secrets -> Prisma reconciliation approval -> approved staging schema push -> read-only schema verification -> Wave 1 dry-run/import validation -> Waves 2-4 discovery/import approvals -> production shadow approval -> Server Actions/offline sync | `project-brain/TASK_BOARD.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md`, `project-brain/migration/DATA_MIGRATION_PLAN.md` |

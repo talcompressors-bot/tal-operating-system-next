@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-22
-Mode: Supabase staging import dry-run validation planning, no data writes
+Mode: Supabase staging Wave 1 import closed-loop validation, no Wave 2 work
 
 ## Canonical Role
 
@@ -11,11 +11,11 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Import dry-run validation is next.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation and now requires commit/push before PostgreSQL-backed read validation.
 
 ## Current Milestone
 
-Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, and read-only schema verification are complete.
+Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, and Wave 1 staging import execution are complete.
 
 ## Last Implementation Commit
 
@@ -62,14 +62,21 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - `.gitignore` blocks real `.env` files while allowing env example files.
 - Known excluded `ReportEquipmentItems` rows are classified as historical test data, not business data, no recovery required, excluded by design: 9 rows missing `ReportID` and 25 rows with unmatched `ReportID`.
 - Import Waves are documented as structured `WAVE_ID` blocks: Wave 1 service-report core; Wave 2 service workflow; Wave 3 Maven data; Wave 4 extended operations.
+- Wave 1 staging import ran on 2026-06-22T12:54:25.974Z / 2026-06-22 15:54 IDT against Supabase staging only.
+- Wave 1 source CSV files were read from `data-sources/exports/`: `Customers_Final.csv`, `ServiceReports.csv`, and `ReportEquipmentItems.csv`.
+- Wave 1 source counts were `Customers_Final = 763`, `ServiceReports = 63`, and `ReportEquipmentItems = 109`.
+- Wave 1 DB counts read back through Prisma Client were `customers = 763`, `service_reports = 63`, and `report_equipment_items = 75`.
+- Wave 1 excluded legacy/test `ReportEquipmentItems` counts were `9` missing `ReportID` and `25` unmatched `ReportID`; total excluded by design was `34`.
+- Wave 1 validation result was `PASS`; validation report and import manifest were generated under ignored local path `data-sources/exports/import-runs/`.
+- No Google Sheets writes, AppSheet changes, Maven changes, Apps Script changes, production actions, migrations, schema changes, Prisma db push, seed, or Wave 2/3/4 import occurred during Wave 1 import execution.
 
 ## Current Task
 
-Prepare staging import dry-run validation without writing data.
+Commit Wave 1 staging import script plus Project Brain closed-loop sync.
 
 ## Next Approved Task
 
-Staging import dry-run validation only after explicit approval.
+Wave 1 Next.js read validation / service report screens from PostgreSQL staging data. Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, or production shadow setup until Liad explicitly approves that later gate.
 
 ## Approved Architecture Decisions In Force
 
@@ -93,6 +100,7 @@ Staging import dry-run validation only after explicit approval.
 - Optional future Supabase env names are `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`; do not add them until Supabase client features require them.
 - Prisma is reconciled for `DIRECT_URL` and `ReportEquipmentItem.reportCounter`; any DB push still requires separate approval.
 - Staging validation must confirm `Customers_Final = 763`, `ServiceReports = 63`, and `ReportEquipmentItems = 109`; the Wave 1 baseline was updated after read-only export validation found legitimate business data added after the original baseline. `ReportEquipmentItems` imports only rows linked to real `ServiceReports`; legacy/test rows intentionally excluded from import must be reported as historical test data, not business data, no recovery required, excluded by design.
+- Wave 1 import execution is successful only when closed-loop sync passes: approved source CSVs are read from `data-sources/exports/`, staging receives only approved Wave 1 data, DB counts are read back by Prisma Client, excluded counts are reported, validation report and manifest are generated, Project Brain records import date/time and counts, git status is reviewed, only approved files are committed/pushed, no source systems are modified, and no production systems are touched. If any item fails, stop and do not continue to Wave 2.
 - Use Server Actions by default for internal Next.js write flows.
 - Design field workflows offline-first with conflict review.
 
@@ -112,13 +120,13 @@ Staging import dry-run validation only after explicit approval.
 
 ## Blocked / Forbidden Actions
 
-- No code implementation unless explicitly approved for dry-run validation.
+- No additional code implementation unless explicitly approved.
 - No Prisma migration.
 - No additional DB creation.
 - No additional `prisma db push`.
 - No Supabase production setup.
 - No additional schema push.
-- No real import.
+- No additional import.
 - No production cutover.
 - No PostgreSQL/Supabase environment implementation during planning.
 - No Google Sheets writes.
@@ -127,10 +135,11 @@ Staging import dry-run validation only after explicit approval.
 - No production Apps Script changes.
 - No new agents.
 - No new planning/control files unless existing files are searched first and proven insufficient.
+- No Wave 2/3/4 work until Liad explicitly approves that later gate.
 
 ## Done When
 
-- Supabase staging-first shadow environment planning scope is clear.
-- Env placeholder and secret ignore rules are prepared.
-- Supabase project creation remains pending authenticated access.
-- No migration, DB schema action, import, or Prisma command has run.
+- Wave 1 import script is committed/pushed.
+- Wave 1 Project Brain closed-loop sync is committed/pushed.
+- Git status is clean after closeout.
+- Next gate is Wave 1 Next.js read validation from PostgreSQL staging data and does not imply Wave 2 approval.

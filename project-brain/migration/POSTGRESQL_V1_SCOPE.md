@@ -238,13 +238,18 @@ FORBIDDEN:
 
 SUCCESS_CRITERIA:
 
-* Row counts validated
+* Row counts validated: Customers_Final = 763, ServiceReports = 63, ReportEquipmentItems = 109
 * Parent links validated
-* Legacy/test rows excluded
-* Staging import completed
+* Legacy/test rows excluded: 9 missing ReportID, 25 unmatched ReportID
+* Staging import completed after explicit approval
+* Prisma Client reads back DB counts: customers = 763, service_reports = 63, report_equipment_items = linked rows only
+* Validation report and import manifest generated
+* Project Brain records import date/time, source counts, DB counts, excluded counts, PASS/FAIL result, and next task
+* Git status reviewed and only approved files committed/pushed
+* No Google Sheets writes, AppSheet changes, Maven changes, Apps Script changes, or production actions
 
 NEXT_WAVE:
-WAVE_2_SERVICE_WORKFLOW
+WAVE_1_NEXTJS_READ_VALIDATION
 
 ---
 
@@ -509,6 +514,8 @@ The first shadow database success criteria:
 
 - Counts match confirmed live validation for `Customers_Final` = 763, `ServiceReports` = 63, and `ReportEquipmentItems` = 109; `ReportEquipmentItems` imported count equals only rows linked to real `ServiceReports`.
 - Legacy/test `ReportEquipmentItems` rows excluded from import are reported in validation output.
+- Wave 1 import execution is successful only when closed-loop sync passes: source CSVs were read from `data-sources/exports/`, Supabase staging received only approved Wave 1 data, Prisma Client read back DB counts, validation report and import manifest were generated, Project Brain was updated, git status was reviewed, only approved files were committed/pushed, no source systems were modified, and no production systems were touched.
+- If any closed-loop item fails, stop, report failure, and do not continue to Wave 2.
 - Service report list/detail screens can be validated against shadow data without production writes.
 - Business document, AI draft, Maven, inventory, and audit tables exist in scope before Prisma is generated.
 

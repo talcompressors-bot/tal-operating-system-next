@@ -82,12 +82,16 @@ SUCCESS_CRITERIA:
 * Parent links validated
 * Legacy/test rows excluded
 * Staging import completed after explicit approval
+* Closed-loop sync completed before Wave 2: source CSVs read from `data-sources/exports/`; Supabase staging received only approved Wave 1 data; Prisma Client read back DB counts; validation report generated; import manifest generated; Project Brain updated with import date/time, source counts, DB counts, excluded counts, PASS/FAIL result, and next task; git status reviewed; only approved files committed/pushed; no Google Sheets, AppSheet, Maven, Apps Script, or production systems touched
 
 BASELINE_REASON:
 Read-only Wave 1 export validation found legitimate business data added after the original baseline.
 
+CLOSED_LOOP_RESULT:
+Wave 1 staging import ran on 2026-06-22T12:54:25.974Z / 2026-06-22 15:54 IDT. Source counts: Customers_Final = 763, ServiceReports = 63, ReportEquipmentItems = 109. DB counts read back by Prisma Client: customers = 763, service_reports = 63, report_equipment_items = 75. Excluded legacy/test ReportEquipmentItems: 9 missing ReportID, 25 unmatched ReportID. Validation result: PASS. Manifest/report generated under ignored local `data-sources/exports/import-runs/`. No source systems or production systems were touched.
+
 NEXT_WAVE:
-WAVE_2_SERVICE_WORKFLOW
+WAVE_1_NEXTJS_READ_VALIDATION
 
 ---
 
