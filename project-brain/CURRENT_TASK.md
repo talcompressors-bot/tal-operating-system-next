@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-22
-Mode: Wave 2 connector dry-run validation completed; no Wave 2 import
+Mode: Staging PostgreSQL connectivity blocked; no Wave 2 import
 
 ## Canonical Role
 
@@ -11,15 +11,15 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Wave 2 import is not approved.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Current blocker is local staging PostgreSQL connectivity: `.env.staging` still points at a project ref that does not match the confirmed staging project. Wave 2 import is not approved.
 
 ## Current Milestone
 
-Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, and Wave 2 connector dry-run validation are complete.
+Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, and Wave 2 connector dry-run validation are complete. Latest local Next.js/PostgreSQL validation is blocked by staging connection-string mismatch.
 
 ## Last Implementation Commit
 
-`7f63193 Require project tree reporting`
+`143d791 Record Wave 2 connector dry-run validation`
 
 ## Last Closeout Commit
 
@@ -85,14 +85,17 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - Wave 2 observed row counts: `ProductsCatalog = 113`, `PartsUsed = 1`, `AIDraftSuggestions = 2`, `BusinessDocuments = 1`, `BusinessDocumentItems = 0`, `BusinessDocumentLog = 2`, `ApprovalsLog = 0`, `EmailLog = 0`.
 - Wave 2 parent-link evidence: `AIDraftSuggestions.SourceReportID = 715fc06e` resolves to Wave 1 service report `5808`; `BusinessDocuments.SourceReportId = 890331ff` resolves to Wave 1 service report `5834`; `BusinessDocuments.CustomerId = 18803` resolves to an existing Wave 1 customer.
 - No Google Sheets writes, AppSheet changes, Maven changes, Apps Script changes, DB writes, Supabase writes, imports, Prisma commands, or production actions occurred during Wave 2 connector validation.
+- Staging PostgreSQL connectivity diagnostics after `.env.staging` update still failed on 2026-06-22: Prisma cannot reach `aws-1-eu-central-1.pooler.supabase.com:6543`; Next.js home page returns HTTP 200, but `/service-reports` and `/service-reports/acd1133d` return HTTP 500 because Prisma cannot connect.
+- Diagnostics found `.env.staging` is loaded correctly and contains `NEXT_PUBLIC_APP_ENV=staging`, `DATABASE_URL`, and `DIRECT_URL`, but the connection user/project reference still does not match the confirmed staging project ref `mdlxxxklufrchiabonafm`.
+- Actual DB counts could not be read during the latest diagnostics because Prisma cannot connect. No DB writes, imports, migrations, Prisma schema commands, Google Sheets writes, AppSheet changes, Maven changes, Apps Script changes, or production actions occurred.
 
 ## Current Task
 
-Wave 2 connector dry-run validation completed; prepare Wave 2 import blocker resolution plan only.
+Staging PostgreSQL connectivity diagnostics blocked by local `.env.staging` project-ref mismatch; Wave 2 import remains blocked.
 
 ## Next Approved Task
 
-Prepare Wave 2 import blocker resolution plan only. Required topics: duplicate/blank SKU handling, `PartsUsed` example/test classification, `AIDraftSuggestions` customer-name fallback mapping, Wave 2 enum/status mapping, `BusinessDocumentLog` shifted-column handling, and title-row skip rules for `PartsUsed` and `EmailLog`.
+Correct local ignored `.env.staging` values to the confirmed Supabase staging project ref, then rerun read-only Prisma and Next.js route validation. After staging connectivity is restored, continue Wave 2 import blocker resolution planning only. Required Wave 2 topics remain: duplicate/blank SKU handling, `PartsUsed` example/test classification, `AIDraftSuggestions` customer-name fallback mapping, Wave 2 enum/status mapping, `BusinessDocumentLog` shifted-column handling, and title-row skip rules for `PartsUsed` and `EmailLog`.
 
 Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes, schema changes, or source-system actions until Liad explicitly approves that later gate.
 
