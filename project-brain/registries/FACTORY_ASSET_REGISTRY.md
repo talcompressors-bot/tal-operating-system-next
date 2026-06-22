@@ -24,7 +24,7 @@ Purpose: Provide the first auditable inventory of known Tal AI Factory assets so
 - `data-sources/tools/SHEETS_REGISTRY.md`
 - `project-brain/maps/*`
 - `project-brain/PROJECT_BRAIN_MASTER.md`
-- `project-brain/current/CURRENT_TASK.md`
+- `project-brain/CURRENT_TASK.md`
 
 ## Field Definitions
 
@@ -50,7 +50,7 @@ Purpose: Provide the first auditable inventory of known Tal AI Factory assets so
 | PROJECT_OPERATING_PROTOCOL | Governance document | `PROJECT_OPERATING_PROTOCOL.md` | `INFRASTRUCTURE_MANAGER_AGENT` | All agents | Active | `PROJECT_BRAIN_MASTER.md`; `PHASE_EXECUTION_BLUEPRINT.md`; `AGENT_FACTORY_OPERATING_SYSTEM.md` | Official governance protocol | 2026-06-15 governance foundation | Needs ongoing alignment as new agents/registries are added | Yes | Keep as first source-of-truth file for audits |
 | PROJECT_INDEX | Governance index | `PROJECT_INDEX.md` | `PROJECT_BRAIN_AGENT` | All agents | Active | `PHASE_EXECUTION_BLUEPRINT.md`; `AGENT_FACTORY_OPERATING_SYSTEM.md`; `FACTORY_CONTROL_CENTER_AGENT.md` | Source-load asset | UNKNOWN | Current contents not revalidated in FAR-1 beyond references | Yes | Include in future Factory Control Center audit |
 | PROJECT_BRAIN_MASTER | Durable memory | `project-brain/PROJECT_BRAIN_MASTER.md` | `PROJECT_BRAIN_AGENT` | All agents | Active | `PROJECT_BRAIN_MASTER.md`; `CURRENT_TASK.md` | Durable project memory | 2026-06-15 documented change log | Needs updates after new registry creation | Yes | Propose brain update after registry adoption |
-| CURRENT_TASK | Current-state document | `project-brain/current/CURRENT_TASK.md` | `PROJECT_BRAIN_AGENT` | All agents | Current | `CURRENT_TASK.md` | Phase 1 current task source | 2026-06-15 | Needs date/status refresh after later committed docs | Yes | Update when active mission/phase changes |
+| CURRENT_TASK | Current-state document | `project-brain/CURRENT_TASK.md` | `PROJECT_BRAIN_AGENT` | All agents | Current | `CURRENT_TASK.md` | Canonical current task/current phase/next task source | 2026-06-22 | Keep aligned with `PROJECT_INDEX.md` startup path | Yes | Update when active mission/phase changes |
 | LIVE_OBJECTS | Current-state document | `project-brain/current/LIVE_OBJECTS.md` | `PROJECT_BRAIN_AGENT` | Factory Control Center, Infrastructure Manager | Active/UNKNOWN | `AGENT_FACTORY_OPERATING_SYSTEM.md`; `FACTORY_CONTROL_CENTER_AGENT.md` | UNKNOWN | UNKNOWN | File referenced but not audited in FAR-1 | Yes | Include in next reality-vs-documentation audit |
 | ROADMAP | Roadmap document | `project-brain/roadmap/ROADMAP.md` | `PROJECT_BRAIN_AGENT` | Infrastructure Manager, Factory Control Center, Orchestrator | Active | `ROADMAP.md` | Master roadmap | 2026-06-15 | Needs registry reference after FAR-1 | Yes | Propose roadmap/brain update if registry becomes official |
 | PHASE_EXECUTION_BLUEPRINT | Phase execution blueprint | `project-brain/roadmap/PHASE_EXECUTION_BLUEPRINT.md` | `INFRASTRUCTURE_MANAGER_AGENT` | Factory Control Center, Orchestrator, all builder agents | Draft execution blueprint | `PHASE_EXECUTION_BLUEPRINT.md` | Defines phases 0-54 execution fields | Commit `70facc0` documentation layer | Draft status remains; per-phase reality not fully audited | Yes | Factory Control Center should audit fields and reality match |

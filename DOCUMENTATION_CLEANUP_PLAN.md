@@ -12,6 +12,12 @@ Audited:
 
 No cleanup has been performed yet. This file is only a plan.
 
+Current consolidation note:
+
+- This file is historical planning context, not an active source of truth.
+- Canonical current task/current phase/next task source is `project-brain/CURRENT_TASK.md`.
+- `project-brain/current/CURRENT_TASK.md` is retired/historical compatibility only and must not be used as active project state.
+
 ---
 
 ## 1. Duplicate Documentation
@@ -41,13 +47,14 @@ Files:
 
 Issue:
 
-- `project-brain/CURRENT_TASK.md` is a deprecated pointer.
-- `project-brain/current/CURRENT_TASK.md` is the real source of truth.
+- Historical note: this section originally treated `project-brain/current/CURRENT_TASK.md` as active.
+- Current rule: `project-brain/CURRENT_TASK.md` is the canonical current task/current phase/next task source.
+- `project-brain/current/CURRENT_TASK.md` is retired/historical compatibility only.
 
 Plan:
 
-- Keep `project-brain/current/CURRENT_TASK.md` as the active source.
-- Keep `project-brain/CURRENT_TASK.md` only as a short deprecation pointer, or remove it after all references are updated.
+- Keep `project-brain/CURRENT_TASK.md` as the active source.
+- Keep `project-brain/current/CURRENT_TASK.md` only as a retired compatibility stub; do not update it with active state.
 
 ### AI Draft instructions duplicated across files
 
@@ -127,13 +134,14 @@ Plan:
 Conflict:
 
 - `PROJECT_INDEX.md` prioritizes `project-brain/checkpoints/ACTIVE_SESSION_STATE.md`.
-- `project-brain/CURRENT_TASK.md` says the source of truth is `project-brain/current/CURRENT_TASK.md`.
-- `START_CODEX.md` correctly points to `project-brain/current/CURRENT_TASK.md`.
+- Historical note: this section predates consolidation and contains retired-path references.
+- `project-brain/CURRENT_TASK.md` is now the canonical current task/current phase/next task source.
+- `START_CODEX.md` should point to `PROJECT_INDEX.md` first, then `project-brain/CURRENT_TASK.md`.
 - `project-brain/STARTUP_PROTOCOL.md` says to read `CURRENT_TASK.md` without the correct path.
 
 Resolution plan:
 
-- Define `project-brain/current/CURRENT_TASK.md` as the active current-task source of truth.
+- Define `project-brain/CURRENT_TASK.md` as the active current-task source of truth.
 - Treat `ACTIVE_SESSION_STATE.md` as session/runtime state, not task truth.
 - Update startup/read-order docs accordingly.
 
@@ -334,11 +342,21 @@ Recommended deprecations:
 
 Reason:
 
-- Already says it is deprecated.
+- Canonical current task/current phase/next task source.
 
 Replacement:
 
-- project-brain/current/CURRENT_TASK.md
+- No replacement. Do not deprecate.
+
+### project-brain/current/CURRENT_TASK.md
+
+Reason:
+
+- Retired compatibility path. Historical references only.
+
+Replacement:
+
+- project-brain/CURRENT_TASK.md
 
 ### project-brain/SYSTEM_COMPONENTS.md
 
@@ -389,7 +407,7 @@ Action:
 
 1. Fill `PROJECT_OPERATING_PROTOCOL.md` as the canonical operating protocol.
 2. Fix all startup/read-order references to use repo-relative paths.
-3. Confirm `project-brain/current/CURRENT_TASK.md` as current-task source of truth.
+3. Confirm `project-brain/CURRENT_TASK.md` as current-task source of truth.
 4. Clean `PROJECT_BRAIN_MASTER.md` duplication and make it an index/summary.
 5. Consolidate AI Draft run/test/checklist docs.
 6. Fill empty `ROADMAP.md` and `TEST_SCENARIOS.md`.

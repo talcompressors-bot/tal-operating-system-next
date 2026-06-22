@@ -487,7 +487,7 @@ Evidence directly available in the repository:
 
 - `PROJECT_OPERATING_PROTOCOL.md`: source-of-truth, approval, reuse, and schema-change rules.
 - `PROJECT_INDEX.md`: current phase and stable systems.
-- `project-brain/current/CURRENT_TASK.md`: Phase 1 read-only mapping and protected systems.
+- `project-brain/CURRENT_TASK.md`: Phase 1 read-only mapping and protected systems.
 - `project-brain/roadmap/ROADMAP.md`: Digital Twin read-only phase and AI Draft approval gates.
 - `agents/PRE_MISSION_REVIEW_SYSTEM.md`: mandatory review and output requirements.
 - `agents/INFRASTRUCTURE_MANAGER_AGENT.md`: review requirements for new registries/tables.

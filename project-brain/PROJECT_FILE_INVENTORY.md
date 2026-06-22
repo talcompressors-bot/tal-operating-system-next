@@ -37,8 +37,8 @@ Status values: `ACTIVE_CODE`, `ACTIVE_DOC`, `PLANNING`, `OBSOLETE`, `DUPLICATE`,
 | `data-sources/vendor-spare-parts/Spare Parts Service List(EPM Series) rev2 (1).xls` | Spreadsheet | Vendor spare parts | Pricing/catalog | ACTIVE_DOC | Keep | Source data |
 | `data-sources/brain-agent.ps1` | PowerShell | Local helper | UNKNOWN | UNKNOWN | Keep | Inspect before use |
 | `project-brain/PROJECT_BRAIN_MASTER.md` | Markdown | Durable memory summary | Governance | ACTIVE_DOC | Update | Contains older duplication/stale content |
-| `project-brain/current/CURRENT_TASK.md` | Markdown | Current task source | Governance | ACTIVE_DOC | Keep | Active current task |
-| `project-brain/CURRENT_TASK.md` | Markdown | Deprecated pointer | Governance | OBSOLETE | Keep as pointer | Do not use as active source |
+| `project-brain/CURRENT_TASK.md` | Markdown | Current task source | Governance | ACTIVE_DOC | Keep | Canonical active current task/current phase/next task source |
+| `project-brain/current/CURRENT_TASK.md` | Markdown | Retired current-task compatibility stub | Governance | OBSOLETE | Keep as redirect/stub | Do not use as active source |
 | `project-brain/current/LIVE_OBJECTS.md` | Markdown | Current known IDs | Governance | ACTIVE_DOC | Update | Missing IDs remain UNKNOWN |
 | `project-brain/DECISION_LOG.md` | Markdown | Decisions | Governance | ACTIVE_DOC | Keep | Active record |
 | `project-brain/TEST_SCENARIOS.md` | Markdown | Tests | QA | ACTIVE_DOC | Keep | Already modified before this mission |
@@ -72,4 +72,3 @@ Status values: `ACTIVE_CODE`, `ACTIVE_DOC`, `PLANNING`, `OBSOLETE`, `DUPLICATE`,
 | `.agents/skills/*` | Markdown | Local Codex skills | Agent tooling | ACTIVE_DOC | Keep | Local helper skills |
 | `scripts/playwright/appsheet-discovery.ts` | TypeScript | Read-only AppSheet UI scanner | AppSheet -> Next.js migration | ACTIVE_CODE | Keep | Added by this mission; read-only |
 | `project-brain/appsheet-ui/*` | Markdown/JSON | AppSheet UI discovery docs/reports/maps | AppSheet -> Next.js migration | ACTIVE_DOC | Keep/update | Added by this mission |
-

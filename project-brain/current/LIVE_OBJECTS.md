@@ -34,4 +34,4 @@ MavenDocumentNumber: UNKNOWN
 
 ## Source Rule
 
-Use this file only for verified active IDs or explicit `UNKNOWN` values. Current project phase and task state come from `project-brain/current/CURRENT_TASK.md` and `project-brain/roadmap/ROADMAP.md`.
+Use this file only for verified active IDs or explicit `UNKNOWN` values. Current project phase and task state come from `project-brain/CURRENT_TASK.md` and `project-brain/roadmap/ROADMAP.md`.

@@ -40,7 +40,7 @@ Required sources:
 1. `PROJECT_OPERATING_PROTOCOL.md`
 2. `PROJECT_INDEX.md`
 3. `project-brain/PROJECT_BRAIN_MASTER.md`
-4. `project-brain/current/CURRENT_TASK.md`
+4. `project-brain/CURRENT_TASK.md`
 5. `project-brain/current/LIVE_OBJECTS.md`
 6. `project-brain/roadmap/ROADMAP.md`
 7. `project-brain/DECISION_LOG.md`
@@ -96,7 +96,7 @@ Project Brain Agent must not write Google Sheets.
 Files the Project Brain Agent may update only when the mission explicitly requires documentation updates and approval rules are satisfied:
 
 - `project-brain/PROJECT_BRAIN_MASTER.md`
-- `project-brain/current/CURRENT_TASK.md`
+- `project-brain/CURRENT_TASK.md`
 - `project-brain/current/LIVE_OBJECTS.md`
 - `project-brain/roadmap/ROADMAP.md`
 - `project-brain/DECISION_LOG.md`
@@ -258,7 +258,7 @@ Evidence Required: File paths and relevant sections.
 ### Action 1.2 - Load Current State
 
 Purpose: Identify active phase, task, and latest durable memory.  
-Input: `project-brain/PROJECT_BRAIN_MASTER.md`, `project-brain/current/CURRENT_TASK.md`, `project-brain/roadmap/ROADMAP.md`, latest checkpoint.  
+Input: `project-brain/PROJECT_BRAIN_MASTER.md`, `project-brain/CURRENT_TASK.md`, `project-brain/roadmap/ROADMAP.md`, latest checkpoint.  
 Process: Read files and extract phase, task, completed milestones, next step, and protected systems.  
 Expected Result: Current project state summary.  
 Validation: Phase and task are backed by at least one current source.  

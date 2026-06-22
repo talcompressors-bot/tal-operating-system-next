@@ -44,7 +44,7 @@ Every Phase 1 mission advances the final Tal AI Operating System vision by creat
 ### `PROJECT_BRAIN_AGENT`
 
 - Responsibility: Loads and protects durable project memory.
-- Inputs: `project-brain/PROJECT_BRAIN_MASTER.md`, `project-brain/current/CURRENT_TASK.md`, `project-brain/roadmap/ROADMAP.md`, maps, checkpoints.
+- Inputs: `project-brain/PROJECT_BRAIN_MASTER.md`, `project-brain/CURRENT_TASK.md`, `project-brain/roadmap/ROADMAP.md`, maps, checkpoints.
 - Outputs: Current-state summary, Project Brain update proposal.
 - Validation responsibility: Confirm roadmap/current task/Project Brain alignment and mark stale or conflicting memory.
 
@@ -101,7 +101,7 @@ Supports the final Tal AI Operating System by ensuring every Digital Twin missio
 - `agents/PRE_MISSION_REVIEW_SYSTEM.md`
 - `agents/INFRASTRUCTURE_MANAGER_AGENT.md`
 - `agents/AGENT_REGISTRY.md`
-- `project-brain/current/CURRENT_TASK.md`
+- `project-brain/CURRENT_TASK.md`
 - `project-brain/roadmap/ROADMAP.md`
 - `project-brain/roadmap/PHASE_EXECUTION_BLUEPRINT.md`
 - `project-brain/roadmap/PHASE_1_PLAYBOOK.md`
@@ -241,7 +241,7 @@ Next Safe Step:
 
 ## Brain Updates
 
-- Propose update to `project-brain/current/CURRENT_TASK.md` if the active mission changes.
+- Propose update to `project-brain/CURRENT_TASK.md` if the active mission changes.
 - Propose update to `project-brain/PROJECT_BRAIN_MASTER.md` if new durable governance state is established.
 - Propose checkpoint if Phase 1 execution sequence is approved.
 
@@ -1460,7 +1460,7 @@ Checkpoint Proposed: Yes/No
 
 Propose updates to:
 
-- `project-brain/current/CURRENT_TASK.md`
+- `project-brain/CURRENT_TASK.md`
 - `project-brain/roadmap/ROADMAP.md`
 - `project-brain/PROJECT_BRAIN_MASTER.md`
 - relevant files under `project-brain/maps/*`

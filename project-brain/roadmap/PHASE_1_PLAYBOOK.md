@@ -29,7 +29,7 @@ Use these sources before executing any Phase 1 mission:
 - `agents/PRE_MISSION_REVIEW_SYSTEM.md`
 - `agents/INFRASTRUCTURE_MANAGER_AGENT.md`
 - `agents/AGENT_REGISTRY.md`
-- `project-brain/current/CURRENT_TASK.md`
+- `project-brain/CURRENT_TASK.md`
 - `project-brain/roadmap/ROADMAP.md`
 - `project-brain/roadmap/PHASE_EXECUTION_BLUEPRINT.md`
 - `project-brain/PROJECT_BRAIN_MASTER.md`
@@ -83,7 +83,7 @@ Inputs:
 - User request or active current task.
 - `agents/PRE_MISSION_REVIEW_SYSTEM.md`
 - `agents/INFRASTRUCTURE_MANAGER_AGENT.md`
-- `project-brain/current/CURRENT_TASK.md`
+- `project-brain/CURRENT_TASK.md`
 - `project-brain/roadmap/ROADMAP.md`
 - `project-brain/PROJECT_BRAIN_MASTER.md`
 - `project-brain/roadmap/PHASE_EXECUTION_BLUEPRINT.md`
@@ -144,7 +144,7 @@ Completion Criteria:
 
 Brain Updates:
 
-- Propose update to `project-brain/current/CURRENT_TASK.md` if the active mission changes.
+- Propose update to `project-brain/CURRENT_TASK.md` if the active mission changes.
 - Propose checkpoint if the review approves a major Phase 1 execution sequence.
 
 Mission Breakdown:
@@ -707,7 +707,7 @@ Completion Criteria:
 
 Brain Updates:
 
-- Propose updates to `project-brain/current/CURRENT_TASK.md`.
+- Propose updates to `project-brain/CURRENT_TASK.md`.
 - Propose updates to `project-brain/roadmap/ROADMAP.md`.
 - Propose updates to `project-brain/PROJECT_BRAIN_MASTER.md`.
 - Propose updates to relevant map files.

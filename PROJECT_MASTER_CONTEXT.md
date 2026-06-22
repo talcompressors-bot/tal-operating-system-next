@@ -10,9 +10,14 @@ This file preserves useful durable context from 2026-06-10, but it is not the cu
 
 Official current-state sources:
 
-- `project-brain/current/CURRENT_TASK.md`
+- `project-brain/CURRENT_TASK.md`
 - `project-brain/roadmap/ROADMAP.md`
 - `project-brain/current/LIVE_OBJECTS.md`
+
+Historical note:
+
+- Older references in this file to `project-brain/current/CURRENT_TASK.md` are retired/historical only.
+- The canonical current task/current phase/next task source is `project-brain/CURRENT_TASK.md`.
 
 Official current state:
 
@@ -27,7 +32,7 @@ This file is historical high-level project context for `TalCompressors-ServiceRe
 
 It consolidates the current repository state, Project Brain memory, stable production flows, System Health infrastructure, AI Draft roadmap, and active blockers so future work can resume without relying on chat history or screenshots.
 
-This file is documentation only. It does not replace Project Brain, Google Sheets, Apps Script, git history, `project-brain/current/CURRENT_TASK.md`, or `project-brain/roadmap/ROADMAP.md` as operational sources of truth.
+This file is documentation only. It does not replace Project Brain, Google Sheets, Apps Script, git history, `project-brain/CURRENT_TASK.md`, or `project-brain/roadmap/ROADMAP.md` as operational sources of truth.
 
 ## Project Vision
 
@@ -447,7 +452,8 @@ Apps Script files:
 ## Documentation Gaps
 
 - `PROJECT_OPERATING_PROTOCOL.md` is active and official.
-- `project-brain/current/CURRENT_TASK.md` is the official current-task source.
+- `project-brain/CURRENT_TASK.md` is the official current-task source.
+- `project-brain/current/CURRENT_TASK.md` is retired/historical compatibility only.
 - `project-brain/roadmap/ROADMAP.md` is the official master roadmap.
 - `project-brain/checkpoints/ACTIVE_SESSION_STATE.md` is historical/archive context only.
 - This file is non-current and should not be used for active next steps.

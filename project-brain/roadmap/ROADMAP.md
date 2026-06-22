@@ -10,7 +10,7 @@ This file is the master roadmap for current and future project phases.
 
 It consolidates approved planning from:
 
-- `project-brain/current/CURRENT_TASK.md`
+- `project-brain/CURRENT_TASK.md`
 - `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`
 - `project-brain/checkpoints/CHECKPOINT_2026-06-15_GOVERNANCE_FOUNDATION_COMPLETE.md`
 - `project-brain/SYSTEM_HEALTH_AGENT_PLAN.md`
@@ -38,7 +38,7 @@ Status: COMPLETE
 Source:
 
 - `project-brain/checkpoints/CHECKPOINT_2026-06-15_GOVERNANCE_FOUNDATION_COMPLETE.md`
-- `project-brain/current/CURRENT_TASK.md`
+- `project-brain/CURRENT_TASK.md`
 
 Completed milestone:
 
@@ -60,7 +60,7 @@ Completed work:
 - `agents/INFRASTRUCTURE_REVIEW_TEMPLATE.md` created.
 - `agents/AGENT_REGISTRY.md` updated to include Infrastructure Manager.
 - Infrastructure Manager V1 tested with a proposed `WorkflowRegistry` / `Workflow Agent` request.
-- Infrastructure Manager integrated into `PROJECT_INDEX.md`, `START_CODEX.md`, `project-brain/PROJECT_BRAIN_MASTER.md`, and `project-brain/current/CURRENT_TASK.md`.
+- Infrastructure Manager integrated into `PROJECT_INDEX.md`, `START_CODEX.md`, `project-brain/PROJECT_BRAIN_MASTER.md`, and `project-brain/CURRENT_TASK.md`.
 
 Exit criteria:
 
@@ -89,7 +89,7 @@ Status: CURRENT
 
 Source:
 
-- `project-brain/current/CURRENT_TASK.md`
+- `project-brain/CURRENT_TASK.md`
 - `project-brain/checkpoints/CHECKPOINT_2026-06-15_GOVERNANCE_FOUNDATION_COMPLETE.md`
 - `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`
 
@@ -138,7 +138,7 @@ Dependencies:
 - Infrastructure Manager V1 active.
 - Source-of-truth hierarchy defined.
 - `SHEETS_REGISTRY` populated.
-- Current task source confirmed at `project-brain/current/CURRENT_TASK.md`.
+- Current task source confirmed at `project-brain/CURRENT_TASK.md`.
 
 Exit criteria:
 
@@ -358,7 +358,7 @@ Approved cleanup order:
 
 1. Fill `PROJECT_OPERATING_PROTOCOL.md` as the canonical operating protocol.
 2. Fix startup/read-order references to use repo-relative paths.
-3. Confirm `project-brain/current/CURRENT_TASK.md` as current-task source of truth.
+3. Confirm `project-brain/CURRENT_TASK.md` as current-task source of truth.
 4. Clean `PROJECT_BRAIN_MASTER.md` duplication and make it an index/summary.
 5. Consolidate AI Draft run/test/checklist docs.
 6. Fill empty `ROADMAP.md` and `TEST_SCENARIOS.md`.

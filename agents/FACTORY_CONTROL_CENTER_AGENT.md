@@ -40,7 +40,7 @@ Read these sources before every audit:
 5. `agents/AGENT_REGISTRY.md`
 6. `agents/AGENT_FACTORY_OPERATING_SYSTEM.md`
 7. `project-brain/PROJECT_BRAIN_MASTER.md`
-8. `project-brain/current/CURRENT_TASK.md`
+8. `project-brain/CURRENT_TASK.md`
 9. `project-brain/current/LIVE_OBJECTS.md`
 10. `project-brain/roadmap/ROADMAP.md`
 11. `project-brain/roadmap/PHASE_EXECUTION_BLUEPRINT.md`
@@ -131,7 +131,7 @@ The Control Center audits phases from `project-brain/roadmap/PHASE_EXECUTION_BLU
 - `project-brain/roadmap/ROADMAP.md`
 - `project-brain/roadmap/PHASE_EXECUTION_BLUEPRINT.md`
 - relevant phase playbooks/SOPs
-- `project-brain/current/CURRENT_TASK.md`
+- `project-brain/CURRENT_TASK.md`
 - `project-brain/PROJECT_BRAIN_MASTER.md`
 - relevant checkpoints
 

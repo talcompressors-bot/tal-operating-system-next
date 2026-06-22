@@ -60,7 +60,7 @@ Use this order:
 
 1. `PROJECT_OPERATING_PROTOCOL.md`
 2. `PROJECT_INDEX.md`
-3. `project-brain/current/CURRENT_TASK.md`
+3. `project-brain/CURRENT_TASK.md`
 4. `project-brain/roadmap/ROADMAP.md`
 5. `project-brain/PROJECT_BRAIN_MASTER.md`
 6. `agents/INFRASTRUCTURE_MANAGER_AGENT.md`
@@ -101,7 +101,7 @@ For every `UNKNOWN` answer:
 |---|---|
 | Who investigates | Discovery Agent, routed by Infrastructure Manager. If no specialist exists, Infrastructure Manager assigns the closest active specialist from `agents/AGENT_REGISTRY.md`. |
 | Where they investigate | Source-of-truth files first, then registries, maps, read-only runtime source, Git history, and only then read-only live metadata if approved or already available. |
-| Files searched | `PROJECT_OPERATING_PROTOCOL.md`, `PROJECT_INDEX.md`, `project-brain/current/CURRENT_TASK.md`, `project-brain/roadmap/ROADMAP.md`, `project-brain/PROJECT_BRAIN_MASTER.md`, `project-brain/current/LIVE_OBJECTS.md`, `project-brain/DECISION_LOG.md`, `project-brain/maps/*`, `data-sources/tools/SHEETS_REGISTRY.md`, relevant `agents/*`, relevant `apps-script/*`. |
+| Files searched | `PROJECT_OPERATING_PROTOCOL.md`, `PROJECT_INDEX.md`, `project-brain/CURRENT_TASK.md`, `project-brain/roadmap/ROADMAP.md`, `project-brain/PROJECT_BRAIN_MASTER.md`, `project-brain/current/LIVE_OBJECTS.md`, `project-brain/DECISION_LOG.md`, `project-brain/maps/*`, `data-sources/tools/SHEETS_REGISTRY.md`, relevant `agents/*`, relevant `apps-script/*`. |
 | Registries checked | `agents/AGENT_REGISTRY.md`, `data-sources/tools/SHEETS_REGISTRY.md`, documented live registry tables `AutomationRegistry`, `HealthCheckRegistry`, and `SystemHealthLog` when read-only metadata is available. |
 | Maps checked | `project-brain/maps/SYSTEM_MAP.md`, `project-brain/maps/APPSHEET_MAP.md`, `project-brain/maps/APPS_SCRIPT_MAP.md`, `project-brain/maps/AI_DRAFT_FIELD_MAPPING.md`, and any relevant future map under `project-brain/maps/*`. |
 | When result becomes VERIFIED | A result is `VERIFIED` only when the answer is supported by at least one current source-of-truth file and is not contradicted by a higher-priority source. If sources conflict, the result stays `UNKNOWN` or becomes `NEEDS_MORE_EVIDENCE`. |
@@ -217,16 +217,16 @@ Every answer must identify the question, evidence source, and validation method.
 
 | Question Type | Evidence Source | Validation Method |
 |---|---|---|
-| What is the current phase? | `PROJECT_INDEX.md`, `project-brain/current/CURRENT_TASK.md`, `project-brain/roadmap/ROADMAP.md`, `project-brain/PROJECT_BRAIN_MASTER.md`. | Confirm the same phase appears in current-task and roadmap sources. If conflict exists, follow source-of-truth hierarchy and report the conflict. Current documented phase is `PHASE 1 - Digital Twin Foundation`. |
+| What is the current phase? | `PROJECT_INDEX.md`, `project-brain/CURRENT_TASK.md`, `project-brain/roadmap/ROADMAP.md`, `project-brain/PROJECT_BRAIN_MASTER.md`. | Confirm the same phase appears in current-task and roadmap sources. If conflict exists, follow source-of-truth hierarchy and report the conflict. Current documented phase is `PHASE 1 - Digital Twin Foundation`. |
 | What project goal does the mission advance? | `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/roadmap/ROADMAP.md`, `project-brain/PROJECT_BRAIN_MASTER.md`. | Match mission to documented business, operational, AI, roadmap, or phase goals. If no match exists, mark `UNKNOWN` or `DEFERRED`. |
 | What tables exist? | `data-sources/tools/SHEETS_REGISTRY.md`, `project-brain/PROJECT_BRAIN_MASTER.md`, `project-brain/maps/APPSHEET_MAP.md`, `project-brain/maps/SYSTEM_MAP.md`. | Prefer `SHEETS_REGISTRY.md` for live header metadata. Cross-check against maps and Project Brain. Unknown AppSheet-only behavior remains `UNKNOWN`. |
 | What workflows exist? | `project-brain/maps/SYSTEM_MAP.md`, `project-brain/maps/APPSHEET_MAP.md`, `project-brain/maps/APPS_SCRIPT_MAP.md`, `project-brain/PROJECT_BRAIN_MASTER.md`, `data-sources/tools/SHEETS_REGISTRY.md` for `AutomationRegistry`. | Confirm workflow is documented in maps or registry. If only inferred from names, mark `UNKNOWN`. |
 | What agents exist? | `agents/AGENT_REGISTRY.md`, relevant `agents/*.md`. | Agent exists only if listed in the registry or represented by an agent file. Planned agents cannot be treated as active. |
 | What dependencies exist? | `PROJECT_INDEX.md`, `project-brain/roadmap/ROADMAP.md`, `project-brain/PROJECT_BRAIN_MASTER.md`, maps, `apps-script/*` read-only source when relevant. | Trace upstream and downstream files, tables, workflows, and production systems. Unknown external dependencies remain `UNKNOWN`. |
-| What systems are protected? | `PROJECT_OPERATING_PROTOCOL.md`, `PROJECT_INDEX.md`, `agents/INFRASTRUCTURE_MANAGER_AGENT.md`, `project-brain/current/CURRENT_TASK.md`, `project-brain/PROJECT_BRAIN_MASTER.md`. | Use the union of documented protected systems and stable systems. Current protected systems include Apps Script, Google Sheets live data, AppSheet production, Maven, Drive, AutomationCommands, report counter logic, Drive folder logic, and BusinessDocuments workflow. |
+| What systems are protected? | `PROJECT_OPERATING_PROTOCOL.md`, `PROJECT_INDEX.md`, `agents/INFRASTRUCTURE_MANAGER_AGENT.md`, `project-brain/CURRENT_TASK.md`, `project-brain/PROJECT_BRAIN_MASTER.md`. | Use the union of documented protected systems and stable systems. Current protected systems include Apps Script, Google Sheets live data, AppSheet production, Maven, Drive, AutomationCommands, report counter logic, Drive folder logic, and BusinessDocuments workflow. |
 | Which registry owns workflow information? | `data-sources/tools/SHEETS_REGISTRY.md`, `agents/INFRASTRUCTURE_MANAGER_AGENT.md`, maps. | `AutomationRegistry` is documented as the central automation/workflow governance table. `WorkflowRegistry` is not documented in current sources; owner is `UNKNOWN` unless later approved. |
-| What mission is active? | `project-brain/current/CURRENT_TASK.md`, `project-brain/roadmap/ROADMAP.md`, latest relevant checkpoint. | Current documented task is the active mission source. If user request overrides current work, treat it as the requested mission and state the current-task mismatch. |
-| What production systems are affected? | Mandatory question answers, maps, `agents/INFRASTRUCTURE_MANAGER_AGENT.md`, `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/current/CURRENT_TASK.md`. | Identify direct and indirect affected systems. If any write, deployment, Maven, Drive, email, schema, or setup action is implied, require explicit approval. |
+| What mission is active? | `project-brain/CURRENT_TASK.md`, `project-brain/roadmap/ROADMAP.md`, latest relevant checkpoint. | Current documented task is the active mission source. If user request overrides current work, treat it as the requested mission and state the current-task mismatch. |
+| What production systems are affected? | Mandatory question answers, maps, `agents/INFRASTRUCTURE_MANAGER_AGENT.md`, `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md`. | Identify direct and indirect affected systems. If any write, deployment, Maven, Drive, email, schema, or setup action is implied, require explicit approval. |
 
 If evidence cannot be found in documented project sources, write `UNKNOWN`. Do not invent.
 
@@ -274,7 +274,7 @@ Verification questions must be answered from documented evidence:
 
 | Test Question | Expected Evidence-Based Answer |
 |---|---|
-| What is the current phase? | `PHASE 1 - Digital Twin Foundation`, sourced from `PROJECT_INDEX.md`, `project-brain/current/CURRENT_TASK.md`, `project-brain/roadmap/ROADMAP.md`, and `project-brain/PROJECT_BRAIN_MASTER.md`. |
+| What is the current phase? | `PHASE 1 - Digital Twin Foundation`, sourced from `PROJECT_INDEX.md`, `project-brain/CURRENT_TASK.md`, `project-brain/roadmap/ROADMAP.md`, and `project-brain/PROJECT_BRAIN_MASTER.md`. |
 | What systems are protected? | Apps Script, Google Sheets live data, AppSheet production, Maven, Drive, AutomationCommands, and stable flows such as ReportCounter, Drive folder logic, BusinessDocuments workflow, and Maven draft flow, sourced from protocol, current task, Project Brain, and Infrastructure Manager. |
 | Which agent owns WorkflowRegistry? | `UNKNOWN`. Current sources document `AutomationRegistry` as a central automation/workflow governance table, but do not document `WorkflowRegistry` or an owner for it. |
 | What mission is active? | Current documented task: start Digital Twin Foundation as a read-only mapping phase. A new user mission can be reviewed as the requested mission, but must be distinguished from the current task. |
@@ -356,7 +356,7 @@ Next Safe Step:
 
 After every approved mission is completed, update or propose updates to:
 
-- `project-brain/current/CURRENT_TASK.md`
+- `project-brain/CURRENT_TASK.md`
 - `project-brain/roadmap/ROADMAP.md`
 - `project-brain/PROJECT_BRAIN_MASTER.md`
 - relevant registry/map files

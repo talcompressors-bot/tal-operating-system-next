@@ -32,7 +32,7 @@ Last updated: 2026-06-21
 
 ## Duplicate Or Conflicting Plans
 
-- `project-brain/CURRENT_TASK.md` is a deprecated pointer; `project-brain/current/CURRENT_TASK.md` is active.
+- `project-brain/current/CURRENT_TASK.md` is a retired compatibility stub; `project-brain/CURRENT_TASK.md` is active.
 - AI Draft docs are spread across agent docs, runtime blueprint, flow map, and roadmap files.
 - AppSheet/Apps Script maps overlap with `SYSTEM_COMPONENTS.md` and `PROJECT_BRAIN_MASTER.md`.
 - `project-brain/apps-script/*` appears to be a mirror/snapshot of Apps Script files, while `apps-script/*` is the active code area.
@@ -57,4 +57,3 @@ Last updated: 2026-06-21
 - Decide where automatic receipts belong in the roadmap and what source data proves payment evidence.
 - Decide canonical policy for `apps-script/*.js` versus `project-brain/apps-script/*.gs` mirrors.
 - Approve or reject any future production logic work separately.
-

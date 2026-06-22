@@ -31,7 +31,7 @@ Required inputs:
 2. `PROJECT_OPERATING_PROTOCOL.md`
 3. `PROJECT_INDEX.md`
 4. `project-brain/PROJECT_BRAIN_MASTER.md`
-5. `project-brain/current/CURRENT_TASK.md`
+5. `project-brain/CURRENT_TASK.md`
 6. `project-brain/current/LIVE_OBJECTS.md`
 7. `project-brain/DECISION_LOG.md`
 8. `project-brain/architecture/TARGET_ARCHITECTURE_VISION.md`

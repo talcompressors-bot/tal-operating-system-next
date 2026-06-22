@@ -37,7 +37,7 @@ Every agent starts by loading these sources in order when relevant to the missio
 4. `agents/INFRASTRUCTURE_MANAGER_AGENT.md`
 5. `agents/AGENT_REGISTRY.md`
 6. `project-brain/PROJECT_BRAIN_MASTER.md`
-7. `project-brain/current/CURRENT_TASK.md`
+7. `project-brain/CURRENT_TASK.md`
 8. `project-brain/current/LIVE_OBJECTS.md`
 9. `project-brain/roadmap/ROADMAP.md`
 10. `project-brain/roadmap/PHASE_EXECUTION_BLUEPRINT.md`
@@ -283,7 +283,7 @@ EXISTS: `agents/PROJECT_BRAIN_AGENT_SOP.md`.
 ## Project Brain Mission Execution Contract
 
 Mission Objective: Execute one of the missions defined in `agents/PROJECT_BRAIN_AGENT_SOP.md`.  
-Required Inputs: `PROJECT_OPERATING_PROTOCOL.md`, `PROJECT_INDEX.md`, `project-brain/PROJECT_BRAIN_MASTER.md`, `project-brain/current/CURRENT_TASK.md`, `project-brain/current/LIVE_OBJECTS.md`, `project-brain/roadmap/ROADMAP.md`, `project-brain/DECISION_LOG.md`, maps, bugs, lessons, checkpoints, registry, Pre-Mission Review, Infrastructure Manager, `SHEETS_REGISTRY.md`, `git status --short`.  
+Required Inputs: `PROJECT_OPERATING_PROTOCOL.md`, `PROJECT_INDEX.md`, `project-brain/PROJECT_BRAIN_MASTER.md`, `project-brain/CURRENT_TASK.md`, `project-brain/current/LIVE_OBJECTS.md`, `project-brain/roadmap/ROADMAP.md`, `project-brain/DECISION_LOG.md`, maps, bugs, lessons, checkpoints, registry, Pre-Mission Review, Infrastructure Manager, `SHEETS_REGISTRY.md`, `git status --short`.  
 Allowed Tools: Documentation reads/writes when requested, `git status --short`, `git diff`, checkpoint creation when authorized.  
 Forbidden Tools: Apps Script writes, Google Sheets writes, AppSheet edits, Maven actions, customer emails, unapproved commits/pushes.  
 Source Files: Defined by `agents/PROJECT_BRAIN_AGENT_SOP.md`.  
