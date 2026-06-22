@@ -152,7 +152,7 @@ Approved staging-first flow:
    - `Customers_Final` = 763
    - `ServiceReports` = 62
    - `ReportEquipmentItems` imports only rows linked to real `ServiceReports`
-   - excluded orphan equipment rows are reported
+   - legacy/test rows intentionally excluded from import are reported
 
 ## Staging Data Rules
 

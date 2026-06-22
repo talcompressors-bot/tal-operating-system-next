@@ -296,6 +296,8 @@ Approved import note:
 
 - Legacy/test `ReportEquipmentItems` rows created during equipment-add testing must not be imported to PostgreSQL.
 - Import only `ReportEquipmentItems` rows linked to real `ServiceReports`.
+- Known excluded rows: 9 rows missing `ReportID`; 25 rows with unmatched `ReportID`.
+- Classification: historical test data, not business data, no recovery required, excluded by design.
 - Keep `serviceReportId` nullable as a safety rule, even though the approved import excludes rows without a real parent report.
 
 Import rule:
@@ -304,7 +306,7 @@ Import rule:
 - Preserve the original source `ReportID` in `sourceReportId`.
 - Derive `reportCounter` during import by joining `ReportEquipmentItems.ReportID` -> `ServiceReports.ReportID` -> `ServiceReports.ReportCounter`.
 - Do not add `ReportCounter` to Google Sheets or AppSheet.
-- Exclude rows with missing/unmatched `ReportID` from PostgreSQL import and report them in import validation output.
+- Exclude legacy/test rows intentionally excluded from import because they have missing/unmatched `ReportID`; report them in import validation output.
 - `reportCounter` is display/search/audit metadata only.
 - `sourceReportId` remains the true source link.
 - `serviceReportId` remains the internal PostgreSQL FK.

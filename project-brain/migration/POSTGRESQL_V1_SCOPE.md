@@ -36,15 +36,18 @@ Required schema correction:
 - Reason: live validation found equipment rows with missing or unmatched `ReportID`, and Liad approved excluding those legacy/test rows from PostgreSQL import.
 - Preserve the original source `ReportID` in `source_report_id`.
 - Add nullable `report_counter` for display/search/audit, derived during import from `ReportEquipmentItems.ReportID` -> `ServiceReports.ReportID` -> `ServiceReports.ReportCounter`.
-- Import behavior must import only equipment rows linked to real `ServiceReports`; missing/unmatched rows are reported in validation output and not imported.
+- Import behavior must import only equipment rows linked to real `ServiceReports`; legacy/test rows intentionally excluded from import are reported in validation output and not imported.
 - Keep `service_report_id` nullable as a safety rule even though approved import excludes unlinked rows.
 
-Detailed orphan equipment findings:
+Detailed legacy/test exclusion findings:
 
 - 9 `ReportEquipmentItems` rows are missing `ReportID`.
 - 25 `ReportEquipmentItems` rows have `ReportID` values not found in `ServiceReports`.
-- No `ReportCounter` / source report number could be recovered for orphan rows.
-- The orphan rows are likely old/test/deleted parent reports or legacy remnants.
+- Classification: historical test data.
+- Business classification: not business data.
+- Recovery requirement: no recovery required.
+- Import classification: excluded by design.
+- No `ReportCounter` / source report number is required for these legacy/test rows intentionally excluded from import.
 - Do not modify Google Sheets or AppSheet to clean these rows.
 
 ## Approved Architecture Decisions

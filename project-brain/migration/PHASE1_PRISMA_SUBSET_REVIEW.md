@@ -18,7 +18,7 @@ It included only:
 - `ImportIssueType`
 - `ImportRunStatus`
 
-The draft used PostgreSQL, preserved source IDs, preserved raw source JSON, and made `ReportEquipmentItem.reportId` optional based on the live validation result showing orphan equipment rows.
+The draft used PostgreSQL, preserved source IDs, preserved raw source JSON, and made `ReportEquipmentItem.reportId` optional based on the live validation result showing legacy/test rows intentionally excluded from import.
 
 ## Why It Was Not Committed
 
@@ -80,7 +80,7 @@ The next schema pass should reconcile:
 - AppSheet source table mappings
 - PostgreSQL naming conventions
 - nullable vs required relations
-- import-tolerant handling for legacy/orphan data
+- import-tolerant handling for legacy/test data intentionally excluded from import
 - Phase 1 read-only needs versus full V1 platform needs
 
 Until that review is approved, no `prisma/schema.prisma` should be committed as the official V1 schema.

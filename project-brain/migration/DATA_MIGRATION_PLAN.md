@@ -109,6 +109,8 @@ These sheets exist in the registry but are not mapped to active Prisma V1 models
 
 - Legacy/test `ReportEquipmentItems` rows created during equipment-add testing must not be imported to PostgreSQL.
 - Import only `ReportEquipmentItems` linked to real `ServiceReports`.
+- Known excluded rows: 9 rows missing `ReportID`; 25 rows with unmatched `ReportID`.
+- Classification: historical test data, not business data, no recovery required, excluded by design.
 - Do not modify Google Sheets or AppSheet to clean those rows.
 - Keep `ReportEquipmentItem.serviceReportId` nullable as a safety rule.
 - Preserve `ReportEquipmentItems.ReportID` as `sourceReportId`.

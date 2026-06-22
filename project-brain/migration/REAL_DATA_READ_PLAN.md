@@ -370,7 +370,7 @@ Use 5-10 known source reports:
 | Hebrew headers are unstable or encoded badly | Incorrect field mapping | Centralize mapping in adapter and preserve raw source. |
 | Blank headers in `ServiceReports` | Parser confusion | Use explicit column names/indexes from verified registry. |
 | Missing customer references | Report list shows incomplete customer data | Display source customer ID and mark relation missing. |
-| Missing equipment parent report | Equipment rows disappear or attach incorrectly | Quarantine orphan equipment rows in read report. |
+| Missing equipment parent report | Equipment rows disappear or attach incorrectly | Report legacy/test rows intentionally excluded from import in the read report. |
 | Large sheet size affects page speed | Slow UI | Cache reads or use snapshot files. |
 | Stale snapshot data | UI not current | Show snapshot timestamp clearly. |
 | Credentials leak to browser | Security issue | Keep all data access in Server Components/server-only modules. |
@@ -433,4 +433,3 @@ Reason:
 - enough to validate UI against real customer/report/equipment data
 
 Do not implement until Liad approves the chosen option.
-

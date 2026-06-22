@@ -95,7 +95,7 @@ First import should be a safe shadow import into PostgreSQL:
 2. Import `ServiceReport` rows and link to customers.
 3. Import `ReportEquipmentItem` rows and link to service reports.
 4. Store full source row in `rawSource` for traceability.
-5. Quarantine invalid/orphan rows instead of failing silently.
+5. Report invalid rows and legacy/test rows intentionally excluded from import instead of failing silently.
 
 No source sheet writes.
 
