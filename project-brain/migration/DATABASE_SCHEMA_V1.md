@@ -24,6 +24,9 @@ This schema is based on:
 - Build read-only parity first.
 - Add write paths only after explicit approval and idempotency design.
 - Keep Maven and external integrations behind server-side API/worker boundaries.
+- Use Server Actions by default for internal Next.js write flows. API routes are reserved for external webhooks, Maven callbacks, public endpoints, and third-party integrations.
+- Support offline field work through a local pending-action queue that syncs automatically when internet returns.
+- Treat PostgreSQL as the source of truth after successful sync. Conflicts must be logged for review and must not be silently overwritten.
 
 ---
 
@@ -306,6 +309,7 @@ Columns:
 | `appsheet_item_id` | TEXT | UNIQUE, NOT NULL | `ReportEquipmentItems.ItemID` |
 | `service_report_id` | UUID | FK -> `service_reports(id)` NULL | resolved parent service report |
 | `source_report_id` | TEXT | NULL | original `ReportEquipmentItems.ReportID` |
+| `report_counter` | TEXT | NULL | derived by `ReportEquipmentItems.ReportID` -> `ServiceReports.ReportID` -> `ServiceReports.ReportCounter` |
 | `equipment_number` | TEXT | NULL | equipment number |
 | `equipment_type` | TEXT | NULL | equipment type |
 | `equipment_subtype` | TEXT | NULL | equipment subtype |
@@ -331,24 +335,29 @@ Indexes:
 - UNIQUE: `report_equipment_items(appsheet_item_id)`
 - INDEX: `report_equipment_items(service_report_id)`
 - INDEX: `report_equipment_items(source_report_id)`
+- INDEX: `report_equipment_items(report_counter)`
 - INDEX: `report_equipment_items(equipment_model)`
 - INDEX: `report_equipment_items(serial_number)`
 - INDEX: `report_equipment_items(compressor_category)`
 
-Validation note:
+Approved import decision:
 
-- Read-only validation found 9 `ReportEquipmentItems` rows missing `ReportID`.
-- Read-only validation found 25 `ReportEquipmentItems` rows where `ReportID` is not found in `ServiceReports`.
-- No `ReportCounter` / source report number could be recovered for orphan rows.
-- These rows are likely old/test/deleted parent reports or legacy remnants.
+- Legacy/test `ReportEquipmentItems` rows created during equipment-add testing must not be imported to PostgreSQL.
+- Import only `ReportEquipmentItems` rows linked to real `ServiceReports`.
+- Do not modify Google Sheets or AppSheet to clean these rows.
+- Keep `service_report_id` nullable as a safety rule for importer tolerance, validation review, and future unknown source defects.
 
 Import rule:
 
-- Import all `ReportEquipmentItems`.
 - Link rows with valid source `ReportID` to `service_reports`.
 - Preserve the original source `ReportID` in `source_report_id`.
-- Preserve orphan rows with `service_report_id = NULL`.
-- Record each missing/unmatched parent as an import validation/import issue.
+- Derive `report_counter` during import by joining `ReportEquipmentItems.ReportID` -> `ServiceReports.ReportID` -> `ServiceReports.ReportCounter`.
+- Do not add `ReportCounter` to Google Sheets or AppSheet.
+- Exclude rows with missing/unmatched `ReportID` from PostgreSQL import and record them in import validation output.
+- `report_counter` is display/search/audit metadata only.
+- `source_report_id` remains the true source link.
+- `service_report_id` remains the internal PostgreSQL FK.
+- Never use `report_counter` as a primary relationship key.
 
 ---
 

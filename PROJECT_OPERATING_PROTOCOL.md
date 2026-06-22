@@ -40,6 +40,72 @@ Forbidden unless Liad explicitly approves official migration work:
 
 Goal: build the new Next.js system side-by-side while the existing AppSheet system remains production.
 
+## Critical Architecture Rule: Server Actions First
+
+All internal Next.js write flows must use Server Actions by default.
+
+This applies to:
+
+- approvals
+- AI draft approval
+- `BusinessDocument` creation
+- `ServiceReport` shadow updates
+- import review actions
+- user-triggered queue commands
+- PostgreSQL mutations
+- offline sync actions
+
+API routes are allowed only for:
+
+- external webhooks
+- Maven callbacks
+- public endpoints
+- third-party integrations
+
+Server Actions do not grant permission to write production AppSheet, Google Sheets, Maven, Drive, email, or Apps Script state. Production-impacting actions still require explicit approval.
+
+## Critical Architecture Rule: Offline First
+
+The app must support field work without internet.
+
+Rules:
+
+- Local devices store pending actions in an offline queue.
+- When internet returns, the queue syncs automatically.
+- Server Actions are the default sync target for internal app mutations.
+- PostgreSQL is the source of truth after successful sync.
+- Conflicts must be logged and require review.
+- Conflicts must not be silently overwritten.
+- AppSheet and Google Sheets production remain untouched during the shadow phase.
+
+## Future Infrastructure Rule: Open Remote Development Environment
+
+The upcoming VPS/Remote Development track must be based on an open full development environment, not a limited control UI.
+
+Required capabilities:
+
+- full terminal access
+- full repository access
+- Git/GitHub operations
+- Codex CLI access
+- VS Code Server or browser IDE access
+- ability to run Next.js dev/build
+- ability to run Prisma/PostgreSQL tools
+- ability to add future AI agents
+- secure SSH access
+- mobile/tablet access
+- secrets management
+- backups and rollback
+
+Avoid:
+
+- closed low-code control panels
+- mobile-only restricted interfaces
+- tools that prevent direct terminal or Git access
+- systems that lock the project into one provider
+
+This is a future infrastructure track, not permission to provision a VPS, install tools, move secrets, deploy, or change production hosting now.
+
 ## 1. Purpose
 
 This protocol defines how work starts, how current state is verified, how priorities are chosen, how changes are approved, how implementation is performed, how results are verified, and how project memory is updated.
@@ -556,8 +622,12 @@ If blocked:
 - Do not run setup functions without approval.
 - Preserve AutomationCommands queue architecture.
 - Preserve ReportCounter logic.
+- Preserve the `ReportEquipmentItems` import rule: import only rows linked to real `ServiceReports`; exclude legacy/test equipment rows; do not modify Google Sheets; keep the internal FK nullable as a safety rule.
+- Derive `ReportEquipmentItem.reportCounter` only during PostgreSQL import by joining through `ServiceReports.ReportCounter`; never use it as a primary relationship key.
 - Preserve Drive folder and report file logic.
 - Preserve Maven idempotency protections.
+- Use Server Actions by default for internal Next.js write flows.
+- Design field workflows as offline-first with explicit conflict review.
 - Keep rollback possible.
 
 ## 30. Forbidden Actions
