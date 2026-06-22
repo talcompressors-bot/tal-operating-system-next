@@ -3,6 +3,19 @@
 ## 2026-06-22
 
 Decision:
+`fd76610 Fix Wave 1 service report display mapping` is classified as the Last Implementation Commit.
+
+Reason:
+The commit changed read-only Next.js Wave 1 service-report display behavior by deriving service dates from `raw_source` when `service_date` is null, mapping pending-signature source status to `Pending Signature`, replacing UI `UNKNOWN` status with `Status Missing` for missing source statuses, and adding sparse equipment display fallbacks. Validation used read-only staging queries and temporary read-only HTTP checks. It is an implementation/read-display commit, not closeout metadata. Last Closeout Commit remains `8114210 Sync project brain commit model state`.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-22
+
+Decision:
 `a28da7b Create autonomous agent orchestration governance` is classified as the Last Implementation Commit.
 
 Reason:
