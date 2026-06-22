@@ -7,7 +7,7 @@ description: Close a TalCompressors-ServiceReports-AI Codex session with a Proje
 
 Use this skill to close a TalCompressors-ServiceReports-AI work session cleanly and preserve enough state for the next session to resume without screenshots or repeated explanations.
 
-This skill prepares a closeout and, only with explicit user approval, updates Project Brain files. `by codex` is the official shutdown command. It may commit and push only approved closeout files as part of that command. It must not deploy, create Maven documents, send email, or modify production systems unless the user separately approves that exact action.
+This skill prepares a closeout and updates Project Brain for approved or completed AUTO_ALLOWED work. `by codex` is the official shutdown command. It may commit and push approved files or safe/scoped/validated AUTO_ALLOWED documentation and read-only app changes. It must not deploy, create Maven documents, send email, or modify production systems unless the user separately approves that exact action.
 
 ## Required Reads
 
@@ -66,7 +66,7 @@ Follow this order:
 5. Identify changed files.
 6. Summarize completed work.
 7. Summarize uncommitted changes.
-8. Update canonical state files when needed and approved:
+8. Update canonical state files when needed and either approved or allowed by the Autonomous Work Loop:
    - `PROJECT_INDEX.md`
    - `project-brain/CURRENT_TASK.md`
    - `project-brain/TASK_BOARD.md`
@@ -75,7 +75,7 @@ Follow this order:
    - Last Implementation Commit only when actual implementation changed
 9. Verify no forbidden systems were touched.
 10. Verify next approved task is clear.
-11. Commit only approved files.
+11. Commit only approved files, or safe/scoped/validated AUTO_ALLOWED documentation and read-only app changes.
 12. Push to `origin/main`.
 13. Confirm clean `git status --short --branch`.
 14. Confirm whether follow-up sync is required. Closeout-only metadata commits do not require another sync just to record their own hash.
@@ -98,6 +98,47 @@ When the user approves closeout file updates, update only the files that are rel
 
 Do not update Project Brain files just because the session is ending. Update them only when there is meaningful state to preserve.
 
+## Autonomous Work Loop Closeout
+
+AUTO_ALLOWED work may be closed without extra ping-pong:
+
+- read files
+- inspect repo
+- run `git status` and `git log`
+- run local tests/type checks
+- run read-only DB queries
+- run read-only UI validation
+- create/update documentation
+- fix UI/read-only mapping bugs
+- create local validation reports
+- update Project Brain after completed safe work
+- commit/push safe documentation and read-only app changes after validation
+
+APPROVAL_REQUIRED work must stop and request explicit approval:
+
+- `prisma/schema.prisma` changes
+- Prisma `db push` or migration
+- DB writes/imports
+- Supabase project/settings changes
+- Google Sheets/AppSheet/Maven/Apps Script changes
+- production deployment
+- email/Drive/customer-facing actions
+- deleting data/files
+- new agent/control architecture
+
+Closeout loop:
+
+1. Verify validation results.
+2. Check that no protected system was affected.
+3. Update Project Brain with evidence, risks, and next task.
+4. Commit/push if safe and scoped.
+5. Stop only when APPROVAL_REQUIRED is reached.
+6. Present proof, risks, and exact approval request.
+
+Codex is the main Orchestrator at closeout. It should complete safe closeout autonomously and ask Liad only at meaningful gates.
+
+Approval-gate output must include what was done, what was checked, proof of success, risks, requested approval, what will happen after approval, and systems confirmed untouched.
+
 ## Git Rules
 
 Before suggesting a commit message:
@@ -108,7 +149,7 @@ Before suggesting a commit message:
 4. Review relevant diffs.
 5. Separate files changed by this session from unrelated existing changes when possible.
 6. Report untracked files.
-7. Stage, commit, and push only approved files when `by codex` or a separate explicit user request authorizes it.
+7. Stage, commit, and push only approved files, or safe/scoped/validated AUTO_ALLOWED documentation and read-only app changes.
 
 If the user asks for a commit later, keep the commit scoped to the approved session changes.
 
@@ -120,8 +161,8 @@ If the user asks for a commit later, keep the commit scoped to the approved sess
 - Do not update payment status.
 - Do not rewrite stable flows during closeout.
 - Do not let AppSheet Bot and Apps Script update the same row.
-- Do not update Project Brain without approval.
-- Do not commit or push unapproved files.
+- Do not update Project Brain except for approved work or completed AUTO_ALLOWED work.
+- Do not commit or push unapproved files except safe/scoped/validated AUTO_ALLOWED documentation and read-only app changes.
 - Do not erase or overwrite historical checkpoints.
 
 ## Output Format

@@ -4,6 +4,8 @@
 
 Decide which agent and which tools are required to achieve the user goal.
 
+Codex is the main Orchestrator. It owns end-to-end execution for AUTO_ALLOWED work and routes specialized work to existing agent owners by role.
+
 ## Input
 
 User request or project task.
@@ -26,7 +28,8 @@ User request or project task.
 6. Assign each task to the existing owner agent from `PROJECT_INDEX.md` and `agents/AGENT_REGISTRY.md`.
 7. Select tools.
 8. Define safe execution order.
-9. Request approval before any change.
+9. Execute AUTO_ALLOWED work autonomously when it is the next approved task.
+10. Request approval only when APPROVAL_REQUIRED work is reached.
 
 ## Agent Routing
 
@@ -110,6 +113,58 @@ Never assume the right tool.
 
 Always choose the smallest safe toolset that can complete the task.
 
+## Autonomous Work Loop
+
+AUTO_ALLOWED:
+
+- read files
+- inspect repo
+- run `git status` and `git log`
+- run local tests/type checks
+- run read-only DB queries
+- run read-only UI validation
+- create/update documentation
+- fix UI/read-only mapping bugs
+- create local validation reports
+- update Project Brain after completed safe work
+- commit/push safe documentation and read-only app changes after validation
+
+APPROVAL_REQUIRED:
+
+- `prisma/schema.prisma` changes
+- Prisma `db push` or migration
+- DB writes/imports
+- Supabase project/settings changes
+- Google Sheets/AppSheet/Maven/Apps Script changes
+- production deployment
+- email/Drive/customer-facing actions
+- deleting data/files
+- new agent/control architecture
+
+Orchestrator loop:
+
+1. Read `PROJECT_INDEX.md`.
+2. Read `project-brain/TASK_BOARD.md`.
+3. Pick the next approved task.
+4. Assign each task to the existing owner agent.
+5. Execute AUTO_ALLOWED work without stopping.
+6. Validate.
+7. Check that no protected system was affected.
+8. Update Project Brain.
+9. Commit/push if safe and scoped.
+10. Stop only at APPROVAL_REQUIRED gates.
+11. Present proof, risks, and exact approval request.
+
+Approval-gate reports must include:
+
+- what was done
+- what was checked
+- proof of success
+- risks
+- what approval is requested
+- what will happen after approval
+- what systems were confirmed untouched
+
 ## Output
 
 1. Goal understood
@@ -118,4 +173,4 @@ Always choose the smallest safe toolset that can complete the task.
 4. Tools selected
 5. Execution order
 6. Risks
-7. Approval needed
+7. Approval needed, only for APPROVAL_REQUIRED gates

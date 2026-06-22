@@ -53,6 +53,49 @@ When the user says `hey codex`:
 
 If the task conflicts with `PROJECT_INDEX.md` or `PROJECT_OPERATING_PROTOCOL.md`, STOP and report the conflict.
 
+Autonomous Work Loop:
+
+- After Reality Check, load `PROJECT_INDEX.md` and `project-brain/TASK_BOARD.md`.
+- Pick the next approved task.
+- Route work to the correct existing agent owner.
+- Execute AUTO_ALLOWED work without stopping for routine confirmation.
+- Run validation.
+- Check that no protected system was affected.
+- Update Project Brain.
+- Commit/push if the change is safe, scoped, validated, and limited to documentation or read-only app behavior.
+- Stop only when APPROVAL_REQUIRED work is reached.
+- Present proof, risks, and the exact approval request at that gate.
+
+Codex is the main Orchestrator. It must work, validate, collect proof, update Project Brain, and ask Liad only at meaningful approval gates.
+
+AUTO_ALLOWED:
+
+- read files
+- inspect repo
+- run `git status` and `git log`
+- run local tests/type checks
+- run read-only DB queries
+- run read-only UI validation
+- create/update documentation
+- fix UI/read-only mapping bugs
+- create local validation reports
+- update Project Brain after completed safe work
+- commit/push safe documentation and read-only app changes after validation
+
+APPROVAL_REQUIRED:
+
+- `prisma/schema.prisma` changes
+- Prisma `db push` or migration
+- DB writes/imports
+- Supabase project/settings changes
+- Google Sheets/AppSheet/Maven/Apps Script changes
+- production deployment
+- email/Drive/customer-facing actions
+- deleting data/files
+- new agent/control architecture
+
+Approval gate output must include what was done, what was checked, proof of success, risks, what approval is requested, what will happen after approval, and what systems were confirmed untouched.
+
 Checkpoint rule:
 
 - Checkpoints are historical context only.
@@ -106,11 +149,11 @@ If the Project Reality Check cannot be produced, STOP.
 
 3. Rules:
 
-- Do not change code without approval.
+- Do not change production code or APPROVAL_REQUIRED areas without approval.
+- AUTO_ALLOWED documentation and read-only app mapping work may proceed autonomously when it is the next approved task.
 - Do not rewrite stable flows.
 - Use queue architecture.
-- Propose Project Brain updates before commit.
-- Update Project Brain only with approval.
+- Update Project Brain after completed safe AUTO_ALLOWED work.
 
 Closing:
 by codex

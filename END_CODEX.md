@@ -39,7 +39,7 @@ When the user says `by codex`, run this workflow:
 5. Identify changed files.
 6. Summarize completed work.
 7. Summarize uncommitted changes.
-8. Update canonical state files when needed and approved:
+8. Update canonical state files when needed and either approved or allowed by the Autonomous Work Loop:
    - `PROJECT_INDEX.md`
    - `project-brain/CURRENT_TASK.md`
    - `project-brain/TASK_BOARD.md`
@@ -48,7 +48,7 @@ When the user says `by codex`, run this workflow:
    - Last Implementation Commit only when actual implementation changed
 9. Verify no forbidden systems were touched.
 10. Verify next approved task is clear.
-11. Commit only approved files.
+11. Commit only approved files, or safe/scoped/validated AUTO_ALLOWED documentation and read-only app changes.
 12. Push to `origin/main`.
 13. Confirm clean `git status --short --branch`.
 14. Confirm whether follow-up sync is required. Closeout-only metadata commits do not require another sync just to record their own hash.
@@ -65,6 +65,43 @@ What was completed?
 What was changed?
 
 What remains open?
+
+---
+
+## Autonomous Work Loop Closeout
+
+For completed AUTO_ALLOWED work, `by codex` should close the loop without extra ping-pong:
+
+1. Verify validation results.
+2. Check that no protected system was affected.
+3. Update Project Brain with completed safe work, evidence, risks, and next task.
+4. Commit and push safe/scoped documentation and read-only app changes.
+5. Stop only if the next step is APPROVAL_REQUIRED.
+6. Present proof, risks, and the exact approval request.
+
+Codex is the main Orchestrator at closeout. It should not ask Liad for routine safe closeout steps; it should complete validation, Project Brain sync, and safe scoped commit/push, then stop at the next meaningful approval gate.
+
+APPROVAL_REQUIRED closeout must not proceed into:
+
+- `prisma/schema.prisma` changes
+- Prisma `db push` or migration
+- DB writes/imports
+- Supabase project/settings changes
+- Google Sheets/AppSheet/Maven/Apps Script changes
+- production deployment
+- email/Drive/customer-facing actions
+- deleting data/files
+- new agent/control architecture
+
+Approval gate output must include:
+
+- what was done
+- what was checked
+- proof of success
+- risks
+- what approval is requested
+- what will happen after approval
+- what systems were confirmed untouched
 
 ---
 
@@ -158,7 +195,7 @@ Do not modify production code.
 
 Do not touch Prisma, DB, migrations, Google Sheets, AppSheet, Maven, or production Apps Script during closeout unless explicitly approved for that exact action.
 
-Do not commit or push unapproved files.
+Do not commit or push unapproved files except safe/scoped/validated AUTO_ALLOWED documentation and read-only app changes.
 
 Do not invent new tasks.
 

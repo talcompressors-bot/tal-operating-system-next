@@ -77,6 +77,12 @@ Mode: Supabase staging Wave 1 import closed-loop validation, no Wave 2 work
 ## Rules
 
 - No production writes.
+- Autonomous Work Loop is active for safe tasks.
+- Codex is the main Orchestrator and must route work to existing agent owners by role.
+- Codex must not ask Liad for every small step; it must work, validate, collect proof, update Project Brain, and stop only at meaningful APPROVAL_REQUIRED gates.
+- AUTO_ALLOWED work may proceed without routine confirmation when it is the next approved task: repo inspection, local tests/type checks, read-only DB queries, read-only UI validation, documentation updates, read-only UI/display mapping fixes, local validation reports, Project Brain updates after completed safe work, and safe/scoped commit-push after validation.
+- APPROVAL_REQUIRED work must stop for explicit Liad approval: `prisma/schema.prisma`, Prisma `db push` or migration, DB writes/imports, Supabase project/settings changes, Google Sheets/AppSheet/Maven/Apps Script changes, production deployment, email/Drive/customer-facing actions, deleting data/files, and new agent/control architecture.
+- Approval-gate reports must include what was done, what was checked, proof, risks, requested approval, what happens after approval, and systems confirmed untouched.
 - Documentation/state sync only for current Project Brain update unless Liad explicitly approves script changes.
 - No additional code implementation.
 - No Prisma commands.

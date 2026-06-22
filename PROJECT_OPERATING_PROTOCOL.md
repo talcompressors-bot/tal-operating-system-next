@@ -505,6 +505,67 @@ Approval requests must include:
 - rollback plan
 - whether production is affected
 
+## 18A. Autonomous Work Loop
+
+Codex should reduce Liad ping-pong by working autonomously on safe tasks and stopping only at meaningful approval gates.
+
+Codex is the main Orchestrator for normal repository work. Codex must not ask Liad for every small step. It must work, validate, collect proof, update Project Brain, and ask Liad only at meaningful APPROVAL_REQUIRED gates.
+
+AUTO_ALLOWED work may proceed without asking for another approval when it is the next approved task and stays inside the current safety boundaries:
+
+- read files
+- inspect the repository
+- run `git status` and `git log`
+- run local tests and type checks
+- run read-only DB queries
+- run read-only UI validation
+- create or update documentation
+- fix UI/read-only mapping bugs
+- create local validation reports
+- update Project Brain after completed safe work
+- commit and push safe documentation and read-only app changes after validation
+
+APPROVAL_REQUIRED work must stop and request explicit approval before proceeding:
+
+- `prisma/schema.prisma` changes
+- Prisma `db push` or migration
+- DB writes or imports
+- Supabase project or settings changes
+- Google Sheets, AppSheet, Maven, or Apps Script changes
+- production deployment
+- email, Drive, or customer-facing actions
+- deleting data or files
+- new agent or control architecture
+
+Required autonomous loop:
+
+1. Run `hey codex`.
+2. Produce Project Reality Check.
+3. Load `PROJECT_INDEX.md` and `project-brain/TASK_BOARD.md`.
+4. Pick the next approved task.
+5. Route work to the correct existing owner agent by role.
+6. Execute AUTO_ALLOWED work without stopping for routine confirmation.
+7. Run validation.
+8. Check that no protected system was affected.
+9. Update Project Brain.
+10. Commit and push if the change is safe, scoped, and validated.
+11. Stop only when APPROVAL_REQUIRED work is reached.
+12. Present proof, risks, and the exact approval request.
+
+If a task mixes AUTO_ALLOWED and APPROVAL_REQUIRED work, complete the AUTO_ALLOWED discovery, validation, or planning first, then stop before the approval gate.
+
+Codex approval-gate output must include:
+
+- what was done
+- what was checked
+- proof of success
+- risks
+- what approval is requested
+- what will happen after approval
+- what systems were confirmed untouched
+
+Protected systems check must explicitly cover Google Sheets, AppSheet, Maven, Apps Script, production deployment/cutover, DB writes/imports, Prisma schema/migration/db push, Supabase project/settings, email, Drive, customer-facing actions, and file/data deletion.
+
 ## 19. Change Management Process
 
 Follow this process:
@@ -518,7 +579,7 @@ Follow this process:
 7. Implementation
 8. Verification
 9. Documentation
-10. Commit or push only if explicitly requested
+10. Commit or push only when explicitly requested or when the Autonomous Work Loop classifies the completed, validated change as safe and scoped AUTO_ALLOWED work.
 
 Before implementation:
 - identify stable flows affected
@@ -683,7 +744,7 @@ Documentation-only work is done only when:
 - the requested document change is complete
 - no runtime files were changed
 - the diff was reviewed
-- no commit or push occurred unless requested
+- commit/push followed the Autonomous Work Loop or was explicitly requested
 
 ## 28. Escalation Rules
 

@@ -120,9 +120,54 @@ Before any modification, answer:
 3. What stable flow could be affected?
 4. How will it be tested?
 5. Is rollback possible?
-6. Has the user approved the change?
+6. Is the change AUTO_ALLOWED, or has the user approved it?
 
 Do not modify production systems or deploy without explicit approval.
+
+## Autonomous Work Loop
+
+After Project Reality Check, Codex should reduce Liad ping-pong:
+
+1. Load `PROJECT_INDEX.md` and `project-brain/TASK_BOARD.md`.
+2. Pick the next approved task.
+3. Route work to the correct existing agent owner.
+4. Execute AUTO_ALLOWED work without stopping.
+5. Run validation.
+6. Check that no protected system was affected.
+7. Update Project Brain.
+8. Commit/push if safe and scoped.
+9. Stop only when APPROVAL_REQUIRED is reached.
+10. Present proof, risks, and the exact approval request.
+
+Codex is the main Orchestrator. It should not ask Liad for every small step; it should work, validate, collect proof, update Project Brain, and ask only at meaningful gates.
+
+AUTO_ALLOWED:
+
+- read files
+- inspect repo
+- run `git status` and `git log`
+- run local tests/type checks
+- run read-only DB queries
+- run read-only UI validation
+- create/update documentation
+- fix UI/read-only mapping bugs
+- create local validation reports
+- update Project Brain after completed safe work
+- commit/push safe documentation and read-only app changes after validation
+
+APPROVAL_REQUIRED:
+
+- `prisma/schema.prisma` changes
+- Prisma `db push` or migration
+- DB writes/imports
+- Supabase project/settings changes
+- Google Sheets/AppSheet/Maven/Apps Script changes
+- production deployment
+- email/Drive/customer-facing actions
+- deleting data/files
+- new agent/control architecture
+
+Approval-gate output must include what was done, what was checked, proof of success, risks, requested approval, what will happen after approval, and systems confirmed untouched.
 
 ## Forbidden
 
@@ -131,7 +176,7 @@ Do not modify production systems or deploy without explicit approval.
 - Do not deploy without approval.
 - Do not let AppSheet Bot and Apps Script update the same row simultaneously.
 - Do not create new functions before understanding existing functions.
-- Do not update Project Brain files without user approval.
+- Do not update Project Brain files except for approved work or completed AUTO_ALLOWED work.
 
 ## Output Format
 

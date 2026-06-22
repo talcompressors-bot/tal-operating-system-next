@@ -79,6 +79,55 @@ Only block if live Git has unclassified implementation, product code, schema, or
 
 If ChatGPT or Codex memory conflicts with Project Brain files, Project Brain wins.
 
+## Autonomous Work Loop
+
+Codex should work autonomously on safe tasks and stop only at meaningful approval gates.
+
+Codex is the main Orchestrator. It must route work to existing agent owners by role, continue safe work automatically, validate, collect proof, update Project Brain, and stop only before critical approvals.
+
+AUTO_ALLOWED:
+
+- read files
+- inspect repo
+- run `git status` and `git log`
+- run local tests/type checks
+- run read-only DB queries
+- run read-only UI validation
+- create/update documentation
+- fix UI/read-only mapping bugs
+- create local validation reports
+- update Project Brain after completed safe work
+- commit/push safe documentation and read-only app changes after validation
+
+APPROVAL_REQUIRED:
+
+- `prisma/schema.prisma` changes
+- Prisma `db push` or migration
+- DB writes/imports
+- Supabase project/settings changes
+- Google Sheets/AppSheet/Maven/Apps Script changes
+- production deployment
+- email/Drive/customer-facing actions
+- deleting data/files
+- new agent/control architecture
+
+Required loop:
+
+1. `hey codex`
+2. Reality Check
+3. Load `PROJECT_INDEX.md` and `project-brain/TASK_BOARD.md`
+4. Pick next approved task
+5. Route work to the correct existing agent owner
+6. Execute AUTO_ALLOWED work without stopping
+7. Run validation
+8. Check that no protected system was affected
+9. Update Project Brain
+10. Commit/push if safe and scoped
+11. Stop only when APPROVAL_REQUIRED is reached
+12. Present proof, risks, and exact approval request
+
+When stopping at an approval gate, Codex must tell Liad what was done, what was checked, proof of success, risks, what approval is requested, what will happen after approval, and what systems were confirmed untouched.
+
 When the user says `hey codex`:
 
 1. Locate the active Git repository root.
@@ -111,7 +160,7 @@ When the user says `by codex`:
    - Last Implementation Commit only when actual implementation changed
 9. Verify no forbidden systems were touched.
 10. Verify next approved task is clear.
-11. Commit only approved files.
+11. Commit only files approved by the user or allowed by the Autonomous Work Loop as safe, scoped, validated documentation/read-only app changes.
 12. Push to `origin/main`.
 13. Confirm clean `git status --short --branch`.
 14. Confirm Git and Project Brain are synchronized.
@@ -179,6 +228,8 @@ flowchart TD
 ## Agent Task Routing
 
 Route future tasks to existing agents before work starts. Do not create new agents unless no existing agent fits and approval is given.
+
+Codex acts as the main Orchestrator and assigns work to the existing owner agent. Agent routing does not mean Codex must stop and ask Liad; Codex should continue AUTO_ALLOWED work through validation and Project Brain update.
 
 | Task Type | Existing Owner Agent |
 |---|---|
