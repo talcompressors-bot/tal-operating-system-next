@@ -81,6 +81,19 @@ Approved.
 ## 2026-06-22
 
 Decision:
+`hey codex` must sync from GitHub before reading Project Brain when the working tree is clean, and Project Reality Check must compare live Git against Project Brain recorded commits.
+
+Reason:
+New sessions must start from the latest GitHub state instead of stale local Project Brain files. Commit mismatches must be visible before implementation, and closeout must sync canonical Project Brain state.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-22
+
+Decision:
 `hey codex` is the official startup command and `by codex` is the official shutdown command.
 
 Reason:

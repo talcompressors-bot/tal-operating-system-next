@@ -41,6 +41,7 @@ Mode: PostgreSQL/Supabase shadow environment planning, documentation only
 | Project Brain Consolidation Phase 1-3 completed | Startup path enforced through `PROJECT_INDEX.md`; retired current task references cleaned |
 | Retired current task references cleaned | Commit `9433855 Clean retired current task references` |
 | Startup and shutdown workflow enforcement implemented | Commit `e36c35e Implement hey codex and by codex workflow`; `hey codex` starts from `PROJECT_INDEX.md`; `by codex` runs closeout, approved commit, push, and next startup point |
+| Reality Check Git sync hardening implemented | Commit `670f4c8 Harden codex startup and reality check sync`; `hey codex` fast-forwards from `origin/main` before Project Brain reads when clean; Reality Check compares live Git with Project Brain recorded commits |
 
 ## BLOCKED / NOT STARTED
 

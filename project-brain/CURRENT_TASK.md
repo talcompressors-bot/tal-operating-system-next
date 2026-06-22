@@ -15,11 +15,11 @@ Project Brain Consolidation Phase 1-3 completed. PostgreSQL/Supabase shadow envi
 
 ## Current Milestone
 
-Startup and shutdown paths are enforced and retired current task references are cleaned.
+Startup remote sync, shutdown path, and Reality Check commit comparison are enforced.
 
 ## Last Verified Commit
 
-`e36c35e Implement hey codex and by codex workflow`
+`670f4c8 Harden codex startup and reality check sync`
 
 ## Real Current State
 
@@ -40,6 +40,7 @@ Startup and shutdown paths are enforced and retired current task references are 
 - Startup path is enforced through `PROJECT_INDEX.md`.
 - Retired current task references were cleaned in `9433855 Clean retired current task references`.
 - Official startup command `hey codex` and shutdown command `by codex` were implemented in `e36c35e Implement hey codex and by codex workflow`.
+- Reality Check now compares live Git against Project Brain recorded commits, and `hey codex` now fast-forwards from `origin/main` before reading Project Brain when the working tree is clean.
 
 ## Current Task
 
@@ -54,6 +55,8 @@ PostgreSQL/Supabase shadow environment planning, not implementation.
 - `PROJECT_INDEX.md` is the mandatory startup entrypoint.
 - `hey codex` is the official startup command.
 - `by codex` is the official shutdown command.
+- `hey codex` must fetch and fast-forward from `origin/main` before reading Project Brain when the working tree is clean.
+- Project Reality Check must compare live Git latest commit against commits recorded in `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`.
 - `PROJECT_OPERATING_PROTOCOL.md` is the highest authority/governor.
 - `project-brain/CURRENT_TASK.md` is the canonical current task/current phase/next task source.
 - `project-brain/TASK_BOARD.md` is the canonical task board/progress map.
