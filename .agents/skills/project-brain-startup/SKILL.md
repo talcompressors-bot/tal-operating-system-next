@@ -236,17 +236,130 @@ If AUTO_APPROVED, continue working.
 
 If APPROVAL_REQUIRED, stop and present:
 
-- Project Tree
-- Current Position
-- what existed before
-- what changed
-- proof
-- impact
-- risk
-- exact approval requested
-- what will happen after approval
+Executive Approval Report:
 
-Approval-gate output must include what was done, what was checked, proof of success, risks, requested approval, what will happen after approval, and systems confirmed untouched.
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EXECUTIVE APPROVAL REQUEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PROJECT POSITION
+
+* Current Wave
+* Current Task
+* Project Completion %
+* Next Wave
+
+REQUEST
+
+* What Codex wants to do
+
+WHY
+
+* Why this action is needed
+
+EVIDENCE
+
+* What was checked
+* What proof exists
+* Validation results
+* Before/After summary
+
+FILES TO CHANGE
+
+* Exact files
+
+SYSTEMS TOUCHED
+
+* Exact systems affected
+
+SYSTEMS CONFIRMED UNTOUCHED
+
+* Google Sheets
+* AppSheet
+* Maven
+* Apps Script
+* Production
+
+IMPACT ANALYSIS
+
+Systems affected:
+
+* exact files
+* exact modules
+* exact routes
+* exact tables
+* exact agents
+
+Systems verified unaffected:
+
+* Project Brain
+* Governance
+* Wave 1
+* Existing imports
+* Existing Prisma schema
+* Existing Supabase data
+* Existing AppSheet logic
+* Existing Maven integrations
+* Existing automation flows
+* Existing inventory logic
+
+Regression Review:
+
+* What was checked
+* How it was checked
+* Evidence
+
+Dependency Review:
+
+* Which future waves depend on this area
+* Whether the change can block future work
+* Whether approved architecture changes
+
+Approval Confidence:
+
+* LOW
+* MEDIUM
+* HIGH
+
+Mandatory statement:
+
+* "I checked for impact on existing project logic and future approved project roadmap."
+
+RISK
+
+* Low / Medium / High
+* Explanation
+
+ROLLBACK
+
+* How to undo the change
+
+AFTER APPROVAL
+
+* Exact next action
+* Expected outcome
+
+DECISION REQUIRED
+
+* Approve
+* Reject
+* Modify
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+Executive Approval Report rules:
+
+- The executive summary must fit within about 15 lines before detailed evidence.
+- Do not present raw logs first.
+- Detailed evidence may appear below the summary.
+- Include Project Tree Position and PROJECT COMPLETION MODEL.
+- Include Risk, Rollback, and Systems Confirmed Untouched.
+- Include IMPACT ANALYSIS. No approval request is valid without Impact Analysis.
+- Stop and wait for Liad's decision.
+
+Approval-gate output must use the Executive Approval Report format and include what was done, what was checked, proof of success, risks, requested approval, what will happen after approval, and systems confirmed untouched.
 
 Proof Requirement:
 

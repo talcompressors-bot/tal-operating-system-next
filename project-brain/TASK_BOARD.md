@@ -91,7 +91,15 @@ Mode: Supabase staging Wave 1 import closed-loop validation, no Wave 2 work
   - Safe commits: documentation-only commits, Project Brain commits, governance commits, read-only validation report commits, safe implementation commits after validation, `git push` of approved safe-scope work.
 - Do not ask Liad for approval when executing AUTO_APPROVED actions; only stop for APPROVAL_REQUIRED gates.
 - APPROVAL_REQUIRED work must stop for explicit Liad approval: `schema.prisma` changes, Prisma `db push`, Prisma `migrate`, DB writes, imports, seeds, Supabase project/settings changes, Google Sheets changes, AppSheet changes, Maven changes, Apps Script changes, Drive writes, email/customer-facing actions, production deployment, production cutover, deleting business data, deleting source files, new agent architecture, and new governance architecture.
-- Before stopping for approval, Codex must verify whether the action is AUTO_APPROVED. If AUTO_APPROVED, continue working. If APPROVAL_REQUIRED, stop and present Project Tree, Current Position, what existed before, what changed, proof, impact, risk, exact approval requested, and what will happen after approval.
+- Before stopping for approval, Codex must verify whether the action is AUTO_APPROVED. If AUTO_APPROVED, continue working. If APPROVAL_REQUIRED, stop and present an Executive Approval Report.
+- Executive Approval Reports must start with `EXECUTIVE APPROVAL REQUEST` and include PROJECT POSITION, REQUEST, WHY, EVIDENCE, FILES TO CHANGE, SYSTEMS TOUCHED, SYSTEMS CONFIRMED UNTOUCHED, RISK, ROLLBACK, AFTER APPROVAL, and DECISION REQUIRED.
+- Executive Approval Reports must fit the executive summary within about 15 lines before detailed evidence, must not present raw logs first, must include Project Tree Position and PROJECT COMPLETION MODEL, must include Risk, Rollback, and Systems Confirmed Untouched, and must stop for Liad to Approve, Reject, or Modify.
+- Executive Approval Reports must include IMPACT ANALYSIS. No approval request is valid without Impact Analysis.
+- IMPACT ANALYSIS must report systems affected, systems verified unaffected, Regression Review, Dependency Review, Approval Confidence, and the mandatory statement.
+- Systems affected must list exact files, modules, routes, tables, and agents.
+- Systems verified unaffected must cover Project Brain, Governance, Wave 1, existing imports, existing Prisma schema, existing Supabase data, existing AppSheet logic, existing Maven integrations, existing automation flows, and existing inventory logic.
+- Approval Confidence must be LOW, MEDIUM, or HIGH.
+- IMPACT ANALYSIS must explicitly state: "I checked for impact on existing project logic and future approved project roadmap."
 - Approval-gate reports must include what was done, what was checked, proof, risks, requested approval, what happens after approval, and systems confirmed untouched.
 - Proof Requirement: before closing any completed task, Codex must provide what was wrong before, what changed, evidence, validation result, and user-visible impact.
 - Preferred evidence includes screenshots, Playwright screenshots, HTML render samples, before/after comparisons, and counts.
