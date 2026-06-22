@@ -194,6 +194,17 @@ Special relationship decisions:
 
 Import strategy must be staged, idempotent, and shadow-only.
 
+Import waves:
+
+| Wave | Source Sheets | Target PostgreSQL Tables | Gate |
+|---|---|---|---|
+| Wave 1 | `Customers_Final`, `ServiceReports`, `ReportEquipmentItems` | `customers`, `service_reports`, `report_equipment_items` | Required before Next.js can replace AppSheet for service reports, along with UI/write-path/cutover approvals. |
+| Wave 2 | `ProductsCatalog`, `PartsUsed`, `AIDraftSuggestions`, `BusinessDocuments`, `BusinessDocumentItems`, `BusinessDocumentLog`, `ApprovalsLog`, `EmailLog` | `products`, `parts_used`, `ai_draft_suggestions`, `business_documents`, `business_document_items`, `business_document_logs`, `approvals`, `email_logs` | Depends on Wave 1. |
+| Wave 3 | `InvoiceMavenCustomers`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, `InvoiceMavenItems`, any other Maven-origin tabs, `SyncState`, `SyncLog`, `ErrorLog` | `maven_customers`, `maven_documents`, `maven_document_items`, `maven_items`, to-classify Maven-origin targets, `sync_states`, `sync_logs`, `error_logs` | Depends on Wave 1 and Maven-origin discovery; may depend on Wave 2 links to `BusinessDocuments` and products. |
+| Wave 4 | `InventoryStock`, `SuppliersProducts`, `InspectionItems`, `Lists`, `AppMenu`, governance/security sheets | `inventory_stocks`, future procurement/inspection/reference/UI/governance/security targets | Extended/future scope; separate approval required. |
+
+Historical/config-only sheets are excluded unless later approved: `Customers2`, `PDF_Template`, `SetupGuide`, `AppSheet_Formulas`, `ServiceReport_Form_View`.
+
 Recommended order:
 
 1. Import reference/master data: `customers`, `products`, `maven_customers`, `maven_items`.

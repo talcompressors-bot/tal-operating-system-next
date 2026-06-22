@@ -7,7 +7,7 @@ Mode: Supabase staging import dry-run validation planning, no data writes
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Import dry-run validation planning | Prepare first staging import validation without writing data | Minimal first dry-run is `Customers_Final`, `ServiceReports`, `ReportEquipmentItems`; second-stage discovery includes every Maven-origin Sheets tab and link/classification checks before import | Yes before dry-run execution or script work |
+| Import dry-run validation planning | Prepare first staging import validation without writing data | Import Waves are documented; Wave 1/minimal first dry-run is `Customers_Final`, `ServiceReports`, `ReportEquipmentItems`; Wave 3 includes every Maven-origin Sheets tab and link/classification checks before import | Yes before dry-run execution or script work |
 
 ## NEXT
 
@@ -15,6 +15,7 @@ Mode: Supabase staging import dry-run validation planning, no data writes
 |---|---|---|---|
 | Staging import dry-run validation | Validate source counts, uniqueness, parent links, enum/status mappings, and excluded legacy/test rows without writing data | Dry-run report shows pass/fail, blockers, warnings, and excluded `ReportEquipmentItems` counts | Yes |
 | Second-stage Maven dry-run discovery | Confirm all Maven-origin Sheets and their links before import | Known `InvoiceMaven*` tabs plus any other Sheets tabs storing Maven imported/synced/created data are documented with purpose, target table, Customer/BusinessDocument/Product links, and active V1/later V1/future-historical classification | Yes before Maven history import |
+| Import Waves execution planning | Sequence source imports by dependency wave | Wave 1 service-report core precedes Wave 2 product/AI/business documents; Wave 3 Maven/sync follows discovery; Wave 4 extended/future sources require separate approval | Yes before real import |
 | Supabase production shadow setup | Create `talcompressors-next-prod` only after staging validation passes | Production shadow project exists; no production cutover and no AppSheet/Sheets/Maven changes | Yes after staging validation |
 | Real staging import | Import validated V1 data into Supabase staging | Requires approved dry-run report; legacy/test `ReportEquipmentItems` rows remain excluded by design | Yes before running import |
 | Server Actions architecture | Make internal Next.js write flows use Server Actions by default | Approvals, AI draft approval, BusinessDocument creation, ServiceReport shadow updates, import review, queue commands, PostgreSQL mutations, and offline sync actions have Server Action paths | Yes before write implementation |
@@ -56,6 +57,7 @@ Mode: Supabase staging import dry-run validation planning, no data writes
 | Supabase staging schema pushed | Staging-only `prisma db push` completed after explicit approval; no migration, seed, import, production action, AppSheet/Sheets/Maven action, or code change occurred |
 | Staging schema verification completed | Read-only verification found 21 public V1 tables, no missing/extra V1 tables, and approved indexes/relations/enums present |
 | ReportEquipmentItems exclusion terminology updated | Commit `b6b709b Reclassify ReportEquipmentItems exclusions`; 9 rows missing `ReportID` and 25 unmatched `ReportID` rows are classified as historical test data, not business data, no recovery required, excluded by design |
+| Import Waves plan documented | Wave 1: `Customers_Final`, `ServiceReports`, `ReportEquipmentItems`; Wave 2: product/AI/business document support; Wave 3: Maven-origin/sync; Wave 4: extended/future inventory, reference, governance/security sources |
 
 ## BLOCKED / NOT STARTED
 

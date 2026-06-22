@@ -33,6 +33,28 @@ Recommended import order:
 
 ---
 
+# Import Waves Plan
+
+Import waves are dependency gates for dry-run validation and later approved import execution. They do not approve import by themselves.
+
+| Wave | Source Sheets | Target PostgreSQL Tables | Purpose |
+|---|---|---|---|
+| Wave 1 | `Customers_Final`, `ServiceReports`, `ReportEquipmentItems` | `customers`, `service_reports`, `report_equipment_items` | Core service-report dataset. This is the minimal first dry-run scope and the minimum data wave required before Next.js can replace AppSheet for service report screens. |
+| Wave 2 | `ProductsCatalog`, `PartsUsed`, `AIDraftSuggestions`, `BusinessDocuments`, `BusinessDocumentItems`, `BusinessDocumentLog`, `ApprovalsLog`, `EmailLog` | `products`, `parts_used`, `ai_draft_suggestions`, `business_documents`, `business_document_items`, `business_document_logs`, `approvals`, `email_logs` | Product, parts, AI draft, business-document, approval, and communication support data. |
+| Wave 3 | `InvoiceMavenCustomers`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, `InvoiceMavenItems`, any other Maven-origin tabs, `SyncState`, `SyncLog`, `ErrorLog` | `maven_customers`, `maven_documents`, `maven_document_items`, `maven_items`, to-classify Maven-origin targets, `sync_states`, `sync_logs`, `error_logs` | Maven-origin history/reference data and sync observability. |
+| Wave 4 | `InventoryStock`, `SuppliersProducts`, `InspectionItems`, `Lists`, `AppMenu`, governance/security sheets | `inventory_stocks`, future procurement/inspection/reference/UI/governance/security targets | Extended/future operational, procurement, reference, UI, governance, and security scope. |
+
+Historical/config-only sheets are excluded unless later approved: `Customers2`, `PDF_Template`, `SetupGuide`, `AppSheet_Formulas`, `ServiceReport_Form_View`.
+
+Wave dependencies:
+
+1. Wave 1 must pass dry-run validation before any service-report replacement/cutover planning.
+2. Wave 2 depends on Wave 1 because products, parts, AI drafts, business documents, approvals, and email logs link back to customers and service reports.
+3. Wave 3 depends on Wave 1 for customer matching and may depend on Wave 2 where Maven documents link to business documents or product/catalog data.
+4. Wave 4 depends on the earlier waves and requires separate approval for extended/future targets.
+
+---
+
 # Table Migration Plan
 
 | Target Table | Source Sheet | Estimated Row Count | Source Primary Key | Target Prisma Model | Migration Strategy | Required Data Cleanup | Risk Level |
