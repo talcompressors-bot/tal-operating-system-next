@@ -13,7 +13,7 @@ Mode: Supabase staging-first shadow environment planning, documentation only
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Supabase staging project creation and secret setup | Create `talcompressors-next-staging` and configure required secret names only after approval | Staging project exists with `DATABASE_URL`, `DIRECT_URL`, and `NEXT_PUBLIC_APP_ENV`; no schema push, migration, import, or production cutover | Yes |
+| Supabase staging project creation and secret setup | Create `talcompressors-next-staging` and configure real staging secret values outside git | Staging project exists; `DATABASE_URL`, `DIRECT_URL`, and `NEXT_PUBLIC_APP_ENV` values are stored outside git; no schema push, migration, import, or production cutover | Yes |
 | Prisma staging reconciliation | Prepare hosted Supabase schema readiness before DB push | `DIRECT_URL` and `ReportEquipmentItem.reportCounter` reconciled before any DB push | Yes before code/schema edits |
 | Supabase production shadow setup | Create `talcompressors-next-prod` only after staging validation passes | Production shadow project exists; no production cutover and no AppSheet/Sheets/Maven changes | Yes after staging validation |
 | Import mapping and import validation | Map source rows to PostgreSQL and validate exclusions before import | `ReportEquipmentItems` imports only rows linked to real `ServiceReports`; legacy/test exclusions are reported | Yes before running import |
@@ -49,12 +49,13 @@ Mode: Supabase staging-first shadow environment planning, documentation only
 | Closeout commit loop prevention documented | Closeout-only metadata commits do not require another Project Brain sync just to record their own hash |
 | Master map and agent routing added | Commit `2963977 Add master map and agent routing`; classified as governance implementation because it changed project routing behavior |
 | Supabase staging-first shadow plan approved | Commit `d1d6f88 Document Supabase staging-first shadow plan`; use `talcompressors-next-staging` first and `talcompressors-next-prod` production shadow only after staging validation; local PostgreSQL is not first target |
+| Staging env placeholder and secret ignore prepared | `.env.staging.example` contains required env names only; `.gitignore` blocks real `.env` files while allowing examples; Supabase project creation remains pending authenticated access |
 
 ## BLOCKED / NOT STARTED
 
 | Task | Blocker | Next Unblock Step |
 |---|---|---|
-| Supabase staging project creation | Environment setup requires explicit approval after planning | Approve staging project creation and secret setup only |
+| Supabase staging project creation | Requires authenticated Supabase CLI/API/browser access | Create `talcompressors-next-staging` through authenticated Supabase path; keep real secret values outside git |
 | Database migration | No PostgreSQL environment has been created; no migration approval | Approve environment first, then migration plan |
 | Schema push | Prisma reconciliation is required first; no DB push is approved | Approve `DIRECT_URL` and `ReportEquipmentItem.reportCounter` reconciliation first |
 | Import execution | Shadow environment and import validation are not complete | Prepare staging environment and validate import mapping first |

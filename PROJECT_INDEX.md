@@ -128,9 +128,9 @@ This section is the living navigation screen. It summarizes current reality only
 | Field | Current Reality | Canonical Evidence |
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging-first shadow environment planning is approved | `project-brain/CURRENT_TASK.md` |
-| Current milestone | Supabase staging-first plan documented; implementation still requires explicit approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Current task | Prepare Supabase staging-first shadow environment implementation approval after planning | `project-brain/CURRENT_TASK.md` |
-| Next approved task | Supabase staging project creation and secret setup only after approval; no schema push, migration, import, production cutover, or AppSheet/Sheets/Maven changes | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current milestone | Supabase staging-first plan documented; env placeholder and secret ignore rules prepared; Supabase project creation still requires authenticated access | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current task | Create Supabase staging project through an authenticated Supabase path and place staging secret values outside git | `project-brain/CURRENT_TASK.md` |
+| Next approved task | Create `talcompressors-next-staging` and configure real staging secret values outside git only; no schema push, migration, import, production cutover, or AppSheet/Sheets/Maven changes | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Last Implementation Commit | `d1d6f88 Document Supabase staging-first shadow plan` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
@@ -157,8 +157,8 @@ This map is a navigation summary only. The visual map is view-only and is not a 
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging-first shadow environment plan approved | `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model | `project-brain/TASK_BOARD.md` |
-| Current task | Prepare Supabase staging project creation and secret setup approval after planning | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Next approved task | Supabase staging project creation and secret setup only after approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current task | Create `talcompressors-next-staging` through an authenticated Supabase path and keep real secret values outside git | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Next approved task | Authenticated Supabase staging project creation and out-of-git secret value setup only | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |
 | Dependency order | Governance and Project Brain state -> system map/source review -> PostgreSQL V1 scope -> data migration planning -> Supabase staging-first plan -> approved staging project/secrets -> Prisma reconciliation approval -> approved staging schema push -> approved import validation -> production shadow approval -> Server Actions/offline sync | `project-brain/TASK_BOARD.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md`, `project-brain/migration/DATA_MIGRATION_PLAN.md` |

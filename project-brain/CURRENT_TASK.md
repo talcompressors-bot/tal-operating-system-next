@@ -50,14 +50,17 @@ Startup remote sync, shutdown path, Reality Check commit comparison, and Supabas
 - `d1d6f88 Document Supabase staging-first shadow plan` is classified as the latest governance implementation commit because it changed the approved Supabase shadow environment sequence.
 - Supabase staging-first shadow plan is approved: use `talcompressors-next-staging` first, then `talcompressors-next-prod` as production shadow only after staging validation passes.
 - Local PostgreSQL is not the first target.
+- Staging env placeholder file `.env.staging.example` was prepared with names only: `NEXT_PUBLIC_APP_ENV`, `DATABASE_URL`, and `DIRECT_URL`.
+- `.gitignore` blocks real `.env` files while allowing env example files.
+- Supabase staging project creation is not complete because no authenticated Supabase CLI/API/browser path is available in this environment.
 
 ## Current Task
 
-Prepare Supabase staging project creation and secret setup approval after planning. This is documentation/state planning only until implementation is explicitly approved.
+Create Supabase staging project `talcompressors-next-staging` through an authenticated Supabase path and place real staging secret values outside git.
 
 ## Next Approved Task
 
-Supabase staging project creation and secret setup only after approval.
+Authenticated Supabase staging project creation and out-of-git secret value setup only.
 
 ## Approved Architecture Decisions In Force
 
@@ -119,5 +122,6 @@ Supabase staging project creation and secret setup only after approval.
 ## Done When
 
 - Supabase staging-first shadow environment planning scope is clear.
-- No implementation, migration, DB creation, or Prisma command has run.
-- Approval requirements are explicit before any environment setup.
+- Env placeholder and secret ignore rules are prepared.
+- Supabase project creation remains pending authenticated access.
+- No migration, DB schema action, import, or Prisma command has run.

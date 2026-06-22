@@ -3,6 +3,19 @@
 ## 2026-06-22
 
 Decision:
+Real Supabase staging secret values must remain outside git; repository may contain env example placeholders with names only.
+
+Reason:
+The staging gate needs `DATABASE_URL`, `DIRECT_URL`, and `NEXT_PUBLIC_APP_ENV`, but secret values must not be committed. `.env.staging.example` may document names only, and `.gitignore` must block real `.env` files while allowing example files.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-22
+
+Decision:
 `d1d6f88 Document Supabase staging-first shadow plan` is classified as the Last Implementation Commit.
 
 Reason:
