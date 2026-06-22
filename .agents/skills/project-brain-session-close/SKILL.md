@@ -1,34 +1,30 @@
 ---
 name: project-brain-session-close
-description: Close a TalCompressors-ServiceReports-AI Codex session with a Project Brain handoff. Use when the user asks to close a session, end a Codex session, write a session checkpoint, prepare a handoff, update Project Brain after completed work, summarize changed files before stopping, or suggest a commit message without committing.
+description: Close a TalCompressors-ServiceReports-AI Codex session with a Project Brain handoff. Use when the user says "by codex" or asks to close a session, end a Codex session, write a session checkpoint, prepare a handoff, update Project Brain after completed work, summarize changed files before stopping, commit approved closeout files, push approved closeout files, or suggest a commit message.
 ---
 
 # Project Brain Session Close
 
 Use this skill to close a TalCompressors-ServiceReports-AI work session cleanly and preserve enough state for the next session to resume without screenshots or repeated explanations.
 
-This skill prepares a closeout and, only with explicit user approval, updates Project Brain files. It must not commit, push, deploy, create Maven documents, send email, or modify production systems unless the user separately approves that action.
+This skill prepares a closeout and, only with explicit user approval, updates Project Brain files. `by codex` is the official shutdown command. It may commit and push only approved closeout files as part of that command. It must not deploy, create Maven documents, send email, or modify production systems unless the user separately approves that exact action.
 
 ## Required Reads
 
 Read these files when they exist:
 
 1. `PROJECT_INDEX.md`
-2. `AI_RULES.md`
-3. `agents/PROJECT_BRAIN_AGENT.md`
-4. `project-brain/current/CURRENT_TASK.md`
-5. `project-brain/current/LIVE_OBJECTS.md`
-6. `project-brain/checkpoints/ACTIVE_SESSION_STATE.md`
-7. Latest relevant checkpoint under `project-brain/checkpoints/`
-8. `project-brain/PROJECT_BRAIN_MASTER.md`
-9. `project-brain/maps/SYSTEM_MAP.md`
-10. `project-brain/bugs/CURRENT_BUGS.md`
-11. `project-brain/lessons/LESSONS_LEARNED.md`
-12. `project-brain/DECISION_LOG.md`
+2. `PROJECT_OPERATING_PROTOCOL.md`
+3. `START_CODEX.md`
+4. `END_CODEX.md`
+5. `.agents/skills/project-brain-session-close/SKILL.md`
+6. `project-brain/CURRENT_TASK.md`
+7. `project-brain/TASK_BOARD.md`
+8. `project-brain/DECISION_LOG.md`
 
 Also inspect:
 
-- `git status --short`
+- `git status --short --branch`
 - Relevant diffs for files changed in the current session
 - Any task-specific agent or skill files used during the session
 
@@ -58,26 +54,34 @@ Before recommending closeout updates, identify whether the session affected or c
 - Signed report / HTML file save logic
 - AppSheet Bot and Apps Script row update boundaries
 
-## Closeout Workflow
+## by codex Closeout Workflow
 
 Follow this order:
 
-1. Load Project Brain state from the required reads.
-2. Inspect git status.
-3. Review changed files before proposing any Project Brain updates.
-4. Summarize what was completed, what was verified, and what remains open.
-5. Preserve active IDs and stable-system risks.
-6. Identify documentation gaps, new bugs, lessons, or roadmap changes.
-7. Propose exact Project Brain file updates, if any.
-8. Ask for approval before editing Project Brain files.
-9. Suggest a commit message only after reviewing changed files.
-10. Do not commit or push unless the user explicitly asks.
+1. Run Project Reality Check.
+2. Run `git status --short --branch`.
+3. Identify changed files.
+4. Summarize completed work.
+5. Summarize uncommitted changes.
+6. Update canonical state files when needed and approved:
+   - `PROJECT_INDEX.md`
+   - `project-brain/CURRENT_TASK.md`
+   - `project-brain/TASK_BOARD.md`
+   - `project-brain/DECISION_LOG.md` if decisions changed
+7. Verify no forbidden systems were touched.
+8. Verify next approved task is clear.
+9. Commit only approved files.
+10. Push to `origin/main`.
+11. Confirm clean `git status --short --branch`.
+12. Print next `hey codex` startup point.
 
 ## Project Brain Update Targets
 
 When the user approves closeout file updates, update only the files that are relevant:
 
-- `project-brain/current/CURRENT_TASK.md` for active task status and next step
+- `PROJECT_INDEX.md` for Project Reality Check and navigation state
+- `project-brain/CURRENT_TASK.md` for active task status and next step
+- `project-brain/TASK_BOARD.md` for task board and progress map
 - `project-brain/current/LIVE_OBJECTS.md` for known active IDs
 - `project-brain/checkpoints/` for a dated handoff checkpoint
 - `project-brain/lessons/LESSONS_LEARNED.md` for durable lessons
@@ -92,18 +96,16 @@ Do not update Project Brain files just because the session is ending. Update the
 
 Before suggesting a commit message:
 
-1. Run `git status --short`.
+1. Run `git status --short --branch`.
 2. Review relevant diffs.
 3. Separate files changed by this session from unrelated existing changes when possible.
 4. Report untracked files.
-5. Do not stage, commit, or push unless explicitly requested.
+5. Stage, commit, and push only approved files when `by codex` or a separate explicit user request authorizes it.
 
 If the user asks for a commit later, keep the commit scoped to the approved session changes.
 
 ## Forbidden
 
-- Do not commit.
-- Do not push.
 - Do not deploy.
 - Do not create Maven documents.
 - Do not send customer email.
@@ -111,6 +113,7 @@ If the user asks for a commit later, keep the commit scoped to the approved sess
 - Do not rewrite stable flows during closeout.
 - Do not let AppSheet Bot and Apps Script update the same row.
 - Do not update Project Brain without approval.
+- Do not commit or push unapproved files.
 - Do not erase or overwrite historical checkpoints.
 
 ## Output Format

@@ -1,7 +1,7 @@
 # END CODEX
 
 Activation:
-ביי קודקס
+by codex
 
 ## Mission
 
@@ -9,15 +9,45 @@ Close the current work session.
 
 Do not leave important knowledge only in chat.
 
+`by codex` is the official shutdown command for this repository.
+
 ---
 
 ## Read First
 
-- project-brain/PROJECT_BRAIN_MASTER.md
-- project-brain/checkpoints/
-- project-brain/lessons/
-- project-brain/bugs/
-- project-brain/maps/
+- PROJECT_INDEX.md
+- PROJECT_OPERATING_PROTOCOL.md
+- START_CODEX.md
+- END_CODEX.md
+- .agents/skills/project-brain-session-close/SKILL.md
+- project-brain/CURRENT_TASK.md
+- project-brain/TASK_BOARD.md
+- project-brain/DECISION_LOG.md
+
+If `PROJECT_INDEX.md` has not been read first, STOP.
+
+---
+
+## Required by codex Workflow
+
+When the user says `by codex`, run this workflow:
+
+1. Run Project Reality Check.
+2. Run `git status --short --branch`.
+3. Identify changed files.
+4. Summarize completed work.
+5. Summarize uncommitted changes.
+6. Update canonical state files when needed and approved:
+   - `PROJECT_INDEX.md`
+   - `project-brain/CURRENT_TASK.md`
+   - `project-brain/TASK_BOARD.md`
+   - `project-brain/DECISION_LOG.md` if decisions changed
+7. Verify no forbidden systems were touched.
+8. Verify next approved task is clear.
+9. Commit only approved files.
+10. Push to `origin/main`.
+11. Confirm clean `git status --short --branch`.
+12. Print next `hey codex` startup point.
 
 ---
 
@@ -35,70 +65,73 @@ What remains open?
 
 ### Project Brain Update
 
-Suggest updates for:
+Update or confirm:
+
+- Project Reality Check
 - Current Task
-- Checkpoints
-- Lessons Learned
-- Open Bugs
-- Roadmap
-- System Map
+- Task Board
+- Decision Log, if decisions changed
+- Next approved task
 
 ---
 
 ### Current Task Update
 
-Update:
+Update or confirm:
 
-- Current ReportCounter
-- Current BusinessDocumentId
-- Current AutomationCommandId
-- Current Investigation
+- Current phase
+- Current task
+- Next approved task
+- Last verified commit
 - What was tested
 - Results
-- Next Step
-- Session Handoff Notes
+- Session handoff notes
 
 ---
 
 ### Risk Review
 
-Did any change affect:
+Verify whether any change affected:
 
 - ServiceApp_FIX
 - Maven Sync
 - Queue Architecture
 - BusinessDocuments
 - Apps Script
+- Google Sheets
+- AppSheet
+- Prisma / DB / migrations
 
 ---
 
 ### Git Review
 
-Run mentally:
+Run:
 
-- git status
+- `git status --short --branch`
 - changed files
 - new files
+- relevant diffs
 
 ---
 
-### Suggested Commit
+### Commit and Push
 
-Provide:
+Commit only approved files.
 
-Commit Title
+Push only the approved commit to `origin/main`.
 
-Commit Description
+Confirm clean `git status --short --branch`.
 
 ---
 
 ### Next Session Startup
 
-Recommend:
+Print the next `hey codex` startup point:
 
-- next task
+- next approved task
 - files to read
-- bugs to investigate
+- blockers or approvals needed
 
 ---
 
@@ -106,11 +139,13 @@ Recommend:
 
 Do not deploy.
 
-Do not push.
-
 Do not modify production code.
 
-Only summarize and prepare next session.
+Do not touch Prisma, DB, migrations, Google Sheets, AppSheet, Maven, or production Apps Script during closeout unless explicitly approved for that exact action.
+
+Do not commit or push unapproved files.
+
+Do not invent new tasks.
 
 ---
 
@@ -119,5 +154,5 @@ Only summarize and prepare next session.
 1. Session Summary
 2. Brain Updates
 3. Risks
-4. Commit Message
-5. Next Recommended Task
+4. Commit and Push Result
+5. Next `hey codex` Startup Point

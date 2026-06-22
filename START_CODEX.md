@@ -1,7 +1,9 @@
 # START CODEX
 
 Activation:
-שלום קודקס
+hey codex
+
+`hey codex` is the official startup command for this repository.
 
 When activated:
 
@@ -14,6 +16,13 @@ When activated:
 - relevant task-specific docs
 
 If `PROJECT_INDEX.md` has not been read first, STOP. Do not analyze, plan, propose, or implement until `PROJECT_INDEX.md` is read.
+
+When the user says `hey codex`:
+
+1. Read `PROJECT_INDEX.md` first.
+2. Produce Project Reality Check.
+3. Continue from next approved task only.
+4. Do not invent new tasks.
 
 If the task conflicts with `PROJECT_INDEX.md` or `PROJECT_OPERATING_PROTOCOL.md`, STOP and report the conflict.
 
@@ -65,4 +74,4 @@ If the Project Reality Check cannot be produced, STOP.
 - Update Project Brain only with approval.
 
 Closing:
-ביי קודקס
+by codex

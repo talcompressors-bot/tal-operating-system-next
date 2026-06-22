@@ -237,6 +237,17 @@ Rules:
 
 ## 8. Startup Sequence
 
+Official startup command:
+
+- `hey codex`
+
+When the user says `hey codex`, Codex must:
+
+1. Read `PROJECT_INDEX.md` first.
+2. Produce Project Reality Check.
+3. Continue from next approved task only.
+4. Do not invent new tasks.
+
 Before analysis, planning, code changes, schema work, deployment, or production action:
 
 1. Read `PROJECT_INDEX.md`.
@@ -266,6 +277,29 @@ If the Project Reality Check cannot be produced, STOP.
 
 ## 9. Shutdown Sequence
 
+Official shutdown command:
+
+- `by codex`
+
+When the user says `by codex`, Codex must:
+
+1. Run Project Reality Check.
+2. Run `git status --short --branch`.
+3. Identify changed files.
+4. Summarize completed work.
+5. Summarize uncommitted changes.
+6. Update canonical state files when needed and approved:
+   - `PROJECT_INDEX.md`
+   - `project-brain/CURRENT_TASK.md`
+   - `project-brain/TASK_BOARD.md`
+   - `project-brain/DECISION_LOG.md` if decisions changed
+7. Verify no forbidden systems were touched.
+8. Verify next approved task is clear.
+9. Commit only approved files.
+10. Push to `origin/main`.
+11. Confirm clean `git status --short --branch`.
+12. Print next `hey codex` startup point.
+
 At session close or handoff:
 
 1. Summarize what was completed.
@@ -276,7 +310,7 @@ At session close or handoff:
 6. Recommend Project Brain updates.
 7. Create or propose a checkpoint if meaningful state changed.
 8. Suggest a commit message only after reviewing the diff.
-9. Do not commit, push, deploy, or update Project Brain unless explicitly approved.
+9. Do not deploy or update Project Brain unless explicitly approved.
 
 ## 10. Reuse Before Create Rule
 

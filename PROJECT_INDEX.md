@@ -14,6 +14,14 @@ Master source for ServiceApp_FIX project.
 
 Every Codex or ChatGPT project session must start with this file.
 
+Official startup command:
+
+- `hey codex`
+
+Official shutdown command:
+
+- `by codex`
+
 Required startup order:
 
 1. PROJECT_INDEX.md
@@ -36,6 +44,32 @@ Project Reality Check must include:
 - files relevant to the requested work
 
 If ChatGPT or Codex memory conflicts with Project Brain files, Project Brain wins.
+
+When the user says `hey codex`:
+
+1. Read `PROJECT_INDEX.md` first.
+2. Produce Project Reality Check.
+3. Continue from next approved task only.
+4. Do not invent new tasks.
+
+When the user says `by codex`:
+
+1. Run Project Reality Check.
+2. Run `git status --short --branch`.
+3. Identify changed files.
+4. Summarize completed work.
+5. Summarize uncommitted changes.
+6. Update canonical state files when needed and approved:
+   - `PROJECT_INDEX.md`
+   - `project-brain/CURRENT_TASK.md`
+   - `project-brain/TASK_BOARD.md`
+   - `project-brain/DECISION_LOG.md` if decisions changed
+7. Verify no forbidden systems were touched.
+8. Verify next approved task is clear.
+9. Commit only approved files.
+10. Push to `origin/main`.
+11. Confirm clean `git status --short --branch`.
+12. Print next `hey codex` startup point.
 
 Before creating any new planning file, map, dashboard, control center, protocol, agent, or roadmap, Codex must search existing files and prove no existing file already serves that purpose.
 
