@@ -1,5 +1,18 @@
 # DECISION LOG
 
+## 2026-06-22
+
+Decision:
+`2963977 Add master map and agent routing` is classified as the Last Implementation Commit.
+
+Reason:
+The commit changed project governance/routing behavior by adding the master project map and routing future work to existing owner agents. It is an implementation/governance commit, not closeout metadata. Last Closeout Commit remains `8114210 Sync project brain commit model state`.
+
+Status:
+Approved.
+
+---
+
 ## 2026-05-25
 
 Decision:

@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, and Reality Check commit comparison are enfo
 
 ## Last Implementation Commit
 
-`315b8cc Fix reality check commit model`
+`2963977 Add master map and agent routing`
 
 ## Last Closeout Commit
 
@@ -45,7 +45,7 @@ Startup remote sync, shutdown path, and Reality Check commit comparison are enfo
 - Retired current task references were cleaned in `9433855 Clean retired current task references`.
 - Official startup command `hey codex` and shutdown command `by codex` were implemented in `e36c35e Implement hey codex and by codex workflow`.
 - Reality Check now compares live Git against Project Brain recorded commits, and `hey codex` now fast-forwards from `origin/main` before reading Project Brain when the working tree is clean.
-- `315b8cc Fix reality check commit model` is classified as the latest governance implementation commit because it changed Reality Check behavior.
+- `2963977 Add master map and agent routing` is classified as the latest governance implementation commit because it changed project governance/routing behavior.
 - `8114210 Sync project brain commit model state` is classified as the latest closeout metadata/state-sync commit.
 
 ## Current Task
