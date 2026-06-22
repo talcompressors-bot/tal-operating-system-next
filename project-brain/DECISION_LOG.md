@@ -3,6 +3,19 @@
 ## 2026-06-22
 
 Decision:
+`c11c460 Document import waves plan` is classified as the Last Implementation Commit.
+
+Reason:
+The commit changed approved migration planning by defining Import Waves 1-4, preserving Wave 1 as the service-report core gate, and recording that Wave 1 is required before Next.js can replace AppSheet for service reports. It is an implementation/planning commit, not closeout metadata. Last Closeout Commit remains `8114210 Sync project brain commit model state`.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-22
+
+Decision:
 `b6b709b Reclassify ReportEquipmentItems exclusions` is classified as the Last Implementation Commit.
 
 Reason:

@@ -131,7 +131,7 @@ This section is the living navigation screen. It summarizes current reality only
 | Current milestone | Supabase staging project/secrets prepared outside git; Prisma schema pushed to staging; read-only schema verification passed | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Current task | Prepare staging import dry-run validation without writing data | `project-brain/CURRENT_TASK.md` |
 | Next approved task | Run or build staging import dry-run validation only after approval; no real import, migration, schema change, production action, or AppSheet/Sheets/Maven change | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Last Implementation Commit | `b6b709b Reclassify ReportEquipmentItems exclusions` | Git history; `project-brain/CURRENT_TASK.md` |
+| Last Implementation Commit | `c11c460 Document import waves plan` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
 | Blocked/forbidden actions | No production writes, Prisma migration, DB creation, Sheets/AppSheet/Maven actions, new planning/control files, new agents, or implementation before Reality Check | `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md` |

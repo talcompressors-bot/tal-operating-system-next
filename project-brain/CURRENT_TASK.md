@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`b6b709b Reclassify ReportEquipmentItems exclusions`
+`c11c460 Document import waves plan`
 
 ## Last Closeout Commit
 
@@ -52,6 +52,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - `fc1dfa8 Prepare Supabase staging env placeholders` is classified as the latest implementation/setup commit because it added staging env placeholders and secret ignore rules.
 - `9a81290 Reconcile Prisma schema for Supabase staging` is classified as the latest implementation/schema commit because it added `DIRECT_URL`, `ReportEquipmentItem.reportCounter`, and the report counter index.
 - `b6b709b Reclassify ReportEquipmentItems exclusions` is classified as the latest implementation/planning commit because it changed approved migration planning language and import classification for excluded `ReportEquipmentItems` rows.
+- `c11c460 Document import waves plan` is classified as the latest implementation/planning commit because it changed approved migration planning by defining Waves 1-4 and the Wave 1 gate for service-report replacement readiness.
 - Prisma validation passed after reconciliation with process-only placeholder `DATABASE_URL` and `DIRECT_URL`.
 - Prisma generate completed against local staging env values after explicit approval.
 - Supabase staging-first shadow plan is approved: use `talcompressors-next-staging` first, then `talcompressors-next-prod` as production shadow only after staging validation passes.
@@ -59,6 +60,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - Staging env placeholder file `.env.staging.example` was prepared with names only: `NEXT_PUBLIC_APP_ENV`, `DATABASE_URL`, and `DIRECT_URL`.
 - `.gitignore` blocks real `.env` files while allowing env example files.
 - Known excluded `ReportEquipmentItems` rows are classified as historical test data, not business data, no recovery required, excluded by design: 9 rows missing `ReportID` and 25 rows with unmatched `ReportID`.
+- Import Waves are documented: Wave 1 service-report core; Wave 2 product/AI/business-document support; Wave 3 Maven-origin/sync observability; Wave 4 extended/future inventory, reference, governance/security sources.
 
 ## Current Task
 
