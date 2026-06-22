@@ -7,25 +7,23 @@ When activated:
 
 1. Read:
 
-- PROJECT_OPERATING_PROTOCOL.md
 - PROJECT_INDEX.md
-- PROJECT_COMMANDS.md
-- agents/PROJECT_BRAIN_AGENT.md
-- agents/INFRASTRUCTURE_MANAGER_AGENT.md
-- project-brain/current/CURRENT_TASK.md
-- project-brain/roadmap/ROADMAP.md
-- project-brain/current/LIVE_OBJECTS.md
-- project-brain/PROJECT_BRAIN_MASTER.md
-- project-brain/maps/SYSTEM_MAP.md
-- project-brain/lessons/LESSONS_LEARNED.md
-- project-brain/bugs/CURRENT_BUGS.md
-- latest relevant historical checkpoint in project-brain/checkpoints/
+- PROJECT_OPERATING_PROTOCOL.md
+- project-brain/CURRENT_TASK.md
+- project-brain/TASK_BOARD.md
+- relevant task-specific docs
 
 Checkpoint rule:
 
 - Checkpoints are historical context only.
 - Do not treat `ACTIVE_SESSION_STATE.md` or `NEXT_SESSION.md` as current state.
-- Current project state comes from `project-brain/current/CURRENT_TASK.md` and `project-brain/roadmap/ROADMAP.md`.
+- Current project state, current phase, and next task come from `project-brain/CURRENT_TASK.md`.
+- Task progress comes from `project-brain/TASK_BOARD.md`.
+
+Memory rule:
+
+- If ChatGPT or Codex memory conflicts with Project Brain files, Project Brain wins.
+- Before creating any new planning file, map, dashboard, control center, protocol, agent, or roadmap, search existing files and prove no existing file already serves that purpose.
 
 Infrastructure Manager routing rule:
 
@@ -37,13 +35,16 @@ before specialist agents.
 
 2. Output:
 
-- Current active task
-- Current state
-- Current roadmap phase
-- Stable systems
-- Open bugs
-- Highest risk
-- Recommended next task
+Project Reality Check:
+
+- Current phase
+- Last known commit
+- Current task
+- Next approved task
+- Blocked or forbidden actions
+- Files relevant to the requested work
+
+No implementation task may start until the Project Reality Check is shown.
 
 3. Rules:
 

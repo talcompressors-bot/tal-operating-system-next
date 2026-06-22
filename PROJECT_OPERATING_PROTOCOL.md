@@ -126,6 +126,8 @@ This is an operational document. It is not the future-state vision document.
 6. Human approval is required before production-impacting, customer-facing, financial, schema, deployment, or external-write actions.
 7. Stable production flows must be protected.
 8. Unknown IDs must remain `UNKNOWN`; never invent identifiers.
+9. If ChatGPT or Codex memory conflicts with Project Brain files, Project Brain wins.
+10. Before creating any new planning file, map, dashboard, control center, protocol, agent, or roadmap, search existing files and prove no existing file already serves that purpose.
 
 ## 3. Project Purpose Summary
 
@@ -167,16 +169,13 @@ Classify work before implementation:
 
 Immediate priority order:
 
-1. Source of Truth hierarchy
-2. `PROJECT_OPERATING_PROTOCOL.md`
-3. `project-brain/PROJECT_BRAIN_MASTER.md`
-4. `project-brain/current/CURRENT_TASK.md`
-5. `project-brain/current/LIVE_OBJECTS.md`
-6. `data-sources/tools/SHEETS_REGISTRY.md`
-7. System Health
-8. Infrastructure Manager
-9. Digital Twin
-10. Migration Blueprint
+1. Mandatory startup entrypoint: `PROJECT_INDEX.md`
+2. Governor: `PROJECT_OPERATING_PROTOCOL.md`
+3. Current state and next task: `project-brain/CURRENT_TASK.md`
+4. Task board and progress map: `project-brain/TASK_BOARD.md`
+5. Durable decisions: `project-brain/DECISION_LOG.md`
+6. Canonical system map: `project-brain/maps/SYSTEM_MAP.md`
+7. Migration scope: `project-brain/migration/POSTGRESQL_V1_SCOPE.md`
 
 ## 6. Project Maturity Model
 
@@ -208,16 +207,21 @@ When files disagree, use this hierarchy:
 
 1. `PROJECT_OPERATING_PROTOCOL.md`
 2. `PROJECT_INDEX.md`
-3. `project-brain/PROJECT_BRAIN_MASTER.md`
-4. `project-brain/current/CURRENT_TASK.md`
-5. `project-brain/current/LIVE_OBJECTS.md`
-6. `project-brain/DECISION_LOG.md`
-7. `project-brain/maps/*`
-8. `project-brain/bugs/CURRENT_BUGS.md`
-9. `project-brain/lessons/LESSONS_LEARNED.md`
-10. Latest relevant checkpoint under `project-brain/checkpoints/`
-11. Live runtime source under `apps-script/*`
-12. Git history
+3. `project-brain/CURRENT_TASK.md`
+4. `project-brain/TASK_BOARD.md`
+5. `project-brain/DECISION_LOG.md`
+6. `project-brain/maps/SYSTEM_MAP.md`
+7. `project-brain/migration/POSTGRESQL_V1_SCOPE.md`
+8. `project-brain/PROJECT_BRAIN_MASTER.md`
+9. `project-brain/roadmap/ROADMAP.md`
+10. `project-brain/current/LIVE_OBJECTS.md`
+11. `data-sources/tools/SHEETS_REGISTRY.md`
+12. `project-brain/maps/*`
+13. `project-brain/bugs/CURRENT_BUGS.md`
+14. `project-brain/lessons/LESSONS_LEARNED.md`
+15. Latest relevant checkpoint under `project-brain/checkpoints/`
+16. Live runtime source under `apps-script/*`
+17. Git history
 
 Rules:
 - Deprecated files cannot override active files.
@@ -229,23 +233,24 @@ Rules:
 
 Before analysis, planning, code changes, schema work, deployment, or production action:
 
-1. Read `PROJECT_OPERATING_PROTOCOL.md`.
-2. Read `PROJECT_INDEX.md`.
-3. Read `PROJECT_COMMANDS.md`.
-4. Read `START_CODEX.md` if starting a new session.
-5. Read `project-brain/PROJECT_BRAIN_MASTER.md`.
-6. Read `project-brain/current/CURRENT_TASK.md`.
-7. Read `project-brain/current/LIVE_OBJECTS.md`.
-8. Read the latest relevant checkpoint under `project-brain/checkpoints/`.
-9. Read `project-brain/DECISION_LOG.md`.
-10. Read relevant files in `project-brain/maps/`.
-11. Read `project-brain/bugs/CURRENT_BUGS.md`.
-12. Read `project-brain/lessons/LESSONS_LEARNED.md`.
-13. Read the relevant agent file under `agents/`.
-14. Run `git status --short`.
-15. Summarize current state, active IDs, risks, affected systems, stable systems, and approval needs.
+1. Read `PROJECT_INDEX.md`.
+2. Read `PROJECT_OPERATING_PROTOCOL.md`.
+3. Read `project-brain/CURRENT_TASK.md`.
+4. Read `project-brain/TASK_BOARD.md`.
+5. Read relevant task-specific docs.
+6. Run `git status --short`.
+7. Produce a short Project Reality Check.
 
-Do not start coding immediately after opening the repository.
+Project Reality Check must include:
+
+- current phase
+- last known commit
+- current task
+- next approved task
+- blocked or forbidden actions
+- files relevant to the requested work
+
+No implementation task may start until the Project Reality Check is shown.
 
 ## 9. Shutdown Sequence
 
@@ -659,7 +664,9 @@ Forbidden without explicit approval:
 | `PROJECT_COMMANDS.md` | command vocabulary | update when commands change |
 | `START_CODEX.md` | startup entry | keep minimal and aligned with protocol |
 | `project-brain/PROJECT_BRAIN_MASTER.md` | durable project memory | update for durable architecture/status changes |
-| `project-brain/current/CURRENT_TASK.md` | active task | update at meaningful handoff |
+| `project-brain/CURRENT_TASK.md` | active task, current phase, next task | update at meaningful handoff |
+| `project-brain/TASK_BOARD.md` | task board and progress map | update when task status changes |
+| `project-brain/current/CURRENT_TASK.md` | retired compatibility path | redirect only; do not update with state |
 | `project-brain/current/LIVE_OBJECTS.md` | verified active IDs | update only with verified IDs or `UNKNOWN` |
 | `project-brain/DECISION_LOG.md` | approved decisions | append approved decisions only |
 | `project-brain/maps/*` | system maps | update when architecture or workflow maps change |

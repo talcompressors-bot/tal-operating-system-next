@@ -1,25 +1,28 @@
 # PROJECT BRAIN MASTER
 
 Status: Durable project memory  
-Current-state sources: `project-brain/current/CURRENT_TASK.md` and `project-brain/roadmap/ROADMAP.md`
+Active-state sources: `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`
+
+This file is durable project memory. It must not duplicate the active current task, current phase, next task, or task board.
+
+For live project reality, start with:
+
+1. `PROJECT_INDEX.md`
+2. `project-brain/CURRENT_TASK.md`
+3. `project-brain/TASK_BOARD.md`
 
 ## Official Current State
 
-PHASE 0 - Governance Foundation: COMPLETE
+Active current state is intentionally not repeated here.
 
-PHASE 1 - Digital Twin Foundation: CURRENT
+Use:
 
-Infrastructure Manager: ACTIVE
-
-Master Roadmap: `project-brain/roadmap/ROADMAP.md`
-
-Current task:
-
-Start Digital Twin Foundation as a read-only mapping phase.
-
-Next step:
-
-Run Infrastructure Manager review for Digital Twin Foundation before creating or modifying anything.
+- `PROJECT_INDEX.md` for the living project map and Project Reality Check.
+- `project-brain/CURRENT_TASK.md` for current phase, current task, and next task.
+- `project-brain/TASK_BOARD.md` for NOW/NEXT/DONE/BLOCKED status.
+- `project-brain/DECISION_LOG.md` for approved decisions.
+- `project-brain/maps/SYSTEM_MAP.md` for canonical system map.
+- `project-brain/migration/POSTGRESQL_V1_SCOPE.md` for PostgreSQL V1 migration scope.
 
 ## Governance Foundation
 
@@ -266,7 +269,7 @@ AI Draft pilot and implementation planning belong in:
 
 Status:
 
-Current phase.
+Historical completed/transitioned phase context. Not the active current phase source.
 
 Purpose:
 
@@ -379,8 +382,9 @@ Official roadmap:
 
 Current roadmap state:
 
-- PHASE 0 - Governance Foundation: COMPLETE
-- PHASE 1 - Digital Twin Foundation: CURRENT
+Do not read current phase from this section.
+
+Read current phase from `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`.
 
 Long-term target architecture:
 
@@ -391,11 +395,13 @@ Long-term target architecture:
 1. Understand before changing.
 2. Prefer modifying existing logic before creating new logic.
 3. One change at a time.
-4. Use `project-brain/current/CURRENT_TASK.md` for current task.
-5. Use `project-brain/roadmap/ROADMAP.md` for roadmap state.
-6. Update Project Brain only with approval.
-7. Create or propose a checkpoint before risky modifications.
-8. AI recommends. Apps Script executes. User approves.
+4. Use `PROJECT_INDEX.md` as the mandatory startup entrypoint.
+5. Use `project-brain/CURRENT_TASK.md` for current phase, current task, and next task.
+6. Use `project-brain/TASK_BOARD.md` for task board and progress state.
+7. Use `project-brain/roadmap/ROADMAP.md` for roadmap state.
+8. Update Project Brain only with approval.
+9. Create or propose a checkpoint before risky modifications.
+10. AI recommends. Apps Script executes. User approves.
 
 ## Change Log
 

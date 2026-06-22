@@ -17,28 +17,30 @@ Do not assume project structure, current task, stable systems, or active IDs fro
 
 Read these files in order when they exist:
 
-1. `PROJECT_OPERATING_PROTOCOL.md`
-2. `PROJECT_INDEX.md`
-3. `AI_RULES.md`
-4. `agents/AGENT_REGISTRY.md`
-5. `agents/PROJECT_BRAIN_AGENT.md`
-6. `project-brain/current/CURRENT_TASK.md`
-7. `project-brain/current/LIVE_OBJECTS.md`
-8. `project-brain/checkpoints/ACTIVE_SESSION_STATE.md`
-9. Latest relevant checkpoint under `project-brain/checkpoints/`
-10. `project-brain/PROJECT_BRAIN_MASTER.md`
-11. `project-brain/maps/SYSTEM_MAP.md`
-12. `project-brain/bugs/CURRENT_BUGS.md`
-13. `project-brain/lessons/LESSONS_LEARNED.md`
-14. `project-brain/DECISION_LOG.md`
+1. `PROJECT_INDEX.md`
+2. `PROJECT_OPERATING_PROTOCOL.md`
+3. `project-brain/CURRENT_TASK.md`
+4. `project-brain/TASK_BOARD.md`
+5. Relevant task-specific docs
 
 If a file is missing or empty, report that as a documentation gap instead of inventing content.
 
+For architecture, schema, migration, source-of-truth, or future-platform work, relevant task-specific docs include:
+
+- `project-brain/DECISION_LOG.md`
+- `project-brain/maps/SYSTEM_MAP.md`
+- `project-brain/migration/POSTGRESQL_V1_SCOPE.md`
+- the relevant agent file under `agents/`
+
 ## Current Task Source
 
-Use `project-brain/current/CURRENT_TASK.md` as the active current-task source of truth.
+Use `project-brain/CURRENT_TASK.md` as the active current-task, current phase, and next task source of truth.
 
-Treat `project-brain/CURRENT_TASK.md` as deprecated if it points to the current-task file.
+Treat `project-brain/current/CURRENT_TASK.md` as a retired compatibility path only.
+
+If ChatGPT or Codex memory conflicts with Project Brain files, Project Brain wins.
+
+Before creating any new planning file, map, dashboard, control center, protocol, agent, or roadmap, search existing files and prove no existing file already serves that purpose.
 
 ## Preserve Important IDs
 
@@ -90,12 +92,14 @@ Do not modify production systems or deploy without explicit approval.
 
 When this skill is used for startup or project-state recovery, respond with:
 
-1. Current active task
-2. Current state
-3. Known active IDs
-4. Stable systems
-5. Open bugs
-6. Highest risks
-7. Files that must not be broken
-8. Recommended next step
-9. Approval needed, if any
+Project Reality Check:
+
+1. Current phase
+2. Last known commit
+3. Current task
+4. Next approved task
+5. Blocked or forbidden actions
+6. Files relevant to the requested work
+7. Approval needed, if any
+
+No implementation task may start until the Project Reality Check is shown.
