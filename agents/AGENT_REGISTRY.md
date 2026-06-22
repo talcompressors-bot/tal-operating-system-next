@@ -1,6 +1,19 @@
 # AGENT REGISTRY
 
 ## Active Agents
+
+| Agent | Status | Owner Area |
+|---|---|---|
+| `ORCHESTRATOR_AGENT` | Active | Parallel/multi-agent coordination, task routing, safe execution order |
+| `PROJECT_BRAIN_AGENT` | Active | Project Brain updates, project memory, current state |
+| `INFRASTRUCTURE_MANAGER_AGENT` | Active | Architecture, schema, migration, governance, source-of-truth review |
+| `PRE_MISSION_REVIEW_SYSTEM` | Active | Pre-mission risk review and approval gate |
+| `GIT_AGENT` | Active | Git work, commits, checkpoints |
+| `APPS_SCRIPT_AGENT` | Active | Apps Script work and safe Apps Script analysis |
+| `MAVEN_AGENT` | Active | Maven sync and draft workflow |
+| `AI_DRAFT_AGENT` | Development | AI Draft recommendations and business-document draft support |
+| `FACTORY_CONTROL_CENTER_AGENT` | Active | Audit/control review |
+
 ### ORCHESTRATOR_AGENT
 
 Status: Active

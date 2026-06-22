@@ -149,6 +149,50 @@ Canonical file links:
 
 ---
 
+## Master Project Map
+
+This map is a navigation summary only. The visual map is view-only and is not a source of truth. Source of truth remains `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, and `project-brain/roadmap/ROADMAP.md`.
+
+| Area | Current Status | Canonical Owner |
+|---|---|---|
+| Current phase | Project Brain Consolidation Phase 1-3 completed; PostgreSQL/Supabase shadow environment planning is next | `project-brain/CURRENT_TASK.md` |
+| Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model | `project-brain/TASK_BOARD.md` |
+| Current task | Prepare PostgreSQL/Supabase shadow environment planning after consolidation | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Next approved task | PostgreSQL/Supabase shadow environment planning, not implementation | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Future phases | PostgreSQL/Supabase shadow environment implementation; import mapping/validation; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
+| Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |
+| Dependency order | Governance and Project Brain state -> system map/source review -> PostgreSQL V1 scope -> data migration planning -> shadow environment planning -> approved environment implementation -> import validation -> Server Actions/offline sync | `project-brain/TASK_BOARD.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md`, `project-brain/migration/DATA_MIGRATION_PLAN.md` |
+| System map | Current legacy and target system navigation | `project-brain/maps/SYSTEM_MAP.md` |
+
+```mermaid
+flowchart TD
+  A[Governance and Project Brain] --> B[System Map and Source Review]
+  B --> C[PostgreSQL V1 Scope]
+  C --> D[Data Migration Plan]
+  D --> E[Shadow Environment Planning]
+  E --> F[Approved Shadow Environment Implementation]
+  F --> G[Import Mapping and Validation]
+  G --> H[Server Actions and Offline Sync]
+```
+
+## Agent Task Routing
+
+Route future tasks to existing agents before work starts. Do not create new agents unless no existing agent fits and approval is given.
+
+| Task Type | Existing Owner Agent |
+|---|---|
+| Git work | `agents/GIT_AGENT.md` |
+| Apps Script work | `agents/APPS_SCRIPT_AGENT.md` |
+| Maven work | `agents/MAVEN_AGENT.md` |
+| AI Draft work | `agents/AI_DRAFT_AGENT.md` |
+| Architecture, schema, migration, governance | `agents/INFRASTRUCTURE_MANAGER_AGENT.md` |
+| Project Brain updates | `agents/PROJECT_BRAIN_AGENT.md` |
+| Parallel or multi-agent coordination | `agents/ORCHESTRATOR_AGENT.md` |
+| Pre-mission risk review | `agents/PRE_MISSION_REVIEW_SYSTEM.md` |
+| Audit or control review | `agents/FACTORY_CONTROL_CENTER_AGENT.md` |
+
+---
+
 ## Supporting Read Order
 
 After the mandatory startup files, read only the supporting files relevant to the task:

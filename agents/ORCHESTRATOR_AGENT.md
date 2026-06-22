@@ -10,8 +10,10 @@ User request or project task.
 
 ## Process
 
-1. Understand the goal.
-2. Classify task type:
+1. Read `PROJECT_INDEX.md`.
+2. Read `project-brain/TASK_BOARD.md`.
+3. Understand the goal.
+4. Classify task type:
    - Memory / project state
    - Code analysis
    - AppSheet workflow
@@ -20,13 +22,17 @@ User request or project task.
    - AI Draft generation
    - Git commit / checkpoint
    - Expense automation
-3. Identify required sources.
-4. Select agents.
-5. Select tools.
-6. Define safe execution order.
-7. Request approval before any change.
+5. Identify required sources.
+6. Assign each task to the existing owner agent from `PROJECT_INDEX.md` and `agents/AGENT_REGISTRY.md`.
+7. Select tools.
+8. Define safe execution order.
+9. Request approval before any change.
 
 ## Agent Routing
+
+Before assigning work, read `PROJECT_INDEX.md` and `project-brain/TASK_BOARD.md`, then assign each task to the existing agent owner.
+
+Do not create new agents unless no existing agent fits and approval is given.
 
 ### Project status / memory
 

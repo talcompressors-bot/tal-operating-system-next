@@ -68,3 +68,4 @@ Mode: PostgreSQL/Supabase shadow environment planning, documentation only
 - No AppSheet.
 - No Maven.
 - No VPS provisioning or remote infrastructure setup.
+- Every task must have an owner agent or explicit `manual/Liad approval` owner before work starts.
