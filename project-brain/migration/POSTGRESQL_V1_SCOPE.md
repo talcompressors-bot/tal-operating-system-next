@@ -229,6 +229,10 @@ Minimum validation required before import code:
 - Verify `PartsUsed` and `EmailLog` usable schemas.
 - Confirm Hebrew/source status mappings.
 - Confirm import issue taxonomy and import run tracking.
+- Keep minimal first dry-run limited to `Customers_Final`, `ServiceReports`, and `ReportEquipmentItems`.
+- Include `InvoiceMavenCustomers`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, and `InvoiceMavenItems` as second-stage dry-run discovery sources.
+- Second-stage Maven discovery must confirm where the Maven Sheets exist and how they link to `Customers_Final`, `BusinessDocuments`, `InvoiceMavenDocuments`, and `ProductsCatalog` before import.
+- Maven discovery is read-only and must not create, modify, sync, or trigger Maven documents.
 
 ## 7. Shadow Database Strategy
 

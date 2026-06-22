@@ -103,6 +103,29 @@ These sheets exist in the registry but are not mapped to active Prisma V1 models
 
 ---
 
+# First Dry-Run Source Discovery
+
+The first dry-run must stay focused on the service-core source set:
+
+| Stage | Source Sheet | Purpose | Required For First Dry-Run |
+|---|---|---|---|
+| Minimal first dry-run | `Customers_Final` | Customer parent records for service reports | Yes |
+| Minimal first dry-run | `ServiceReports` | Service report parent records and `ReportCounter` source | Yes |
+| Minimal first dry-run | `ReportEquipmentItems` | Equipment/service child rows and approved legacy/test exclusion validation | Yes |
+
+Second-stage dry-run source discovery must confirm the existing Maven Sheets and how they link to customers and business documents before any import:
+
+| Stage | Source Sheet | Target Model | Discovery Goal |
+|---|---|---|---|
+| Second-stage Maven discovery | `InvoiceMavenCustomers` | `MavenCustomer` | Confirm Maven customer identifiers, business IDs/names, and conservative link options to `Customers_Final`. |
+| Second-stage Maven discovery | `InvoiceMavenDocuments` | `MavenDocument` | Confirm Maven document identifiers, customer links, document numbers, payment/status fields, and any link fields to `BusinessDocuments`. |
+| Second-stage Maven discovery | `InvoiceMavenDocumentItems` | `MavenDocumentItem` | Confirm item-row identifiers and parent link to `InvoiceMavenDocuments.InvoiceMavenDocumentId`. |
+| Second-stage Maven discovery | `InvoiceMavenItems` | `MavenItem` | Confirm Maven item identifiers, SKU/product references, and safe link options to `ProductsCatalog`. |
+
+Maven discovery is read-only. It must not create, modify, sync, or trigger Maven documents.
+
+---
+
 # Approved Import Decisions
 
 ## `ReportEquipmentItems`

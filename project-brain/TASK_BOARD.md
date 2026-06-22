@@ -7,13 +7,14 @@ Mode: Supabase staging import dry-run validation planning, no data writes
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Import dry-run validation planning | Prepare first staging import validation without writing data | Import order, source counts, uniqueness checks, parent-link checks, excluded `ReportEquipmentItems` classification, and approval gate are defined | Yes before dry-run execution or script work |
+| Import dry-run validation planning | Prepare first staging import validation without writing data | Minimal first dry-run is `Customers_Final`, `ServiceReports`, `ReportEquipmentItems`; second-stage discovery includes Maven Sheets and link checks before import | Yes before dry-run execution or script work |
 
 ## NEXT
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
 | Staging import dry-run validation | Validate source counts, uniqueness, parent links, enum/status mappings, and excluded legacy/test rows without writing data | Dry-run report shows pass/fail, blockers, warnings, and excluded `ReportEquipmentItems` counts | Yes |
+| Second-stage Maven dry-run discovery | Confirm existing Maven Sheets and their links before import | `InvoiceMavenCustomers`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, and `InvoiceMavenItems` locations and links to customers/business documents/products are documented read-only | Yes before Maven history import |
 | Supabase production shadow setup | Create `talcompressors-next-prod` only after staging validation passes | Production shadow project exists; no production cutover and no AppSheet/Sheets/Maven changes | Yes after staging validation |
 | Real staging import | Import validated V1 data into Supabase staging | Requires approved dry-run report; legacy/test `ReportEquipmentItems` rows remain excluded by design | Yes before running import |
 | Server Actions architecture | Make internal Next.js write flows use Server Actions by default | Approvals, AI draft approval, BusinessDocument creation, ServiceReport shadow updates, import review, queue commands, PostgreSQL mutations, and offline sync actions have Server Action paths | Yes before write implementation |
