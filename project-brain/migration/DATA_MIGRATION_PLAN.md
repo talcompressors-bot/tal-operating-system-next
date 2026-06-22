@@ -266,6 +266,78 @@ Approve Wave 2 read-only source export and dry-run validation only.
 
 After that approval, Codex may create local ignored CSV exports for the eight Wave 2 source tabs and run read-only dry-run validation. It still may not import data, write to Supabase, change schema, run Prisma db push/migrate, touch production, mutate Google Sheets/AppSheet/Maven/Apps Script, or begin Wave 3.
 
+## Wave 2 Connector Dry-Run Validation Report
+
+Run date/time:
+2026-06-22 19:13 IDT.
+
+Execution mode:
+Connector-based read-only validation without local Wave 2 CSV export files. This path was approved after blocked CSV export attempts. No blocked CSV export paths were retried.
+
+Source:
+Google Sheets connector read-only ranges from spreadsheet `ServiceApp_FIX`.
+
+Validation result:
+READ VALIDATION PASS; IMPORT READINESS FAIL.
+
+Reason:
+All eight approved Wave 2 tabs were readable through the connector, but import blockers remain in source schema/key/link readiness.
+
+Validated Wave 2 tabs:
+
+| Source Tab | Target Table | Data Rows Found | Schema Result | Key Result | Parent-Link Result | Import Readiness |
+|---|---|---:|---|---|---|---|
+| `ProductsCatalog` | `products` | 113 | Header present: `ProductID`, `SKU`, `ProductName`, pricing/status fields | `ProductID` values observed as unique; duplicate non-empty `SKU` found: `SCR-20EPM` in `PM-0001` and `PM-0049`; multiple blank SKUs exist | Not parent-dependent for Wave 2 | BLOCKED until SKU handling rule is approved |
+| `PartsUsed` | `parts_used` | 1 | Row 1 is title `PartsUsed`; real header starts on row 2 | `PartID = P-EX-1` unique in observed rows | `ReportID = R-EXAMPLE` does not resolve to Wave 1 `ServiceReports.ReportID` | BLOCKED; appears to be example/test data, not import-ready business data |
+| `AIDraftSuggestions` | `ai_draft_suggestions` | 2 | Header present | `SuggestionID` values observed as unique | `SourceReportID = 715fc06e` resolves to Wave 1 service report `5808`; one row has blank source report; `CustomerID` contains customer name `רפת יזרעאל מעוז` instead of source ID, which matches customer `1895C` by name | BLOCKED until customer/name mapping and enum/status mapping are approved |
+| `BusinessDocuments` | `business_documents` | 1 | Header present | `BusinessDocumentId = f57ee720` unique in observed rows | `CustomerId = 18803` resolves; `SourceReportId = 890331ff` resolves to Wave 1 service report `5834` | WARN; parent links pass but enum/status and empty item JSON handling need mapping |
+| `BusinessDocumentItems` | `business_document_items` | 0 | Header only | No data rows | No data rows | READY AS EMPTY TABLE for Wave 2, if approved |
+| `BusinessDocumentLog` | `business_document_logs` | 2 | Header present but row values appear shifted: datetime values are under `LogID`, action text under `DateTime`, and document ID under `Action` | No stable `LogID` values found in data rows | `f57ee720` is present and resolves to `BusinessDocuments.BusinessDocumentId` only if shifted-column mapping is applied | BLOCKED until log column mapping is corrected or approved as source-specific transform |
+| `ApprovalsLog` | `approvals` | 0 | Header only | No data rows | No data rows | READY AS EMPTY TABLE for Wave 2, if approved |
+| `EmailLog` | `email_logs` | 0 | Row 1 is title `EmailLog`; real header starts on row 2 | No data rows | No data rows | READY AS EMPTY TABLE with title-row skip rule, if approved |
+
+Status / enum inventory found:
+
+* `ProductsCatalog.Status`: `Active`.
+* `ProductsCatalog.SourceSystem`: `InvoiceMaven`.
+* `AIDraftSuggestions.SuggestedDocumentType`: `Quote`, blank.
+* `AIDraftSuggestions.ApprovalStatus`: `Approved`, `Waiting`.
+* `AIDraftSuggestions.Status`: `ConvertedToDocument`, `Draft`.
+* `BusinessDocuments.DocumentStatus`: `DraftRequestReceived`.
+* `BusinessDocuments.ApprovalStatus`: `Waiting`.
+
+JSON/date/decimal findings:
+
+* `BusinessDocumentLog.RawData` row 1 contains JSON-like command payload and is parseable in principle.
+* `BusinessDocumentLog.RawData` row 2 contains plain status-change text and requires tolerant raw text handling.
+* `BusinessDocuments.ItemsJson` is blank in the single observed row.
+* `AIDraftSuggestions.SuggestedItems` is blank in both observed rows.
+* `ProductsCatalog` price fields include numeric-looking values, but at least two rows place `0` and `1` across price/currency-like columns; decimal/currency mapping must be reviewed before import.
+
+Blockers before Wave 2 import approval:
+
+1. Approve duplicate/blank SKU handling for `ProductsCatalog`, including duplicate `SCR-20EPM`.
+2. Classify `PartsUsed` row `P-EX-1` / `R-EXAMPLE` as example/test or provide real parts source rows.
+3. Approve `AIDraftSuggestions.CustomerID` fallback mapping by customer name when the field contains `רפת יזרעאל מעוז` instead of `CustomerID`.
+4. Approve enum/status mapping for `Approved`, `Waiting`, `ConvertedToDocument`, `Draft`, `DraftRequestReceived`, and `Active`.
+5. Approve shifted-column handling for `BusinessDocumentLog` or correct source mapping before import.
+6. Approve title-row skip rules for `PartsUsed` and `EmailLog`.
+
+Forbidden-action confirmation:
+
+* No Google Sheets writes.
+* No AppSheet changes.
+* No Maven changes.
+* No Apps Script changes.
+* No DB writes.
+* No Supabase writes.
+* No import.
+* No Prisma commands.
+* No production actions.
+
+Next approval gate:
+Approve Wave 2 import blocker resolution plan only, or approve specific source mapping rules listed above before any Wave 2 staging import request.
+
 ---
 
 WAVE_ID: WAVE_3_MAVEN_DATA

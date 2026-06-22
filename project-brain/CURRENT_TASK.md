@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-22
-Mode: Wave 2 service workflow planning/discovery approved; no Wave 2 import
+Mode: Wave 2 connector dry-run validation completed; no Wave 2 import
 
 ## Canonical Role
 
@@ -11,11 +11,11 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 service workflow planning/discovery is approved, limited to documentation/source-readiness planning only.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Wave 2 import is not approved.
 
 ## Current Milestone
 
-Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, and Wave 2 planning/discovery gate approval are complete.
+Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, and Wave 2 connector dry-run validation are complete.
 
 ## Last Implementation Commit
 
@@ -79,14 +79,20 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - Wave 1 read/display mapping fixes completed and validated: service dates fall back to `raw_source` service date without DB writes; pending-signature source status maps to `Pending Signature`; missing source status displays as `Status Missing` instead of `UNKNOWN`; sparse equipment rows render safe fallbacks; sample report `acd1133d` renders with equipment details.
 - Read-only staging validation after mapping fixes: `service_reports = 63`, `report_equipment_items = 75`, unknown dates `0`, pending-signature statuses `29`, signed statuses `32`, status-missing rows `2`, unknown statuses `0`, sparse fallback failures `0`.
 - Read-only HTTP validation after mapping fixes: `/service-reports` HTTP 200, `/service-reports/acd1133d` HTTP 200, 63 service report links rendered, pending-signature display present, no `UNKNOWN DATE`, no `UNKNOWN` status display, sample detail date fallback present, and sample equipment subtitle present.
+- Wave 2 connector dry-run validation completed on 2026-06-22 19:13 IDT without local Wave 2 CSV export files after Liad approved connector-only validation.
+- Wave 2 read validation result: PASS. All eight approved tabs were readable through the Google Sheets connector: `ProductsCatalog`, `PartsUsed`, `AIDraftSuggestions`, `BusinessDocuments`, `BusinessDocumentItems`, `BusinessDocumentLog`, `ApprovalsLog`, and `EmailLog`.
+- Wave 2 import readiness result: FAIL/BLOCKED. Blockers: duplicate SKU `SCR-20EPM`; `PartsUsed` contains one example row `P-EX-1` linked to unresolved `R-EXAMPLE`; `AIDraftSuggestions.CustomerID` contains customer name `רפת יזרעאל מעוז` instead of source ID in one row; `BusinessDocumentLog` rows appear shifted against the header; enum/status mappings require approval.
+- Wave 2 observed row counts: `ProductsCatalog = 113`, `PartsUsed = 1`, `AIDraftSuggestions = 2`, `BusinessDocuments = 1`, `BusinessDocumentItems = 0`, `BusinessDocumentLog = 2`, `ApprovalsLog = 0`, `EmailLog = 0`.
+- Wave 2 parent-link evidence: `AIDraftSuggestions.SourceReportID = 715fc06e` resolves to Wave 1 service report `5808`; `BusinessDocuments.SourceReportId = 890331ff` resolves to Wave 1 service report `5834`; `BusinessDocuments.CustomerId = 18803` resolves to an existing Wave 1 customer.
+- No Google Sheets writes, AppSheet changes, Maven changes, Apps Script changes, DB writes, Supabase writes, imports, Prisma commands, or production actions occurred during Wave 2 connector validation.
 
 ## Current Task
 
-Prepare Wave 2 service workflow planning/discovery only.
+Wave 2 connector dry-run validation completed; prepare Wave 2 import blocker resolution plan only.
 
 ## Next Approved Task
 
-Wave 2 planning/discovery only. Identify required source exports, schema blockers, parent-link checks, enum/status mapping needs, dry-run report format, and the exact approval gate before any Wave 2 source export or dry-run execution.
+Prepare Wave 2 import blocker resolution plan only. Required topics: duplicate/blank SKU handling, `PartsUsed` example/test classification, `AIDraftSuggestions` customer-name fallback mapping, Wave 2 enum/status mapping, `BusinessDocumentLog` shifted-column handling, and title-row skip rules for `PartsUsed` and `EmailLog`.
 
 Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes, schema changes, or source-system actions until Liad explicitly approves that later gate.
 

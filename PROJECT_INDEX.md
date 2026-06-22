@@ -384,8 +384,8 @@ This section is the living navigation screen. It summarizes current reality only
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Current milestone | Wave 1 Next.js read/display validation PASS after PostgreSQL read switch | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Current task | Wave 2 service workflow planning/discovery only | `project-brain/CURRENT_TASK.md` |
-| Next approved task | Define Wave 2 source exports, schema blockers, parent-link checks, enum/status mapping needs, dry-run report format, and exact approval gate before source export/dry-run execution. No Wave 2 import, Maven work, production shadow, DB write, schema change, or source-system action is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current task | Wave 2 connector dry-run validation completed; prepare Wave 2 import blocker resolution plan only | `project-brain/CURRENT_TASK.md` |
+| Next approved task | Prepare Wave 2 blocker resolution plan covering duplicate/blank SKU handling, `PartsUsed` example/test classification, `AIDraftSuggestions` customer-name fallback mapping, enum/status mappings, `BusinessDocumentLog` shifted-column handling, and title-row skip rules. No Wave 2 import, Maven work, production shadow, DB write, schema change, or source-system action is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Last Implementation Commit | `7f63193 Require project tree reporting` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
@@ -460,9 +460,9 @@ NEXT APPROVAL GATE
 Current Project Tree Position:
 
 - Current Wave: Wave 2 Service Workflow Layer
-- Current Task: Wave 2 service workflow planning/discovery only
+- Current Task: Wave 2 connector dry-run validation completed; prepare Wave 2 import blocker resolution plan only
 - Last Completed Task: Wave 1 service-report core import, PostgreSQL read switch, and read/display mapping validation
-- Next Task: Approval gate for Wave 2 read-only source export and dry-run validation
+- Next Task: Prepare Wave 2 import blocker resolution plan only
 - Estimated completion %: 50%
 - Completion basis: capability-weighted evidence, not completed-waves / total-waves.
 - Governance / Project Brain / Git workflow: 15% / 15% COMPLETE
@@ -476,7 +476,7 @@ Current Project Tree Position:
 - Wave 6 Automation Runtime: 0% / 3% PENDING
 - Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 0% / 2% PENDING
 - Critical Path: Wave 2 Service Workflow Layer -> Wave 3 Maven Knowledge Layer -> Wave 4 Inventory Layer -> Wave 5 Offline First -> Wave 6 Automation Runtime -> Wave 7 Production Shadow -> Wave 8 Production Cutover -> Wave 9 AppSheet Retirement
-- Next Approval Gate: approve or reject Wave 2 read-only source export and dry-run validation; approval is required because it reads live source data and creates local exports; after approval, Codex may export approved Wave 2 source CSVs and run read-only dry-run validation only.
+- Next Approval Gate: approve or reject Wave 2 source mapping/blocker resolution decisions before any staging import; approval is required because import would write to Supabase staging; after approval, Codex may prepare an import request only for explicitly approved Wave 2 mappings.
 
 Rule: a task is not considered complete unless Project Tree Position is reported.
 
@@ -529,8 +529,8 @@ This estimate is valid only because the first four capabilities are complete by 
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md` |
-| Current task | Wave 2 service workflow planning/discovery only | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Next approved task | Define Wave 2 source exports, schema blockers, parent-link checks, enum/status mapping needs, dry-run report format, and exact approval gate before source export/dry-run execution. No Wave 2 import, Maven work, production shadow, DB write, schema change, or source-system action is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current task | Wave 2 connector dry-run validation completed; prepare Wave 2 import blocker resolution plan only | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Next approved task | Prepare Wave 2 blocker resolution plan covering duplicate/blank SKU handling, `PartsUsed` example/test classification, `AIDraftSuggestions` customer-name fallback mapping, enum/status mappings, `BusinessDocumentLog` shifted-column handling, and title-row skip rules. No Wave 2 import, Maven work, production shadow, DB write, schema change, or source-system action is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |
 | Dependency order | Governance and Project Brain state -> system map/source review -> PostgreSQL V1 scope -> data migration planning -> Supabase staging-first plan -> approved staging project/secrets -> Prisma reconciliation approval -> approved staging schema push -> read-only schema verification -> Wave 1 dry-run/import validation -> Waves 2-4 discovery/import approvals -> production shadow approval -> Server Actions/offline sync | `project-brain/TASK_BOARD.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md`, `project-brain/migration/DATA_MIGRATION_PLAN.md` |
