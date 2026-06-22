@@ -7,7 +7,27 @@ hey codex
 
 When activated:
 
-1. Read:
+1. Locate the active Git repository root.
+2. Run:
+
+- `git status --short --branch`
+
+3. If the working tree is clean, run:
+
+- `git fetch origin`
+- `git pull --ff-only origin main`
+
+4. If the working tree is not clean:
+
+- STOP.
+- Report uncommitted changes.
+- Do not pull until the user approves a stash, commit, or discard plan.
+
+5. After a successful pull, run:
+
+- `git log -1 --oneline`
+
+6. Only then read:
 
 - PROJECT_INDEX.md
 - PROJECT_OPERATING_PROTOCOL.md
@@ -15,14 +35,21 @@ When activated:
 - project-brain/TASK_BOARD.md
 - relevant task-specific docs
 
-If `PROJECT_INDEX.md` has not been read first, STOP. Do not analyze, plan, propose, or implement until `PROJECT_INDEX.md` is read.
+Do not read Project Brain files until the repository has been checked and fast-forwarded from `origin/main` when the working tree is clean.
 
 When the user says `hey codex`:
 
-1. Read `PROJECT_INDEX.md` first.
-2. Produce Project Reality Check.
-3. Continue from next approved task only.
-4. Do not invent new tasks.
+1. Locate the active Git repository root.
+2. Run `git status --short --branch`.
+3. If the working tree is clean, run `git fetch origin` and `git pull --ff-only origin main`.
+4. If the working tree is not clean, STOP, report uncommitted changes, and do not pull until the user approves a stash, commit, or discard plan.
+5. After a successful pull, run `git log -1 --oneline`.
+6. Only then read `PROJECT_INDEX.md`, `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md`, and `project-brain/TASK_BOARD.md`.
+7. Produce Project Reality Check using the live Git commit as the latest commit source.
+8. Show live Git latest commit and Project Brain recorded commit.
+9. If mismatch exists, report it and recommend state sync before implementation.
+10. Continue from next approved task only.
+11. Do not invent new tasks.
 
 If the task conflicts with `PROJECT_INDEX.md` or `PROJECT_OPERATING_PROTOCOL.md`, STOP and report the conflict.
 
@@ -58,8 +85,19 @@ Project Reality Check:
 - Current task
 - Next approved task
 - Last verified commit
+- Live Git latest commit
+- Git working state
+- Commit comparison between live Git, `PROJECT_INDEX.md`, and `project-brain/CURRENT_TASK.md`
 - Blocked or forbidden actions
 - Canonical files relevant to the requested work
+
+Project Reality Check must always run:
+
+- `git status --short --branch`
+- `git fetch origin` and `git pull --ff-only origin main` when the working tree is clean and this is a new `hey codex` session
+- `git log -1 --oneline`
+
+If live Git and Project Brain recorded commits do not match, report the mismatch clearly and do not continue implementation until the mismatch is acknowledged.
 
 No implementation task may start until the Project Reality Check is shown.
 

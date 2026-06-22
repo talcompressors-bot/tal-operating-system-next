@@ -25,6 +25,7 @@ Read these files when they exist:
 Also inspect:
 
 - `git status --short --branch`
+- `git log -1 --oneline`
 - Relevant diffs for files changed in the current session
 - Any task-specific agent or skill files used during the session
 
@@ -60,20 +61,23 @@ Follow this order:
 
 1. Run Project Reality Check.
 2. Run `git status --short --branch`.
-3. Identify changed files.
-4. Summarize completed work.
-5. Summarize uncommitted changes.
-6. Update canonical state files when needed and approved:
+3. Run `git log -1 --oneline`.
+4. Compare live Git latest commit against Project Brain recorded commits in `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`.
+5. Identify changed files.
+6. Summarize completed work.
+7. Summarize uncommitted changes.
+8. Update canonical state files to the latest Git commit when needed and approved:
    - `PROJECT_INDEX.md`
    - `project-brain/CURRENT_TASK.md`
    - `project-brain/TASK_BOARD.md`
    - `project-brain/DECISION_LOG.md` if decisions changed
-7. Verify no forbidden systems were touched.
-8. Verify next approved task is clear.
-9. Commit only approved files.
-10. Push to `origin/main`.
-11. Confirm clean `git status --short --branch`.
-12. Print next `hey codex` startup point.
+9. Verify no forbidden systems were touched.
+10. Verify next approved task is clear.
+11. Commit only approved files.
+12. Push to `origin/main`.
+13. Confirm clean `git status --short --branch`.
+14. Confirm Git and Project Brain are synchronized.
+15. Print next `hey codex` startup point.
 
 ## Project Brain Update Targets
 
@@ -97,10 +101,12 @@ Do not update Project Brain files just because the session is ending. Update the
 Before suggesting a commit message:
 
 1. Run `git status --short --branch`.
-2. Review relevant diffs.
-3. Separate files changed by this session from unrelated existing changes when possible.
-4. Report untracked files.
-5. Stage, commit, and push only approved files when `by codex` or a separate explicit user request authorizes it.
+2. Run `git log -1 --oneline`.
+3. Compare live Git latest commit against Project Brain recorded commits.
+4. Review relevant diffs.
+5. Separate files changed by this session from unrelated existing changes when possible.
+6. Report untracked files.
+7. Stage, commit, and push only approved files when `by codex` or a separate explicit user request authorizes it.
 
 If the user asks for a commit later, keep the commit scoped to the approved session changes.
 
@@ -134,6 +140,9 @@ Changed Files
 
 Verification
 - ...
+- Live Git latest commit:
+- Project Brain recorded commit:
+- Commit mismatch status:
 
 Known Active IDs
 - ReportCounter:

@@ -243,22 +243,33 @@ Official startup command:
 
 When the user says `hey codex`, Codex must:
 
-1. Read `PROJECT_INDEX.md` first.
-2. Produce Project Reality Check.
-3. Continue from next approved task only.
-4. Do not invent new tasks.
+1. Locate the active Git repository root.
+2. Run `git status --short --branch`.
+3. If the working tree is clean, run `git fetch origin` and `git pull --ff-only origin main`.
+4. If the working tree is not clean, STOP, report uncommitted changes, and do not pull until the user approves a stash, commit, or discard plan.
+5. After a successful pull, run `git log -1 --oneline`.
+6. Only then read `PROJECT_INDEX.md`, `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md`, and `project-brain/TASK_BOARD.md`.
+7. Produce Project Reality Check using the live Git commit as the source for latest commit.
+8. Show live Git latest commit and Project Brain recorded commit.
+9. If mismatch exists, report it and recommend state sync before implementation.
+10. Continue from next approved task only.
+11. Do not invent new tasks.
 
-Before analysis, planning, code changes, schema work, deployment, or production action:
+Before analysis, planning, code changes, schema work, deployment, or production action in a new session:
 
-1. Read `PROJECT_INDEX.md`.
-2. Read `PROJECT_OPERATING_PROTOCOL.md`.
-3. Read `project-brain/CURRENT_TASK.md`.
-4. Read `project-brain/TASK_BOARD.md`.
-5. Read relevant task-specific docs.
-6. Run `git status --short`.
-7. Produce a short Project Reality Check.
+1. Locate the active Git repository root.
+2. Run `git status --short --branch`.
+3. If the working tree is clean, run `git fetch origin` and `git pull --ff-only origin main`.
+4. If the working tree is not clean, STOP, report uncommitted changes, and do not pull until the user approves a stash, commit, or discard plan.
+5. After a successful pull, run `git log -1 --oneline`.
+6. Read `PROJECT_INDEX.md`.
+7. Read `PROJECT_OPERATING_PROTOCOL.md`.
+8. Read `project-brain/CURRENT_TASK.md`.
+9. Read `project-brain/TASK_BOARD.md`.
+10. Read relevant task-specific docs.
+11. Produce a short Project Reality Check.
 
-If `PROJECT_INDEX.md` has not been read first, STOP.
+If Project Brain files are read before the repository has been checked and fast-forwarded when clean, STOP and restart the startup sequence.
 
 If the task conflicts with `PROJECT_INDEX.md` or `PROJECT_OPERATING_PROTOCOL.md`, STOP and report the conflict.
 
@@ -268,8 +279,24 @@ Project Reality Check must include:
 - current task
 - next approved task
 - last verified commit
+- live Git latest commit
+- Git working state
+- commit comparison between live Git, `PROJECT_INDEX.md`, and `project-brain/CURRENT_TASK.md`
 - blocked or forbidden actions
 - canonical files relevant to the requested work
+
+Project Reality Check must compare:
+
+- latest Git commit from `git log -1 --oneline`
+- last verified commit written in `PROJECT_INDEX.md`
+- last verified commit written in `project-brain/CURRENT_TASK.md`
+
+If any mismatch exists:
+
+- report the mismatch clearly
+- recommend sync before implementation during `hey codex`
+- update canonical state files during closeout / `by codex`
+- do not continue implementation until the mismatch is acknowledged
 
 No implementation task may start until the Project Reality Check is shown.
 
@@ -285,20 +312,23 @@ When the user says `by codex`, Codex must:
 
 1. Run Project Reality Check.
 2. Run `git status --short --branch`.
-3. Identify changed files.
-4. Summarize completed work.
-5. Summarize uncommitted changes.
-6. Update canonical state files when needed and approved:
+3. Run `git log -1 --oneline`.
+4. Compare live Git latest commit against Project Brain recorded commits.
+5. Identify changed files.
+6. Summarize completed work.
+7. Summarize uncommitted changes.
+8. Update canonical state files to the latest Git commit when needed and approved:
    - `PROJECT_INDEX.md`
    - `project-brain/CURRENT_TASK.md`
    - `project-brain/TASK_BOARD.md`
    - `project-brain/DECISION_LOG.md` if decisions changed
-7. Verify no forbidden systems were touched.
-8. Verify next approved task is clear.
-9. Commit only approved files.
-10. Push to `origin/main`.
-11. Confirm clean `git status --short --branch`.
-12. Print next `hey codex` startup point.
+9. Verify no forbidden systems were touched.
+10. Verify next approved task is clear.
+11. Commit only approved files.
+12. Push to `origin/main`.
+13. Confirm clean `git status --short --branch`.
+14. Confirm Git and Project Brain are synchronized.
+15. Print next `hey codex` startup point.
 
 At session close or handoff:
 

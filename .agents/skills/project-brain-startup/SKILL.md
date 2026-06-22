@@ -9,9 +9,18 @@ Use this skill to establish the current project state before analysis, planning,
 
 ## First Rule
 
-Every Codex task or session must begin by reading `PROJECT_INDEX.md`.
+Every new Codex task or session must begin by locating the active Git repository root and synchronizing from GitHub before reading Project Brain files.
 
-If `PROJECT_INDEX.md` has not been read first, STOP. Do not analyze, plan, propose, or implement until `PROJECT_INDEX.md` is read.
+Required `hey codex` order:
+
+1. Locate the active Git repository root.
+2. Run `git status --short --branch`.
+3. If the working tree is clean, run `git fetch origin` and `git pull --ff-only origin main`.
+4. If the working tree is not clean, STOP, report uncommitted changes, and do not pull until the user approves a stash, commit, or discard plan.
+5. After a successful pull, run `git log -1 --oneline`.
+6. Only then read `PROJECT_INDEX.md`, `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md`, and `project-brain/TASK_BOARD.md`.
+
+If Project Brain files are read before the repository has been checked and fast-forwarded when clean, STOP and restart the startup sequence.
 
 If the task conflicts with `PROJECT_INDEX.md` or `PROJECT_OPERATING_PROTOCOL.md`, STOP and report the conflict.
 
@@ -23,13 +32,30 @@ Do not assume project structure, current task, stable systems, or active IDs fro
 
 Read these files in order when they exist:
 
-1. `PROJECT_INDEX.md`
-2. `PROJECT_OPERATING_PROTOCOL.md`
-3. `project-brain/CURRENT_TASK.md`
-4. `project-brain/TASK_BOARD.md`
-5. Relevant task-specific docs
+1. Locate and sync the active Git repository using the required `hey codex` order.
+2. `PROJECT_INDEX.md`
+3. `PROJECT_OPERATING_PROTOCOL.md`
+4. `project-brain/CURRENT_TASK.md`
+5. `project-brain/TASK_BOARD.md`
+6. Relevant task-specific docs
 
 If a file is missing or empty, report that as a documentation gap instead of inventing content.
+
+## Required Git Check
+
+Project Reality Check must always run:
+
+1. `git status --short --branch`
+2. `git fetch origin` and `git pull --ff-only origin main` when this is a new `hey codex` session and the working tree is clean
+3. `git log -1 --oneline`
+
+Then compare:
+
+- latest Git commit
+- last verified commit written in `PROJECT_INDEX.md`
+- last verified commit written in `project-brain/CURRENT_TASK.md`
+
+For `hey codex`, produce Project Reality Check using the live Git commit as the source for latest commit. Show both the live Git latest commit and the Project Brain recorded commit. If any mismatch exists, report it clearly, recommend state sync before implementation, and do not continue implementation until the mismatch is acknowledged.
 
 For architecture, schema, migration, source-of-truth, or future-platform work, relevant task-specific docs include:
 
@@ -108,10 +134,14 @@ Project Reality Check:
 1. Current phase
 2. Current task
 3. Next approved task
-4. Last verified commit
-5. Blocked or forbidden actions
-6. Canonical files relevant to the requested work
-7. Approval needed, if any
+4. Live Git latest commit
+5. Last verified commit recorded in `PROJECT_INDEX.md`
+6. Last verified commit recorded in `project-brain/CURRENT_TASK.md`
+7. Commit comparison result
+8. Git working state
+9. Blocked or forbidden actions
+10. Canonical files relevant to the requested work
+11. Approval needed, if any
 
 No implementation task may start until the Project Reality Check is shown.
 

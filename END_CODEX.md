@@ -34,20 +34,23 @@ When the user says `by codex`, run this workflow:
 
 1. Run Project Reality Check.
 2. Run `git status --short --branch`.
-3. Identify changed files.
-4. Summarize completed work.
-5. Summarize uncommitted changes.
-6. Update canonical state files when needed and approved:
+3. Run `git log -1 --oneline`.
+4. Compare live Git latest commit against Project Brain recorded commits in `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`.
+5. Identify changed files.
+6. Summarize completed work.
+7. Summarize uncommitted changes.
+8. Update canonical state files to the latest Git commit when needed and approved:
    - `PROJECT_INDEX.md`
    - `project-brain/CURRENT_TASK.md`
    - `project-brain/TASK_BOARD.md`
    - `project-brain/DECISION_LOG.md` if decisions changed
-7. Verify no forbidden systems were touched.
-8. Verify next approved task is clear.
-9. Commit only approved files.
-10. Push to `origin/main`.
-11. Confirm clean `git status --short --branch`.
-12. Print next `hey codex` startup point.
+9. Verify no forbidden systems were touched.
+10. Verify next approved task is clear.
+11. Commit only approved files.
+12. Push to `origin/main`.
+13. Confirm clean `git status --short --branch`.
+14. Confirm Git and Project Brain are synchronized.
+15. Print next `hey codex` startup point.
 
 ---
 
@@ -68,6 +71,9 @@ What remains open?
 Update or confirm:
 
 - Project Reality Check
+- Live Git latest commit
+- Project Brain recorded commit
+- Commit mismatch status
 - Current Task
 - Task Board
 - Decision Log, if decisions changed
@@ -83,6 +89,8 @@ Update or confirm:
 - Current task
 - Next approved task
 - Last verified commit
+- Latest Git commit
+- Whether Git and Project Brain are synchronized
 - What was tested
 - Results
 - Session handoff notes
@@ -109,6 +117,7 @@ Verify whether any change affected:
 Run:
 
 - `git status --short --branch`
+- `git log -1 --oneline`
 - changed files
 - new files
 - relevant diffs
@@ -122,6 +131,8 @@ Commit only approved files.
 Push only the approved commit to `origin/main`.
 
 Confirm clean `git status --short --branch`.
+
+Confirm Git and Project Brain are synchronized before final output.
 
 ---
 
