@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`29331fb Read Wave 1 service reports from PostgreSQL`
+`a28da7b Create autonomous agent orchestration governance`
 
 ## Last Closeout Commit
 
@@ -56,6 +56,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - `9efa017 Refactor import planning and update Wave 1 baseline` is classified as the latest implementation/planning commit because it refactored Import Waves into agent-readable structured blocks, recorded Wave ownership/blockers/success criteria, and updated Wave 1 baseline counts after read-only source validation found legitimate new business data.
 - `3abf7d3 Record Wave 1 staging import pass` is classified as the latest implementation/import commit because it added the Wave 1 staging import script, recorded validation PASS, and documented PostgreSQL staging counts and excluded legacy/test rows.
 - `29331fb Read Wave 1 service reports from PostgreSQL` is classified as the latest implementation commit because it switched the Next.js service report list/detail screens from snapshot JSON to read-only PostgreSQL staging reads for Wave 1 data.
+- `a28da7b Create autonomous agent orchestration governance` is classified as the latest implementation/governance commit because it made Codex the main Orchestrator for safe work, routed tasks to existing agent owners, and defined the stop-only-at-approval-gates loop.
 - Prisma validation passed after reconciliation with process-only placeholder `DATABASE_URL` and `DIRECT_URL`.
 - Prisma generate completed against local staging env values after explicit approval.
 - Supabase staging-first shadow plan is approved: use `talcompressors-next-staging` first, then `talcompressors-next-prod` as production shadow only after staging validation passes.
@@ -87,6 +88,7 @@ Fix Wave 1 read/display mapping issues only: service date display, pending-signa
 - `PROJECT_INDEX.md` is the mandatory startup entrypoint.
 - `hey codex` is the official startup command.
 - `by codex` is the official shutdown command.
+- Codex is the main Orchestrator for safe scoped work and should work, validate, collect proof, update Project Brain, and commit/push safe validated changes without routine ping-pong.
 - `hey codex` must fetch and fast-forward from `origin/main` before reading Project Brain when the working tree is clean.
 - Project Reality Check must compare live Git latest commit against Last Implementation Commit and Last Closeout Commit recorded in `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`.
 - If live Git latest commit equals Last Closeout Commit, Project Brain is synchronized even when Last Implementation Commit is older.

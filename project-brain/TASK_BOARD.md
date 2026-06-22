@@ -62,6 +62,7 @@ Mode: Supabase staging Wave 1 import closed-loop validation, no Wave 2 work
 | Wave 1 import commit classified | Commit `3abf7d3 Record Wave 1 staging import pass`; classified as latest implementation/import commit |
 | Wave 1 PostgreSQL read implemented | Commit `29331fb Read Wave 1 service reports from PostgreSQL`; Next.js service report list/detail screens read Wave 1 PostgreSQL staging data |
 | Post-import Wave 1 review completed | `/service-reports` HTTP 200; `/service-reports/acd1133d` HTTP 200; 63 service report links rendered; counts `customers = 763`, `service_reports = 63`, `report_equipment_items = 75`; validation PASS; issues recorded for date, status, and sparse equipment display |
+| Autonomous agent orchestration governance created | Commit `a28da7b Create autonomous agent orchestration governance`; Codex is the main Orchestrator for AUTO_ALLOWED work, routes tasks to existing agent owners, validates, updates Project Brain, commits/pushes safe scoped work, and stops only at APPROVAL_REQUIRED gates |
 
 ## BLOCKED / NOT STARTED
 

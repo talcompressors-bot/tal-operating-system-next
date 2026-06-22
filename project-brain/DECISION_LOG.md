@@ -3,6 +3,19 @@
 ## 2026-06-22
 
 Decision:
+`a28da7b Create autonomous agent orchestration governance` is classified as the Last Implementation Commit.
+
+Reason:
+The commit changed project governance behavior by making Codex the main Orchestrator for safe scoped work, requiring task routing to existing agent owners, allowing AUTO_ALLOWED work to continue through validation and Project Brain update, and stopping only at APPROVAL_REQUIRED gates. It is an implementation/governance commit, not closeout metadata. Last Closeout Commit remains `8114210 Sync project brain commit model state`.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-22
+
+Decision:
 `29331fb Read Wave 1 service reports from PostgreSQL` is classified as the Last Implementation Commit.
 
 Reason:
