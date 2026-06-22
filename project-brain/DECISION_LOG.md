@@ -3,6 +3,19 @@
 ## 2026-06-22
 
 Decision:
+`9efa017 Refactor import planning and update Wave 1 baseline` is classified as the Last Implementation Commit.
+
+Reason:
+The commit changed approved migration planning by converting Import Waves into structured agent-readable `WAVE_ID` blocks, adding owner/blocker/success criteria fields for future automation, and updating Wave 1 baseline counts to `Customers_Final = 763`, `ServiceReports = 63`, and `ReportEquipmentItems = 109` after read-only export validation found legitimate new business data. It is an implementation/planning commit, not closeout metadata. Last Closeout Commit remains `8114210 Sync project brain commit model state`.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-22
+
+Decision:
 `c11c460 Document import waves plan` is classified as the Last Implementation Commit.
 
 Reason:

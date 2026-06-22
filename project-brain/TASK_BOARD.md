@@ -57,7 +57,7 @@ Mode: Supabase staging import dry-run validation planning, no data writes
 | Supabase staging schema pushed | Staging-only `prisma db push` completed after explicit approval; no migration, seed, import, production action, AppSheet/Sheets/Maven action, or code change occurred |
 | Staging schema verification completed | Read-only verification found 21 public V1 tables, no missing/extra V1 tables, and approved indexes/relations/enums present |
 | ReportEquipmentItems exclusion terminology updated | Commit `b6b709b Reclassify ReportEquipmentItems exclusions`; 9 rows missing `ReportID` and 25 unmatched `ReportID` rows are classified as historical test data, not business data, no recovery required, excluded by design |
-| Import Waves plan documented | Commit `c11c460 Document import waves plan`; refactored into structured `WAVE_ID` blocks for Codex, AI agents, automation, and Project Brain indexing |
+| Import Waves plan documented | Commit `9efa017 Refactor import planning and update Wave 1 baseline`; structured `WAVE_ID` blocks for Codex, AI agents, automation, and Project Brain indexing are recorded; Wave 1 baseline is `Customers_Final = 763`, `ServiceReports = 63`, `ReportEquipmentItems = 109` |
 
 ## BLOCKED / NOT STARTED
 
