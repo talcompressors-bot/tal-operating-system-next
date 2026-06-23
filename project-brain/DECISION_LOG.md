@@ -16,6 +16,19 @@ Approved.
 ## 2026-06-23
 
 Decision:
+AI Draft Suggestions may have a read-only empty-state shell before Wave 2 import approval.
+
+Reason:
+The `AiDraftSuggestion` Prisma model already exists and the staging table currently has zero rows. A shell that reads only existing rows, shows an empty state, and prepares approval/Maven lifecycle placeholders does not import data, write to the database, change schema, or touch source systems.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
 After the Service Reports list context enhancement, the next safe task is a Wave 2 import blocker-resolution approval package.
 
 Reason:

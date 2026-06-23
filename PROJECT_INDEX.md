@@ -404,9 +404,9 @@ This section is the living navigation screen. It summarizes current reality only
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Current milestone | Wave 1 Next.js read/display validation PASS after PostgreSQL read switch | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Current task | Service Reports list search/filter and customer/equipment context cues are implemented; current blocker is none for this read-only enhancement | `project-brain/CURRENT_TASK.md` |
+| Current task | AI Draft Suggestions read-only empty-state shell is implemented; current blocker is none for this read-only shell | `project-brain/CURRENT_TASK.md` |
 | Next approved task | Prepare the Wave 2 import blocker-resolution approval package from existing dry-run findings. Do not run imports, DB writes, schema changes, env changes, or source-system actions without explicit approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
-| Last Implementation Commit | `9bd6435 Enhance service report list filters` | Git history; `project-brain/CURRENT_TASK.md` |
+| Last Implementation Commit | `f8f271e Add AI draft suggestions shell` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
 | Blocked/forbidden actions | No production writes, Prisma migration, DB creation, Sheets/AppSheet/Maven actions, new planning/control files, new agents, or implementation before Reality Check | `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md` |
@@ -482,10 +482,10 @@ NEXT APPROVAL GATE
 Current Project Tree Position:
 
 - Current Wave: Wave 2 Service Workflow Layer
-- Current Task: Service Reports list search/filter and customer/equipment context cues are implemented; current blocker is none for this read-only enhancement
-- Last Completed Task: Service Reports list context enhancement
+- Current Task: AI Draft Suggestions read-only empty-state shell is implemented; current blocker is none for this read-only shell
+- Last Completed Task: AI Draft Suggestions shell
 - Next Task: Prepare the Wave 2 import blocker-resolution approval package from existing dry-run findings
-- Estimated completion %: 56%
+- Estimated completion %: 57%
 - Completion basis: capability-weighted evidence, not completed-waves / total-waves.
 - Governance / Project Brain / Git workflow: 15% / 15% COMPLETE
 - Supabase + Prisma Data Layer: 15% / 15% COMPLETE
@@ -543,15 +543,15 @@ Current evidence-based estimate:
 - Wave 6 Automation Runtime: 0% / 3% PENDING
 - Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 0% / 2% PENDING
 
-Current estimated completion: 56%.
+Current estimated completion: 57%.
 
-This estimate is valid because the first four capabilities are complete by Project Brain evidence and the Wave 2 read-only Equipment, PartsUsed, Service Report central work-screen, bidirectional navigation, and Service Reports list context enhancements are now implemented. If any of those capabilities are later found partial, estimate lower and explain why.
+This estimate is valid because the first four capabilities are complete by Project Brain evidence and the Wave 2 read-only Equipment, PartsUsed, Service Report central work-screen, bidirectional navigation, Service Reports list context, and AI Draft Suggestions shell enhancements are now implemented. If any of those capabilities are later found partial, estimate lower and explain why.
 
 | Area | Current Status | Canonical Owner |
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md` |
-| Current task | Service Reports list search/filter and customer/equipment context cues are implemented; current blocker is none for this read-only enhancement | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current task | AI Draft Suggestions read-only empty-state shell is implemented; current blocker is none for this read-only shell | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Next approved task | Prepare the Wave 2 import blocker-resolution approval package from existing dry-run findings. Do not run imports, DB writes, schema changes, env changes, or source-system actions without explicit approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
 | Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |
