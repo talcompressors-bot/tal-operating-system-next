@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-23
-Mode: PartsUsed read-only module implemented; next task is ProductsCatalog read-only module
+Mode: Data coverage audit completed; next task is populated-module enhancement
 
 ## Canonical Role
 
@@ -11,11 +11,11 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Real Supabase Prisma connectivity passed outside the network sandbox, confirming earlier `P1001` failures were sandbox/runtime network limitations rather than Supabase/project/env issues. Supabase staging connectivity blocker is resolved. The Customers read-only module is implemented and pushed. Automatic Project Brain closeout sync is required after every completed task. Multi-agent operating workflow docs are implemented and pushed. The ReportEquipmentItems / Equipment read-only module is implemented and pushed. The PartsUsed read-only module is implemented and committed. Wave 2 import is not approved.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Real Supabase Prisma connectivity passed outside the network sandbox, confirming earlier `P1001` failures were sandbox/runtime network limitations rather than Supabase/project/env issues. Supabase staging connectivity blocker is resolved. The Customers read-only module is implemented and pushed. Automatic Project Brain closeout sync is required after every completed task. Multi-agent operating workflow docs are implemented and pushed. The ReportEquipmentItems / Equipment read-only module is implemented and pushed. The PartsUsed read-only module is implemented and committed. Data coverage audit is completed. Wave 2 import is not approved.
 
 ## Current Milestone
 
-Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, Wave 2 connector dry-run validation, real Prisma staging connectivity validation, Customers read-only module implementation, automatic Project Brain closeout sync governance, multi-agent operating workflow docs, ReportEquipmentItems / Equipment read-only module implementation, and PartsUsed read-only module implementation are complete.
+Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, Wave 2 connector dry-run validation, real Prisma staging connectivity validation, Customers read-only module implementation, automatic Project Brain closeout sync governance, multi-agent operating workflow docs, ReportEquipmentItems / Equipment read-only module implementation, PartsUsed read-only module implementation, and data coverage audit are complete.
 
 ## Last Implementation Commit
 
@@ -98,14 +98,15 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - ReportEquipmentItems / Equipment read-only module implemented in commit `3f1761f Add equipment read-only module`: added `/equipment` list, `/equipment/[id]` detail, read-only `ReportEquipmentItem` Prisma adapter, search/filter fields, service-report links, and active dashboard card. Validation: scoped TypeScript check passed; `git diff --check` passed with CRLF warnings only; read-only Prisma lookup found known equipment `3002f879`; local HTTP validation returned 200 for `/`, `/equipment`, `/equipment/3002f879`, `/service-reports`, `/service-reports/5e0eaae3`, and `/customers`. No schema changes, migrations, env changes, DB writes, imports, AppSheet changes, Maven changes, Apps Script changes, source-system changes, or production actions occurred. Project completion percentage is now 52%.
 - PartsUsed read-only module implemented in commit `14542b5 Add PartsUsed read-only module`: added `/parts-used` list, `/parts-used/[id]` detail, read-only `PartUsed` Prisma adapter, search/filter fields, service-report/product context links, invalid enum filter hardening, and active dashboard card. Validation: scoped TypeScript check passed; `git diff --check` passed with CRLF warnings only; read-only Prisma validation found `parts_used = 0`; local HTTP validation returned 200 for `/`, `/parts-used`, `/parts-used?matchSource=BAD_VALUE`, `/service-reports`, `/equipment`, and `/customers`, and 404 for `/parts-used/not-a-real-part`. No schema changes, migrations, env changes, DB writes, imports, AppSheet changes, Maven changes, Apps Script changes, source-system changes, or production actions occurred. Current blocker is `none` for this read-only module. Project completion percentage is now 53%.
 - Application route map documented in commit `7a8ce9b Add application route map`: created `APPLICATION_ROUTE_MAP.md` listing all implemented Next.js routes, module names, status, data source, record count, and AppSheet equivalent. Validation: actual `app/**/page.tsx` route files were enumerated; read-only Prisma count query verified `customers = 763`, `serviceReports = 63`, `reportEquipmentItems = 75`, `partsUsed = 0`, and `products = 0`; `git diff --check` passed. No app code, schema changes, migrations, env changes, DB writes, imports, source-system changes, or production actions occurred.
+- Data coverage audit completed in commit `5a682ec Add data coverage audit`: created `DATA_COVERAGE_AUDIT.md` with read-only Prisma counts and readiness classifications for 19 requested models. Populated models are `Customer = 763`, `ServiceReport = 63`, and `ReportEquipmentItem = 75`. `PartUsed = 0` and `Product = 0` are empty. Inventory, AI draft, business document, automation, Maven, approval, email, sync, and error-log tables are not ready for useful read-only module validation because they have no staging rows. Validation: read-only Prisma counts succeeded; `git diff --check` passed. No app code, schema changes, migrations, env changes, DB writes, imports, source-system changes, or production actions occurred.
 
 ## Current Task
 
-Application route map is created and committed. Current blocker: none.
+Data coverage audit is created and committed. Current blocker: none for read-only audit work.
 
 ## Next Approved Task
 
-Implement the ProductsCatalog read-only module using the existing Prisma schema and Next.js architecture. Use read-only Server Components and Prisma reads only.
+Enhance already populated read-only modules, such as improving cross-links between ServiceReports, Equipment, and Customers. Do not build ProductsCatalog as the next data-backed module until `Product` rows are populated in staging.
 
 Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes, schema changes, migrations, env changes, or source-system actions until Liad explicitly approves that later gate.
 
@@ -171,6 +172,6 @@ Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import
 
 ## Done When
 
-- ProductsCatalog read-only module is implemented, validated, committed, and pushed.
+- A populated-module enhancement is implemented, validated, committed, and pushed, or Product rows are populated after explicit import approval before ProductsCatalog module work resumes.
 - Project Brain records the implementation commit hash, validation result, current blocker `none` for the read-only module, exact next task, approval gates, and project completion percentage.
 - No write path, import, migration, schema push, source-system change, or production action is added.

@@ -404,8 +404,8 @@ This section is the living navigation screen. It summarizes current reality only
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Current milestone | Wave 1 Next.js read/display validation PASS after PostgreSQL read switch | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Current task | PartsUsed read-only module implemented and committed; current blocker is none for the read-only module | `project-brain/CURRENT_TASK.md` |
-| Next approved task | Implement the ProductsCatalog read-only module. No Wave 2 import, Maven work, production shadow, DB write, schema change, env change, or source-system action is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current task | Data coverage audit completed; current blocker is none for read-only audit work | `project-brain/CURRENT_TASK.md` |
+| Next approved task | Enhance already populated read-only modules, such as ServiceReports, Equipment, and Customers. Do not build ProductsCatalog as the next data-backed module until `Product` rows are populated in staging | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
 | Last Implementation Commit | `14542b5 Add PartsUsed read-only module` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
@@ -418,6 +418,7 @@ Canonical file links:
 - Task board: `project-brain/TASK_BOARD.md`
 - Decisions: `project-brain/DECISION_LOG.md`
 - Application route map: `APPLICATION_ROUTE_MAP.md`
+- Data coverage audit: `DATA_COVERAGE_AUDIT.md`
 - System map: `project-brain/maps/SYSTEM_MAP.md`
 - Migration scope: `project-brain/migration/POSTGRESQL_V1_SCOPE.md`
 - Prisma schema: `prisma/schema.prisma`
@@ -481,9 +482,9 @@ NEXT APPROVAL GATE
 Current Project Tree Position:
 
 - Current Wave: Wave 2 Service Workflow Layer
-- Current Task: PartsUsed read-only module implemented and committed; current blocker is none for the read-only module
-- Last Completed Task: PartsUsed read-only module
-- Next Task: ProductsCatalog read-only module
+- Current Task: Data coverage audit completed; current blocker is none for read-only audit work
+- Last Completed Task: Data coverage audit
+- Next Task: Populated-module enhancement across ServiceReports, Equipment, and Customers
 - Estimated completion %: 53%
 - Completion basis: capability-weighted evidence, not completed-waves / total-waves.
 - Governance / Project Brain / Git workflow: 15% / 15% COMPLETE
@@ -550,13 +551,14 @@ This estimate is valid because the first four capabilities are complete by Proje
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md` |
-| Current task | PartsUsed read-only module implemented and committed; current blocker is none for the read-only module | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Next approved task | Implement the ProductsCatalog read-only module. No Wave 2 import, Maven work, production shadow, DB write, schema change, env change, or source-system action is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current task | Data coverage audit completed; current blocker is none for read-only audit work | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Next approved task | Enhance already populated read-only modules, such as ServiceReports, Equipment, and Customers. Do not build ProductsCatalog as the next data-backed module until `Product` rows are populated in staging | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
 | Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |
 | Dependency order | Governance and Project Brain state -> system map/source review -> PostgreSQL V1 scope -> data migration planning -> Supabase staging-first plan -> approved staging project/secrets -> Prisma reconciliation approval -> approved staging schema push -> read-only schema verification -> Wave 1 dry-run/import validation -> Waves 2-4 discovery/import approvals -> production shadow approval -> Server Actions/offline sync | `project-brain/TASK_BOARD.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md`, `project-brain/migration/DATA_MIGRATION_PLAN.md` |
 | Import waves | Structured `WAVE_ID` blocks define Wave 1 service-report core, Wave 2 service workflow, Wave 3 Maven data, and Wave 4 extended operations for agent-readable planning | `project-brain/migration/DATA_MIGRATION_PLAN.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md` |
 | Application routes | Implemented Next.js route inventory with module, status, data source, record count, and AppSheet equivalent | `APPLICATION_ROUTE_MAP.md` |
+| Data coverage | Read-only Prisma count audit and module readiness recommendation | `DATA_COVERAGE_AUDIT.md` |
 | System map | Current legacy and target system navigation | `project-brain/maps/SYSTEM_MAP.md` |
 
 ```mermaid

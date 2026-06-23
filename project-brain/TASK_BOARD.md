@@ -1,13 +1,13 @@
 # TASK BOARD
 
 Last updated: 2026-06-23
-Mode: PartsUsed read-only module implemented; next task is ProductsCatalog read-only module
+Mode: Data coverage audit completed; next task is populated-module enhancement
 
 ## NOW
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| ProductsCatalog read-only module | Implement a read-only ProductsCatalog page/module using existing Prisma schema and Next.js architecture | Routes render with read-only Prisma reads, linked PartsUsed context where available, no writes/imports/schema/env changes, and existing routes still pass validation | No for read-only module; yes before any import, DB write, schema change, env change, or source-system action |
+| Populated-module enhancement | Improve the existing read-only modules that have staging data: ServiceReports, Customers, and Equipment | Cross-links and visible navigation improve without schema/env changes, imports, DB writes, or source-system actions; existing routes still pass validation | No for read-only enhancement; yes before any import, DB write, schema change, env change, or source-system action |
 
 ## NEXT
 
@@ -75,6 +75,7 @@ Mode: PartsUsed read-only module implemented; next task is ProductsCatalog read-
 | ReportEquipmentItems / Equipment read-only module implemented | Commit `3f1761f Add equipment read-only module`; added `/equipment`, `/equipment/[id]`, read-only `ReportEquipmentItem` adapter, dashboard activation, search/filter fields, and service-report links; validation: scoped TypeScript passed, `git diff --check` passed with CRLF warnings only, read-only Prisma lookup found equipment `3002f879`, and local HTTP checks returned 200 for `/`, `/equipment`, `/equipment/3002f879`, `/service-reports`, `/service-reports/5e0eaae3`, and `/customers`; no schema/env/migration/DB write/import/source-system/production changes; completion is 52% |
 | PartsUsed read-only module implemented | Commit `14542b5 Add PartsUsed read-only module`; added `/parts-used`, `/parts-used/[id]`, read-only `PartUsed` adapter, dashboard activation, search/filter fields, service-report/product context links, and invalid enum filter hardening; validation: scoped TypeScript passed, `git diff --check` passed with CRLF warnings only, read-only Prisma validation found `parts_used = 0`, local HTTP checks returned 200 for `/`, `/parts-used`, `/parts-used?matchSource=BAD_VALUE`, `/service-reports`, `/equipment`, and `/customers`, and 404 for `/parts-used/not-a-real-part`; no schema/env/migration/DB write/import/source-system/production changes; completion is 53% |
 | Application route map documented | Commit `7a8ce9b Add application route map`; created `APPLICATION_ROUTE_MAP.md` with every implemented route, module, status, data source, record count, and AppSheet equivalent; validation: actual `app/**/page.tsx` files enumerated, read-only Prisma counts verified, and `git diff --check` passed; no app/schema/env/migration/DB write/import/source-system/production changes |
+| Data coverage audit completed | Commit `5a682ec Add data coverage audit`; created `DATA_COVERAGE_AUDIT.md` with read-only Prisma counts and classifications for 19 requested models; populated models are `Customer = 763`, `ServiceReport = 63`, and `ReportEquipmentItem = 75`; `PartUsed = 0` and `Product = 0` are empty; remaining workflow/runtime/Maven/sync/log tables are not ready for useful read-only module validation; no app/schema/env/migration/DB write/import/source-system/production changes |
 
 ## BLOCKED / NOT STARTED
 

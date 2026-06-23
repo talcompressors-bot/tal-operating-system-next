@@ -3,6 +3,19 @@
 ## 2026-06-23
 
 Decision:
+After the data coverage audit, ProductsCatalog should not be the next data-backed read-only module until `Product` rows exist in staging.
+
+Reason:
+Read-only Prisma counts in `DATA_COVERAGE_AUDIT.md` show the only populated audited models are `Customer = 763`, `ServiceReport = 63`, and `ReportEquipmentItem = 75`; all three already have read-only modules. `Product = 0` and `PartUsed = 0`; other workflow, Maven, automation, sync, and log tables are empty/not ready. The safest next implementation is an enhancement to already populated read-only modules, or explicit approval for an import/population step before building data-heavy modules around empty tables.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
 `14542b5 Add PartsUsed read-only module` is classified as the Last Implementation Commit.
 
 Reason:
