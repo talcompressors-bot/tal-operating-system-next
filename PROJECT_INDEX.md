@@ -417,6 +417,7 @@ Canonical file links:
 - Current state: `project-brain/CURRENT_TASK.md`
 - Task board: `project-brain/TASK_BOARD.md`
 - Decisions: `project-brain/DECISION_LOG.md`
+- Application route map: `APPLICATION_ROUTE_MAP.md`
 - System map: `project-brain/maps/SYSTEM_MAP.md`
 - Migration scope: `project-brain/migration/POSTGRESQL_V1_SCOPE.md`
 - Prisma schema: `prisma/schema.prisma`
@@ -555,6 +556,7 @@ This estimate is valid because the first four capabilities are complete by Proje
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |
 | Dependency order | Governance and Project Brain state -> system map/source review -> PostgreSQL V1 scope -> data migration planning -> Supabase staging-first plan -> approved staging project/secrets -> Prisma reconciliation approval -> approved staging schema push -> read-only schema verification -> Wave 1 dry-run/import validation -> Waves 2-4 discovery/import approvals -> production shadow approval -> Server Actions/offline sync | `project-brain/TASK_BOARD.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md`, `project-brain/migration/DATA_MIGRATION_PLAN.md` |
 | Import waves | Structured `WAVE_ID` blocks define Wave 1 service-report core, Wave 2 service workflow, Wave 3 Maven data, and Wave 4 extended operations for agent-readable planning | `project-brain/migration/DATA_MIGRATION_PLAN.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md` |
+| Application routes | Implemented Next.js route inventory with module, status, data source, record count, and AppSheet equivalent | `APPLICATION_ROUTE_MAP.md` |
 | System map | Current legacy and target system navigation | `project-brain/maps/SYSTEM_MAP.md` |
 
 ```mermaid
