@@ -29,10 +29,12 @@ When activated:
 
 6. Only then read:
 
+- START_CODEX.md
 - PROJECT_INDEX.md
 - PROJECT_OPERATING_PROTOCOL.md
 - project-brain/CURRENT_TASK.md
 - project-brain/TASK_BOARD.md
+- project-brain/DECISION_LOG.md
 - relevant task-specific docs
 
 Do not read Project Brain files until the repository has been checked and fast-forwarded from `origin/main` when the working tree is clean.
@@ -44,7 +46,7 @@ When the user says `hey codex`:
 3. If the working tree is clean, run `git fetch origin` and `git pull --ff-only origin main`.
 4. If the working tree is not clean, STOP, report uncommitted changes, and do not pull until the user approves a stash, commit, or discard plan.
 5. After a successful pull, run `git log -1 --oneline`.
-6. Only then read `PROJECT_INDEX.md`, `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md`, and `project-brain/TASK_BOARD.md`.
+6. Only then read `START_CODEX.md`, `PROJECT_INDEX.md`, `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, and `project-brain/DECISION_LOG.md`.
 7. Produce Project Reality Check using the live Git commit as the latest commit source.
 8. Show live Git latest commit, Last Implementation Commit, and Last Closeout Commit.
 9. Continue if live Git latest commit is recorded as Last Implementation Commit or Last Closeout Commit, or if live Git latest commit is only a closeout/state-sync metadata commit newer than Last Closeout Commit. If live Git contains unclassified implementation, code, schema, or governance behavior changes, report mismatch and recommend state sync before implementation.

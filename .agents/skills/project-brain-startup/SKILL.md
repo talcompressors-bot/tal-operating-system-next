@@ -1,6 +1,6 @@
 ---
 name: project-brain-startup
-description: Load TalCompressors-ServiceReports-AI project memory before analysis or code work. Use when starting a session, recovering context, checking current project state, responding to project-status requests, or before modifying code, Apps Script, Maven workflows, AppSheet automation, or Project Brain files.
+description: Load TalCompressors-ServiceReports-AI project memory before analysis or code work. Use when the user says `hey codex`, starting a session, recovering context, checking current project state, responding to project-status requests, or before modifying code, Apps Script, Maven workflows, AppSheet automation, or Project Brain files.
 ---
 
 # Project Brain Startup
@@ -18,7 +18,7 @@ Required `hey codex` order:
 3. If the working tree is clean, run `git fetch origin` and `git pull --ff-only origin main`.
 4. If the working tree is not clean, STOP, report uncommitted changes, and do not pull until the user approves a stash, commit, or discard plan.
 5. After a successful pull, run `git log -1 --oneline`.
-6. Only then read `PROJECT_INDEX.md`, `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md`, and `project-brain/TASK_BOARD.md`.
+6. Only then read `START_CODEX.md`, `PROJECT_INDEX.md`, `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, and `project-brain/DECISION_LOG.md`.
 
 If Project Brain files are read before the repository has been checked and fast-forwarded when clean, STOP and restart the startup sequence.
 
@@ -33,11 +33,13 @@ Do not assume project structure, current task, stable systems, or active IDs fro
 Read these files in order when they exist:
 
 1. Locate and sync the active Git repository using the required `hey codex` order.
-2. `PROJECT_INDEX.md`
-3. `PROJECT_OPERATING_PROTOCOL.md`
-4. `project-brain/CURRENT_TASK.md`
-5. `project-brain/TASK_BOARD.md`
-6. Relevant task-specific docs
+2. `START_CODEX.md`
+3. `PROJECT_INDEX.md`
+4. `PROJECT_OPERATING_PROTOCOL.md`
+5. `project-brain/CURRENT_TASK.md`
+6. `project-brain/TASK_BOARD.md`
+7. `project-brain/DECISION_LOG.md`
+8. Relevant task-specific docs
 
 If a file is missing or empty, report that as a documentation gap instead of inventing content.
 
