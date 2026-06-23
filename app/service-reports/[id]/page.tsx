@@ -24,37 +24,78 @@ export default async function ServiceReportDetailPage({
     <section className="page-shell">
       <div className="detail-header">
         <div>
-          <p className="eyebrow">דוח שירות</p>
-          <h1>דוח #{report.reportNumber}</h1>
+          <p className="eyebrow">Service Report</p>
+          <h1>Report #{report.reportNumber}</h1>
           <p className="lede">{report.customer}</p>
         </div>
-        <Link className="button secondary" href="/service-reports">
-          חזרה לרשימה
-        </Link>
+        <div className="actions">
+          <button className="button disabled" disabled type="button">
+            Create AI Draft
+          </button>
+          <button className="button disabled" disabled type="button">
+            Create Business Draft
+          </button>
+          <button className="button disabled" disabled type="button">
+            Send to Maven
+          </button>
+          <Link className="button secondary" href="/service-reports">
+            Back to reports
+          </Link>
+        </div>
       </div>
 
       <div className="detail-grid">
         <section className="info-panel">
-          <h2>פרטי הדוח</h2>
+          <h2>Customer summary</h2>
           <dl>
             <div>
-              <dt>מספר דוח</dt>
+              <dt>Customer</dt>
+              <dd>
+                {report.customerSummary.id ? (
+                  <Link href={`/customers/${report.customerSummary.id}`}>
+                    {report.customerSummary.name}
+                  </Link>
+                ) : (
+                  report.customerSummary.name
+                )}
+              </dd>
+            </div>
+            <div>
+              <dt>Primary contact</dt>
+              <dd>{report.customerSummary.contactName}</dd>
+            </div>
+            <div>
+              <dt>Phone</dt>
+              <dd>{report.customerSummary.phonePrimary}</dd>
+            </div>
+            <div>
+              <dt>Email</dt>
+              <dd>{report.customerSummary.emailPrimary}</dd>
+            </div>
+            <div>
+              <dt>Address</dt>
+              <dd>{report.customerSummary.address}</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section className="info-panel">
+          <h2>Report details</h2>
+          <dl>
+            <div>
+              <dt>Report number</dt>
               <dd>{report.reportNumber}</dd>
             </div>
             <div>
-              <dt>לקוח</dt>
-              <dd>{report.customer}</dd>
-            </div>
-            <div>
-              <dt>תאריך שירות</dt>
+              <dt>Service date</dt>
               <dd>{report.serviceDate}</dd>
             </div>
             <div>
-              <dt>טכנאי</dt>
+              <dt>Technician</dt>
               <dd>{report.technician}</dd>
             </div>
             <div>
-              <dt>סטטוס</dt>
+              <dt>Status</dt>
               <dd>
                 <span className={`status ${report.statusClassName}`}>
                   {report.status}
@@ -65,23 +106,40 @@ export default async function ServiceReportDetailPage({
         </section>
 
         <section className="info-panel wide">
-          <h2>תיאור השירות</h2>
+          <h2>Service description</h2>
           <p>{report.description}</p>
         </section>
 
         <section className="info-panel wide">
-          <h2>המלצות</h2>
+          <h2>Recommendations</h2>
           <p>{report.recommendations}</p>
         </section>
 
         <section className="info-panel wide">
-          <h2>ציוד</h2>
+          <h2>Lifecycle</h2>
+          <div className="lifecycle-list">
+            <div className="lifecycle-item">
+              <span>{report.lifecycle.businessDraft}</span>
+            </div>
+            <div className="lifecycle-item">
+              <span>{report.lifecycle.maven}</span>
+            </div>
+            <div className="lifecycle-item">
+              <span>{report.lifecycle.customerViewed}</span>
+            </div>
+          </div>
+        </section>
+
+        <section className="info-panel wide">
+          <h2>Equipment summary</h2>
           <div className="equipment-list">
             {report.equipment.map((item) => (
               <article key={item.id} className="equipment-item">
                 <div>
                   <h3>
-                    {item.equipmentNumber} · {item.type}
+                    <Link href={`/equipment/${item.id}`}>
+                      {item.equipmentNumber} - {item.type}
+                    </Link>
                   </h3>
                   <p>{item.subtitle}</p>
                 </div>
@@ -89,6 +147,9 @@ export default async function ServiceReportDetailPage({
                 <p>{item.notes}</p>
               </article>
             ))}
+            {!report.equipment.length ? (
+              <p>No equipment linked to this service report.</p>
+            ) : null}
           </div>
         </section>
       </div>

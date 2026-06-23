@@ -1,4 +1,4 @@
-import type { Prisma, ReportEquipmentItem, ServiceReport } from "@prisma/client";
+import type { Customer, Prisma, ReportEquipmentItem, ServiceReport } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 
 type ServiceReportStatus =
@@ -20,10 +20,26 @@ type EquipmentRow = {
   subtitle: string;
 };
 
+type CustomerSummary = {
+  id: string;
+  name: string;
+  contactName: string;
+  phonePrimary: string;
+  emailPrimary: string;
+  address: string;
+};
+
+type LifecycleState = {
+  businessDraft: string;
+  maven: string;
+  customerViewed: string;
+};
+
 export type ServiceReportView = {
   id: string;
   reportNumber: string;
   customer: string;
+  customerSummary: CustomerSummary;
   serviceDate: string;
   technician: string;
   status: ServiceReportStatus;
@@ -31,10 +47,21 @@ export type ServiceReportView = {
   description: string;
   recommendations: string;
   equipment: EquipmentRow[];
+  lifecycle: LifecycleState;
 };
 
 type ServiceReportWithWave1Relations = ServiceReport & {
-  customer: { name: string } | null;
+  customer:
+    | Pick<
+        Customer,
+        | "appsheetCustomerId"
+        | "name"
+        | "contactName"
+        | "phonePrimary"
+        | "emailPrimary"
+        | "address"
+      >
+    | null;
   equipmentItems: ReportEquipmentItem[];
 };
 
@@ -131,10 +158,34 @@ function mapEquipmentRow(item: ReportEquipmentItem): EquipmentRow {
   };
 }
 
+function mapCustomerSummary(
+  customer: ServiceReportWithWave1Relations["customer"],
+): CustomerSummary {
+  return {
+    id: readText(customer?.appsheetCustomerId),
+    name: readText(customer?.name, "UNKNOWN CUSTOMER"),
+    contactName: readText(customer?.contactName, "No contact"),
+    phonePrimary: readText(customer?.phonePrimary, "No phone"),
+    emailPrimary: readText(customer?.emailPrimary, "No email"),
+    address: readText(customer?.address, "No address"),
+  };
+}
+
+function mapLifecycle(report: ServiceReportWithWave1Relations): LifecycleState {
+  return {
+    businessDraft: report.businessDraftCreated
+      ? "Business draft created"
+      : "Draft not created",
+    maven: report.mavenSentToCustomer ? "Maven sent" : "Maven not sent",
+    customerViewed: "Customer not viewed",
+  };
+}
+
 function mapServiceReport(
   report: ServiceReportWithWave1Relations,
 ): ServiceReportView {
   const status = normalizeStatus(report.status, report.sourceStatusText);
+  const customerSummary = mapCustomerSummary(report.customer);
 
   return {
     id: report.appsheetReportId,
@@ -142,7 +193,8 @@ function mapServiceReport(
       readText(report.reportCounter) ||
       readText(report.reportNumberText) ||
       report.appsheetReportId,
-    customer: readText(report.customer?.name, "UNKNOWN CUSTOMER"),
+    customer: customerSummary.name,
+    customerSummary,
     serviceDate: formatDate(report.serviceDate, report.rawSource),
     technician: readText(report.technicianName, "UNKNOWN TECHNICIAN"),
     status,
@@ -156,13 +208,23 @@ function mapServiceReport(
       readText(report.technicianSummary) ||
       "No recommendations recorded",
     equipment: report.equipmentItems.map(mapEquipmentRow),
+    lifecycle: mapLifecycle(report),
   };
 }
 
 export async function getServiceReportList() {
   const serviceReports = await prisma.serviceReport.findMany({
     include: {
-      customer: { select: { name: true } },
+      customer: {
+        select: {
+          appsheetCustomerId: true,
+          name: true,
+          contactName: true,
+          phonePrimary: true,
+          emailPrimary: true,
+          address: true,
+        },
+      },
       equipmentItems: {
         orderBy: [{ equipmentNumber: "asc" }, { appsheetItemId: "asc" }],
       },
@@ -177,7 +239,16 @@ export async function getServiceReportById(id: string) {
   const report = await prisma.serviceReport.findUnique({
     where: { appsheetReportId: id },
     include: {
-      customer: { select: { name: true } },
+      customer: {
+        select: {
+          appsheetCustomerId: true,
+          name: true,
+          contactName: true,
+          phonePrimary: true,
+          emailPrimary: true,
+          address: true,
+        },
+      },
       equipmentItems: {
         orderBy: [{ equipmentNumber: "asc" }, { appsheetItemId: "asc" }],
       },

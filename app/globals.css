@@ -259,6 +259,14 @@ tr:last-child td {
   background: #eef2f6;
 }
 
+.button.disabled,
+.button:disabled {
+  background: #edf0f4;
+  border: 1px solid var(--border);
+  color: #7b8492;
+  cursor: not-allowed;
+}
+
 .detail-grid {
   display: grid;
   gap: 18px;
@@ -304,6 +312,21 @@ dd {
   gap: 14px;
 }
 
+.lifecycle-list {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.lifecycle-item {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  font-weight: 700;
+  padding: 16px;
+}
+
 .equipment-item {
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -344,6 +367,10 @@ dd {
   }
 
   .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lifecycle-list {
     grid-template-columns: 1fr;
   }
 }
