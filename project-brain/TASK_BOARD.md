@@ -1,13 +1,13 @@
 # TASK BOARD
 
 Last updated: 2026-06-23
-Mode: Equipment read-only module implemented; Wave 2 import remains blocked
+Mode: Current task is PartsUsed read-only module
 
 ## NOW
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Wave 2 blocker-resolution planning | Prepare the Wave 2 source mapping/blocker resolution plan after read-only dry-run findings and before any import | Plan covers duplicate/blank SKU handling, `PartsUsed` example/test classification, `AIDraftSuggestions` customer-name fallback mapping, Wave 2 enum/status mapping, `BusinessDocumentLog` shifted-column handling, and title-row skip rules; no import, DB write, schema change, Maven work, production shadow, or source-system action begins | No for planning; yes before any import or source-system action |
+| PartsUsed read-only module | Implement a read-only PartsUsed page/module using existing Prisma schema and Next.js architecture | Routes render with read-only Prisma reads, related service report/customer context where available, no writes/imports/schema/env changes, and existing routes still pass validation | No for read-only module; yes before any import, DB write, schema change, env change, or source-system action |
 
 ## NEXT
 
@@ -80,7 +80,6 @@ Mode: Equipment read-only module implemented; Wave 2 import remains blocked
 |---|---|---|
 | Database migration | Migrations are not part of current staging shadow path | Separate approval required before any Prisma migrate workflow |
 | Additional schema push | Staging schema is already applied; further schema changes need separate approval | Approve any schema change separately before another db push |
-| Wave 2 import blocker resolution | Connector dry-run found duplicate SKU `SCR-20EPM`, unresolved `PartsUsed.ReportID = R-EXAMPLE`, customer-name-in-ID-field in `AIDraftSuggestions`, shifted `BusinessDocumentLog` rows, and unapproved enum/status mappings | Prepare and approve Wave 2 source mapping/blocker resolution plan |
 | Wave 2 import | Wave 2 import is not approved and dry-run import readiness is FAIL/BLOCKED | Request explicit import approval only after blockers are resolved or explicitly accepted |
 | Production integration | Shadow app is not approved for production | Keep AppSheet/Sheets production until explicit cutover approval |
 | Maven write flow | Not part of current work | Requires separate design and approval |
@@ -129,5 +128,5 @@ Mode: Equipment read-only module implemented; Wave 2 import remains blocked
 - No AppSheet.
 - No Maven.
 - No VPS provisioning or remote infrastructure setup.
-- No Wave 2/3/4 work until Liad explicitly approves that later gate.
+- No Wave 2/3/4 import work until Liad explicitly approves that later gate.
 - Every task must have an owner agent or explicit `manual/Liad approval` owner before work starts.

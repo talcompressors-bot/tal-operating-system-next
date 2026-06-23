@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-23
-Mode: Equipment read-only module implemented; Wave 2 import remains blocked
+Mode: Current task is PartsUsed read-only module
 
 ## Canonical Role
 
@@ -11,7 +11,7 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Real Supabase Prisma connectivity passed outside the network sandbox, confirming earlier `P1001` failures were sandbox/runtime network limitations rather than Supabase/project/env issues. The Customers read-only module is implemented and pushed. Automatic Project Brain closeout sync is required after every completed task. Multi-agent operating workflow docs are implemented and pushed. The ReportEquipmentItems / Equipment read-only module is implemented and committed. Wave 2 import is not approved.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Real Supabase Prisma connectivity passed outside the network sandbox, confirming earlier `P1001` failures were sandbox/runtime network limitations rather than Supabase/project/env issues. Supabase staging connectivity blocker is resolved. The Customers read-only module is implemented and pushed. Automatic Project Brain closeout sync is required after every completed task. Multi-agent operating workflow docs are implemented and pushed. The ReportEquipmentItems / Equipment read-only module is implemented and committed. Current task is the PartsUsed read-only module. Wave 2 import is not approved.
 
 ## Current Milestone
 
@@ -94,18 +94,18 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - Customers read-only module implemented in commit `45da4d0 Implement customers read-only module`: `app/customers/page.tsx`, `app/customers/[id]/page.tsx`, and `app/customers/customer-adapter.ts` were added; `app/page.tsx` now links the active Customers card to `/customers`. It uses existing Prisma `Customer` data, Server Component reads, relation counts, and service-report links only. No schema changes, migrations, env changes, DB writes, AppSheet changes, Maven changes, Apps Script changes, or production actions occurred.
 - Customers module validation: scoped TypeScript check passed; `/`, `/customers`, `/customers/186DD`, `/service-reports`, and `/service-reports/acd1133d` returned HTTP 200. Full `npm.cmd run build` remains blocked by an existing unrelated missing `playwright` dependency in `scripts/playwright/appsheet-discovery-auth.ts`; `npm.cmd run lint` prompts for initial ESLint setup.
 - Automatic Project Brain closeout sync governance implemented in commit `4ed6ca2 Require automatic project brain closeout sync`: `AGENTS.md`, `PROJECT_OPERATING_PROTOCOL.md`, and `PROJECT_INDEX.md` now require Project Brain updates before every final report after a completed task; required closeout fields are completed work, commit hash, validation results, current blocker or `none`, exact next task, approval gates, and project completion percentage; resolved blockers must be removed from current blocker state; final responses must not call a validated resolved issue blocked. Validation: `git diff --check` passed with CRLF warnings only. Project completion percentage remains 50%. No env changes, schema changes, migrations, DB writes/imports, deletes/moves, git remote changes, source-system changes, or production integrations occurred.
-- Multi-agent operating workflow implemented in commit `28f9bf2 Add multi-agent operating workflow`: created `project-brain/agents/BUILDER_AGENT.md`, `project-brain/agents/MAP_GUARD_AGENT.md`, `project-brain/agents/QA_AGENT.md`, `project-brain/agents/REVIEWER_AGENT.md`, `project-brain/agents/AGENT_COMMUNICATION_PROTOCOL.md`, and `project-brain/agents/AUTONOMOUS_BUILD_WORKFLOW.md`; updated `AGENTS.md`, `PROJECT_OPERATING_PROTOCOL.md`, and `PROJECT_INDEX.md`. Validation: `git diff --check` passed with CRLF warnings only. Project completion percentage remains 50%. Current blocker remains Wave 2 import approval/blocker-resolution planning. No app code, schema, migrations, env files, DB writes/imports, source-system changes, deletes/moves, git remote changes, or production integrations occurred.
+- Multi-agent operating workflow implemented in commit `28f9bf2 Add multi-agent operating workflow`: created `project-brain/agents/BUILDER_AGENT.md`, `project-brain/agents/MAP_GUARD_AGENT.md`, `project-brain/agents/QA_AGENT.md`, `project-brain/agents/REVIEWER_AGENT.md`, `project-brain/agents/AGENT_COMMUNICATION_PROTOCOL.md`, and `project-brain/agents/AUTONOMOUS_BUILD_WORKFLOW.md`; updated `AGENTS.md`, `PROJECT_OPERATING_PROTOCOL.md`, and `PROJECT_INDEX.md`. Validation: `git diff --check` passed with CRLF warnings only. Project completion percentage remains 50%. Import approval remained a later gate. No app code, schema, migrations, env files, DB writes/imports, source-system changes, deletes/moves, git remote changes, or production integrations occurred.
 - ReportEquipmentItems / Equipment read-only module implemented in commit `3f1761f Add equipment read-only module`: added `/equipment` list, `/equipment/[id]` detail, read-only `ReportEquipmentItem` Prisma adapter, search/filter fields, service-report links, and active dashboard card. Validation: scoped TypeScript check passed; `git diff --check` passed with CRLF warnings only; read-only Prisma lookup found known equipment `3002f879`; local HTTP validation returned 200 for `/`, `/equipment`, `/equipment/3002f879`, `/service-reports`, `/service-reports/5e0eaae3`, and `/customers`. No schema changes, migrations, env changes, DB writes, imports, AppSheet changes, Maven changes, Apps Script changes, source-system changes, or production actions occurred. Project completion percentage is now 52%.
 
 ## Current Task
 
-ReportEquipmentItems / Equipment read-only module is implemented and committed. Current blocker: Wave 2 import remains blocked pending blocker-resolution planning and explicit approval.
+PartsUsed read-only module.
 
 ## Next Approved Task
 
-Continue Wave 2 import blocker resolution planning only. Required Wave 2 topics remain: duplicate/blank SKU handling, `PartsUsed` example/test classification, `AIDraftSuggestions` customer-name fallback mapping, Wave 2 enum/status mapping, `BusinessDocumentLog` shifted-column handling, and title-row skip rules for `PartsUsed` and `EmailLog`.
+Implement the PartsUsed read-only module using the existing Prisma schema and Next.js architecture. Use read-only Server Components and Prisma reads only.
 
-Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes, schema changes, or source-system actions until Liad explicitly approves that later gate.
+Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes, schema changes, migrations, env changes, or source-system actions until Liad explicitly approves that later gate.
 
 ## Approved Architecture Decisions In Force
 
@@ -165,10 +165,10 @@ Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import
 - No production Apps Script changes.
 - No new agents.
 - No new planning/control files unless existing files are searched first and proven insufficient.
-- No Wave 2/3/4 work until Liad explicitly approves that later gate.
+- No Wave 2/3/4 import work until Liad explicitly approves that later gate.
 
 ## Done When
 
-- ReportEquipmentItems / Equipment read-only module is committed and pushed.
-- Project Brain records the final implementation commit hash `3f1761f`, validation result, current blocker, exact next task, approval gates, and project completion percentage `52%`.
+- PartsUsed read-only module is implemented, validated, committed, and pushed.
+- Project Brain records the implementation commit hash, validation result, current blocker `none` for the read-only module, exact next task, approval gates, and project completion percentage.
 - No write path, import, migration, schema push, source-system change, or production action is added.

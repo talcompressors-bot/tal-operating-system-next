@@ -3,6 +3,19 @@
 ## 2026-06-23
 
 Decision:
+Supabase staging connectivity blocker is resolved, and the current task is now the PartsUsed read-only module.
+
+Reason:
+Real read-only Prisma connectivity has already passed outside the network sandbox, including `customer.count() = 763`, and `npx.cmd prisma db pull --print` exited `0`. The earlier `P1001` condition is classified as a sandbox/runtime network limitation rather than a Supabase, project, or env issue. The approved next safe implementation task is a read-only PartsUsed module. This does not approve imports, DB writes, schema changes, migrations, env changes, source-system changes, Maven actions, AppSheet changes, or production actions.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
 `3f1761f Add equipment read-only module` is classified as the Last Implementation Commit.
 
 Reason:
