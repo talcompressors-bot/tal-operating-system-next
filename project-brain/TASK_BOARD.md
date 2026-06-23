@@ -1,13 +1,13 @@
 # TASK BOARD
 
 Last updated: 2026-06-23
-Mode: Current task is PartsUsed read-only module
+Mode: PartsUsed read-only module implemented; next task is ProductsCatalog read-only module
 
 ## NOW
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| PartsUsed read-only module | Implement a read-only PartsUsed page/module using existing Prisma schema and Next.js architecture | Routes render with read-only Prisma reads, related service report/customer context where available, no writes/imports/schema/env changes, and existing routes still pass validation | No for read-only module; yes before any import, DB write, schema change, env change, or source-system action |
+| ProductsCatalog read-only module | Implement a read-only ProductsCatalog page/module using existing Prisma schema and Next.js architecture | Routes render with read-only Prisma reads, linked PartsUsed context where available, no writes/imports/schema/env changes, and existing routes still pass validation | No for read-only module; yes before any import, DB write, schema change, env change, or source-system action |
 
 ## NEXT
 
@@ -73,6 +73,7 @@ Mode: Current task is PartsUsed read-only module
 | Automatic Project Brain closeout sync required | Commit `4ed6ca2 Require automatic project brain closeout sync`; `AGENTS.md`, `PROJECT_OPERATING_PROTOCOL.md`, and `PROJECT_INDEX.md` require Project Brain updates before every final report after a completed task; required fields are completed work, commit hash, validation, current blocker or `none`, exact next task, approval gates, and project completion percentage; validation `git diff --check` passed with CRLF warnings only; completion remains 50%; resolved blockers must be removed from current blocker state; no env/schema/migration/DB write/delete/move/remote/source-system/production changes |
 | Multi-agent operating workflow added | Commit `28f9bf2 Add multi-agent operating workflow`; created Builder, Map Guard, QA, Reviewer, Agent Communication Protocol, and Autonomous Build Workflow under `project-brain/agents/`; updated `AGENTS.md`, `PROJECT_OPERATING_PROTOCOL.md`, and `PROJECT_INDEX.md`; validation `git diff --check` passed with CRLF warnings only; completion remains 50%; no app/schema/migration/env/DB write/source-system/delete/move/remote/production changes |
 | ReportEquipmentItems / Equipment read-only module implemented | Commit `3f1761f Add equipment read-only module`; added `/equipment`, `/equipment/[id]`, read-only `ReportEquipmentItem` adapter, dashboard activation, search/filter fields, and service-report links; validation: scoped TypeScript passed, `git diff --check` passed with CRLF warnings only, read-only Prisma lookup found equipment `3002f879`, and local HTTP checks returned 200 for `/`, `/equipment`, `/equipment/3002f879`, `/service-reports`, `/service-reports/5e0eaae3`, and `/customers`; no schema/env/migration/DB write/import/source-system/production changes; completion is 52% |
+| PartsUsed read-only module implemented | Commit `14542b5 Add PartsUsed read-only module`; added `/parts-used`, `/parts-used/[id]`, read-only `PartUsed` adapter, dashboard activation, search/filter fields, service-report/product context links, and invalid enum filter hardening; validation: scoped TypeScript passed, `git diff --check` passed with CRLF warnings only, read-only Prisma validation found `parts_used = 0`, local HTTP checks returned 200 for `/`, `/parts-used`, `/parts-used?matchSource=BAD_VALUE`, `/service-reports`, `/equipment`, and `/customers`, and 404 for `/parts-used/not-a-real-part`; no schema/env/migration/DB write/import/source-system/production changes; completion is 53% |
 
 ## BLOCKED / NOT STARTED
 

@@ -3,6 +3,19 @@
 ## 2026-06-23
 
 Decision:
+`14542b5 Add PartsUsed read-only module` is classified as the Last Implementation Commit.
+
+Reason:
+The commit added a read-only PartsUsed module using the existing Prisma `PartUsed` model and existing Next.js Server Component architecture. It created `/parts-used`, `/parts-used/[id]`, a read-only adapter, search/filter handling, service-report links, product context, invalid enum filter hardening, and an active dashboard card. Validation used scoped TypeScript, `git diff --check`, read-only Prisma count validation showing `parts_used = 0`, and local HTTP checks for `/`, `/parts-used`, `/parts-used?matchSource=BAD_VALUE`, `/parts-used/not-a-real-part`, `/service-reports`, `/equipment`, and `/customers`. No schema changes, migrations, env changes, DB writes, imports, source-system changes, or production actions occurred.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
 Supabase staging connectivity blocker is resolved, and the current task is now the PartsUsed read-only module.
 
 Reason:
