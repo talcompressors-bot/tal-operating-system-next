@@ -3,6 +3,19 @@
 ## 2026-06-23
 
 Decision:
+AutomationCommands may have a read-only empty-state shell before DB import/write approval.
+
+Reason:
+The `AutomationCommand` Prisma model already exists and the staging table currently has zero rows. A shell that reads only existing command rows, shows command status/type, source-object and external-target placeholders, retry/error placeholders, and lifecycle states does not execute commands, write to the database, change schema, run migrations, or touch Maven, Invoice4U, email, source systems, or production.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
 No next implementation task is currently approved after the read-only shell progress.
 
 Reason:

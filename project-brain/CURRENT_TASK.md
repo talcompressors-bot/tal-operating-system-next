@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-23
-Mode: Read-only shells progressing; no next implementation task approved yet
+Mode: AutomationCommands read-only shell implemented; no next implementation task approved yet
 
 ## Canonical Role
 
@@ -11,15 +11,15 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Real Supabase Prisma connectivity passed outside the network sandbox, confirming earlier `P1001` failures were sandbox/runtime network limitations rather than Supabase/project/env issues. Supabase staging connectivity blocker is resolved. The Customers read-only module is implemented and pushed. Automatic Project Brain closeout sync is required after every completed task. Multi-agent operating workflow docs are implemented and pushed. The ReportEquipmentItems / Equipment read-only module is implemented and pushed. The PartsUsed read-only module is implemented and committed. Data coverage audit is completed. Service Report detail is enhanced as the central read-only work screen. Bidirectional navigation between Customers, Equipment, and the Service Report work screen is implemented. Service Reports list search/filter and context cues are implemented. AI Draft Suggestions read-only empty-state shell is implemented. BusinessDocuments read-only draft shell is implemented. Inventory stock route alias is fixed. Read-only shells are progressing. No next implementation task is approved yet. DB import/write work remains gated and requires explicit human approval. Wave 2 import is not approved.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Real Supabase Prisma connectivity passed outside the network sandbox, confirming earlier `P1001` failures were sandbox/runtime network limitations rather than Supabase/project/env issues. Supabase staging connectivity blocker is resolved. The Customers read-only module is implemented and pushed. Automatic Project Brain closeout sync is required after every completed task. Multi-agent operating workflow docs are implemented and pushed. The ReportEquipmentItems / Equipment read-only module is implemented and pushed. The PartsUsed read-only module is implemented and committed. Data coverage audit is completed. Service Report detail is enhanced as the central read-only work screen. Bidirectional navigation between Customers, Equipment, and the Service Report work screen is implemented. Service Reports list search/filter and context cues are implemented. AI Draft Suggestions read-only empty-state shell is implemented. BusinessDocuments read-only draft shell is implemented. Inventory stock route alias is fixed. AutomationCommands read-only empty-state shell is implemented and pushed. Read-only shells are progressing. No next implementation task is approved yet. DB import/write work remains gated and requires explicit human approval. Wave 2 import is not approved.
 
 ## Current Milestone
 
-Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, Wave 2 connector dry-run validation, real Prisma staging connectivity validation, Customers read-only module implementation, automatic Project Brain closeout sync governance, multi-agent operating workflow docs, ReportEquipmentItems / Equipment read-only module implementation, PartsUsed read-only module implementation, data coverage audit, Service Report central work-screen enhancement, bidirectional module navigation, Service Reports list context enhancement, AI Draft Suggestions shell, and BusinessDocuments shell are complete.
+Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, Wave 2 connector dry-run validation, real Prisma staging connectivity validation, Customers read-only module implementation, automatic Project Brain closeout sync governance, multi-agent operating workflow docs, ReportEquipmentItems / Equipment read-only module implementation, PartsUsed read-only module implementation, data coverage audit, Service Report central work-screen enhancement, bidirectional module navigation, Service Reports list context enhancement, AI Draft Suggestions shell, BusinessDocuments shell, and AutomationCommands shell are complete.
 
 ## Last Implementation Commit
 
-`bd2bf19 Fix inventory stock route`
+`1d5906c Add automation commands read-only shell`
 
 ## Last Closeout Commit
 
@@ -106,10 +106,11 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - AI Draft runtime error investigation completed: `/ai-drafts` returned HTTP 500 only inside the network sandbox because Prisma could not reach `aws-1-eu-central-1.pooler.supabase.com:6543`; `/ai-drafts` returned HTTP 200 outside the sandbox. Root cause is the known sandbox Prisma connectivity limitation, not an AI Draft code/schema issue. No code fix is required. Build remains blocked by the unrelated existing missing `playwright` dependency/type declarations in `scripts/playwright/appsheet-discovery-auth.ts`.
 - BusinessDocuments shell implemented in commit `5fb5e20 Add business documents shell`: added `/business-documents`, `/business-documents/[id]`, and a read-only `BusinessDocument` adapter using existing `BusinessDocument`, `BusinessDocumentItem`, and `BusinessDocumentLog` relations; dashboard now links the active Business Documents card; `APPLICATION_ROUTE_MAP.md` records the new routes with `BusinessDocument` count `0`. The shell is empty-state-first and maps lifecycle placeholders for Draft, Approved, Sent to Maven, Maven Created, Email Sent, and Customer Viewed, plus link placeholders to AI Draft, Service Report, Customer, and Maven Document. Validation: read-only Prisma counts confirmed `BusinessDocument = 0`, `BusinessDocumentItem = 0`, and `BusinessDocumentLog = 0`; scoped TypeScript passed; `git diff --check` passed with CRLF warnings only; outside-sandbox route validation returned HTTP 200 for `/`, `/business-documents`, `/ai-drafts`, `/service-reports`, and `/customers`; `/business-documents/not-a-real-document` returned 404; dashboard Business Documents link, empty state, Maven document column, AI draft column, and approval column checks passed. No schema changes, migrations, env changes, DB writes, imports, Maven/Invoice4U actions, AppSheet changes, Apps Script changes, source-system changes, or production actions occurred. Current blocker is `none` for this read-only shell. Project completion percentage is now 58%.
 - Inventory stock route alias fixed in commit `bd2bf19 Fix inventory stock route`: `/inventory-stock` now redirects to the existing `/equipment` read-only module instead of returning 404. Investigation found the equipment/stock dashboard card points to `/equipment`, `app/equipment/page.tsx` exists, and `/equipment` returns HTTP 200; the broken route was the missing `/inventory-stock` path. Validation: scoped TypeScript passed; `git diff --check` passed; outside-sandbox route validation returned HTTP 200 for `/`, `/inventory-stock` after redirect to `/equipment`, `/equipment`, `/service-reports`, and `/customers`. No new data module, schema change, migration, env change, DB write/import, source-system action, or production integration occurred. Current blocker is `none` for this navigation fix. Project completion percentage remains 58%.
+- AutomationCommands shell implemented in commit `1d5906c Add automation commands read-only shell`: added `/automation-commands`, `/automation-commands/[id]`, read-only `AutomationCommand` adapter, active dashboard card, and route-map entries. The staging table count is `AutomationCommand = 0`, so the list is empty-state-first while detail mapping is ready for future command rows. Validation: scoped TypeScript passed; `git diff --check` passed with CRLF warnings only; read-only Prisma count confirmed `AutomationCommand count = 0`; local route checks returned HTTP 200 for `/`, `/automation-commands`, `/service-reports`, and `/business-documents`; `/automation-commands/not-a-real-command` returned 404; dashboard link and empty-state checks passed. No DB writes, command execution, Maven/Invoice4U/email action, schema change, migration, env change, import, source-system change, or production action occurred. Current blocker is `none` for this read-only shell. Project completion percentage is now 59%.
 
 ## Current Task
 
-Read-only shells are progressing after the inventory stock route alias fix. Current blocker: no approved next implementation task. DB import/write work remains gated and requires explicit human approval.
+AutomationCommands read-only shell is implemented and validated. Current blocker: none for this read-only shell. No next implementation task is approved yet. DB import/write work remains gated and requires explicit human approval.
 
 ## Next Approved Task
 
@@ -117,9 +118,9 @@ No next implementation task is approved yet.
 
 Next candidate tasks, pending explicit selection/approval:
 
-1. AutomationCommands read-only shell.
-2. Maven/Invoice4U lifecycle tracking shell.
-3. Optional Wave 2 import approval package, only if explicitly approved.
+1. Maven/Invoice4U lifecycle tracking shell.
+2. Optional Wave 2 import approval package, only if explicitly approved.
+3. Build hygiene for the existing missing Playwright dependency/type gap, if explicitly selected.
 
 Project completion should not be overstated: infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells and central work screens; production automation readiness remains not started/gated.
 

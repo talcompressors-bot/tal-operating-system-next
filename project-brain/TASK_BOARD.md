@@ -1,7 +1,7 @@
 # TASK BOARD
 
 Last updated: 2026-06-23
-Mode: Read-only shells progressing; no next implementation task approved yet
+Mode: AutomationCommands read-only shell implemented; no next implementation task approved yet
 
 ## NOW
 
@@ -13,9 +13,9 @@ Mode: Read-only shells progressing; no next implementation task approved yet
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| AutomationCommands read-only shell | Add a read-only shell for existing automation command tracking when explicitly selected | Existing Prisma model is read without DB writes, schema changes, imports, or production actions | Selection/approval required before starting |
 | Maven/Invoice4U lifecycle tracking shell | Add read-only lifecycle tracking placeholders for Maven/Invoice4U state without sending or creating documents | Existing models/routes are used or shell is empty-state-first; no Maven/Invoice4U production action occurs | Selection/approval required before starting; explicit approval required before any Maven/Invoice4U write or integration action |
 | Optional Wave 2 import approval package | Convert existing Wave 2 dry-run blockers into an approval-ready decision package only if explicitly selected | Package lists duplicate SKU decision, unresolved example PartUsed row, AI draft CustomerID mismatch, BusinessDocumentLog header shift, enum/status mappings, recommended choices, risks, and exact no-write next steps | Selection/approval required before starting; yes before any import, DB write, schema change, env change, or source-system action |
+| Build hygiene for Playwright dependency gap | Resolve the existing full TypeScript/build blocker caused by missing `playwright` dependency/type declarations, if selected | Full TypeScript/build checks no longer fail on unrelated Playwright scripts | Selection/approval required before dependency or script-scope changes |
 | Wave 2 staging import approval | Import approved Wave 2 data into Supabase staging only after blocker resolution and explicit approval | Dry-run blockers are resolved or explicitly accepted; source mappings are approved; no production, source-system, Prisma migration, schema push, or Wave 3 action occurs | Yes before any Wave 2 import |
 | Second-stage Maven dry-run discovery | Confirm all Maven-origin Sheets and their links before import | Known `InvoiceMaven*` tabs plus any other Sheets tabs storing Maven imported/synced/created data are documented with purpose, target table, Customer/BusinessDocument/Product links, and active V1/later V1/future-historical classification | Yes before Maven history import |
 | Import Waves execution planning | Sequence source imports by dependency wave | Agent-readable blocks define `WAVE_1_CORE`, `WAVE_2_SERVICE_WORKFLOW`, `WAVE_3_MAVEN_DATA`, and `WAVE_4_EXTENDED_OPERATIONS` with owners, dependencies, blockers, forbidden actions, and success criteria | Yes before real import |
@@ -86,6 +86,7 @@ Mode: Read-only shells progressing; no next implementation task approved yet
 | AI Draft sandbox runtime finding recorded | `/ai-drafts` HTTP 500 reproduced only inside the network sandbox due to Prisma being unable to reach the Supabase pooler; `/ai-drafts` returned HTTP 200 outside the sandbox, confirming no AI Draft code fix is required. Build remains blocked by unrelated missing `playwright` dependency/type declarations in `scripts/playwright/appsheet-discovery-auth.ts` |
 | BusinessDocuments shell implemented | Commit `5fb5e20 Add business documents shell`; added `/business-documents`, `/business-documents/[id]`, read-only `BusinessDocument` adapter using items/log relations, active dashboard card, and route-map entries; table counts are `BusinessDocument = 0`, `BusinessDocumentItem = 0`, and `BusinessDocumentLog = 0`, so the list is empty-state-first while detail mapping is ready for future rows; validation: scoped TypeScript passed, `git diff --check` passed with CRLF warnings only, outside-sandbox route checks returned 200 for `/`, `/business-documents`, `/ai-drafts`, `/service-reports`, and `/customers`, `/business-documents/not-a-real-document` returned 404, and dashboard link/empty-state/Maven/AI-draft/approval checks passed; no schema/env/migration/DB write/import/Maven/Invoice4U/source-system/production changes; completion is 58% |
 | Inventory stock route alias fixed | Commit `bd2bf19 Fix inventory stock route`; `/inventory-stock` now redirects to existing `/equipment`; validation returned 200 for `/`, `/inventory-stock` after redirect, `/equipment`, `/service-reports`, and `/customers`; no new data module, schema/env/migration/DB write/import/source-system/production changes; completion remains 58% |
+| AutomationCommands shell implemented | Commit `1d5906c Add automation commands read-only shell`; added `/automation-commands`, `/automation-commands/[id]`, read-only `AutomationCommand` adapter, active dashboard card, and route-map entries; table count is `AutomationCommand = 0`, so the list is empty-state-first while detail mapping is ready for future command rows; validation: scoped TypeScript passed, `git diff --check` passed with CRLF warnings only, read-only Prisma count confirmed `AutomationCommand count = 0`, local route checks returned 200 for `/`, `/automation-commands`, `/service-reports`, and `/business-documents`, `/automation-commands/not-a-real-command` returned 404, and dashboard link/empty-state checks passed; no DB writes, command execution, Maven/Invoice4U/email action, schema change, migration, env change, import, source-system change, or production action occurred; completion is 59% |
 
 ## BLOCKED / NOT STARTED
 
@@ -104,7 +105,7 @@ Mode: Read-only shells progressing; no next implementation task approved yet
 | Area | Current State |
 |---|---|
 | Infrastructure readiness | High for staging, Prisma, Wave 1 import, and read-only Supabase validation evidence |
-| Read-only UI coverage | Progressing through Service Reports, Customers, Equipment, PartsUsed, AI Drafts, BusinessDocuments, and inventory-stock route alias coverage |
+| Read-only UI coverage | Progressing through Service Reports, Customers, Equipment, PartsUsed, AI Drafts, BusinessDocuments, AutomationCommands, and inventory-stock route alias coverage |
 | Production automation readiness | Not started/gated; DB writes/imports, Maven/Invoice4U actions, production integrations, schema changes, and migrations require explicit human approval |
 
 ## Rules
