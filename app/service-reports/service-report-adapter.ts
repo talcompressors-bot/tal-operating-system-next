@@ -16,6 +16,7 @@ type EquipmentRow = {
   model: string;
   serialNumber: string;
   status: string;
+  serviceDescription: string;
   notes: string;
   subtitle: string;
 };
@@ -35,6 +36,24 @@ type LifecycleState = {
   customerViewed: string;
 };
 
+type ScrPreviewLine = {
+  lineType: "Part" | "Labor" | "Visit";
+  suggestedSku: string;
+  description: string;
+  quantity: string;
+  confidence: number;
+  priceSource: string;
+  needsPriceApproval: boolean;
+};
+
+type ScrMatchingPreview = {
+  available: boolean;
+  detectedModel: string;
+  serviceType: string;
+  status: string;
+  lines: ScrPreviewLine[];
+};
+
 export type ServiceReportView = {
   id: string;
   reportNumber: string;
@@ -49,6 +68,7 @@ export type ServiceReportView = {
   equipment: EquipmentRow[];
   equipmentCue: string;
   lifecycle: LifecycleState;
+  scrMatchingPreview: ScrMatchingPreview;
 };
 
 export type ServiceReportListFilters = {
@@ -154,6 +174,7 @@ function readRawText(rawSource: Prisma.JsonValue, key: string, fallback = "") {
 function mapEquipmentRow(item: ReportEquipmentItem): EquipmentRow {
   const model = readText(item.equipmentModel, "No model");
   const serialNumber = readText(item.serialNumber, "No serial number");
+  const serviceDescription = readText(item.serviceDescription);
 
   return {
     id: item.appsheetItemId,
@@ -162,9 +183,10 @@ function mapEquipmentRow(item: ReportEquipmentItem): EquipmentRow {
     model,
     serialNumber,
     status: readText(item.systemStatus, "UNKNOWN STATUS"),
+    serviceDescription,
     notes:
       readText(item.technicianRecommendations) ||
-      readText(item.serviceDescription) ||
+      serviceDescription ||
       readRawText(item.rawSource, SOURCE_EXTRA_PARTS_KEY) ||
       "No notes recorded",
     subtitle: `${model} - Serial ${serialNumber}`,
@@ -211,6 +233,112 @@ function buildEquipmentCue(equipment: EquipmentRow[]) {
   return visibleEquipment.join(", ");
 }
 
+function normalizeScrModel(model: string) {
+  const normalizedModel = model.toUpperCase().replace(/[^A-Z0-9]/g, "");
+
+  if (!normalizedModel.includes("SCR")) {
+    return "";
+  }
+
+  return normalizedModel.replace(/^SCR/, "");
+}
+
+function hasSmallServiceEvidence(item: EquipmentRow) {
+  const evidence =
+    `${item.serviceDescription} ${item.notes} ${item.subtitle}`.toLowerCase();
+
+  return evidence.includes("2000") || evidence.includes("small");
+}
+
+function buildScrMatchingPreview(equipment: EquipmentRow[]): ScrMatchingPreview {
+  const scrEquipment = equipment.filter((item) => normalizeScrModel(item.model));
+
+  if (!scrEquipment.length) {
+    return {
+      available: false,
+      detectedModel: "No SCR compressor detected",
+      serviceType: "Unavailable",
+      status: "No SCR PM/EPM matching source applies to this report.",
+      lines: [],
+    };
+  }
+
+  const modelCounts = new Map<string, EquipmentRow[]>();
+
+  scrEquipment.forEach((item) => {
+    const model = normalizeScrModel(item.model);
+    const existingItems = modelCounts.get(model) ?? [];
+    existingItems.push(item);
+    modelCounts.set(model, existingItems);
+  });
+
+  const [detectedModel, matchingItems] =
+    Array.from(modelCounts.entries()).find(
+      ([model, items]) => model === "40PM" && items.some(hasSmallServiceEvidence),
+    ) ?? Array.from(modelCounts.entries())[0];
+
+  if (detectedModel !== "40PM" || !matchingItems.some(hasSmallServiceEvidence)) {
+    return {
+      available: false,
+      detectedModel: detectedModel ? `SCR-${detectedModel}` : "SCR model detected",
+      serviceType: "Needs review",
+      status:
+        "SCR equipment was detected, but this report does not match the documented 40PM 2000H preview evidence yet.",
+      lines: [],
+    };
+  }
+
+  const quantity = String(matchingItems.length);
+
+  return {
+    available: true,
+    detectedModel: "SCR-40PM",
+    serviceType: "2000-hour small periodic compressor service",
+    status:
+      "Read-only preview from SCR matching reports; parts remain price-approval required.",
+    lines: [
+      {
+        lineType: "Part",
+        suggestedSku: "25200007-005",
+        description: "Oil Filter for SCR-40PM 2000H service",
+        quantity,
+        confidence: 78,
+        priceSource:
+          "Vendor purchase evidence only; Products/Maven historical selling price unavailable",
+        needsPriceApproval: true,
+      },
+      {
+        lineType: "Part",
+        suggestedSku: "25100043-071",
+        description: "Air filter core for SCR-40PM 2000H service",
+        quantity,
+        confidence: 78,
+        priceSource:
+          "Vendor purchase evidence only; Products/Maven historical selling price unavailable",
+        needsPriceApproval: true,
+      },
+      {
+        lineType: "Visit",
+        suggestedSku: "N/A",
+        description: "Technician visit",
+        quantity: "1",
+        confidence: 100,
+        priceSource: "Fixed rule: 300 NIS",
+        needsPriceApproval: false,
+      },
+      {
+        lineType: "Labor",
+        suggestedSku: "N/A",
+        description: "Technician labor",
+        quantity: "Missing hours",
+        confidence: 50,
+        priceSource: "Fixed rule: 275 NIS/hour, quantity missing",
+        needsPriceApproval: true,
+      },
+    ],
+  };
+}
+
 function mapServiceReport(
   report: ServiceReportWithWave1Relations,
 ): ServiceReportView {
@@ -241,6 +369,7 @@ function mapServiceReport(
     equipment,
     equipmentCue: buildEquipmentCue(equipment),
     lifecycle: mapLifecycle(report),
+    scrMatchingPreview: buildScrMatchingPreview(equipment),
   };
 }
 

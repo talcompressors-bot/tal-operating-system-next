@@ -327,6 +327,27 @@ dd {
   padding: 16px;
 }
 
+.preview-summary {
+  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 18px;
+}
+
+.preview-table {
+  margin-top: 18px;
+}
+
+.preview-table table {
+  min-width: 920px;
+}
+
+.empty-state {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
 .equipment-item {
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -371,6 +392,10 @@ dd {
   }
 
   .lifecycle-list {
+    grid-template-columns: 1fr;
+  }
+
+  .preview-summary {
     grid-template-columns: 1fr;
   }
 }

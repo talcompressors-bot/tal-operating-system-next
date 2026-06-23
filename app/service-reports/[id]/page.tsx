@@ -131,6 +131,61 @@ export default async function ServiceReportDetailPage({
         </section>
 
         <section className="info-panel wide">
+          <h2>SCR matching preview</h2>
+          <dl className="preview-summary">
+            <div>
+              <dt>Detected model</dt>
+              <dd>{report.scrMatchingPreview.detectedModel}</dd>
+            </div>
+            <div>
+              <dt>Service type</dt>
+              <dd>{report.scrMatchingPreview.serviceType}</dd>
+            </div>
+            <div>
+              <dt>Preview status</dt>
+              <dd>{report.scrMatchingPreview.status}</dd>
+            </div>
+          </dl>
+
+          {report.scrMatchingPreview.available ? (
+            <div className="table-card preview-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Line</th>
+                    <th>SKU</th>
+                    <th>Description</th>
+                    <th>Qty</th>
+                    <th>Confidence</th>
+                    <th>Price source</th>
+                    <th>Price approval</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {report.scrMatchingPreview.lines.map((line) => (
+                    <tr key={`${line.lineType}-${line.suggestedSku}`}>
+                      <td>{line.lineType}</td>
+                      <td>{line.suggestedSku}</td>
+                      <td>{line.description}</td>
+                      <td>{line.quantity}</td>
+                      <td>{line.confidence}</td>
+                      <td>{line.priceSource}</td>
+                      <td>
+                        {line.needsPriceApproval ? "Required" : "Not required"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="empty-state">
+              No SCR SKU preview is available for this report yet.
+            </p>
+          )}
+        </section>
+
+        <section className="info-panel wide">
           <h2>Equipment summary</h2>
           <div className="equipment-list">
             {report.equipment.map((item) => (
