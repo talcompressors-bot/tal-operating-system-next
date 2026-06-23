@@ -37,6 +37,12 @@ const modules = [
     href: "/ai-drafts",
     active: true,
   },
+  {
+    title: "Automation Commands",
+    description: "Read-only command queue shell for lifecycle and external target tracking.",
+    href: "/automation-commands",
+    active: true,
+  },
 ];
 
 export default function HomePage() {
