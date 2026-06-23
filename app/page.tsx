@@ -33,9 +33,9 @@ const modules = [
   },
   {
     title: "טיוטות AI",
-    description: "הצעות טיוטה חכמות להמשך טיפול לאחר שירות.",
-    href: "#",
-    active: false,
+    description: "Read-only AI draft suggestions shell for future approval and Maven lifecycle.",
+    href: "/ai-drafts",
+    active: true,
   },
 ];
 
