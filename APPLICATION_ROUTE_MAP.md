@@ -1,0 +1,19 @@
+# Application Route Map
+
+Last updated: 2026-06-23
+
+Scope: currently implemented Next.js `app/**/page.tsx` routes only.
+
+Record counts were verified with read-only Prisma count queries against the current Supabase staging database.
+
+| Route | Module | Status | Data Source | Record Count | AppSheet Equivalent |
+|---|---|---|---|---:|---|
+| `/` | Dashboard | Implemented | Static Next.js module registry in `app/page.tsx` | N/A | AppSheet app home / navigation |
+| `/service-reports` | Service Reports list | Implemented, read-only | Supabase PostgreSQL via Prisma `ServiceReport` | 63 | `ServiceReports` table list view |
+| `/service-reports/[id]` | Service Report detail | Implemented, read-only | Supabase PostgreSQL via Prisma `ServiceReport` with linked customer/equipment context | 63 addressable reports | `ServiceReports` detail view |
+| `/customers` | Customers list | Implemented, read-only | Supabase PostgreSQL via Prisma `Customer` | 763 | `Customers_Final` / Customers list view |
+| `/customers/[id]` | Customer detail | Implemented, read-only | Supabase PostgreSQL via Prisma `Customer` with linked service-report counts/history | 763 addressable customers | Customer detail view |
+| `/equipment` | Equipment list | Implemented, read-only | Supabase PostgreSQL via Prisma `ReportEquipmentItem` | 75 | `ReportEquipmentItems` / equipment inline or related view |
+| `/equipment/[id]` | Equipment detail | Implemented, read-only | Supabase PostgreSQL via Prisma `ReportEquipmentItem` with linked service-report context | 75 addressable equipment rows | `ReportEquipmentItems` detail/related record view |
+| `/parts-used` | Parts Used list | Implemented, read-only | Supabase PostgreSQL via Prisma `PartUsed` | 0 | `PartsUsed` table list view |
+| `/parts-used/[id]` | Parts Used detail | Implemented, read-only | Supabase PostgreSQL via Prisma `PartUsed` with linked service-report/product context when present | 0 addressable parts-used rows | `PartsUsed` detail view |
