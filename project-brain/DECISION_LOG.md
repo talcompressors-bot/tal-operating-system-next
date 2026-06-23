@@ -3,6 +3,19 @@
 ## 2026-06-23
 
 Decision:
+SCR matching intelligence may be surfaced as a read-only preview panel on the Service Report detail work screen.
+
+Reason:
+The preview uses existing ServiceReport and ReportEquipmentItem reads plus prior SCR analysis reports only. It does not create AI Drafts, create BusinessDocuments, write/import database rows, change schema, run migrations, touch env files, or call Maven/Invoice4U. Price-bearing part lines remain `needsPriceApproval = true` because staging Product/Maven/BusinessDocument item history has no usable selling prices.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
 AutomationCommands may have a read-only empty-state shell before DB import/write approval.
 
 Reason:
