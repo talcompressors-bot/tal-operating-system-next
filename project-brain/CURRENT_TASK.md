@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-23
-Mode: Inventory stock route alias fixed; next task is Wave 2 approval package
+Mode: Read-only shells progressing; no next implementation task approved yet
 
 ## Canonical Role
 
@@ -11,7 +11,7 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Real Supabase Prisma connectivity passed outside the network sandbox, confirming earlier `P1001` failures were sandbox/runtime network limitations rather than Supabase/project/env issues. Supabase staging connectivity blocker is resolved. The Customers read-only module is implemented and pushed. Automatic Project Brain closeout sync is required after every completed task. Multi-agent operating workflow docs are implemented and pushed. The ReportEquipmentItems / Equipment read-only module is implemented and pushed. The PartsUsed read-only module is implemented and committed. Data coverage audit is completed. Service Report detail is enhanced as the central read-only work screen. Bidirectional navigation between Customers, Equipment, and the Service Report work screen is implemented. Service Reports list search/filter and context cues are implemented. AI Draft Suggestions read-only empty-state shell is implemented. BusinessDocuments read-only draft shell is implemented. Inventory stock route alias is fixed. Wave 2 import is not approved.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Real Supabase Prisma connectivity passed outside the network sandbox, confirming earlier `P1001` failures were sandbox/runtime network limitations rather than Supabase/project/env issues. Supabase staging connectivity blocker is resolved. The Customers read-only module is implemented and pushed. Automatic Project Brain closeout sync is required after every completed task. Multi-agent operating workflow docs are implemented and pushed. The ReportEquipmentItems / Equipment read-only module is implemented and pushed. The PartsUsed read-only module is implemented and committed. Data coverage audit is completed. Service Report detail is enhanced as the central read-only work screen. Bidirectional navigation between Customers, Equipment, and the Service Report work screen is implemented. Service Reports list search/filter and context cues are implemented. AI Draft Suggestions read-only empty-state shell is implemented. BusinessDocuments read-only draft shell is implemented. Inventory stock route alias is fixed. Read-only shells are progressing. No next implementation task is approved yet. DB import/write work remains gated and requires explicit human approval. Wave 2 import is not approved.
 
 ## Current Milestone
 
@@ -109,11 +109,19 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Current Task
 
-Inventory stock route alias is fixed. Current blocker: none for this navigation fix.
+Read-only shells are progressing after the inventory stock route alias fix. Current blocker: no approved next implementation task. DB import/write work remains gated and requires explicit human approval.
 
 ## Next Approved Task
 
-Prepare the Wave 2 import blocker-resolution approval package from existing dry-run findings. Do not run imports, DB writes, schema changes, env changes, or source-system actions without explicit approval.
+No next implementation task is approved yet.
+
+Next candidate tasks, pending explicit selection/approval:
+
+1. AutomationCommands read-only shell.
+2. Maven/Invoice4U lifecycle tracking shell.
+3. Optional Wave 2 import approval package, only if explicitly approved.
+
+Project completion should not be overstated: infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells and central work screens; production automation readiness remains not started/gated.
 
 Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes, schema changes, migrations, env changes, or source-system actions until Liad explicitly approves that later gate.
 
@@ -179,6 +187,6 @@ Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import
 
 ## Done When
 
-- The next populated-module enhancement is implemented, validated, committed, and pushed, or Product rows are populated after explicit import approval before ProductsCatalog module work resumes.
-- Project Brain records the implementation commit hash, validation result, current blocker `none` for the read-only module, exact next task, approval gates, and project completion percentage.
+- A next candidate task is explicitly selected/approved before implementation begins.
+- Project Brain records the implementation commit hash, validation result, current blocker or `none`, exact next task or next candidate list, approval gates, and project completion percentage.
 - No write path, import, migration, schema push, source-system change, or production action is added.

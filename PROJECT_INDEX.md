@@ -404,8 +404,8 @@ This section is the living navigation screen. It summarizes current reality only
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Current milestone | Wave 1 Next.js read/display validation PASS after PostgreSQL read switch | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Current task | Inventory stock route alias is fixed; current blocker is none for this navigation fix | `project-brain/CURRENT_TASK.md` |
-| Next approved task | Prepare the Wave 2 import blocker-resolution approval package from existing dry-run findings. Do not run imports, DB writes, schema changes, env changes, or source-system actions without explicit approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
+| Current task | Read-only shells are progressing after the inventory stock route alias fix; no next implementation task is approved yet | `project-brain/CURRENT_TASK.md` |
+| Next approved task | None. Next candidate tasks are AutomationCommands read-only shell; Maven/Invoice4U lifecycle tracking shell; optional Wave 2 import approval package only if explicitly approved. DB import/write work remains gated and requires explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
 | Last Implementation Commit | `bd2bf19 Fix inventory stock route` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
@@ -482,9 +482,9 @@ NEXT APPROVAL GATE
 Current Project Tree Position:
 
 - Current Wave: Wave 2 Service Workflow Layer
-- Current Task: Inventory stock route alias is fixed; current blocker is none for this navigation fix
+- Current Task: Read-only shells are progressing after the inventory stock route alias fix; no next implementation task is approved yet
 - Last Completed Task: Inventory stock route alias fix
-- Next Task: Prepare the Wave 2 import blocker-resolution approval package from existing dry-run findings
+- Next Task: None approved. Candidate tasks are AutomationCommands read-only shell; Maven/Invoice4U lifecycle tracking shell; optional Wave 2 import approval package only if explicitly approved.
 - Estimated completion %: 58%
 - Completion basis: capability-weighted evidence, not completed-waves / total-waves.
 - Governance / Project Brain / Git workflow: 15% / 15% COMPLETE
@@ -498,7 +498,7 @@ Current Project Tree Position:
 - Wave 6 Automation Runtime: 0% / 3% PENDING
 - Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 0% / 2% PENDING
 - Critical Path: Wave 2 Service Workflow Layer -> Wave 3 Maven Knowledge Layer -> Wave 4 Inventory Layer -> Wave 5 Offline First -> Wave 6 Automation Runtime -> Wave 7 Production Shadow -> Wave 8 Production Cutover -> Wave 9 AppSheet Retirement
-- Next Approval Gate: approve or reject Wave 2 source mapping/blocker resolution decisions before any staging import; approval is required because import would write to Supabase staging; after local staging connectivity is fixed, Codex may rerun read-only validation without approval.
+- Next Approval Gate: explicitly select/approve the next candidate task before implementation; separate explicit approval is required before any DB import/write, schema change, migration, env change, Maven/Invoice4U action, source-system action, or production integration.
 
 Rule: a task is not considered complete unless Project Tree Position is reported.
 
@@ -547,12 +547,18 @@ Current estimated completion: 58%.
 
 This estimate is valid because the first four capabilities are complete by Project Brain evidence and the Wave 2 read-only Equipment, PartsUsed, Service Report central work-screen, bidirectional navigation, Service Reports list context, AI Draft Suggestions shell, and BusinessDocuments shell enhancements are now implemented. If any of those capabilities are later found partial, estimate lower and explain why.
 
+Readiness split:
+
+- Infrastructure readiness: high for staging, Prisma, Wave 1 import, and read-only Supabase validation evidence.
+- Read-only UI coverage: progressing through Service Reports, Customers, Equipment, PartsUsed, AI Drafts, BusinessDocuments, and inventory-stock route alias coverage.
+- Production automation readiness: not started/gated; DB writes/imports, Maven/Invoice4U actions, production integrations, schema changes, and migrations require explicit human approval.
+
 | Area | Current Status | Canonical Owner |
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md` |
-| Current task | Inventory stock route alias is fixed; current blocker is none for this navigation fix | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Next approved task | Prepare the Wave 2 import blocker-resolution approval package from existing dry-run findings. Do not run imports, DB writes, schema changes, env changes, or source-system actions without explicit approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
+| Current task | Read-only shells are progressing after the inventory stock route alias fix; no next implementation task is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Next approved task | None. Next candidate tasks are AutomationCommands read-only shell; Maven/Invoice4U lifecycle tracking shell; optional Wave 2 import approval package only if explicitly approved. DB import/write work remains gated and requires explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
 | Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |
 | Dependency order | Governance and Project Brain state -> system map/source review -> PostgreSQL V1 scope -> data migration planning -> Supabase staging-first plan -> approved staging project/secrets -> Prisma reconciliation approval -> approved staging schema push -> read-only schema verification -> Wave 1 dry-run/import validation -> Waves 2-4 discovery/import approvals -> production shadow approval -> Server Actions/offline sync | `project-brain/TASK_BOARD.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md`, `project-brain/migration/DATA_MIGRATION_PLAN.md` |

@@ -3,6 +3,19 @@
 ## 2026-06-23
 
 Decision:
+No next implementation task is currently approved after the read-only shell progress.
+
+Reason:
+The previous closeout incorrectly made the Wave 2 import blocker-resolution approval package read as the approved next task. Current state is corrected: read-only shells are progressing, DB import/write work remains gated and requires explicit human approval, and the next candidate tasks are AutomationCommands read-only shell, Maven/Invoice4U lifecycle tracking shell, and optional Wave 2 import approval package only if explicitly approved.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
 `71a5435 Enhance service report work screen` is classified as the Last Implementation Commit.
 
 Reason:

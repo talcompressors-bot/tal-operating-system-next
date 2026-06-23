@@ -1,18 +1,21 @@
 # TASK BOARD
 
 Last updated: 2026-06-23
-Mode: Inventory stock route alias fixed; next task is Wave 2 approval package
+Mode: Read-only shells progressing; no next implementation task approved yet
 
 ## NOW
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Wave 2 import blocker-resolution approval package | Convert existing Wave 2 dry-run blockers into an approval-ready decision package | Package lists duplicate SKU decision, unresolved example PartUsed row, AI draft CustomerID mismatch, BusinessDocumentLog header shift, enum/status mappings, recommended choices, risks, and exact no-write next steps | No for documentation/read-only analysis; yes before any import, DB write, schema change, env change, or source-system action |
+| Await next task selection | Keep state accurate after read-only shell progress and inventory stock route fix | No implementation task is currently approved; candidate tasks are listed below; DB import/write work remains gated | Yes before starting any DB import/write/schema/env/source-system/Maven/Invoice4U work; explicit selection required before the next implementation task |
 
 ## NEXT
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
+| AutomationCommands read-only shell | Add a read-only shell for existing automation command tracking when explicitly selected | Existing Prisma model is read without DB writes, schema changes, imports, or production actions | Selection/approval required before starting |
+| Maven/Invoice4U lifecycle tracking shell | Add read-only lifecycle tracking placeholders for Maven/Invoice4U state without sending or creating documents | Existing models/routes are used or shell is empty-state-first; no Maven/Invoice4U production action occurs | Selection/approval required before starting; explicit approval required before any Maven/Invoice4U write or integration action |
+| Optional Wave 2 import approval package | Convert existing Wave 2 dry-run blockers into an approval-ready decision package only if explicitly selected | Package lists duplicate SKU decision, unresolved example PartUsed row, AI draft CustomerID mismatch, BusinessDocumentLog header shift, enum/status mappings, recommended choices, risks, and exact no-write next steps | Selection/approval required before starting; yes before any import, DB write, schema change, env change, or source-system action |
 | Wave 2 staging import approval | Import approved Wave 2 data into Supabase staging only after blocker resolution and explicit approval | Dry-run blockers are resolved or explicitly accepted; source mappings are approved; no production, source-system, Prisma migration, schema push, or Wave 3 action occurs | Yes before any Wave 2 import |
 | Second-stage Maven dry-run discovery | Confirm all Maven-origin Sheets and their links before import | Known `InvoiceMaven*` tabs plus any other Sheets tabs storing Maven imported/synced/created data are documented with purpose, target table, Customer/BusinessDocument/Product links, and active V1/later V1/future-historical classification | Yes before Maven history import |
 | Import Waves execution planning | Sequence source imports by dependency wave | Agent-readable blocks define `WAVE_1_CORE`, `WAVE_2_SERVICE_WORKFLOW`, `WAVE_3_MAVEN_DATA`, and `WAVE_4_EXTENDED_OPERATIONS` with owners, dependencies, blockers, forbidden actions, and success criteria | Yes before real import |
@@ -95,6 +98,14 @@ Mode: Inventory stock route alias fixed; next task is Wave 2 approval package
 | Maven write flow | Not part of current work | Requires separate design and approval |
 | New planning/control files | Existing-file audit is required first | Search existing files and prove no owner file already exists |
 | Full Next.js build | Existing unrelated missing `playwright` dependency/type declarations in `scripts/playwright/appsheet-discovery-auth.ts` | Add or scope the Playwright dependency/types in a separate approved dependency/build hygiene task |
+
+## COMPLETION / READINESS SPLIT
+
+| Area | Current State |
+|---|---|
+| Infrastructure readiness | High for staging, Prisma, Wave 1 import, and read-only Supabase validation evidence |
+| Read-only UI coverage | Progressing through Service Reports, Customers, Equipment, PartsUsed, AI Drafts, BusinessDocuments, and inventory-stock route alias coverage |
+| Production automation readiness | Not started/gated; DB writes/imports, Maven/Invoice4U actions, production integrations, schema changes, and migrations require explicit human approval |
 
 ## Rules
 
