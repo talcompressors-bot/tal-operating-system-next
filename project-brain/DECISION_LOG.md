@@ -3,6 +3,19 @@
 ## 2026-06-23
 
 Decision:
+Staging Supabase Project ID is `mdlvxklufrchiabonafm`; local `.env.staging` matches that verified project id, and remaining Prisma failure is `P1001` connectivity, not wrong project id.
+
+Reason:
+The Supabase Project ID was verified visually from Supabase Project Settings. Earlier Project Brain references to a different staging ref were stale. Prisma CLI loads `.env` by default, not `.env.staging`; local Prisma validation must either create a temporary `.env` from `.env.staging` or explicitly load the staging env. After temporary `.env` creation, Prisma schema validation passed and Prisma moved to `P1001` connectivity against the Supabase pooler.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
 The nested Git repository is the only active source of truth for this project.
 
 Reason:

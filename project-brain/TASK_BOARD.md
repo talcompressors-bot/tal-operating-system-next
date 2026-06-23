@@ -7,7 +7,7 @@ Mode: Staging PostgreSQL connectivity blocked; no Wave 2 import
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Staging PostgreSQL connectivity fix | Correct local ignored `.env.staging` values to the confirmed Supabase staging project ref and rerun read-only Prisma/Next.js validation | Prisma can read staging counts; `/service-reports` and `/service-reports/acd1133d` return HTTP 200; no import, DB write, schema change, Maven work, production shadow, or source-system action begins | No for local env correction/read-only validation; yes before any import or source-system action |
+| Staging PostgreSQL connectivity fix | Resolve local/network/runtime connectivity to the Supabase pooler. `.env.staging` matches verified Supabase Project ID `mdlvxklufrchiabonafm`; Prisma CLI loads `.env` by default, so local Prisma validation must use a temporary `.env` copied from `.env.staging` or explicit env loading | Prisma can read staging counts; `/service-reports` and `/service-reports/acd1133d` return HTTP 200; no import, DB write, schema change, Maven work, production shadow, or source-system action begins | No for read-only validation; yes before any import or source-system action |
 
 ## NEXT
 
@@ -67,7 +67,7 @@ Mode: Staging PostgreSQL connectivity blocked; no Wave 2 import
 | Project tree reporting required | Commit `7f63193 Require project tree reporting`; every Reality Check, Approval Gate, Autonomous Completion Report, and `by codex` closeout must include Project Tree Position from `PROJECT_INDEX.md` |
 | Wave 2 planning/discovery gate approved | Liad approved Wave 2 planning/discovery only; scope is documentation/source-readiness planning and excludes Wave 2 import, DB writes, schema changes, Maven actions, production shadow, and source-system changes |
 | Wave 2 connector dry-run validation completed | 2026-06-22 19:13 IDT; connector-only read validation approved after blocked CSV export paths; all eight Wave 2 tabs were readable; observed rows: `ProductsCatalog = 113`, `PartsUsed = 1`, `AIDraftSuggestions = 2`, `BusinessDocuments = 1`, `BusinessDocumentItems = 0`, `BusinessDocumentLog = 2`, `ApprovalsLog = 0`, `EmailLog = 0`; read validation PASS, import readiness FAIL/BLOCKED; no Google Sheets writes, AppSheet changes, Maven changes, Apps Script changes, DB writes, Supabase writes, imports, Prisma commands, or production actions |
-| Staging connectivity diagnostics completed | 2026-06-22; Next.js starts and home page returns HTTP 200, but Prisma cannot reach `aws-1-eu-central-1.pooler.supabase.com:6543`; `/service-reports` and `/service-reports/acd1133d` return HTTP 500; `.env.staging` loads with project ref `mdlvxklufrchiabonafm`; correction source: verified from Supabase Project Settings > General; no DB writes/imports/migrations/source-system/production actions |
+| Staging connectivity diagnostics completed | 2026-06-22; Next.js starts and home page returns HTTP 200, but Prisma cannot reach the Supabase pooler; `/service-reports` and `/service-reports/acd1133d` return HTTP 500; `.env.staging` matches verified Supabase Project ID `mdlvxklufrchiabonafm`; correction source: verified visually from Supabase Project Settings; after temporary `.env` creation, Prisma validation passed and `db pull --print` moved to `P1001` connectivity against `aws-1-eu-central-1.pooler.supabase.com:5432`; no DB writes/imports/migrations/source-system/production actions |
 
 ## BLOCKED / NOT STARTED
 
@@ -75,7 +75,7 @@ Mode: Staging PostgreSQL connectivity blocked; no Wave 2 import
 |---|---|---|
 | Database migration | Migrations are not part of current staging shadow path | Separate approval required before any Prisma migrate workflow |
 | Additional schema push | Staging schema is already applied; further schema changes need separate approval | Approve any schema change separately before another db push |
-| Staging PostgreSQL connectivity | Local ignored `.env.staging` still contains a project ref mismatch, so Prisma cannot connect to staging and DB counts cannot be read | Correct local `.env.staging` values for confirmed staging project ref and rerun read-only Prisma/Next.js validation |
+| Staging PostgreSQL connectivity | `.env.staging` matches verified Supabase Project ID `mdlvxklufrchiabonafm`; remaining blocker is `P1001` connectivity to the Supabase pooler, not wrong project id | Resolve local/network/runtime connectivity and rerun read-only Prisma/Next.js validation with env loaded explicitly or with temporary `.env` copied from `.env.staging` |
 | Wave 2 import blocker resolution | Connector dry-run found duplicate SKU `SCR-20EPM`, unresolved `PartsUsed.ReportID = R-EXAMPLE`, customer-name-in-ID-field in `AIDraftSuggestions`, shifted `BusinessDocumentLog` rows, and unapproved enum/status mappings | Prepare and approve Wave 2 source mapping/blocker resolution plan |
 | Wave 2 import | Wave 2 import is not approved and dry-run import readiness is FAIL/BLOCKED | Request explicit import approval only after blockers are resolved or explicitly accepted |
 | Production integration | Shadow app is not approved for production | Keep AppSheet/Sheets production until explicit cutover approval |
