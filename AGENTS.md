@@ -22,6 +22,19 @@ Project Reality Check must include the required project tree reporting from `PRO
 
 Do not start implementation before the Project Reality Check is shown.
 
+## Multi-Agent Operating Workflow
+
+Codex remains the main Orchestrator. For safe work, Codex should use the Project Brain workflow roles in `project-brain/agents/`:
+
+1. `MAP_GUARD_AGENT.md` checks source ownership, reuse, protected systems, and approval gates.
+2. `BUILDER_AGENT.md` performs approved/AUTO_ALLOWED scoped work.
+3. `QA_AGENT.md` validates behavior and protected-system boundaries.
+4. `REVIEWER_AGENT.md` reviews scope, evidence, Project Brain sync, and final report readiness.
+5. `AGENT_COMMUNICATION_PROTOCOL.md` defines handoff packets.
+6. `AUTONOMOUS_BUILD_WORKFLOW.md` defines the end-to-end autonomous loop.
+
+These Project Brain workflow roles do not replace active agents under `agents/AGENT_REGISTRY.md`. Specialist work still routes to the existing active owner agents listed there.
+
 ## Automatic Project Brain Closeout Sync
 
 After every completed task, Codex must update Project Brain before the final report.

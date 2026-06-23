@@ -513,6 +513,25 @@ Codex should reduce Liad ping-pong by working autonomously on safe tasks and sto
 
 Codex is the main Orchestrator for normal repository work. Codex must not ask Liad for every small step. It must work, validate, collect proof, update Project Brain, and ask Liad only at meaningful APPROVAL_REQUIRED gates.
 
+Codex must use the Project Brain multi-agent operating workflow for safe completed work:
+
+1. Map Guard Agent checks source ownership, reuse, protected systems, and approval gates.
+2. Builder Agent performs approved/AUTO_ALLOWED scoped work.
+3. QA Agent validates the change and protected-system boundaries.
+4. Reviewer Agent checks scope, evidence, blocker state, Project Brain sync readiness, and final report accuracy.
+5. Project Brain sync records completion before the final report.
+
+The workflow files live under `project-brain/agents/`:
+
+- `BUILDER_AGENT.md`
+- `MAP_GUARD_AGENT.md`
+- `QA_AGENT.md`
+- `REVIEWER_AGENT.md`
+- `AGENT_COMMUNICATION_PROTOCOL.md`
+- `AUTONOMOUS_BUILD_WORKFLOW.md`
+
+These are Project Brain workflow roles. They do not replace the active specialist agents registered in `agents/AGENT_REGISTRY.md`.
+
 After every completed task, Codex must update Project Brain before the final report. This is mandatory, not optional. The sync must happen after successful validation and, when there is a feature/code/governance commit, after that feature commit is created so the commit hash can be recorded.
 
 Required Project Brain closeout updates:
@@ -767,14 +786,16 @@ Required autonomous loop:
 2. Produce Project Reality Check.
 3. Load `PROJECT_INDEX.md` and `project-brain/TASK_BOARD.md`.
 4. Pick the next approved task.
-5. Route work to the correct existing owner agent by role.
-6. Execute AUTO_ALLOWED work without stopping for routine confirmation.
-7. Run validation.
-8. Check that no protected system was affected.
-9. Update Project Brain.
-10. Commit and push if the change is safe, scoped, and validated.
-11. Stop only when APPROVAL_REQUIRED work is reached.
-12. Present proof, risks, and the exact approval request.
+5. Run Map Guard review.
+6. Route work to Builder Agent and any existing specialist owner agent by role.
+7. Execute AUTO_ALLOWED work without stopping for routine confirmation.
+8. Run QA validation.
+9. Run Reviewer scope/evidence check.
+10. Check that no protected system was affected.
+11. Commit and push if the change is safe, scoped, and validated.
+12. Update, commit, and push Project Brain sync.
+13. Stop only when APPROVAL_REQUIRED work is reached.
+14. Present proof, risks, and the exact approval request.
 
 If a task mixes AUTO_ALLOWED and APPROVAL_REQUIRED work, complete the AUTO_ALLOWED discovery, validation, or planning first, then stop before the approval gate.
 
@@ -937,6 +958,21 @@ Recommended hierarchy:
 6. Worker tools and scripts
 
 Specialist agents do not bypass this protocol.
+
+## 23A. Multi-Agent Operating Workflow
+
+Project Brain workflow roles:
+
+| Role | File | Responsibility |
+|---|---|---|
+| Builder | `project-brain/agents/BUILDER_AGENT.md` | Implement approved/AUTO_ALLOWED scoped work using existing patterns |
+| Map Guard | `project-brain/agents/MAP_GUARD_AGENT.md` | Protect source map, ownership, reuse, and approval gates |
+| QA | `project-brain/agents/QA_AGENT.md` | Validate behavior and protected-system boundaries |
+| Reviewer | `project-brain/agents/REVIEWER_AGENT.md` | Review scope, evidence, blocker language, and Project Brain sync |
+| Communication | `project-brain/agents/AGENT_COMMUNICATION_PROTOCOL.md` | Standardize handoff packets |
+| Autonomous Build | `project-brain/agents/AUTONOMOUS_BUILD_WORKFLOW.md` | Define the end-to-end safe build loop |
+
+These roles are not production automations and do not execute external actions by themselves. Codex uses them as the operating model for safe work and still routes domain-specific work to the active agents in `agents/AGENT_REGISTRY.md`.
 
 ## 24. Digital Twin Responsibilities
 

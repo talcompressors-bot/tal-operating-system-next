@@ -574,6 +574,30 @@ Route future tasks to existing agents before work starts. Do not create new agen
 
 Codex acts as the main Orchestrator and assigns work to the existing owner agent. Agent routing does not mean Codex must stop and ask Liad; Codex should continue AUTO_ALLOWED work through validation and Project Brain update.
 
+For safe build work, Codex also uses the Project Brain multi-agent operating workflow:
+
+```text
+Codex Orchestrator
+-> Map Guard Agent
+-> Builder Agent
+-> QA Agent
+-> Reviewer Agent
+-> Project Brain sync
+-> Git commit/push
+-> Final report
+```
+
+Project Brain workflow role files:
+
+- `project-brain/agents/BUILDER_AGENT.md`
+- `project-brain/agents/MAP_GUARD_AGENT.md`
+- `project-brain/agents/QA_AGENT.md`
+- `project-brain/agents/REVIEWER_AGENT.md`
+- `project-brain/agents/AGENT_COMMUNICATION_PROTOCOL.md`
+- `project-brain/agents/AUTONOMOUS_BUILD_WORKFLOW.md`
+
+These workflow roles extend the existing agent registry; they do not replace active specialist agents.
+
 | Task Type | Existing Owner Agent |
 |---|---|
 | Git work | `agents/GIT_AGENT.md` |
