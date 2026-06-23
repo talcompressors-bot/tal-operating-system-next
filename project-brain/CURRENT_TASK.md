@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-23
-Mode: Service Report central work screen enhanced; next task is populated-module enhancement
+Mode: Bidirectional module navigation implemented; next task is Service Reports list context enhancement
 
 ## Canonical Role
 
@@ -11,15 +11,15 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Real Supabase Prisma connectivity passed outside the network sandbox, confirming earlier `P1001` failures were sandbox/runtime network limitations rather than Supabase/project/env issues. Supabase staging connectivity blocker is resolved. The Customers read-only module is implemented and pushed. Automatic Project Brain closeout sync is required after every completed task. Multi-agent operating workflow docs are implemented and pushed. The ReportEquipmentItems / Equipment read-only module is implemented and pushed. The PartsUsed read-only module is implemented and committed. Data coverage audit is completed. Service Report detail is enhanced as the central read-only work screen. Wave 2 import is not approved.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Real Supabase Prisma connectivity passed outside the network sandbox, confirming earlier `P1001` failures were sandbox/runtime network limitations rather than Supabase/project/env issues. Supabase staging connectivity blocker is resolved. The Customers read-only module is implemented and pushed. Automatic Project Brain closeout sync is required after every completed task. Multi-agent operating workflow docs are implemented and pushed. The ReportEquipmentItems / Equipment read-only module is implemented and pushed. The PartsUsed read-only module is implemented and committed. Data coverage audit is completed. Service Report detail is enhanced as the central read-only work screen. Bidirectional navigation between Customers, Equipment, and the Service Report work screen is implemented. Wave 2 import is not approved.
 
 ## Current Milestone
 
-Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, Wave 2 connector dry-run validation, real Prisma staging connectivity validation, Customers read-only module implementation, automatic Project Brain closeout sync governance, multi-agent operating workflow docs, ReportEquipmentItems / Equipment read-only module implementation, PartsUsed read-only module implementation, data coverage audit, and Service Report central work-screen enhancement are complete.
+Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, Wave 2 connector dry-run validation, real Prisma staging connectivity validation, Customers read-only module implementation, automatic Project Brain closeout sync governance, multi-agent operating workflow docs, ReportEquipmentItems / Equipment read-only module implementation, PartsUsed read-only module implementation, data coverage audit, Service Report central work-screen enhancement, and bidirectional module navigation are complete.
 
 ## Last Implementation Commit
 
-`71a5435 Enhance service report work screen`
+`8e3fae9 Add bidirectional module navigation`
 
 ## Last Closeout Commit
 
@@ -100,14 +100,15 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - Application route map documented in commit `7a8ce9b Add application route map`: created `APPLICATION_ROUTE_MAP.md` listing all implemented Next.js routes, module names, status, data source, record count, and AppSheet equivalent. Validation: actual `app/**/page.tsx` route files were enumerated; read-only Prisma count query verified `customers = 763`, `serviceReports = 63`, `reportEquipmentItems = 75`, `partsUsed = 0`, and `products = 0`; `git diff --check` passed. No app code, schema changes, migrations, env changes, DB writes, imports, source-system changes, or production actions occurred.
 - Data coverage audit completed in commit `5a682ec Add data coverage audit`: created `DATA_COVERAGE_AUDIT.md` with read-only Prisma counts and readiness classifications for 19 requested models. Populated models are `Customer = 763`, `ServiceReport = 63`, and `ReportEquipmentItem = 75`. `PartUsed = 0` and `Product = 0` are empty. Inventory, AI draft, business document, automation, Maven, approval, email, sync, and error-log tables are not ready for useful read-only module validation because they have no staging rows. Validation: read-only Prisma counts succeeded; `git diff --check` passed. No app code, schema changes, migrations, env changes, DB writes, imports, source-system changes, or production actions occurred.
 - Service Report central work screen enhanced in commit `71a5435 Enhance service report work screen`: `/service-reports/[id]` now shows a customer summary card, equipment summary section, disabled future action buttons for Create AI Draft, Create Business Draft, and Send to Maven, lifecycle placeholders for Draft not created, Maven not sent, and Customer not viewed, plus links to customer and equipment detail pages. Validation: scoped TypeScript passed; `git diff --check` passed with CRLF warnings only; local HTTP validation returned 200 for `/`, `/service-reports`, `/service-reports/acd1133d`, `/customers`, `/equipment`, and `/equipment/3002f879`; detail HTML contained all requested new work-screen labels/placeholders. No schema changes, migrations, env changes, DB writes, imports, AppSheet changes, Maven changes, Apps Script changes, source-system changes, or production actions occurred. Current blocker is `none` for this read-only enhancement. Project completion percentage is now 54%.
+- Bidirectional module navigation implemented in commit `8e3fae9 Add bidirectional module navigation`: Customer detail labels linked service reports as Service Report work screens; Equipment detail links explicitly target the Service Report work screen; Service Report work screen continues linking back to Customer and Equipment detail pages; dashboard route map remains unchanged because no routes were added. Validation: scoped TypeScript passed; `git diff --check` passed with CRLF warnings only; sandbox HTTP validation confirmed `/` returned 200 while Prisma-backed routes were blocked by sandbox networking; outside the sandbox, `/`, `/customers`, `/customers/186DD`, `/equipment`, `/equipment/3002f879`, `/service-reports`, and `/service-reports/acd1133d` all returned HTTP 200, with Customer-to-ServiceReport, Equipment-to-ServiceReport, ServiceReport-to-Customer, and ServiceReport-to-Equipment link checks passing. No schema changes, migrations, env changes, DB writes, imports, AppSheet changes, Maven changes, Apps Script changes, source-system changes, production actions, or dashboard route changes occurred. Current blocker is `none` for this read-only enhancement. Project completion percentage is now 55%.
 
 ## Current Task
 
-Service Report detail is enhanced as the central read-only work screen. Current blocker: none for this read-only enhancement.
+Bidirectional read-only navigation between Customer detail, Equipment detail, and the Service Report work screen is implemented. Current blocker: none for this read-only enhancement.
 
 ## Next Approved Task
 
-Continue enhancing already populated read-only modules, such as adding bidirectional context from Customer and Equipment detail pages back to the central Service Report work screen. Do not build ProductsCatalog as the next data-backed module until `Product` rows are populated in staging.
+Enhance the Service Reports list with read-only search/filter and context cues across populated Customer, ServiceReport, and Equipment data. Do not build ProductsCatalog as the next data-backed module until `Product` rows are populated in staging.
 
 Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes, schema changes, migrations, env changes, or source-system actions until Liad explicitly approves that later gate.
 

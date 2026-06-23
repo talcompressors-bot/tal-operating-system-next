@@ -16,6 +16,19 @@ Approved.
 ## 2026-06-23
 
 Decision:
+Dashboard route map remains unchanged for bidirectional module navigation.
+
+Reason:
+The task added and clarified links among existing populated read-only routes only. No new Next.js route, AppSheet equivalent, data source, or record count changed, so `APPLICATION_ROUTE_MAP.md` and dashboard route inventory do not require a content change.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
 After the data coverage audit, ProductsCatalog should not be the next data-backed read-only module until `Product` rows exist in staging.
 
 Reason:

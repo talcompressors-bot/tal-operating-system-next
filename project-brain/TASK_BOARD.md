@@ -1,13 +1,13 @@
 # TASK BOARD
 
 Last updated: 2026-06-23
-Mode: Service Report central work screen enhanced; next task is populated-module enhancement
+Mode: Bidirectional module navigation implemented; next task is Service Reports list context enhancement
 
 ## NOW
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Populated-module enhancement | Continue improving the existing read-only modules that have staging data: ServiceReports, Customers, and Equipment | Customer and Equipment detail pages link back into the central Service Report work screen; no schema/env changes, imports, DB writes, or source-system actions; existing routes still pass validation | No for read-only enhancement; yes before any import, DB write, schema change, env change, or source-system action |
+| Service Reports list context enhancement | Improve the existing read-only Service Reports list using populated Customer, ServiceReport, and Equipment data | Search/filter and context cues are added without schema/env changes, imports, DB writes, or source-system actions; existing routes still pass validation | No for read-only enhancement; yes before any import, DB write, schema change, env change, or source-system action |
 
 ## NEXT
 
@@ -77,6 +77,7 @@ Mode: Service Report central work screen enhanced; next task is populated-module
 | Application route map documented | Commit `7a8ce9b Add application route map`; created `APPLICATION_ROUTE_MAP.md` with every implemented route, module, status, data source, record count, and AppSheet equivalent; validation: actual `app/**/page.tsx` files enumerated, read-only Prisma counts verified, and `git diff --check` passed; no app/schema/env/migration/DB write/import/source-system/production changes |
 | Data coverage audit completed | Commit `5a682ec Add data coverage audit`; created `DATA_COVERAGE_AUDIT.md` with read-only Prisma counts and classifications for 19 requested models; populated models are `Customer = 763`, `ServiceReport = 63`, and `ReportEquipmentItem = 75`; `PartUsed = 0` and `Product = 0` are empty; remaining workflow/runtime/Maven/sync/log tables are not ready for useful read-only module validation; no app/schema/env/migration/DB write/import/source-system/production changes |
 | Service Report central work screen enhanced | Commit `71a5435 Enhance service report work screen`; `/service-reports/[id]` now includes customer summary, equipment summary, disabled future actions, lifecycle placeholders, and links to customer/equipment detail pages; validation: scoped TypeScript passed, `git diff --check` passed with CRLF warnings only, local route checks returned 200 for `/`, `/service-reports`, `/service-reports/acd1133d`, `/customers`, `/equipment`, and `/equipment/3002f879`, and detail HTML contained all requested labels/placeholders; no schema/env/migration/DB write/import/source-system/production changes; completion is 54% |
+| Bidirectional module navigation implemented | Commit `8e3fae9 Add bidirectional module navigation`; Customer detail now explicitly labels linked Service Report work screens, Equipment detail explicitly links to the Service Report work screen, and Service Report detail continues linking back to Customer and Equipment detail pages; validation: scoped TypeScript passed, `git diff --check` passed with CRLF warnings only, outside-sandbox route checks returned 200 for `/`, `/customers`, `/customers/186DD`, `/equipment`, `/equipment/3002f879`, `/service-reports`, and `/service-reports/acd1133d`, and all four bidirectional link checks passed; no schema/env/migration/DB write/import/source-system/production/dashboard-route changes; completion is 55% |
 
 ## BLOCKED / NOT STARTED
 
