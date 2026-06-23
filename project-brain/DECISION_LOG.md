@@ -16,6 +16,19 @@ Approved.
 ## 2026-06-23
 
 Decision:
+BusinessDocuments may have a read-only empty-state draft shell before Wave 2 import approval.
+
+Reason:
+The `BusinessDocument`, `BusinessDocumentItem`, and `BusinessDocumentLog` Prisma models already exist and the staging tables currently have zero rows. A shell that reads only existing rows, shows an empty state, and prepares approval/Maven/customer lifecycle placeholders does not import data, write to the database, change schema, or touch Maven/Invoice4U/source systems.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
 No code fix is required for the AI Draft runtime error observed in the sandbox.
 
 Reason:
