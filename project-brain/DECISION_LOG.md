@@ -16,6 +16,19 @@ Approved.
 ## 2026-06-23
 
 Decision:
+After the Service Reports list context enhancement, the next safe task is a Wave 2 import blocker-resolution approval package.
+
+Reason:
+The populated read-only Customer, Equipment, and Service Report navigation/work-screen/list surfaces are now implemented. The next meaningful progress point is to convert existing Wave 2 dry-run blockers into explicit decisions before any staging import can be approved. This remains documentation/read-only analysis until Liad explicitly approves imports or DB writes.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
 Dashboard route map remains unchanged for bidirectional module navigation.
 
 Reason:

@@ -1,13 +1,13 @@
 # TASK BOARD
 
 Last updated: 2026-06-23
-Mode: Bidirectional module navigation implemented; next task is Service Reports list context enhancement
+Mode: Service Reports list context enhancement implemented; next task is Wave 2 approval package
 
 ## NOW
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Service Reports list context enhancement | Improve the existing read-only Service Reports list using populated Customer, ServiceReport, and Equipment data | Search/filter and context cues are added without schema/env changes, imports, DB writes, or source-system actions; existing routes still pass validation | No for read-only enhancement; yes before any import, DB write, schema change, env change, or source-system action |
+| Wave 2 import blocker-resolution approval package | Convert existing Wave 2 dry-run blockers into an approval-ready decision package | Package lists duplicate SKU decision, unresolved example PartUsed row, AI draft CustomerID mismatch, BusinessDocumentLog header shift, enum/status mappings, recommended choices, risks, and exact no-write next steps | No for documentation/read-only analysis; yes before any import, DB write, schema change, env change, or source-system action |
 
 ## NEXT
 
@@ -78,6 +78,7 @@ Mode: Bidirectional module navigation implemented; next task is Service Reports 
 | Data coverage audit completed | Commit `5a682ec Add data coverage audit`; created `DATA_COVERAGE_AUDIT.md` with read-only Prisma counts and classifications for 19 requested models; populated models are `Customer = 763`, `ServiceReport = 63`, and `ReportEquipmentItem = 75`; `PartUsed = 0` and `Product = 0` are empty; remaining workflow/runtime/Maven/sync/log tables are not ready for useful read-only module validation; no app/schema/env/migration/DB write/import/source-system/production changes |
 | Service Report central work screen enhanced | Commit `71a5435 Enhance service report work screen`; `/service-reports/[id]` now includes customer summary, equipment summary, disabled future actions, lifecycle placeholders, and links to customer/equipment detail pages; validation: scoped TypeScript passed, `git diff --check` passed with CRLF warnings only, local route checks returned 200 for `/`, `/service-reports`, `/service-reports/acd1133d`, `/customers`, `/equipment`, and `/equipment/3002f879`, and detail HTML contained all requested labels/placeholders; no schema/env/migration/DB write/import/source-system/production changes; completion is 54% |
 | Bidirectional module navigation implemented | Commit `8e3fae9 Add bidirectional module navigation`; Customer detail now explicitly labels linked Service Report work screens, Equipment detail explicitly links to the Service Report work screen, and Service Report detail continues linking back to Customer and Equipment detail pages; validation: scoped TypeScript passed, `git diff --check` passed with CRLF warnings only, outside-sandbox route checks returned 200 for `/`, `/customers`, `/customers/186DD`, `/equipment`, `/equipment/3002f879`, `/service-reports`, and `/service-reports/acd1133d`, and all four bidirectional link checks passed; no schema/env/migration/DB write/import/source-system/production/dashboard-route changes; completion is 55% |
+| Service Reports list context enhancement implemented | Commit `9bd6435 Enhance service report list filters`; `/service-reports` now supports read-only search by report id/number, customer, technician, equipment/model/serial, status/customer/has-equipment filters, customer and equipment/model cues, preserved work-screen links, and an empty state; validation: scoped TypeScript passed, `git diff --check` passed with CRLF warnings only, outside-sandbox route checks returned 200 for `/`, `/service-reports`, `/service-reports?q=acd1133d`, `/service-reports?status=Signed`, `/service-reports?q=no-such-report-filter-value`, `/service-reports/acd1133d`, `/customers`, and `/equipment`, with control/cue/link/search/filter/empty-state checks passing; no schema/env/migration/DB write/import/source-system/production/route-map changes; completion is 56% |
 
 ## BLOCKED / NOT STARTED
 
