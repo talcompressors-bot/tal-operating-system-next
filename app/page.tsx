@@ -22,8 +22,8 @@ const modules = [
   {
     title: "ציוד / מלאי",
     description: "ציוד, חלקים, מלאי והתאמת מקטים.",
-    href: "#",
-    active: false,
+    href: "/equipment",
+    active: true,
   },
   {
     title: "טיוטות AI",
