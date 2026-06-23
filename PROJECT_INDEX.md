@@ -404,9 +404,9 @@ This section is the living navigation screen. It summarizes current reality only
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Current milestone | Wave 1 Next.js read/display validation PASS after PostgreSQL read switch | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Current task | BusinessDocuments read-only draft shell is implemented; current blocker is none for this read-only shell | `project-brain/CURRENT_TASK.md` |
+| Current task | Inventory stock route alias is fixed; current blocker is none for this navigation fix | `project-brain/CURRENT_TASK.md` |
 | Next approved task | Prepare the Wave 2 import blocker-resolution approval package from existing dry-run findings. Do not run imports, DB writes, schema changes, env changes, or source-system actions without explicit approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
-| Last Implementation Commit | `5fb5e20 Add business documents shell` | Git history; `project-brain/CURRENT_TASK.md` |
+| Last Implementation Commit | `bd2bf19 Fix inventory stock route` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
 | Blocked/forbidden actions | No production writes, Prisma migration, DB creation, Sheets/AppSheet/Maven actions, new planning/control files, new agents, or implementation before Reality Check | `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md` |
@@ -482,8 +482,8 @@ NEXT APPROVAL GATE
 Current Project Tree Position:
 
 - Current Wave: Wave 2 Service Workflow Layer
-- Current Task: BusinessDocuments read-only draft shell is implemented; current blocker is none for this read-only shell
-- Last Completed Task: BusinessDocuments shell
+- Current Task: Inventory stock route alias is fixed; current blocker is none for this navigation fix
+- Last Completed Task: Inventory stock route alias fix
 - Next Task: Prepare the Wave 2 import blocker-resolution approval package from existing dry-run findings
 - Estimated completion %: 58%
 - Completion basis: capability-weighted evidence, not completed-waves / total-waves.
@@ -551,7 +551,7 @@ This estimate is valid because the first four capabilities are complete by Proje
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md` |
-| Current task | BusinessDocuments read-only draft shell is implemented; current blocker is none for this read-only shell | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current task | Inventory stock route alias is fixed; current blocker is none for this navigation fix | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Next approved task | Prepare the Wave 2 import blocker-resolution approval package from existing dry-run findings. Do not run imports, DB writes, schema changes, env changes, or source-system actions without explicit approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
 | Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |

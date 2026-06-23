@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-23
-Mode: BusinessDocuments shell implemented; next task is Wave 2 approval package
+Mode: Inventory stock route alias fixed; next task is Wave 2 approval package
 
 ## Canonical Role
 
@@ -11,7 +11,7 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Real Supabase Prisma connectivity passed outside the network sandbox, confirming earlier `P1001` failures were sandbox/runtime network limitations rather than Supabase/project/env issues. Supabase staging connectivity blocker is resolved. The Customers read-only module is implemented and pushed. Automatic Project Brain closeout sync is required after every completed task. Multi-agent operating workflow docs are implemented and pushed. The ReportEquipmentItems / Equipment read-only module is implemented and pushed. The PartsUsed read-only module is implemented and committed. Data coverage audit is completed. Service Report detail is enhanced as the central read-only work screen. Bidirectional navigation between Customers, Equipment, and the Service Report work screen is implemented. Service Reports list search/filter and context cues are implemented. AI Draft Suggestions read-only empty-state shell is implemented. BusinessDocuments read-only draft shell is implemented. Wave 2 import is not approved.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Real Supabase Prisma connectivity passed outside the network sandbox, confirming earlier `P1001` failures were sandbox/runtime network limitations rather than Supabase/project/env issues. Supabase staging connectivity blocker is resolved. The Customers read-only module is implemented and pushed. Automatic Project Brain closeout sync is required after every completed task. Multi-agent operating workflow docs are implemented and pushed. The ReportEquipmentItems / Equipment read-only module is implemented and pushed. The PartsUsed read-only module is implemented and committed. Data coverage audit is completed. Service Report detail is enhanced as the central read-only work screen. Bidirectional navigation between Customers, Equipment, and the Service Report work screen is implemented. Service Reports list search/filter and context cues are implemented. AI Draft Suggestions read-only empty-state shell is implemented. BusinessDocuments read-only draft shell is implemented. Inventory stock route alias is fixed. Wave 2 import is not approved.
 
 ## Current Milestone
 
@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`5fb5e20 Add business documents shell`
+`bd2bf19 Fix inventory stock route`
 
 ## Last Closeout Commit
 
@@ -105,10 +105,11 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - AI Draft Suggestions shell implemented in commit `f8f271e Add AI draft suggestions shell`: added `/ai-drafts`, `/ai-drafts/[id]`, and a read-only `AiDraftSuggestion` adapter; dashboard now links the active AI Drafts card; `APPLICATION_ROUTE_MAP.md` records the new routes with `AiDraftSuggestion` count `0`. The shell is empty-state-first and maps draft status, suggested parts, suggested labor, suggested document type, approval placeholder, and future Maven lifecycle placeholder for future rows. Validation: read-only Prisma count confirmed `AiDraftSuggestion count = 0`; scoped TypeScript passed; `git diff --check` passed with CRLF warnings only; outside-sandbox route validation returned HTTP 200 for `/`, `/ai-drafts`, `/service-reports`, `/customers`, and `/equipment`; `/ai-drafts/not-a-real-draft` returned 404; dashboard AI Draft link, empty state, document type column, and approval column checks passed. No schema changes, migrations, env changes, DB writes, imports, AppSheet changes, Maven changes, Apps Script changes, source-system changes, or production actions occurred. Current blocker is `none` for this read-only shell. Project completion percentage is now 57%.
 - AI Draft runtime error investigation completed: `/ai-drafts` returned HTTP 500 only inside the network sandbox because Prisma could not reach `aws-1-eu-central-1.pooler.supabase.com:6543`; `/ai-drafts` returned HTTP 200 outside the sandbox. Root cause is the known sandbox Prisma connectivity limitation, not an AI Draft code/schema issue. No code fix is required. Build remains blocked by the unrelated existing missing `playwright` dependency/type declarations in `scripts/playwright/appsheet-discovery-auth.ts`.
 - BusinessDocuments shell implemented in commit `5fb5e20 Add business documents shell`: added `/business-documents`, `/business-documents/[id]`, and a read-only `BusinessDocument` adapter using existing `BusinessDocument`, `BusinessDocumentItem`, and `BusinessDocumentLog` relations; dashboard now links the active Business Documents card; `APPLICATION_ROUTE_MAP.md` records the new routes with `BusinessDocument` count `0`. The shell is empty-state-first and maps lifecycle placeholders for Draft, Approved, Sent to Maven, Maven Created, Email Sent, and Customer Viewed, plus link placeholders to AI Draft, Service Report, Customer, and Maven Document. Validation: read-only Prisma counts confirmed `BusinessDocument = 0`, `BusinessDocumentItem = 0`, and `BusinessDocumentLog = 0`; scoped TypeScript passed; `git diff --check` passed with CRLF warnings only; outside-sandbox route validation returned HTTP 200 for `/`, `/business-documents`, `/ai-drafts`, `/service-reports`, and `/customers`; `/business-documents/not-a-real-document` returned 404; dashboard Business Documents link, empty state, Maven document column, AI draft column, and approval column checks passed. No schema changes, migrations, env changes, DB writes, imports, Maven/Invoice4U actions, AppSheet changes, Apps Script changes, source-system changes, or production actions occurred. Current blocker is `none` for this read-only shell. Project completion percentage is now 58%.
+- Inventory stock route alias fixed in commit `bd2bf19 Fix inventory stock route`: `/inventory-stock` now redirects to the existing `/equipment` read-only module instead of returning 404. Investigation found the equipment/stock dashboard card points to `/equipment`, `app/equipment/page.tsx` exists, and `/equipment` returns HTTP 200; the broken route was the missing `/inventory-stock` path. Validation: scoped TypeScript passed; `git diff --check` passed; outside-sandbox route validation returned HTTP 200 for `/`, `/inventory-stock` after redirect to `/equipment`, `/equipment`, `/service-reports`, and `/customers`. No new data module, schema change, migration, env change, DB write/import, source-system action, or production integration occurred. Current blocker is `none` for this navigation fix. Project completion percentage remains 58%.
 
 ## Current Task
 
-BusinessDocuments read-only draft shell is implemented. Current blocker: none for this read-only shell.
+Inventory stock route alias is fixed. Current blocker: none for this navigation fix.
 
 ## Next Approved Task
 

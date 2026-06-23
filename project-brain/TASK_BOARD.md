@@ -1,7 +1,7 @@
 # TASK BOARD
 
 Last updated: 2026-06-23
-Mode: BusinessDocuments shell implemented; next task is Wave 2 approval package
+Mode: Inventory stock route alias fixed; next task is Wave 2 approval package
 
 ## NOW
 
@@ -82,6 +82,7 @@ Mode: BusinessDocuments shell implemented; next task is Wave 2 approval package
 | AI Draft Suggestions shell implemented | Commit `f8f271e Add AI draft suggestions shell`; added `/ai-drafts`, `/ai-drafts/[id]`, read-only `AiDraftSuggestion` adapter, active dashboard card, and route-map entries; table count is `0`, so the list is empty-state-first while detail mapping is ready for future rows; validation: read-only Prisma count confirmed `AiDraftSuggestion count = 0`, scoped TypeScript passed, `git diff --check` passed with CRLF warnings only, outside-sandbox route checks returned 200 for `/`, `/ai-drafts`, `/service-reports`, `/customers`, and `/equipment`, `/ai-drafts/not-a-real-draft` returned 404, and dashboard link/empty-state/document-type/approval checks passed; no schema/env/migration/DB write/import/source-system/production changes; completion is 57% |
 | AI Draft sandbox runtime finding recorded | `/ai-drafts` HTTP 500 reproduced only inside the network sandbox due to Prisma being unable to reach the Supabase pooler; `/ai-drafts` returned HTTP 200 outside the sandbox, confirming no AI Draft code fix is required. Build remains blocked by unrelated missing `playwright` dependency/type declarations in `scripts/playwright/appsheet-discovery-auth.ts` |
 | BusinessDocuments shell implemented | Commit `5fb5e20 Add business documents shell`; added `/business-documents`, `/business-documents/[id]`, read-only `BusinessDocument` adapter using items/log relations, active dashboard card, and route-map entries; table counts are `BusinessDocument = 0`, `BusinessDocumentItem = 0`, and `BusinessDocumentLog = 0`, so the list is empty-state-first while detail mapping is ready for future rows; validation: scoped TypeScript passed, `git diff --check` passed with CRLF warnings only, outside-sandbox route checks returned 200 for `/`, `/business-documents`, `/ai-drafts`, `/service-reports`, and `/customers`, `/business-documents/not-a-real-document` returned 404, and dashboard link/empty-state/Maven/AI-draft/approval checks passed; no schema/env/migration/DB write/import/Maven/Invoice4U/source-system/production changes; completion is 58% |
+| Inventory stock route alias fixed | Commit `bd2bf19 Fix inventory stock route`; `/inventory-stock` now redirects to existing `/equipment`; validation returned 200 for `/`, `/inventory-stock` after redirect, `/equipment`, `/service-reports`, and `/customers`; no new data module, schema/env/migration/DB write/import/source-system/production changes; completion remains 58% |
 
 ## BLOCKED / NOT STARTED
 

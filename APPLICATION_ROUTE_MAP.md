@@ -15,6 +15,7 @@ Record counts were verified with read-only Prisma count queries against the curr
 | `/customers/[id]` | Customer detail | Implemented, read-only | Supabase PostgreSQL via Prisma `Customer` with linked service-report counts/history | 763 addressable customers | Customer detail view |
 | `/equipment` | Equipment list | Implemented, read-only | Supabase PostgreSQL via Prisma `ReportEquipmentItem` | 75 | `ReportEquipmentItems` / equipment inline or related view |
 | `/equipment/[id]` | Equipment detail | Implemented, read-only | Supabase PostgreSQL via Prisma `ReportEquipmentItem` with linked service-report context | 75 addressable equipment rows | `ReportEquipmentItems` detail/related record view |
+| `/inventory-stock` | Inventory / equipment stock redirect | Implemented route alias | Redirects to existing `/equipment` route; no separate data module | N/A | App navigation alias to equipment/stock area |
 | `/parts-used` | Parts Used list | Implemented, read-only | Supabase PostgreSQL via Prisma `PartUsed` | 0 | `PartsUsed` table list view |
 | `/parts-used/[id]` | Parts Used detail | Implemented, read-only | Supabase PostgreSQL via Prisma `PartUsed` with linked service-report/product context when present | 0 addressable parts-used rows | `PartsUsed` detail view |
 | `/ai-drafts` | AI Draft Suggestions list | Implemented, read-only empty-state shell | Supabase PostgreSQL via Prisma `AiDraftSuggestion` | 0 | `AIDraftSuggestions` table list view |
