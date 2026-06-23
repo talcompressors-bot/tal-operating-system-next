@@ -386,9 +386,9 @@ This section is the living navigation screen. It summarizes current reality only
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Current milestone | Wave 1 Next.js read/display validation PASS after PostgreSQL read switch | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Current task | Staging PostgreSQL connectivity diagnostics blocked by local `.env.staging` project-ref mismatch; Wave 2 import remains blocked | `project-brain/CURRENT_TASK.md` |
-| Next approved task | Correct local ignored `.env.staging` values to the confirmed Supabase staging project ref, then rerun read-only Prisma and Next.js route validation. No Wave 2 import, Maven work, production shadow, DB write, schema change, or source-system action is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Last Implementation Commit | `143d791 Record Wave 2 connector dry-run validation` | Git history; `project-brain/CURRENT_TASK.md` |
+| Current task | Customers read-only module implemented and pushed; Wave 2 import remains blocked pending blocker-resolution planning and explicit approval | `project-brain/CURRENT_TASK.md` |
+| Next approved task | Continue Wave 2 import blocker-resolution planning only. No Wave 2 import, Maven work, production shadow, DB write, schema change, or source-system action is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Last Implementation Commit | `45da4d0 Implement customers read-only module` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
 | Blocked/forbidden actions | No production writes, Prisma migration, DB creation, Sheets/AppSheet/Maven actions, new planning/control files, new agents, or implementation before Reality Check | `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md` |
@@ -462,9 +462,9 @@ NEXT APPROVAL GATE
 Current Project Tree Position:
 
 - Current Wave: Wave 2 Service Workflow Layer
-- Current Task: Staging PostgreSQL connectivity diagnostics blocked by local `.env.staging` project-ref mismatch; Wave 2 import remains blocked
-- Last Completed Task: Wave 1 service-report core import, PostgreSQL read switch, and read/display mapping validation
-- Next Task: Correct local ignored `.env.staging` values to the confirmed Supabase staging project ref, then rerun read-only Prisma and Next.js route validation
+- Current Task: Customers read-only module implemented and pushed; Wave 2 import remains blocked pending blocker-resolution planning and explicit approval
+- Last Completed Task: Customers read-only module and staging connectivity diagnosis resolution
+- Next Task: Continue Wave 2 import blocker-resolution planning only
 - Estimated completion %: 50%
 - Completion basis: capability-weighted evidence, not completed-waves / total-waves.
 - Governance / Project Brain / Git workflow: 15% / 15% COMPLETE
@@ -531,8 +531,8 @@ This estimate is valid only because the first four capabilities are complete by 
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md` |
-| Current task | Staging PostgreSQL connectivity diagnostics blocked by local `.env.staging` project-ref mismatch; Wave 2 import remains blocked | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Next approved task | Correct local ignored `.env.staging` values to the confirmed Supabase staging project ref, then rerun read-only Prisma and Next.js route validation. No Wave 2 import, Maven work, production shadow, DB write, schema change, or source-system action is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current task | Customers read-only module implemented and pushed; Wave 2 import remains blocked pending blocker-resolution planning and explicit approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Next approved task | Continue Wave 2 import blocker-resolution planning only. No Wave 2 import, Maven work, production shadow, DB write, schema change, or source-system action is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |
 | Dependency order | Governance and Project Brain state -> system map/source review -> PostgreSQL V1 scope -> data migration planning -> Supabase staging-first plan -> approved staging project/secrets -> Prisma reconciliation approval -> approved staging schema push -> read-only schema verification -> Wave 1 dry-run/import validation -> Waves 2-4 discovery/import approvals -> production shadow approval -> Server Actions/offline sync | `project-brain/TASK_BOARD.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md`, `project-brain/migration/DATA_MIGRATION_PLAN.md` |

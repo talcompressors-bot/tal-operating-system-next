@@ -3,6 +3,32 @@
 ## 2026-06-23
 
 Decision:
+`45da4d0 Implement customers read-only module` is classified as the Last Implementation Commit.
+
+Reason:
+The commit added read-only Next.js Customers list/detail pages, a Customer Prisma adapter, search/filter handling, service-report links, future relation counts, and an active dashboard card. Validation used scoped TypeScript and read-only local HTTP route checks. It changed read-only app behavior only and did not change schema, migrations, env files, DB data, AppSheet, Maven, Apps Script, or production systems.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
+Staging Prisma connectivity is resolved for diagnosis purposes; earlier `P1001` was a sandbox/runtime network limitation.
+
+Reason:
+A real read-only Prisma test outside the network sandbox succeeded with `customer.count() = 763`, and `npx.cmd prisma db pull --print` exited `0`. No DB writes or migrations were run.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
 Staging Supabase Project ID is `mdlvxklufrchiabonafm`; local `.env.staging` matches that verified project id, and remaining Prisma failure is `P1001` connectivity, not wrong project id.
 
 Reason:

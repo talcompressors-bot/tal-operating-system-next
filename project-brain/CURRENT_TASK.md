@@ -1,7 +1,7 @@
 # CURRENT TASK
 
-Last updated: 2026-06-22
-Mode: Staging PostgreSQL connectivity blocked; no Wave 2 import
+Last updated: 2026-06-23
+Mode: Customers read-only module implemented; Wave 2 import remains blocked
 
 ## Canonical Role
 
@@ -11,15 +11,15 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Current blocker is local staging PostgreSQL connectivity: `.env.staging` matches the verified Supabase Project ID `mdlvxklufrchiabonafm`, and the remaining failure is `P1001` connectivity to the Supabase pooler, not wrong project id. Wave 2 import is not approved.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Real Supabase Prisma connectivity passed outside the network sandbox, confirming earlier `P1001` failures were sandbox/runtime network limitations rather than Supabase/project/env issues. The Customers read-only module is implemented and pushed. Wave 2 import is not approved.
 
 ## Current Milestone
 
-Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, and Wave 2 connector dry-run validation are complete. Latest local Next.js/PostgreSQL validation is blocked by staging connection-string mismatch.
+Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, Wave 2 connector dry-run validation, real Prisma staging connectivity validation, and Customers read-only module implementation are complete.
 
 ## Last Implementation Commit
 
-`143d791 Record Wave 2 connector dry-run validation`
+`45da4d0 Implement customers read-only module`
 
 ## Last Closeout Commit
 
@@ -90,14 +90,17 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - Diagnostics found `.env.staging` contains `NEXT_PUBLIC_APP_ENV=staging`, `DATABASE_URL`, and `DIRECT_URL`; the connection user/project reference is `mdlvxklufrchiabonafm`, matching the verified staging project id. Prisma CLI loads `.env` by default, not `.env.staging`; for local Prisma validation, `.env` must be created temporarily from `.env.staging` or env must be loaded explicitly.
 - After `.env` was temporarily created from `.env.staging`, `npx.cmd prisma validate` passed and `npx.cmd prisma db pull --print` moved to `P1001` connectivity against `aws-1-eu-central-1.pooler.supabase.com:5432`.
 - Actual DB counts could not be read during the latest diagnostics because Prisma cannot connect. No DB writes, imports, migrations, Prisma schema commands, Google Sheets writes, AppSheet changes, Maven changes, Apps Script changes, or production actions occurred.
+- Final staging connectivity diagnosis completed after a real read-only Prisma test outside the network sandbox: `customer.count() = 763`, `npx.cmd prisma db pull --print` exit code `0`, and no DB writes or migrations were run. Earlier `P1001` failures were sandbox/runtime network limitations, not a Supabase/project/env issue.
+- Customers read-only module implemented in commit `45da4d0 Implement customers read-only module`: `app/customers/page.tsx`, `app/customers/[id]/page.tsx`, and `app/customers/customer-adapter.ts` were added; `app/page.tsx` now links the active Customers card to `/customers`. It uses existing Prisma `Customer` data, Server Component reads, relation counts, and service-report links only. No schema changes, migrations, env changes, DB writes, AppSheet changes, Maven changes, Apps Script changes, or production actions occurred.
+- Customers module validation: scoped TypeScript check passed; `/`, `/customers`, `/customers/186DD`, `/service-reports`, and `/service-reports/acd1133d` returned HTTP 200. Full `npm.cmd run build` remains blocked by an existing unrelated missing `playwright` dependency in `scripts/playwright/appsheet-discovery-auth.ts`; `npm.cmd run lint` prompts for initial ESLint setup.
 
 ## Current Task
 
-Staging PostgreSQL connectivity diagnostics blocked by `P1001` connectivity to the Supabase pooler; `.env.staging` matches the verified Supabase Project ID `mdlvxklufrchiabonafm`; Wave 2 import remains blocked.
+Customers read-only module is implemented and pushed. Staging PostgreSQL connectivity diagnosis is resolved: real Prisma connectivity passed outside the network sandbox. Wave 2 import remains blocked pending explicit approval and blocker-resolution planning.
 
 ## Next Approved Task
 
-Resolve local/network/runtime connectivity to the Supabase pooler, then rerun read-only Prisma and Next.js route validation with env loaded explicitly or with a temporary `.env` copied from `.env.staging`. After staging connectivity is restored, continue Wave 2 import blocker resolution planning only. Required Wave 2 topics remain: duplicate/blank SKU handling, `PartsUsed` example/test classification, `AIDraftSuggestions` customer-name fallback mapping, Wave 2 enum/status mapping, `BusinessDocumentLog` shifted-column handling, and title-row skip rules for `PartsUsed` and `EmailLog`.
+Continue Wave 2 import blocker resolution planning only. Required Wave 2 topics remain: duplicate/blank SKU handling, `PartsUsed` example/test classification, `AIDraftSuggestions` customer-name fallback mapping, Wave 2 enum/status mapping, `BusinessDocumentLog` shifted-column handling, and title-row skip rules for `PartsUsed` and `EmailLog`.
 
 Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes, schema changes, or source-system actions until Liad explicitly approves that later gate.
 
@@ -144,7 +147,7 @@ Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import
 
 ## Blocked / Forbidden Actions
 
-- No additional code implementation beyond validated AUTO_ALLOWED read/display mapping fixes unless explicitly approved.
+- No additional code implementation beyond validated AUTO_ALLOWED read-only UI/display work unless explicitly approved.
 - No Prisma migration.
 - No additional DB creation.
 - No additional `prisma db push`.
@@ -163,6 +166,6 @@ Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import
 
 ## Done When
 
-- Wave 1 read/display mapping fixes are committed and pushed.
-- Project Brain records the final implementation commit hash for the mapping fix.
+- Customers read-only module is committed and pushed.
+- Project Brain records the final implementation commit hash for the Customers module.
 - No write path, import, migration, schema push, source-system change, or production action is added.
