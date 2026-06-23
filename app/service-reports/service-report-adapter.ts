@@ -47,7 +47,20 @@ export type ServiceReportView = {
   description: string;
   recommendations: string;
   equipment: EquipmentRow[];
+  equipmentCue: string;
   lifecycle: LifecycleState;
+};
+
+export type ServiceReportListFilters = {
+  query?: string;
+  status?: string;
+  customer?: string;
+  hasEquipment?: boolean;
+};
+
+type ServiceReportFilterOption = {
+  value: string;
+  label: string;
 };
 
 type ServiceReportWithWave1Relations = ServiceReport & {
@@ -181,11 +194,29 @@ function mapLifecycle(report: ServiceReportWithWave1Relations): LifecycleState {
   };
 }
 
+function buildEquipmentCue(equipment: EquipmentRow[]) {
+  if (!equipment.length) {
+    return "No equipment linked";
+  }
+
+  const visibleEquipment = equipment
+    .slice(0, 2)
+    .map((item) => `${item.equipmentNumber} / ${item.model}`);
+  const remainingCount = equipment.length - visibleEquipment.length;
+
+  if (remainingCount > 0) {
+    visibleEquipment.push(`+${remainingCount} more`);
+  }
+
+  return visibleEquipment.join(", ");
+}
+
 function mapServiceReport(
   report: ServiceReportWithWave1Relations,
 ): ServiceReportView {
   const status = normalizeStatus(report.status, report.sourceStatusText);
   const customerSummary = mapCustomerSummary(report.customer);
+  const equipment = report.equipmentItems.map(mapEquipmentRow);
 
   return {
     id: report.appsheetReportId,
@@ -207,12 +238,102 @@ function mapServiceReport(
       readText(report.recommendations) ||
       readText(report.technicianSummary) ||
       "No recommendations recorded",
-    equipment: report.equipmentItems.map(mapEquipmentRow),
+    equipment,
+    equipmentCue: buildEquipmentCue(equipment),
     lifecycle: mapLifecycle(report),
   };
 }
 
-export async function getServiceReportList() {
+function includesSearchText(report: ServiceReportView, query: string) {
+  const normalizedQuery = query.trim().toLowerCase();
+
+  if (!normalizedQuery) {
+    return true;
+  }
+
+  const searchText = [
+    report.id,
+    report.reportNumber,
+    report.customer,
+    report.technician,
+    ...report.equipment.flatMap((item) => [
+      item.equipmentNumber,
+      item.type,
+      item.model,
+      item.serialNumber,
+    ]),
+  ]
+    .join(" ")
+    .toLowerCase();
+
+  return searchText.includes(normalizedQuery);
+}
+
+function matchesFilters(
+  report: ServiceReportView,
+  filters: ServiceReportListFilters,
+) {
+  if (filters.query && !includesSearchText(report, filters.query)) {
+    return false;
+  }
+
+  if (filters.status && report.status !== filters.status) {
+    return false;
+  }
+
+  if (
+    filters.customer &&
+    report.customerSummary.id !== filters.customer &&
+    report.customer !== filters.customer
+  ) {
+    return false;
+  }
+
+  if (
+    filters.hasEquipment !== undefined &&
+    (report.equipment.length > 0) !== filters.hasEquipment
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+function uniqueOptions(options: ServiceReportFilterOption[]) {
+  const seenValues = new Set<string>();
+
+  return options.filter((option) => {
+    if (!option.value || seenValues.has(option.value)) {
+      return false;
+    }
+
+    seenValues.add(option.value);
+    return true;
+  });
+}
+
+function buildFilterOptions(serviceReports: ServiceReportView[]) {
+  return {
+    statuses: uniqueOptions(
+      serviceReports.map((report) => ({
+        value: report.status,
+        label: report.status,
+      })),
+    ),
+    customers: uniqueOptions(
+      serviceReports
+        .map((report) => ({
+          value: report.customerSummary.id || report.customer,
+          label: report.customer,
+        }))
+        .sort((left, right) => left.label.localeCompare(right.label)),
+    ),
+  };
+}
+
+export async function getServiceReportList(
+  filters: ServiceReportListFilters = {},
+) {
   const serviceReports = await prisma.serviceReport.findMany({
     include: {
       customer: {
@@ -232,7 +353,14 @@ export async function getServiceReportList() {
     orderBy: [{ reportCounter: "desc" }, { appsheetReportId: "asc" }],
   });
 
-  return serviceReports.map(mapServiceReport);
+  const mappedServiceReports = serviceReports.map(mapServiceReport);
+
+  return {
+    filterOptions: buildFilterOptions(mappedServiceReports),
+    serviceReports: mappedServiceReports.filter((report) =>
+      matchesFilters(report, filters),
+    ),
+  };
 }
 
 export async function getServiceReportById(id: string) {
