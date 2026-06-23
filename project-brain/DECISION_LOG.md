@@ -3,6 +3,19 @@
 ## 2026-06-23
 
 Decision:
+`28f9bf2 Add multi-agent operating workflow` is classified as the Last Implementation Commit. The Project Brain multi-agent operating workflow is approved as a governance/documentation workflow.
+
+Reason:
+The commit created the requested Project Brain workflow roles: Builder, Map Guard, QA, Reviewer, Agent Communication Protocol, and Autonomous Build Workflow. It also updated `AGENTS.md`, `PROJECT_OPERATING_PROTOCOL.md`, and `PROJECT_INDEX.md` so Codex uses the workflow while preserving the existing active specialist agents under `agents/AGENT_REGISTRY.md`. Validation used `git diff --check`, which passed with CRLF warnings only. No app code, schema, migrations, env files, DB writes/imports, source-system changes, deletes/moves, git remote changes, or production integrations occurred.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
 `4ed6ca2 Require automatic project brain closeout sync` is classified as the Last Implementation Commit. Codex must automatically sync Project Brain before the final report after every completed task.
 
 Reason:

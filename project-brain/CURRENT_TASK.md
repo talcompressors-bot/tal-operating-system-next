@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-23
-Mode: Automatic Project Brain closeout sync required; Wave 2 import remains blocked
+Mode: Multi-agent operating workflow added; Wave 2 import remains blocked
 
 ## Canonical Role
 
@@ -11,15 +11,15 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Real Supabase Prisma connectivity passed outside the network sandbox, confirming earlier `P1001` failures were sandbox/runtime network limitations rather than Supabase/project/env issues. The Customers read-only module is implemented and pushed. Automatic Project Brain closeout sync is now required after every completed task. Wave 2 import is not approved.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Real Supabase Prisma connectivity passed outside the network sandbox, confirming earlier `P1001` failures were sandbox/runtime network limitations rather than Supabase/project/env issues. The Customers read-only module is implemented and pushed. Automatic Project Brain closeout sync is required after every completed task. Multi-agent operating workflow docs are implemented and pushed. Wave 2 import is not approved.
 
 ## Current Milestone
 
-Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, Wave 2 connector dry-run validation, real Prisma staging connectivity validation, Customers read-only module implementation, and automatic Project Brain closeout sync governance are complete.
+Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, Wave 2 connector dry-run validation, real Prisma staging connectivity validation, Customers read-only module implementation, automatic Project Brain closeout sync governance, and multi-agent operating workflow docs are complete.
 
 ## Last Implementation Commit
 
-`4ed6ca2 Require automatic project brain closeout sync`
+`28f9bf2 Add multi-agent operating workflow`
 
 ## Last Closeout Commit
 
@@ -94,10 +94,11 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - Customers read-only module implemented in commit `45da4d0 Implement customers read-only module`: `app/customers/page.tsx`, `app/customers/[id]/page.tsx`, and `app/customers/customer-adapter.ts` were added; `app/page.tsx` now links the active Customers card to `/customers`. It uses existing Prisma `Customer` data, Server Component reads, relation counts, and service-report links only. No schema changes, migrations, env changes, DB writes, AppSheet changes, Maven changes, Apps Script changes, or production actions occurred.
 - Customers module validation: scoped TypeScript check passed; `/`, `/customers`, `/customers/186DD`, `/service-reports`, and `/service-reports/acd1133d` returned HTTP 200. Full `npm.cmd run build` remains blocked by an existing unrelated missing `playwright` dependency in `scripts/playwright/appsheet-discovery-auth.ts`; `npm.cmd run lint` prompts for initial ESLint setup.
 - Automatic Project Brain closeout sync governance implemented in commit `4ed6ca2 Require automatic project brain closeout sync`: `AGENTS.md`, `PROJECT_OPERATING_PROTOCOL.md`, and `PROJECT_INDEX.md` now require Project Brain updates before every final report after a completed task; required closeout fields are completed work, commit hash, validation results, current blocker or `none`, exact next task, approval gates, and project completion percentage; resolved blockers must be removed from current blocker state; final responses must not call a validated resolved issue blocked. Validation: `git diff --check` passed with CRLF warnings only. Project completion percentage remains 50%. No env changes, schema changes, migrations, DB writes/imports, deletes/moves, git remote changes, source-system changes, or production integrations occurred.
+- Multi-agent operating workflow implemented in commit `28f9bf2 Add multi-agent operating workflow`: created `project-brain/agents/BUILDER_AGENT.md`, `project-brain/agents/MAP_GUARD_AGENT.md`, `project-brain/agents/QA_AGENT.md`, `project-brain/agents/REVIEWER_AGENT.md`, `project-brain/agents/AGENT_COMMUNICATION_PROTOCOL.md`, and `project-brain/agents/AUTONOMOUS_BUILD_WORKFLOW.md`; updated `AGENTS.md`, `PROJECT_OPERATING_PROTOCOL.md`, and `PROJECT_INDEX.md`. Validation: `git diff --check` passed with CRLF warnings only. Project completion percentage remains 50%. Current blocker remains Wave 2 import approval/blocker-resolution planning. No app code, schema, migrations, env files, DB writes/imports, source-system changes, deletes/moves, git remote changes, or production integrations occurred.
 
 ## Current Task
 
-Automatic Project Brain closeout sync governance is implemented and pushed. Current blocker: Wave 2 import remains blocked pending blocker-resolution planning and explicit approval.
+Multi-agent operating workflow is implemented and pushed. Current blocker: Wave 2 import remains blocked pending blocker-resolution planning and explicit approval.
 
 ## Next Approved Task
 
@@ -167,6 +168,6 @@ Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import
 
 ## Done When
 
-- Automatic Project Brain closeout sync governance is committed and pushed.
+- Multi-agent operating workflow is committed and pushed.
 - Project Brain records the final implementation commit hash, validation result, current blocker, exact next task, approval gates, and project completion percentage.
 - No write path, import, migration, schema push, source-system change, or production action is added.
