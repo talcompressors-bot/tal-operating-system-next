@@ -1,5 +1,18 @@
 # DECISION LOG
 
+## 2026-06-23
+
+Decision:
+The nested Git repository is the only active source of truth for this project.
+
+Reason:
+The parent folder `C:\Users\משתמש\Desktop\TalCompressors-ServiceReports-AI` contains stale duplicate Next.js files outside Git. VS Code and Codex must open the nested repository root only: `C:\Users\משתמש\Desktop\TalCompressors-ServiceReports-AI\TalCompressors-ServiceReports-AI`. No cleanup or deletion is approved yet. The parent duplicate should be quarantined later only after explicit approval.
+
+Status:
+Approved.
+
+---
+
 ## 2026-06-22
 
 Decision:
