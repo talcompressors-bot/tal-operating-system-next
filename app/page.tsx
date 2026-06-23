@@ -26,6 +26,12 @@ const modules = [
     active: true,
   },
   {
+    title: "Parts Used",
+    description: "Read-only parts usage linked to reports and product records.",
+    href: "/parts-used",
+    active: true,
+  },
+  {
     title: "טיוטות AI",
     description: "הצעות טיוטה חכמות להמשך טיפול לאחר שירות.",
     href: "#",
