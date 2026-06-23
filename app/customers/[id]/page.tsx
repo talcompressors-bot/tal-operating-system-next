@@ -25,7 +25,7 @@ export default async function CustomerDetailPage({
           <p className="eyebrow">Customer</p>
           <h1>{customer.name}</h1>
           <p className="lede">
-            Read-only customer card with linked service report history.
+            Read-only customer card with linked service report work screens.
           </p>
         </div>
         <div className="actions">
@@ -106,41 +106,47 @@ export default async function CustomerDetailPage({
         </article>
       </div>
 
-      <div className="table-card">
-        <table>
-          <thead>
-            <tr>
-              <th>Report</th>
-              <th>Date</th>
-              <th>Technician</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {customer.serviceReports.map((report) => (
-              <tr key={report.id}>
-                <td>
-                  <Link href={`/service-reports/${report.id}`}>
-                    {report.reportNumber}
-                  </Link>
-                </td>
-                <td>{report.serviceDate}</td>
-                <td>{report.technician}</td>
-                <td>
-                  <span className={`status ${report.statusClassName}`}>
-                    {report.status}
-                  </span>
-                </td>
-              </tr>
-            ))}
-            {!customer.serviceReports.length ? (
+      <section className="content-section">
+        <h2>Linked service report work screens</h2>
+
+        <div className="table-card">
+          <table>
+            <thead>
               <tr>
-                <td colSpan={4}>No service reports linked to this customer.</td>
+                <th>Work screen</th>
+                <th>Date</th>
+                <th>Technician</th>
+                <th>Status</th>
               </tr>
-            ) : null}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {customer.serviceReports.map((report) => (
+                <tr key={report.id}>
+                  <td>
+                    <Link href={`/service-reports/${report.id}`}>
+                      {report.reportNumber}
+                    </Link>
+                  </td>
+                  <td>{report.serviceDate}</td>
+                  <td>{report.technician}</td>
+                  <td>
+                    <span className={`status ${report.statusClassName}`}>
+                      {report.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+              {!customer.serviceReports.length ? (
+                <tr>
+                  <td colSpan={4}>
+                    No service report work screens linked to this customer.
+                  </td>
+                </tr>
+              ) : null}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </section>
   );
 }

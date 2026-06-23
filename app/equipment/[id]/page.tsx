@@ -25,7 +25,7 @@ export default async function EquipmentDetailPage({
           <p className="eyebrow">Equipment</p>
           <h1>{equipment.equipmentNumber}</h1>
           <p className="lede">
-            Read-only equipment card with linked service report context.
+            Read-only equipment card with linked service report work-screen context.
           </p>
         </div>
         <div className="actions">
@@ -37,7 +37,7 @@ export default async function EquipmentDetailPage({
               className="button secondary"
               href={`/service-reports/${equipment.serviceReportId}`}
             >
-              Service report
+              Service report work screen
             </Link>
           ) : null}
         </div>
@@ -101,10 +101,10 @@ export default async function EquipmentDetailPage({
         </article>
 
         <article className="info-panel wide">
-          <h2>Service report context</h2>
+          <h2>Service report work-screen context</h2>
           <dl>
             <div>
-              <dt>Service report</dt>
+              <dt>Service report work screen</dt>
               <dd>
                 {equipment.serviceReportId ? (
                   <Link href={`/service-reports/${equipment.serviceReportId}`}>
