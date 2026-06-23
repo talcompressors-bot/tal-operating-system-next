@@ -1,7 +1,7 @@
 # TASK BOARD
 
 Last updated: 2026-06-23
-Mode: Customers read-only module implemented; Wave 2 import remains blocked
+Mode: Automatic Project Brain closeout sync required; Wave 2 import remains blocked
 
 ## NOW
 
@@ -70,6 +70,7 @@ Mode: Customers read-only module implemented; Wave 2 import remains blocked
 | Staging connectivity diagnostics completed | 2026-06-22; Next.js starts and home page returns HTTP 200, but Prisma cannot reach the Supabase pooler; `/service-reports` and `/service-reports/acd1133d` return HTTP 500; `.env.staging` matches verified Supabase Project ID `mdlvxklufrchiabonafm`; correction source: verified visually from Supabase Project Settings; after temporary `.env` creation, Prisma validation passed and `db pull --print` moved to `P1001` connectivity against `aws-1-eu-central-1.pooler.supabase.com:5432`; no DB writes/imports/migrations/source-system/production actions |
 | Staging connectivity diagnosis resolved | Real read-only Prisma connectivity passed outside the network sandbox: `customer.count() = 763`; `npx.cmd prisma db pull --print` exit code `0`; earlier `P1001` was sandbox/runtime network limitation, not Supabase/project/env issue; no DB writes or migrations were run |
 | Customers read-only module implemented | Commit `45da4d0 Implement customers read-only module`; added `/customers` list, `/customers/[id]` detail, customer adapter, active dashboard card, search/filter fields, service-report links, and future link counts for BusinessDocuments, AI Drafts, and Maven documents; validation: scoped TypeScript passed and `/`, `/customers`, `/customers/186DD`, `/service-reports`, `/service-reports/acd1133d` returned HTTP 200; no schema/env/migration/DB write/source-system/production changes |
+| Automatic Project Brain closeout sync required | Commit `4ed6ca2 Require automatic project brain closeout sync`; `AGENTS.md`, `PROJECT_OPERATING_PROTOCOL.md`, and `PROJECT_INDEX.md` require Project Brain updates before every final report after a completed task; required fields are completed work, commit hash, validation, current blocker or `none`, exact next task, approval gates, and project completion percentage; validation `git diff --check` passed with CRLF warnings only; completion remains 50%; resolved blockers must be removed from current blocker state; no env/schema/migration/DB write/delete/move/remote/source-system/production changes |
 
 ## BLOCKED / NOT STARTED
 

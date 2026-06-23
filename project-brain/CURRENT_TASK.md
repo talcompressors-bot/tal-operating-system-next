@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-23
-Mode: Customers read-only module implemented; Wave 2 import remains blocked
+Mode: Automatic Project Brain closeout sync required; Wave 2 import remains blocked
 
 ## Canonical Role
 
@@ -11,15 +11,15 @@ Do not use `project-brain/current/CURRENT_TASK.md` for active state. That path i
 
 ## Current Phase
 
-Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Real Supabase Prisma connectivity passed outside the network sandbox, confirming earlier `P1001` failures were sandbox/runtime network limitations rather than Supabase/project/env issues. The Customers read-only module is implemented and pushed. Wave 2 import is not approved.
+Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is applied and verified. Wave 1 staging import passed closed-loop validation. Wave 1 Next.js PostgreSQL read/display validation passed after display mapping fixes. Wave 2 connector-based read-only dry-run validation is completed. Real Supabase Prisma connectivity passed outside the network sandbox, confirming earlier `P1001` failures were sandbox/runtime network limitations rather than Supabase/project/env issues. The Customers read-only module is implemented and pushed. Automatic Project Brain closeout sync is now required after every completed task. Wave 2 import is not approved.
 
 ## Current Milestone
 
-Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, Wave 2 connector dry-run validation, real Prisma staging connectivity validation, and Customers read-only module implementation are complete.
+Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, Wave 2 connector dry-run validation, real Prisma staging connectivity validation, Customers read-only module implementation, and automatic Project Brain closeout sync governance are complete.
 
 ## Last Implementation Commit
 
-`45da4d0 Implement customers read-only module`
+`4ed6ca2 Require automatic project brain closeout sync`
 
 ## Last Closeout Commit
 
@@ -93,10 +93,11 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - Final staging connectivity diagnosis completed after a real read-only Prisma test outside the network sandbox: `customer.count() = 763`, `npx.cmd prisma db pull --print` exit code `0`, and no DB writes or migrations were run. Earlier `P1001` failures were sandbox/runtime network limitations, not a Supabase/project/env issue.
 - Customers read-only module implemented in commit `45da4d0 Implement customers read-only module`: `app/customers/page.tsx`, `app/customers/[id]/page.tsx`, and `app/customers/customer-adapter.ts` were added; `app/page.tsx` now links the active Customers card to `/customers`. It uses existing Prisma `Customer` data, Server Component reads, relation counts, and service-report links only. No schema changes, migrations, env changes, DB writes, AppSheet changes, Maven changes, Apps Script changes, or production actions occurred.
 - Customers module validation: scoped TypeScript check passed; `/`, `/customers`, `/customers/186DD`, `/service-reports`, and `/service-reports/acd1133d` returned HTTP 200. Full `npm.cmd run build` remains blocked by an existing unrelated missing `playwright` dependency in `scripts/playwright/appsheet-discovery-auth.ts`; `npm.cmd run lint` prompts for initial ESLint setup.
+- Automatic Project Brain closeout sync governance implemented in commit `4ed6ca2 Require automatic project brain closeout sync`: `AGENTS.md`, `PROJECT_OPERATING_PROTOCOL.md`, and `PROJECT_INDEX.md` now require Project Brain updates before every final report after a completed task; required closeout fields are completed work, commit hash, validation results, current blocker or `none`, exact next task, approval gates, and project completion percentage; resolved blockers must be removed from current blocker state; final responses must not call a validated resolved issue blocked. Validation: `git diff --check` passed with CRLF warnings only. Project completion percentage remains 50%. No env changes, schema changes, migrations, DB writes/imports, deletes/moves, git remote changes, source-system changes, or production integrations occurred.
 
 ## Current Task
 
-Customers read-only module is implemented and pushed. Staging PostgreSQL connectivity diagnosis is resolved: real Prisma connectivity passed outside the network sandbox. Wave 2 import remains blocked pending explicit approval and blocker-resolution planning.
+Automatic Project Brain closeout sync governance is implemented and pushed. Current blocker: Wave 2 import remains blocked pending blocker-resolution planning and explicit approval.
 
 ## Next Approved Task
 
@@ -166,6 +167,6 @@ Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import
 
 ## Done When
 
-- Customers read-only module is committed and pushed.
-- Project Brain records the final implementation commit hash for the Customers module.
+- Automatic Project Brain closeout sync governance is committed and pushed.
+- Project Brain records the final implementation commit hash, validation result, current blocker, exact next task, approval gates, and project completion percentage.
 - No write path, import, migration, schema push, source-system change, or production action is added.

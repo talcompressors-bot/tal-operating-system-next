@@ -3,6 +3,19 @@
 ## 2026-06-23
 
 Decision:
+`4ed6ca2 Require automatic project brain closeout sync` is classified as the Last Implementation Commit. Codex must automatically sync Project Brain before the final report after every completed task.
+
+Reason:
+Session closeout must not leave completed work only in chat. The mandatory sync records what was completed, commit hash, validation results, current blocker or `none`, exact next task, approval gates, and project completion percentage in `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `project-brain/DECISION_LOG.md` when decisions changed, and `PROJECT_INDEX.md` when status or structure changed. If validation proves a blocker resolved, it must be removed from current blocker state and final responses must not call it blocked.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
 `45da4d0 Implement customers read-only module` is classified as the Last Implementation Commit.
 
 Reason:
