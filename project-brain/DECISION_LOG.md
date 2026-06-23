@@ -3,6 +3,19 @@
 ## 2026-06-23
 
 Decision:
+`71a5435 Enhance service report work screen` is classified as the Last Implementation Commit.
+
+Reason:
+The commit enhanced the existing populated `/service-reports/[id]` read-only route as the central work screen. It reused `Customer`, `ServiceReport`, and `ReportEquipmentItem` data only, added customer summary, equipment summary, disabled future action buttons, lifecycle placeholders, and links to customer/equipment details. Validation used scoped TypeScript, `git diff --check`, local route checks, and HTML content checks for the requested labels/placeholders. No schema changes, migrations, env changes, DB writes, imports, source-system changes, or production actions occurred.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
 After the data coverage audit, ProductsCatalog should not be the next data-backed read-only module until `Product` rows exist in staging.
 
 Reason:
