@@ -404,9 +404,9 @@ This section is the living navigation screen. It summarizes current reality only
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Current milestone | Wave 1 Next.js read/display validation PASS after PostgreSQL read switch | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Current task | Multi-agent operating workflow implemented and pushed; Wave 2 import remains blocked pending blocker-resolution planning and explicit approval | `project-brain/CURRENT_TASK.md` |
+| Current task | ReportEquipmentItems / Equipment read-only module implemented and committed; Wave 2 import remains blocked pending blocker-resolution planning and explicit approval | `project-brain/CURRENT_TASK.md` |
 | Next approved task | Continue Wave 2 import blocker-resolution planning only. No Wave 2 import, Maven work, production shadow, DB write, schema change, or source-system action is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Last Implementation Commit | `28f9bf2 Add multi-agent operating workflow` | Git history; `project-brain/CURRENT_TASK.md` |
+| Last Implementation Commit | `3f1761f Add equipment read-only module` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
 | Blocked/forbidden actions | No production writes, Prisma migration, DB creation, Sheets/AppSheet/Maven actions, new planning/control files, new agents, or implementation before Reality Check | `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md` |
@@ -480,16 +480,16 @@ NEXT APPROVAL GATE
 Current Project Tree Position:
 
 - Current Wave: Wave 2 Service Workflow Layer
-- Current Task: Multi-agent operating workflow implemented and pushed; Wave 2 import remains blocked pending blocker-resolution planning and explicit approval
-- Last Completed Task: Multi-agent operating workflow
+- Current Task: ReportEquipmentItems / Equipment read-only module implemented and committed; Wave 2 import remains blocked pending blocker-resolution planning and explicit approval
+- Last Completed Task: ReportEquipmentItems / Equipment read-only module
 - Next Task: Continue Wave 2 import blocker-resolution planning only
-- Estimated completion %: 50%
+- Estimated completion %: 52%
 - Completion basis: capability-weighted evidence, not completed-waves / total-waves.
 - Governance / Project Brain / Git workflow: 15% / 15% COMPLETE
 - Supabase + Prisma Data Layer: 15% / 15% COMPLETE
 - Import Framework + Wave 1 Import: 10% / 10% COMPLETE
 - Wave 1 Service Reports UI: 10% / 10% COMPLETE
-- Wave 2 Workflow Layer: 0% / 15% CURRENT
+- Wave 2 Workflow Layer: 2% / 15% CURRENT
 - Wave 3 Maven Knowledge Layer: 0% / 15% PENDING
 - Wave 4 Inventory Layer: 0% / 10% PENDING
 - Wave 5 Offline First: 0% / 5% PENDING
@@ -534,22 +534,22 @@ Current evidence-based estimate:
 - Supabase + Prisma Data Layer: 15% / 15% COMPLETE
 - Import Framework + Wave 1 Import: 10% / 10% COMPLETE
 - Wave 1 Service Reports UI: 10% / 10% COMPLETE
-- Wave 2 Workflow Layer: 0% / 15% CURRENT
+- Wave 2 Workflow Layer: 2% / 15% CURRENT
 - Wave 3 Maven Knowledge Layer: 0% / 15% PENDING
 - Wave 4 Inventory Layer: 0% / 10% PENDING
 - Wave 5 Offline First: 0% / 5% PENDING
 - Wave 6 Automation Runtime: 0% / 3% PENDING
 - Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 0% / 2% PENDING
 
-Current estimated completion: 50%.
+Current estimated completion: 52%.
 
-This estimate is valid only because the first four capabilities are complete by Project Brain evidence. If any of those capabilities are later found partial, estimate lower and explain why.
+This estimate is valid because the first four capabilities are complete by Project Brain evidence and the Wave 2 read-only Equipment module is now implemented. If any of those capabilities are later found partial, estimate lower and explain why.
 
 | Area | Current Status | Canonical Owner |
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md` |
-| Current task | Multi-agent operating workflow implemented and pushed; Wave 2 import remains blocked pending blocker-resolution planning and explicit approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current task | ReportEquipmentItems / Equipment read-only module implemented and committed; Wave 2 import remains blocked pending blocker-resolution planning and explicit approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Next approved task | Continue Wave 2 import blocker-resolution planning only. No Wave 2 import, Maven work, production shadow, DB write, schema change, or source-system action is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |

@@ -3,6 +3,19 @@
 ## 2026-06-23
 
 Decision:
+`3f1761f Add equipment read-only module` is classified as the Last Implementation Commit.
+
+Reason:
+The commit added a read-only ReportEquipmentItems / Equipment module using the existing Prisma `ReportEquipmentItem` model and existing Next.js Server Component architecture. It created `/equipment`, `/equipment/[id]`, a read-only adapter, search/filter handling, service-report links, and an active dashboard card. Validation used scoped TypeScript, `git diff --check`, a read-only Prisma lookup for known equipment `3002f879`, and local HTTP checks for `/`, `/equipment`, `/equipment/3002f879`, `/service-reports`, `/service-reports/5e0eaae3`, and `/customers`. No schema changes, migrations, env changes, DB writes, imports, source-system changes, or production actions occurred.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
 `28f9bf2 Add multi-agent operating workflow` is classified as the Last Implementation Commit. The Project Brain multi-agent operating workflow is approved as a governance/documentation workflow.
 
 Reason:

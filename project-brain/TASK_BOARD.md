@@ -1,7 +1,7 @@
 # TASK BOARD
 
 Last updated: 2026-06-23
-Mode: Multi-agent operating workflow added; Wave 2 import remains blocked
+Mode: Equipment read-only module implemented; Wave 2 import remains blocked
 
 ## NOW
 
@@ -72,6 +72,7 @@ Mode: Multi-agent operating workflow added; Wave 2 import remains blocked
 | Customers read-only module implemented | Commit `45da4d0 Implement customers read-only module`; added `/customers` list, `/customers/[id]` detail, customer adapter, active dashboard card, search/filter fields, service-report links, and future link counts for BusinessDocuments, AI Drafts, and Maven documents; validation: scoped TypeScript passed and `/`, `/customers`, `/customers/186DD`, `/service-reports`, `/service-reports/acd1133d` returned HTTP 200; no schema/env/migration/DB write/source-system/production changes |
 | Automatic Project Brain closeout sync required | Commit `4ed6ca2 Require automatic project brain closeout sync`; `AGENTS.md`, `PROJECT_OPERATING_PROTOCOL.md`, and `PROJECT_INDEX.md` require Project Brain updates before every final report after a completed task; required fields are completed work, commit hash, validation, current blocker or `none`, exact next task, approval gates, and project completion percentage; validation `git diff --check` passed with CRLF warnings only; completion remains 50%; resolved blockers must be removed from current blocker state; no env/schema/migration/DB write/delete/move/remote/source-system/production changes |
 | Multi-agent operating workflow added | Commit `28f9bf2 Add multi-agent operating workflow`; created Builder, Map Guard, QA, Reviewer, Agent Communication Protocol, and Autonomous Build Workflow under `project-brain/agents/`; updated `AGENTS.md`, `PROJECT_OPERATING_PROTOCOL.md`, and `PROJECT_INDEX.md`; validation `git diff --check` passed with CRLF warnings only; completion remains 50%; no app/schema/migration/env/DB write/source-system/delete/move/remote/production changes |
+| ReportEquipmentItems / Equipment read-only module implemented | Commit `3f1761f Add equipment read-only module`; added `/equipment`, `/equipment/[id]`, read-only `ReportEquipmentItem` adapter, dashboard activation, search/filter fields, and service-report links; validation: scoped TypeScript passed, `git diff --check` passed with CRLF warnings only, read-only Prisma lookup found equipment `3002f879`, and local HTTP checks returned 200 for `/`, `/equipment`, `/equipment/3002f879`, `/service-reports`, `/service-reports/5e0eaae3`, and `/customers`; no schema/env/migration/DB write/import/source-system/production changes; completion is 52% |
 
 ## BLOCKED / NOT STARTED
 
