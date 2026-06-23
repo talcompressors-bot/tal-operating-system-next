@@ -16,6 +16,19 @@ Approved.
 ## 2026-06-23
 
 Decision:
+No code fix is required for the AI Draft runtime error observed in the sandbox.
+
+Reason:
+The runtime failure was reproduced only inside the network sandbox, where Prisma cannot reach the Supabase pooler at `aws-1-eu-central-1.pooler.supabase.com:6543`. The same `/ai-drafts` route returned HTTP 200 outside the sandbox, so the root cause is the known sandbox Prisma connectivity limitation rather than an AI Draft module code or schema issue. The full build remains separately blocked by the existing missing `playwright` dependency/type declarations in `scripts/playwright/appsheet-discovery-auth.ts`.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-23
+
+Decision:
 AI Draft Suggestions may have a read-only empty-state shell before Wave 2 import approval.
 
 Reason:
