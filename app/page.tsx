@@ -16,8 +16,8 @@ const modules = [
   {
     title: "לקוחות",
     description: "כרטיסי לקוח, פרטי קשר והיסטוריית שירות.",
-    href: "#",
-    active: false,
+    href: "/customers",
+    active: true,
   },
   {
     title: "ציוד / מלאי",
