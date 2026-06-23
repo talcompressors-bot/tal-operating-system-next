@@ -9,9 +9,9 @@ const modules = [
   },
   {
     title: "מסמכים עסקיים",
-    description: "הצעות מחיר, חשבוניות ותהליך טיוטות מסמכים.",
-    href: "#",
-    active: false,
+    description: "Read-only business document draft shell for approval and Maven lifecycle.",
+    href: "/business-documents",
+    active: true,
   },
   {
     title: "לקוחות",
