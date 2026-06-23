@@ -87,6 +87,19 @@ Codex should work autonomously on safe tasks and stop only at meaningful approva
 
 Codex is the main Orchestrator. It must route work to existing agent owners by role, continue safe work automatically, validate, collect proof, update Project Brain, and stop only before critical approvals.
 
+After every completed task, Codex must update Project Brain before the final report. The update must record what was completed, commit hash, validation results, current blocker or `none`, exact next task, approval gates, and project completion percentage.
+
+Required update targets:
+
+- `project-brain/CURRENT_TASK.md`
+- `project-brain/TASK_BOARD.md`
+- `project-brain/DECISION_LOG.md` when decisions changed
+- `PROJECT_INDEX.md` when structure, status, navigation, current task, next task, or completion state changed
+
+If validation proves a blocker was resolved, remove it from current blocker state. Final responses must not describe resolved blockers as still blocked.
+
+After a successful feature commit, Codex may automatically edit Project Brain docs and run `git add`, `git commit`, and `git push` for the Project Brain sync.
+
 AUTO_ALLOWED:
 
 - read files
@@ -99,6 +112,7 @@ AUTO_ALLOWED:
 - fix UI/read-only mapping bugs
 - create local validation reports
 - update Project Brain after completed safe work
+- update Project Brain before every final report after a completed task
 - commit/push safe documentation and read-only app changes after validation
 
 AUTO_APPROVED:
@@ -142,6 +156,7 @@ Project Brain:
 - update `PROJECT_INDEX.md` references
 - update migration plans
 - update wave progress
+- commit and push Project Brain closeout sync after a successful feature commit
 
 Safe commits:
 
@@ -156,6 +171,7 @@ Do not ask Liad for approval when executing AUTO_APPROVED actions. Only stop for
 
 APPROVAL_REQUIRED:
 
+- env changes
 - `prisma/schema.prisma` changes
 - Prisma `db push`
 - Prisma `migrate`
@@ -171,6 +187,8 @@ APPROVAL_REQUIRED:
 - email/customer-facing actions
 - production deployment
 - production cutover
+- git remote changes
+- deletes/moves
 - deleting business data
 - deleting source files
 - new agent architecture
@@ -359,7 +377,7 @@ When the user says `by codex`:
 5. Identify changed files.
 6. Summarize completed work.
 7. Summarize uncommitted changes.
-8. Update canonical state files when needed and approved:
+8. Update canonical state files when needed and either approved or allowed by the Autonomous Work Loop:
    - `PROJECT_INDEX.md`
    - `project-brain/CURRENT_TASK.md`
    - `project-brain/TASK_BOARD.md`

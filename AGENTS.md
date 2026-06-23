@@ -21,3 +21,38 @@ Required action:
 Project Reality Check must include the required project tree reporting from `PROJECT_INDEX.md`.
 
 Do not start implementation before the Project Reality Check is shown.
+
+## Automatic Project Brain Closeout Sync
+
+After every completed task, Codex must update Project Brain before the final report.
+
+Required updates:
+
+1. Update `project-brain/CURRENT_TASK.md`.
+2. Update `project-brain/TASK_BOARD.md`.
+3. Update `project-brain/DECISION_LOG.md` when decisions changed.
+4. Update `PROJECT_INDEX.md` when structure, status, navigation, current task, next task, or completion state changed.
+
+The closeout sync must record:
+
+- what was completed
+- commit hash
+- validation results
+- current blocker, or `none`
+- exact next task
+- approval gates
+- project completion percentage
+
+If validation proves a blocker is resolved, remove it from the current blocker state. The final response must not say `blocked` for an item that validation proved resolved.
+
+After a successful feature commit, Codex may automatically edit Project Brain docs and run `git add`, `git commit`, and `git push` for the Project Brain sync.
+
+Codex must still ask approval before:
+
+- env changes
+- schema changes
+- migrations
+- DB writes/imports
+- deletes/moves
+- git remote changes
+- production integrations

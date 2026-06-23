@@ -326,7 +326,7 @@ When the user says `by codex`, Codex must:
 5. Identify changed files.
 6. Summarize completed work.
 7. Summarize uncommitted changes.
-8. Update canonical state files when needed and approved:
+8. Update canonical state files when needed and either approved or allowed by the Autonomous Work Loop:
    - `PROJECT_INDEX.md`
    - `project-brain/CURRENT_TASK.md`
    - `project-brain/TASK_BOARD.md`
@@ -335,7 +335,7 @@ When the user says `by codex`, Codex must:
    - Last Implementation Commit only when actual implementation changed
 9. Verify no forbidden systems were touched.
 10. Verify next approved task is clear.
-11. Commit only approved files.
+11. Commit only approved files, or safe/scoped Project Brain closeout sync files allowed by the Autonomous Work Loop.
 12. Push to `origin/main`.
 13. Confirm clean `git status --short --branch`.
 14. Confirm whether follow-up sync is required. Closeout-only metadata commits do not require another sync just to record their own hash.
@@ -348,10 +348,10 @@ At session close or handoff:
 3. List tests or checks run.
 4. Preserve known IDs.
 5. Report risks and open issues.
-6. Recommend Project Brain updates.
+6. Update Project Brain before the final report when the task is complete.
 7. Create or propose a checkpoint if meaningful state changed.
 8. Suggest a commit message only after reviewing the diff.
-9. Do not deploy or update Project Brain unless explicitly approved.
+9. Do not deploy. Do update Project Brain for completed safe work when allowed by the Autonomous Work Loop.
 
 ## 10. Reuse Before Create Rule
 
@@ -513,6 +513,31 @@ Codex should reduce Liad ping-pong by working autonomously on safe tasks and sto
 
 Codex is the main Orchestrator for normal repository work. Codex must not ask Liad for every small step. It must work, validate, collect proof, update Project Brain, and ask Liad only at meaningful APPROVAL_REQUIRED gates.
 
+After every completed task, Codex must update Project Brain before the final report. This is mandatory, not optional. The sync must happen after successful validation and, when there is a feature/code/governance commit, after that feature commit is created so the commit hash can be recorded.
+
+Required Project Brain closeout updates:
+
+- `project-brain/CURRENT_TASK.md`
+- `project-brain/TASK_BOARD.md`
+- `project-brain/DECISION_LOG.md` when decisions changed
+- `PROJECT_INDEX.md` when structure, status, navigation, current task, next task, or completion state changed
+
+The closeout sync must include:
+
+- what was completed
+- commit hash
+- validation results
+- current blocker, or `none`
+- exact next task
+- approval gates
+- project completion percentage
+
+If a blocker was resolved, remove it from the current blocker state. Final responses must not describe a resolved issue as `blocked` when validation proved it resolved.
+
+After a successful feature commit, Codex is allowed to automatically edit Project Brain docs and run `git add`, `git commit`, and `git push` for the Project Brain sync.
+
+Codex must still ask explicit approval before env changes, schema changes, migrations, DB writes/imports, deletes/moves, git remote changes, or production integrations.
+
 AUTO_ALLOWED work may proceed without asking for another approval when it is the next approved task and stays inside the current safety boundaries:
 
 - read files
@@ -525,6 +550,7 @@ AUTO_ALLOWED work may proceed without asking for another approval when it is the
 - fix UI/read-only mapping bugs
 - create local validation reports
 - update Project Brain after completed safe work
+- update Project Brain before every final report after a completed task
 - commit and push safe documentation and read-only app changes after validation
 
 AUTO_APPROVED actions do not require Liad approval:
@@ -568,6 +594,7 @@ Project Brain:
 - update `PROJECT_INDEX.md` references
 - update migration plans
 - update wave progress
+- commit and push Project Brain closeout sync after a successful feature commit
 
 Safe commits:
 
@@ -582,6 +609,7 @@ Do not ask Liad for approval when executing AUTO_APPROVED actions. Only stop for
 
 APPROVAL_REQUIRED work must stop and request explicit approval before proceeding:
 
+- env changes
 - `prisma/schema.prisma` changes
 - Prisma `db push`
 - Prisma `migrate`
@@ -597,6 +625,8 @@ APPROVAL_REQUIRED work must stop and request explicit approval before proceeding
 - email/customer-facing actions
 - production deployment
 - production cutover
+- git remote changes
+- deletes/moves
 - deleting business data
 - deleting source files
 - new agent architecture
@@ -982,7 +1012,8 @@ A task is done only when:
 - tests or checks were run, or not run with reason
 - risks are reported
 - changed files are listed
-- Project Brain updates are proposed or completed with approval
+- Project Brain has been updated with completed work, commit hash, validation, blocker state, next task, approval gates, and completion percentage
+- Project Brain has been updated before the final report for every completed task
 - git status is understood
 - next step is clear
 
@@ -996,13 +1027,18 @@ Documentation-only work is done only when:
 
 Escalate to the human owner before:
 
+- env changes
 - production writes
 - external API writes
 - Maven actions
 - customer emails or document sending
 - schema changes
-- deployment or push
+- migrations
+- production deployment or non-approved push outside the Autonomous Work Loop
+- DB writes/imports
 - data deletion
+- deletes/moves
+- git remote changes
 - queue retry or recovery
 - Drive permission changes
 - unverified IDs are required
