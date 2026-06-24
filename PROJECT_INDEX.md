@@ -484,8 +484,8 @@ Current Project Tree Position:
 - Current Wave: Wave 2 Service Workflow Layer
 - Current Task: SCR matching preview panel is implemented and validated; no next implementation task is approved yet
 - Last Completed Task: SCR matching preview panel
-- Next Task: None approved. Candidate tasks are Maven/Invoice4U lifecycle tracking shell; build hygiene for the existing missing Playwright dependency/type gap if explicitly selected; optional Wave 2 import approval package only if explicitly approved.
-- Estimated completion %: 60%
+- Next Task: None approved. Candidate tasks are AI Draft Recommendation Readiness approval decisions for Service Report `5806`; Maven/Invoice4U lifecycle tracking shell; build hygiene for the existing missing Playwright dependency/type gap if explicitly selected; optional Wave 2 import approval package only if explicitly approved.
+- Estimated completion %: 56%
 - Completion basis: capability-weighted evidence, not completed-waves / total-waves.
 - Governance / Project Brain / Git workflow: 15% / 15% COMPLETE
 - Supabase + Prisma Data Layer: 15% / 15% COMPLETE
@@ -497,7 +497,8 @@ Current Project Tree Position:
 - Wave 5 Offline First: 0% / 5% PENDING
 - Wave 6 Automation Runtime: 0% / 3% PENDING
 - Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 0% / 2% PENDING
-- Critical Path: Wave 2 Service Workflow Layer -> Wave 3 Maven Knowledge Layer -> Wave 4 Inventory Layer -> Wave 5 Offline First -> Wave 6 Automation Runtime -> Wave 7 Production Shadow -> Wave 8 Production Cutover -> Wave 9 AppSheet Retirement
+- Completion formula: 15 + 15 + 10 + 10 + 6 + 0 + 0 + 0 + 0 + 0 = 56.
+- Critical Path: Wave 2 Service Workflow Layer -> Wave 3 Maven Knowledge Layer -> AI Draft Recommendation Readiness -> Action Server Knowledge Layer -> Email Document Intake evidence planning -> Wave 4 Inventory Layer -> Wave 5 Offline First -> Wave 6 Automation Runtime -> Wave 7 Production Shadow -> Wave 8 Production Cutover -> Wave 9 AppSheet Retirement
 - Next Approval Gate: explicitly select/approve the next candidate task before implementation; separate explicit approval is required before any DB import/write, schema change, migration, env change, Maven/Invoice4U action, source-system action, or production integration.
 
 Rule: a task is not considered complete unless Project Tree Position is reported.
@@ -543,9 +544,9 @@ Current evidence-based estimate:
 - Wave 6 Automation Runtime: 0% / 3% PENDING
 - Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 0% / 2% PENDING
 
-Current estimated completion: 60%.
+Current estimated completion: 56%.
 
-This estimate is valid because the first four capabilities are complete by Project Brain evidence and the Wave 2 read-only Equipment, PartsUsed, Service Report central work-screen, bidirectional navigation, Service Reports list context, AI Draft Suggestions shell, BusinessDocuments shell, AutomationCommands shell, and SCR matching preview panel enhancements are now implemented. If any of those capabilities are later found partial, estimate lower and explain why.
+This estimate is valid because the first four capabilities are complete by Project Brain evidence and Wave 2 has 6% documented contribution from the read-only Equipment, PartsUsed, Service Report central work-screen, bidirectional navigation, Service Reports list context, AI Draft Suggestions shell, BusinessDocuments shell, AutomationCommands shell, and SCR matching preview panel enhancements. The previous 60% claim was corrected because the listed capability contributions add to 56%, and no additional evidence-based Wave 2 contribution formula currently justifies 60%. If any of those capabilities are later found partial, estimate lower and explain why. If additional Wave 2 capability credit is later justified, document the evidence and formula before raising the estimate.
 
 Readiness split:
 
@@ -558,10 +559,10 @@ Readiness split:
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md` |
 | Current task | SCR matching preview panel is implemented and validated; no next implementation task is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Next approved task | None. Next candidate tasks are Maven/Invoice4U lifecycle tracking shell; build hygiene for the existing missing Playwright dependency/type gap if explicitly selected; optional Wave 2 import approval package only if explicitly approved. DB import/write work remains gated and requires explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
-| Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
+| Next approved task | None. Next candidate tasks are AI Draft Recommendation Readiness approval decisions for Service Report `5806`; Maven/Invoice4U lifecycle tracking shell; build hygiene for the existing missing Playwright dependency/type gap if explicitly selected; optional Wave 2 import approval package only if explicitly approved. DB import/write work remains gated and requires explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
+| Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; AI Draft Recommendation Readiness; Action Server Knowledge Layer; Email Document Intake evidence planning; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |
-| Dependency order | Governance and Project Brain state -> system map/source review -> PostgreSQL V1 scope -> data migration planning -> Supabase staging-first plan -> approved staging project/secrets -> Prisma reconciliation approval -> approved staging schema push -> read-only schema verification -> Wave 1 dry-run/import validation -> Waves 2-4 discovery/import approvals -> production shadow approval -> Server Actions/offline sync | `project-brain/TASK_BOARD.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md`, `project-brain/migration/DATA_MIGRATION_PLAN.md` |
+| Dependency order | Governance and Project Brain state -> system map/source review -> PostgreSQL V1 scope -> data migration planning -> Supabase staging-first plan -> approved staging project/secrets -> Prisma reconciliation approval -> approved staging schema push -> read-only schema verification -> Wave 1 dry-run/import validation -> Waves 2-4 discovery/import approvals -> AI Draft Recommendation Readiness -> Action Server Knowledge Layer -> Email Document Intake evidence planning -> production shadow approval -> Server Actions/offline sync | `project-brain/TASK_BOARD.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md`, `project-brain/migration/DATA_MIGRATION_PLAN.md`, `project-brain/roadmap/ROADMAP.md` |
 | Import waves | Structured `WAVE_ID` blocks define Wave 1 service-report core, Wave 2 service workflow, Wave 3 Maven data, and Wave 4 extended operations for agent-readable planning | `project-brain/migration/DATA_MIGRATION_PLAN.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md` |
 | Application routes | Implemented Next.js route inventory with module, status, data source, record count, and AppSheet equivalent | `APPLICATION_ROUTE_MAP.md` |
 | Data coverage | Read-only Prisma count audit and module readiness recommendation | `DATA_COVERAGE_AUDIT.md` |

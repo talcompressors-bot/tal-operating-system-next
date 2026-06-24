@@ -157,6 +157,11 @@ Runtime decision sequence:
    - Exact approved EquipmentRegistry match: higher confidence.
    - Family/type-only match: lower confidence.
    - No match: keep `NeedsUserApproval` and risk note.
+   - Generic equipment descriptions must stay separate from specific model records.
+   - Examples such as `מדחס 20 כ"ס`, `מדחס בורגי 20 כ"ס`, and `20HP compressor` are classified as `UNKNOWN_MODEL` / `GENERIC_HP_CLASS` unless additional evidence exists.
+   - Additional evidence means exact model name, serial number, customer equipment registry match, repeated service history match, manufacturer/model pair, or approved Liad mapping.
+   - Horsepower is an attribute only, not model identity.
+   - Generic equipment names must not be used for automatic SKU matching.
 
 8. Can a service kit be selected?
    - Exact approved ServiceKitRegistry match: candidate line items.
@@ -178,7 +183,7 @@ Runtime decision sequence:
 
 11. Are fixed charges applicable?
    - Labor: 275 NIS/hour when labor hours are known or approved.
-   - Visit: 300 NIS base visit when applicable or approved.
+   - Technician Visit / Travel: 300 NIS base visit/travel candidate when applicable or approved.
    - If inclusion is uncertain, mark approval required.
 
 12. Is confidence high enough for prefill?
@@ -222,6 +227,69 @@ Read-only recommendation output:
 | `MissingData` | Missing input list |
 | `RiskNotes` | Safety and uncertainty notes |
 | `AIReasoning` | Evidence-backed explanation |
+
+### Global Compressor Service Document Structure
+
+Liad-approved rule:
+
+This rule applies to all business documents, not only quotes.
+
+Applies to:
+
+- Quotes.
+- Invoices.
+- Proforma invoices.
+- Delivery notes if relevant.
+- Service draft documents.
+- `BusinessDocuments`.
+- `BusinessDocumentItems`.
+- AI Draft outputs.
+- Maven document drafts.
+- Any future customer-facing document.
+
+For compressor service documents, the equipment model must appear clearly in the draft title/header.
+
+Reason:
+
+The compressor model is the key that allows the system to connect:
+
+- service type
+- expected parts
+- manufacturer part numbers
+- future internal SKUs
+- historical pricing evidence
+- inventory matching
+
+Required behavior:
+
+- Always identify the compressor model first.
+- Do not treat generic horsepower as model identity.
+- Do not assign SKU without model evidence.
+- Do not use manufacturer cost as customer price.
+- Do not deduct inventory from AI Draft.
+- Future internal SKU mapping will replace or extend manufacturer part numbers.
+- Manufacturer part numbers are internal technical evidence.
+- Customer price comes from Maven/history/pricing evidence, not from spare parts cost.
+
+Standard compressor service document structure:
+
+1. Parts lines.
+2. Oil handling line if needed.
+3. Labor + Service.
+4. Technician Visit / Travel.
+
+Commercial line rules:
+
+- Technician Visit / Travel is one line.
+- Do not generate separate `Technician Visit` and `Travel` lines.
+- Labor + Service is one line.
+- Do not split `Labor` and `Service` unless Liad explicitly approves an exception.
+- Every line must show `INCLUDED`, `EXCLUDED`, or `NEEDS_APPROVAL`.
+- Historical bundled kit price must explain whether it includes parts only, parts + labor/service, or parts + labor/service + technician visit/travel.
+- Do not double-charge travel.
+- Do not double-charge service/labor.
+- Do not double-charge technician visit.
+- Every generated or suggested document line must show `INCLUDED`, `EXCLUDED`, or `NEEDS_APPROVAL`.
 
 Approved internal draft outputs, future only:
 

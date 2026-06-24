@@ -112,22 +112,29 @@ Recommended algorithm for future read-only prototype:
    - remove whitespace and hyphens
    - strip leading text around `SCR`
    - preserve model size and family suffix
-2. Extract model family candidates:
+2. Apply the Model Identity Rule before extracting model family candidates:
+   - Generic equipment descriptions must stay separate from specific model records.
+   - `מדחס 20 כ"ס`, `מדחס בורגי 20 כ"ס`, and `20HP compressor` must not be merged into `SCR-20EPM` or any other specific model by horsepower alone.
+   - Classify generic rows as `UNKNOWN_MODEL` / `GENERIC_HP_CLASS`.
+   - Use horsepower only as an attribute, not as model identity.
+   - Do not use generic equipment names for automatic SKU matching.
+   - Upgrade a generic row to a specific model only when additional evidence exists: exact model name, serial number, customer equipment registry match, repeated service history match, manufacturer/model pair, or approved Liad mapping.
+3. Extract model family candidates:
    - `SCR20APM` -> `20APM`, `20PM`, review alias `20PM2`
    - `100APM-8` -> `100APM`, `100PM`
    - `SCR-40PM` -> `40PM`
    - `SCR50EPM` -> `50EPM`
-3. Apply governed aliases:
+4. Apply governed aliases:
    - PM = APM is documented in `PM_EPM_SPARE_PARTS_SOURCE_OF_TRUTH_REPORT.md`.
    - PM2 mappings for `10PM2`, `15PM2`, `20PM2` require human review before automatic use.
-4. Match vendor rows where normalized vendor `Model` equals an approved model candidate.
-5. Infer service interval from:
+5. Match vendor rows where normalized vendor `Model` equals an approved model candidate.
+6. Infer service interval from:
    - `ReportEquipmentItem.serviceDescription`
    - `ReportEquipmentItem.nextService`
    - `ReportEquipmentItem.currentHours`
    - report notes, only if later exposed in the adapter
-6. Choose rows with nonzero quantity for the matched interval column.
-7. Output candidate lines with confidence and source evidence, not approved invoice lines.
+7. Choose rows with nonzero quantity for the matched interval column.
+8. Output candidate lines with confidence and source evidence, not approved invoice lines.
 
 Confidence proposal:
 
@@ -138,6 +145,7 @@ Confidence proposal:
 | Exact model + vendor SKU + vendor purchase price only | 70, price approval required |
 | Alias model, such as APM -> PM, with approved alias | 75-85 depending on price source |
 | PM2 alias not approved | 50, manual review required |
+| Generic horsepower class only, such as `20HP compressor` | 0 for automatic SKU matching; classify as `UNKNOWN_MODEL` / `GENERIC_HP_CLASS` |
 | Text-only part description match | 40-65, manual review required |
 
 ## Part Description To SKU Matching Logic

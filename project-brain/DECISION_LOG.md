@@ -1,5 +1,296 @@
 # DECISION LOG
 
+## 2026-06-24
+
+Decision:
+Define planned `EMAIL_DOCUMENT_INTAKE_AGENT`.
+
+Purpose:
+Create a governed future specialist agent for incoming customer email classification and evidence-packet creation. The agent works under `ORCHESTRATOR_AGENT` and must create an Evidence Packet before any business action.
+
+Email classifications:
+
+1. Purchase Order.
+2. Request for Quote.
+3. Customer approval.
+4. Customer rejection / correction.
+5. Reply related to existing quote.
+6. Service request.
+7. General customer message.
+
+Required evidence packets:
+
+- `EMAIL_INTAKE_EVIDENCE_PACKET`.
+- `PO_MATCH_EVIDENCE_PACKET`.
+- `RFQ_INTAKE_EVIDENCE_PACKET`.
+- `CUSTOMER_REPLY_EVIDENCE_PACKET`.
+- `DOCUMENT_CHAIN_MATCH_PACKET`.
+
+Critical rules:
+Email evidence is not approval by itself. PO match must not auto-create invoice. Customer reply must not auto-change quote. Attachments must be reviewed before use. If confidence is not `HIGH`, ask Liad. If amount/customer/quote mismatch exists, escalate. Urgent requests still follow approval gates.
+
+Boundaries:
+Documentation only. No code, Gmail access implementation, DB write, Prisma change, automation runtime, email send, invoice creation, BusinessDocument creation, BusinessDocumentItem creation, Maven/Invoice4U action, inventory action, Google Sheets/AppSheet/Apps Script/Drive change, or production workflow change.
+
+Status:
+Planned; not executable.
+
+---
+
+## 2026-06-24
+
+Decision:
+Promote compressor service commercial-line rule to all business documents.
+
+Correction:
+The prior commercial-line rule is global. It applies to all business documents, not only quotes or AI Draft previews.
+
+Applies to:
+
+- Quotes.
+- Invoices.
+- Proforma invoices.
+- Delivery notes if relevant.
+- Service draft documents.
+- `BusinessDocuments`.
+- `BusinessDocumentItems`.
+- AI Draft outputs.
+- Maven document drafts.
+- Any future customer-facing document.
+
+Approved rules:
+
+1. `Technician Visit / Travel` is one commercial line. Do not generate both `Technician Visit` and `Travel` as separate lines.
+2. `Labor + Service` is one commercial line. Do not split into `Labor` and `Service` unless Liad explicitly approves an exception.
+3. Standard compressor service document structure is: Parts lines, Oil handling line if needed, Labor + Service, Technician Visit / Travel.
+4. Do not double-charge travel, technician visit, labor, or service.
+5. Every generated or suggested document line must show `INCLUDED`, `EXCLUDED`, or `NEEDS_APPROVAL`.
+6. Historical bundled prices must explain whether they include parts only, parts + labor/service, or parts + labor/service + technician visit/travel.
+
+Stored in:
+
+- `project-brain/MANUFACTURER_KNOWLEDGE_BASE.md` as approved Liad knowledge.
+- `AI_DRAFT_RUNTIME_BLUEPRINT.md` as the global runtime document-line rule.
+- AI Draft, Service Pattern, Pricing Evidence, Maven Link, and Maven Agent docs as downstream constraints.
+
+Boundary:
+Documentation only. No code, DB, Prisma, Maven action, inventory action, import, BusinessDocument creation, BusinessDocumentItem creation, Apps Script change, Google Sheets change, or runtime workflow change.
+
+Status:
+Approved documentation rule.
+
+---
+
+## 2026-06-24
+
+Decision:
+Correct AI Draft commercial line structure for compressor service drafts.
+
+Correction:
+Technician Visit and Travel are the same commercial line. AI Draft must use one line only: `Technician Visit / Travel`. It must not generate separate `Technician Visit` and `Travel` lines.
+
+Labor + Service is also one commercial line. AI Draft must use one line only: `Labor + Service`. It must not split this into separate `Labor` and `Service` lines unless Liad explicitly approves an exception.
+
+Approved standard compressor service draft structure:
+
+1. Parts lines.
+2. Oil handling line if needed.
+3. Labor + Service.
+4. Technician Visit / Travel.
+
+Required behavior:
+Every line must be marked `INCLUDED`, `EXCLUDED`, or `NEEDS_APPROVAL`. Historical bundled kit price must explain whether it includes parts only, parts + labor/service, or parts + labor/service + technician visit/travel.
+
+Safety rule:
+Do not double-charge travel. Do not double-charge service/labor.
+
+Boundary:
+This is a documentation/reasoning-model correction only. It does not approve implementation, runtime creation, DB schema, APIs, Prisma changes, DB writes/imports, BusinessDocument creation, Maven/Invoice4U action, inventory action, Google Sheets/AppSheet/Apps Script changes, or production workflow changes.
+
+Status:
+Documentation correction.
+
+---
+
+## 2026-06-24
+
+Decision:
+Correct AI Draft recommendation reasoning model for compressor service work.
+
+Bug:
+The AI Draft recommendation preview included technical service parts but did not fully model the commercial service components.
+
+Rule:
+For compressor service work, AI Draft must evaluate commercial service lines. This decision is superseded by the later correction that `Technician Visit / Travel` is one line and `Labor + Service` is one line.
+
+Required behavior:
+Each component must be marked included, excluded, or approval-required. The recommendation must explain why each line is included or excluded, cite evidence, and keep approval flags visible. Commercial service lines must not be omitted just because they are not manufacturer parts. The superseding correction requires `Labor + Service` as one line and `Technician Visit / Travel` as one line.
+
+Boundary:
+This is a documentation/reasoning-model correction only. It does not approve implementation, runtime creation, DB schema, APIs, Prisma changes, DB writes/imports, BusinessDocument creation, Maven/Invoice4U action, inventory action, Google Sheets/AppSheet/Apps Script changes, or production workflow changes.
+
+Status:
+Documentation correction.
+
+---
+
+## 2026-06-24
+
+Decision:
+Add Action Server Knowledge Layer as a planned future roadmap item.
+
+Priority:
+After AI Draft Recommendation Readiness and before large-scale automation runtime.
+
+Purpose:
+Provide AI-facing knowledge packets instead of repeated direct Google Sheets/Maven reads. Google Sheets and Maven remain source/reference systems; the Action Server Knowledge Layer is planned as the AI-facing knowledge access layer.
+
+Future packets:
+Equipment Evidence, Service Pattern Evidence, Parts Compatibility Evidence, Manufacturer Evidence, Pricing Evidence, Customer Pricing Evidence, and AI Draft Readiness Evidence.
+
+Benefits:
+Lower token usage, lower API usage, faster reasoning, reusable knowledge packets, offline readiness, and consistent evidence.
+
+Boundaries:
+This decision does not approve implementation, runtime creation, DB schema, APIs, Prisma changes, DB writes/imports, Maven/Invoice4U action, Google Sheets/AppSheet/Apps Script changes, or production workflow changes.
+
+Status:
+Planned.
+
+---
+
+## 2026-06-24
+
+Decision:
+Approve Inventory Learning Loop documentation rules.
+
+Rule:
+Manufacturer part number is technical identity. Internal SKU is Tal inventory identity. One manufacturer part number may match multiple compressor models. One internal SKU may represent one manufacturer part number or an approved equivalent. Compatible models must be stored as evidence-backed mappings.
+
+Learning sources:
+The system may learn gradually from SCR spare-parts workbooks, foreign purchase orders, received stock, invoice history, Liad corrections, and approved service-kit evidence.
+
+Inventory boundary:
+Inventory quantity may only be updated from approved stock movement, approved purchase receipt, or approved inventory transaction. AI Draft, pricing evidence, service reports, recommendations, compatibility evidence, manufacturer SKU evidence, invoice history, and purchase orders alone must not update quantity or deduct stock.
+
+AI Draft boundary:
+AI Draft may suggest a part/SKU with evidence and approval flags, but cannot deduct stock. Stock deduction requires approved BusinessDocument/invoice workflow, confirmed SKU, confirmed quantity, audit evidence, and a separate inventory transaction gate.
+
+Learning boundary:
+Liad corrections must be stored as approved learning, not AI inference or historical guess.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-24
+
+Decision:
+Approve AI Draft compressor service-line structure rule.
+
+Rule:
+For compressor service drafts, the equipment model must appear clearly in the draft title/header.
+
+Reason:
+The compressor model is the key that allows the system to connect service type, expected parts, manufacturer part numbers, future internal SKUs, historical pricing evidence, and inventory matching.
+
+Standard service draft lines may include:
+Oil Filter; Air Filter; Oil Separator + gaskets; Oil / oil replacement / oil top-up according to oil type and model evidence; Labor + service; Technician visit / travel.
+
+Boundaries:
+Always identify the compressor model first. Do not treat generic horsepower as model identity. Do not assign SKU without model evidence. Do not use manufacturer cost as customer price. Do not deduct inventory from AI Draft. Future internal SKU mapping will replace or extend manufacturer part numbers. Manufacturer part numbers are internal technical evidence. Customer price comes from Maven/history/pricing evidence, not spare-parts cost.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-24
+
+Decision:
+Approve separation of model alias and parts compatibility for APM/PM2 manufacturer matching.
+
+Rule:
+`MODEL_ALIAS != PART_COMPATIBILITY`.
+
+Approved identity aliases:
+`10APM = 10PM2`.
+`20APM = 20PM2`.
+
+Boundary:
+Alias model identity does not guarantee identical service kits or identical spare parts. Equipment Identity and Parts Compatibility are separate layers. Compatibility must be stored separately from alias mappings.
+
+Known non-compatibility:
+`20APM Oil Separator != 20PM2 Oil Separator`.
+
+Approved compatibility exception:
+`20APM Oil Separator = 30PM Oil Separator`.
+
+AI Draft impact:
+Approved alias `20APM <-> 20PM2` does not allow automatic oil separator matching. AI Draft must check explicit part compatibility evidence and set approval flags when compatibility is missing or exception-based.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-24
+
+Decision:
+Approve manufacturer parts governance rules for using SCR spare-parts workbooks inside Tal Operating System.
+
+Rules:
+Manufacturer spare-parts workbooks are technical SKU/model evidence. Manufacturer workbook cost is internal cost evidence only, not customer selling price. Maven/Invoice history is customer price evidence. `ServiceReports` and `ReportEquipmentItems` are operational service evidence.
+
+Shared SKU rule:
+One manufacturer SKU may fit multiple compressor models. Shared SKU compatibility is valid shared-model evidence and is not a duplicate or conflict by itself.
+
+Alias/model boundaries:
+PM/APM alias family requires approved alias governance, not automatic merge. If model identity is generic or low-confidence, AI Draft must not auto-assign a SKU and must set `NeedsSkuApproval = true`. `SCR20EPM` cannot infer EPM workbook SKU compatibility if the manufacturer workbook coverage starts at `25EPM`. Belt recommendations remain historical-only unless another approved manufacturer source exists.
+
+Inventory boundary:
+No inventory deduction is allowed from AI Draft, pricing evidence, service report, manufacturer SKU registry evidence, or recommendation. Inventory deduction is allowed only after approved BusinessDocument/invoice workflow, confirmed SKU, confirmed quantity, audit evidence, and a separate inventory transaction gate.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-24
+
+Decision:
+Approve service pattern rules for AI Draft evidence.
+
+Rule:
+Large Service Rule: `4000h` / `5000h` service = Large Service. Large Service always includes Air Filter, Oil Filter, Oil Separator, and Oil.
+
+Small Service Rule: `2000h` / `2500h` service = Small Service. Small Service always includes Air Filter, Oil Filter, and Oil handling.
+
+Oil handling note:
+For SCR compressors this is often oil top-up / added oil. For ALUP or other compressor models it may be oil replacement. Do not assume the oil action type automatically without model/service evidence.
+
+Boundaries:
+These are service pattern rules only. They help AI Draft recommend expected service lines. They do not approve pricing, inventory deduction, BusinessDocument creation, Maven/Invoice4U action, or any write workflow. Any generated draft must still show evidence and `NeedsApproval` where required.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-24
+
+Decision:
+Correct the canonical project completion estimate from 60% to 56%.
+
+Reason:
+`project-brain/FULL_PROJECT_DISCOVERY_AUDIT.md` found that the recorded capability contributions add to 56%, not 60%. The current formula is Governance / Project Brain / Git workflow 15%, Supabase + Prisma Data Layer 15%, Import Framework + Wave 1 Import 10%, Wave 1 Service Reports UI 10%, Wave 2 Workflow Layer 6%, and all remaining pending capabilities 0%, totaling 56%. No evidence-based formula currently justifies raising Wave 2 from 6% to 10%, so the conservative correction is 56%.
+
+Status:
+Approved.
+
+---
+
 ## 2026-06-23
 
 Decision:

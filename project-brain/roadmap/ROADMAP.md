@@ -1,7 +1,7 @@
 # MASTER ROADMAP
 
 Status: Active consolidated roadmap  
-Last updated: 2026-06-15  
+Last updated: 2026-06-24
 Scope: TalCompressors-ServiceReports-AI project planning
 
 ## Purpose
@@ -328,13 +328,18 @@ Dependencies:
 - `BusinessDocuments`, `BusinessDocumentItems`, and `AutomationCommands` payloads verified.
 - AppSheet approval action and Bot condition verified.
 - Maven create-document API requirements verified before any Maven draft work.
+- Parts / SKU Intelligence must remain read-only until explicitly approved. SKU candidate logic must use exact model, approved alias, service pattern, parts table evidence, and historical invoice evidence.
+- Generic compressor descriptions must not trigger automatic SKU matching.
+- Inventory deduction must remain outside AI Draft and Pricing Evidence. It requires approved BusinessDocument / invoice workflow, confirmed SKU mapping, approved quantity, audit evidence, and a separate inventory transaction gate.
 - Explicit user approval before internal draft rows or Maven draft creation.
 
 Exit criteria:
 
 - Recommendation uses `ServiceReports`, `ReportEquipmentItems`, `PartsUsed`, `Customers_Final`, `ProductsCatalog`, `InvoiceMavenDocuments`, and `InvoiceMavenDocumentItems`.
+- Recommendation can cite `project-brain/PARTS_SKU_INTELLIGENCE_SPEC.md` for SKU candidate evidence and `project-brain/PRICING_EVIDENCE_ENGINE_SPEC.md` for price evidence.
 - Pricing priority follows: `ProductsCatalog`, same equipment history, same customer history, similar service history, AI estimate with approval flag.
 - Output marks `NeedsPriceApproval`, `NeedsUserApproval`, `MissingData`, and `RiskNotes`.
+- Output separates `NeedsSkuApproval`, `NeedsQuantityApproval`, and `NeedsPriceApproval`.
 - Human review occurs before automation continues.
 
 Definition of Done:
@@ -343,6 +348,133 @@ Definition of Done:
 - Stage 2 writes internal draft rows only after approval.
 - Stage 3 creates Maven draft only after separate approval.
 - Queue architecture remains protected.
+
+### Action Server Knowledge Layer
+
+Status:
+
+PLANNED
+
+Priority:
+
+After AI Draft Recommendation Readiness.
+
+Before large-scale automation runtime.
+
+Purpose:
+
+Provide AI-facing knowledge packets instead of repeated direct Google Sheets/Maven reads.
+
+The Action Server Knowledge Layer is a planned AI-facing read layer. Google Sheets and Maven remain source/reference systems. The Action Server serves curated, evidence-backed knowledge packets to AI Draft and future agents so they do not repeatedly scan raw Sheets ranges, Maven raw JSON, or long discovery reports.
+
+Future knowledge packets:
+
+- Equipment Evidence.
+- Service Pattern Evidence.
+- Parts Compatibility Evidence.
+- Manufacturer Evidence.
+- Pricing Evidence.
+- Customer Pricing Evidence.
+- AI Draft Readiness Evidence.
+
+Benefits:
+
+- lower token usage
+- lower API usage
+- faster reasoning
+- reusable knowledge packets
+- offline readiness
+- consistent evidence
+
+Dependencies:
+
+- AI Draft Recommendation Readiness decision rules approved.
+- Service Report to Maven Link evidence model defined.
+- Pricing Evidence Engine rules defined.
+- Equipment Identity, Service Pattern, Parts Compatibility, and Manufacturer Knowledge registries stable enough for read-only packet generation.
+- Infrastructure Manager review before any implementation, runtime, API, schema, or cache design.
+
+Boundaries:
+
+- Do not implement from this roadmap item alone.
+- Do not create runtime.
+- Do not create DB schema.
+- Do not create APIs.
+- Do not modify Prisma.
+- Do not write/import DB data.
+- Do not call Maven/Invoice4U.
+- Do not modify Google Sheets, AppSheet, Apps Script, Drive, or production workflows.
+
+Exit criteria:
+
+- Action Server Knowledge Layer specification is approved before implementation.
+- Knowledge packet shapes are defined.
+- Source/reference boundaries are explicit.
+- Cache/freshness rules are defined.
+- Approval gates are documented.
+
+Definition of Done:
+
+- Roadmap position is clear: after AI Draft Recommendation Readiness and before large-scale automation runtime.
+- The layer remains documentation/planning only until a separate implementation task is approved.
+
+### Email Document Intake Agent
+
+Status:
+
+PLANNED
+
+Priority:
+
+After AI Draft Recommendation Readiness and governed document-chain/linkage rules.
+
+Before automated customer-email processing, invoice automation, or Maven draft automation from email evidence.
+
+Purpose:
+
+Define a governed intake layer for incoming customer emails. The planned agent classifies emails as purchase orders, RFQs, approvals, rejections/corrections, replies to existing quotes, service requests, or general customer messages, then creates evidence packets before any business action.
+
+Future evidence packets:
+
+- `EMAIL_INTAKE_EVIDENCE_PACKET`.
+- `PO_MATCH_EVIDENCE_PACKET`.
+- `RFQ_INTAKE_EVIDENCE_PACKET`.
+- `CUSTOMER_REPLY_EVIDENCE_PACKET`.
+- `DOCUMENT_CHAIN_MATCH_PACKET`.
+
+Dependencies:
+
+- `project-brain/EMAIL_DOCUMENT_INTAKE_AGENT_SPEC.md` approved.
+- `ORCHESTRATOR_AGENT` routing and approval gates.
+- Customer, ServiceReport, BusinessDocument/Quote, Maven document, AI Draft, and future `DocumentChainId` matching rules.
+- Attachment review workflow defined.
+- Infrastructure Manager review before any Gmail/API/runtime/schema implementation.
+- Liad approval workflow for all business actions.
+
+Boundaries:
+
+- Do not implement from this roadmap item alone.
+- Do not create Gmail access runtime.
+- Do not send emails automatically.
+- Do not create invoices automatically.
+- Do not create `BusinessDocuments` or `BusinessDocumentItems` automatically.
+- Do not deduct inventory.
+- Do not modify Prisma.
+- Do not write/import DB data.
+- Do not modify Maven/Invoice4U, Google Sheets, AppSheet, Apps Script, Drive, or production workflows.
+
+Exit criteria:
+
+- Email intake evidence-packet shapes are approved.
+- Customer/document matching confidence rules are approved.
+- Attachment safety rules are approved.
+- Escalation and Liad approval gates are documented.
+- No runtime implementation begins without a separate approved task.
+
+Definition of Done:
+
+- The agent remains planned/non-executable until implementation is explicitly approved.
+- Email evidence remains evidence only and cannot approve business actions by itself.
 
 ### Documentation Cleanup
 

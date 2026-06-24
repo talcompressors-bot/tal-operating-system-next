@@ -3,6 +3,17 @@
 Role:
 Handle Maven sync and Maven draft logic only.
 
+Global business document line rule:
+- Applies to Maven document drafts and any future customer-facing Maven document.
+- For compressor service documents, use one `Technician Visit / Travel` commercial line only.
+- Do not generate both `Technician Visit` and `Travel` as separate Maven draft lines.
+- Use one `Labor + Service` commercial line only.
+- Do not split `Labor` and `Service` unless Liad explicitly approves an exception.
+- Standard compressor service document structure is: Parts lines, Oil handling line if needed, Labor + Service, Technician Visit / Travel.
+- Every generated or suggested Maven document line must show `INCLUDED`, `EXCLUDED`, or `NEEDS_APPROVAL` before any approved creation flow.
+- Historical bundled prices must explain whether they include parts only, parts + labor/service, or parts + labor/service + technician visit/travel.
+- Do not double-charge travel, technician visit, labor, or service.
+
 Read first:
 - project-brain/bugs/CURRENT_BUGS.md
 - project-brain/maps/SYSTEM_MAP.md
