@@ -183,7 +183,9 @@ Runtime decision sequence:
 
 11. Are fixed charges applicable?
    - Labor: 275 NIS/hour when labor hours are known or approved.
-   - Technician Visit / Travel: 300 NIS base visit/travel candidate when applicable or approved.
+   - Labor + Service is a separate commercial line. It is not included in SCR Small Service kit unless explicit historical evidence says otherwise.
+   - Technician Visit / Travel: 300 NIS default suggested price when applicable.
+   - Technician Visit / Travel may be waived for nearby customers; if evidence conflicts or customer-specific history exists, keep `NeedsApproval=TRUE`.
    - If inclusion is uncertain, mark approval required.
 
 12. Is confidence high enough for prefill?
@@ -282,8 +284,14 @@ Commercial line rules:
 
 - Technician Visit / Travel is one line.
 - Do not generate separate `Technician Visit` and `Travel` lines.
+- Default suggested Technician Visit / Travel price is `300` ILS.
+- Nearby customers may have waived visit/travel; if evidence conflicts or customer-specific history exists, keep `NeedsApproval=TRUE`.
 - Labor + Service is one line.
 - Do not split `Labor` and `Service` unless Liad explicitly approves an exception.
+- Labor + Service is separate from SCR Small Service kit by default. It is not included in the kit unless explicit historical evidence says otherwise.
+- SCR Small Service kit includes Air Filter, Oil Filter, and 3L SKR oil top-up.
+- Large Service `4000h` / `5000h` uses full oil replacement. Do not treat Large Service oil as top-up.
+- Partial serial evidence remains `NEEDS_MANUAL_CONFIRMATION`; do not classify it as `HIGH_WITH_REVIEW`.
 - Every line must show `INCLUDED`, `EXCLUDED`, or `NEEDS_APPROVAL`.
 - Historical bundled kit price must explain whether it includes parts only, parts + labor/service, or parts + labor/service + technician visit/travel.
 - Do not double-charge travel.

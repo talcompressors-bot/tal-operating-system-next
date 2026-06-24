@@ -36,6 +36,13 @@ Evidence sources:
 | Small Service | `2000h` / `2500h` service | Liad Approved | Approved | No | No |
 | Large Service | `4000h` / `5000h` service | Liad Approved | Approved | No | No |
 
+Approved service-specific oil rules:
+
+- SCR Small Service kit includes Air Filter, Oil Filter, and `3L SKR oil top-up`.
+- Labor + Service is a separate commercial line. It is not included in the small service kit unless explicit historical evidence says otherwise.
+- Technician Visit / Travel is one commercial line with default suggested price `300` ILS. Keep `NeedsApproval = true` when evidence conflicts or customer-specific history exists.
+- Large Service `4000h` / `5000h` replaces the full oil content. Do not treat Large Service oil as top-up.
+
 ## 2. Expected Parts By Service Type
 
 Approved global compressor service document structure rule:
@@ -94,9 +101,9 @@ Expected lines:
 
 - Air Filter
 - Oil Filter
-- Oil handling
-- Labor + service when supported by report/labor evidence
-- Technician visit / travel when applicable or approved
+- `3L SKR oil top-up` for SCR compressors
+- Labor + Service as a separate commercial line unless explicit historical evidence says otherwise
+- Technician Visit / Travel as one commercial line with default suggested price `300` ILS, approval-required when evidence conflicts or customer-specific history exists
 
 ### Large Service
 
@@ -105,9 +112,9 @@ Expected lines:
 - Air Filter
 - Oil Filter
 - Oil Separator
-- Oil
-- Labor + service when supported by report/labor evidence
-- Technician visit / travel when applicable or approved
+- Full oil replacement
+- Labor + Service as a separate commercial line unless explicit historical evidence says otherwise
+- Technician Visit / Travel as one commercial line with default suggested price `300` ILS, approval-required when evidence conflicts or customer-specific history exists
 
 ## 3. Model-Specific Evidence
 
@@ -184,15 +191,17 @@ Confidence model:
 
 Approved oil handling rules:
 
-- For SCR compressors, oil handling is often oil top-up / added oil.
+- For SCR compressor 2000h / 2500h Small Service, oil handling is `3L SKR oil top-up`.
+- For 4000h / 5000h Large Service, oil handling is full oil replacement. Do not treat Large Service oil as top-up.
 - For ALUP or other compressor models, oil handling may be oil replacement.
 - Do not infer exact oil action without model/service evidence.
 - Do not infer oil quantity without explicit evidence.
 
 Interpretation:
 
-- Small Service includes oil handling, but not necessarily full oil replacement.
-- Large Service includes oil, but action type and quantity still require model/service evidence.
+- SCR Small Service has approved `3L SKR oil top-up` when model/service evidence is present.
+- Large Service has approved full-oil-replacement action when service interval evidence is present.
+- Non-SCR models, unclear intervals, and separate oil charges still require model/service evidence and approval flags.
 
 ## 5. Safety Rules
 

@@ -16,7 +16,7 @@ Status:
 
 Readiness:
 
-`READY_FOR_APPROVAL_BASED_DRAFTS` only if Liad approves the decision rules in `project-brain/AI_DRAFT_RECOMMENDATION_READINESS_DECISION_PACKET.md`.
+`READY_FOR_APPROVAL_BASED_DRAFTS`
 
 Current behavior:
 
@@ -73,7 +73,7 @@ Expected Small Service lines:
 
 - Air Filter.
 - Oil Filter.
-- Oil handling line if needed.
+- 3L SKR oil top-up for SCR Small Service.
 - Labor + Service.
 - Technician Visit / Travel.
 
@@ -113,21 +113,21 @@ Source:
 
 | Standard line | Status in this preview | Reason | Approval state |
 |---|---|---|---|
-| Parts lines | `INCLUDED` | Small Service requires Air Filter and Oil Filter; report rows show Air/Oil filter replaced; Maven kit line includes Air Filter and Oil Filter | Kit price still requires Liad approval |
-| Oil handling line if needed | `NEEDS_APPROVAL` | Maven kit line includes added synthetic oil, but action/quantity remain unresolved | Included only as kit evidence today; do not create a separate oil line unless Liad approves action and quantity |
-| Labor + Service | `NEEDS_APPROVAL` | Labor/service may be bundled in the small-service kit; historical labor/service exists at `225-250` ILS; fixed rule is `275` ILS/hour; no separate compressor labor/service line appears in docs `102451`/`102452` | Liad must decide whether Labor + Service is separate or included in kit |
-| Technician Visit / Travel | `NEEDS_APPROVAL` | A service visit occurred, but visit/travel pricing conflicts: direct compressor docs show `0`, report-linked dryer/filter work shows `250`, fixed rule says `300` | Liad must approve one Technician Visit / Travel decision; do not split or duplicate |
+| Parts lines | `INCLUDED` | Small Service requires Air Filter and Oil Filter; report rows show Air/Oil filter replaced; Maven kit line includes Air Filter and Oil Filter | Kit price remains approval-based |
+| 3L SKR oil top-up | `INCLUDED` | Liad approved SCR Small Service kit content: Air Filter, Oil Filter, and 3L SKR oil top-up | Included inside kit; do not create separate oil price line |
+| Labor + Service | `NEEDS_APPROVAL` | Liad approved Labor + Service as a separate commercial line; historical labor/service exists at `225-250` ILS; fixed rule is `275` ILS/hour; quantity/work-time still needs evidence review | Separate line by default unless explicit historical evidence says it was bundled |
+| Technician Visit / Travel | `NEEDS_APPROVAL` | One service visit occurred; default suggested price is `300` ILS, but direct compressor docs show `0` and report-linked dryer/filter work shows `250` | One line only; approval required because evidence conflicts and customer-specific history exists |
 
 ### Recommendation Table
 
 | Line | Status | Description | Qty | Manufacturer part number | Suggested unit price | Confidence | Evidence source | NeedsSkuApproval | NeedsPriceApproval |
 |---|---|---|---:|---|---:|---|---|---|---|
-| 1 | `NEEDS_APPROVAL` | SCR-40PM 2000h Small Service Kit, bundled line including Oil Filter, Air Filter, and added synthetic oil | `2` equipment rows or one line per serial | bundle uses `25200007-005`, `25100043-071`, oil handling evidence | `1213.38` ILS per linked kit line | `HIGH` for kit evidence; `HIGH_WITH_REVIEW` for second serial | Maven docs `102451`, `102452`; Service Report `5806`; Small Service rule | `false` for Air/Oil Filter evidence; `true` for oil quantity/action | `true` |
+| 1 | `NEEDS_APPROVAL` | SCR-40PM 2000h Small Service Kit, bundled line including Oil Filter, Air Filter, and 3L SKR oil top-up | `2` equipment rows or one line per serial | bundle uses `25200007-005`, `25100043-071`, oil handling evidence | `1213.38` ILS per linked kit line | `HIGH` for full serial; `NEEDS_MANUAL_CONFIRMATION` for second serial | Maven docs `102451`, `102452`; Service Report `5806`; Small Service rule | `false` for Air/Oil Filter evidence; `false` for approved 3L SKR top-up inside kit | `true` |
 | 2 | `INCLUDED` | Air Filter technical evidence line, if the UI displays parts separately under the bundled kit | `2` | `25100043-071` | included in bundled kit; no separate price | `HIGH` technical, `LOW` separate price | Part Compatibility Registry; manufacturer workbook; report replacement flags | `false` for exact `SCR-40PM -> 40PM` evidence packet | `true` |
 | 3 | `INCLUDED` | Oil Filter technical evidence line, if the UI displays parts separately under the bundled kit | `2` | `25200007-005` | included in bundled kit; no separate price | `HIGH` technical, `LOW` separate price | Part Compatibility Registry; manufacturer workbook; report replacement flags | `false` for exact `SCR-40PM -> 40PM` evidence packet | `true` |
-| 4 | `NEEDS_APPROVAL` | Oil handling / added synthetic oil, included in kit only unless Liad approves separate oil action/quantity | unresolved separately | `80000175-039` candidate coolant/oil evidence | included in bundled kit; no separate price | `MEDIUM` | Small Service rule; Maven kit text; Part Compatibility Registry | `true` | `true` |
-| 5 | `NEEDS_APPROVAL` | Labor + Service, only if shown separately from kit and work-time evidence supports it | unresolved | N/A | candidate `275` ILS/hour fixed rule; historical conflict `225-250` | `MEDIUM` | Fixed labor rule; Maven labor/service history | N/A | `true` |
-| 6 | `NEEDS_APPROVAL` | Technician Visit / Travel, one commercial line only | `1` service visit event | N/A | unresolved: direct compressor docs show `0`, report-linked dryer/filter work shows `250`, fixed rule says `300` | `MEDIUM` | Maven docs `102451`, `102452`, `102453`; fixed visit/travel rule; Service Report `5806` | N/A | `true` |
+| 4 | `INCLUDED` | 3L SKR oil top-up, included in SCR Small Service kit only | included in kit | `80000175-039` candidate coolant/oil evidence | included in bundled kit; no separate price | `HIGH` for approved kit content | Small Service rule; Maven kit text; Part Compatibility Registry | `false` inside kit | `true` |
+| 5 | `NEEDS_APPROVAL` | Labor + Service, separate commercial line unless explicit historical evidence says bundled | work-time evidence required | N/A | candidate `275` ILS/hour fixed rule; historical conflict `225-250` | `MEDIUM` | Fixed labor rule; Maven labor/service history | N/A | `true` |
+| 6 | `NEEDS_APPROVAL` | Technician Visit / Travel, one commercial line only | `1` service visit event | N/A | default suggested `300` ILS; conflict evidence `0` and `250` | `MEDIUM` | Maven docs `102451`, `102452`, `102453`; fixed visit/travel rule; Service Report `5806` | N/A | `true` |
 
 ### Engine Interpretation Today
 
@@ -140,7 +140,7 @@ Quantity: 2 equipment rows, or one line per serial if the approval UI requires p
 Unit price evidence: 1213.38 ILS
 Price source: Maven docs 102451 and 102452
 NeedsPriceApproval: true
-NeedsSkuApproval: false for Air/Oil Filter technical evidence, true for unresolved oil handling quantity/action
+NeedsSkuApproval: false for Air/Oil Filter technical evidence and approved 3L SKR top-up inside the kit
 ```
 
 Parts can be displayed underneath the bundled kit as evidence, but should not be priced separately without Liad approval.
@@ -151,13 +151,13 @@ Parts can be displayed underneath the bundled kit as evidence, but should not be
 
 Description:
 
-Bundled SCR-40PM small-service kit including Oil Filter, Air Filter, and added synthetic oil.
+Bundled SCR-40PM small-service kit including Oil Filter, Air Filter, and 3L SKR oil top-up.
 
 Manufacturer part evidence:
 
 - `25200007-005` Oil Filter.
 - `25100043-071` Air Filter.
-- `80000175-039` oil/coolant handling candidate, action and quantity unresolved.
+- `80000175-039` oil/coolant handling candidate for approved 3L SKR oil top-up inside the kit.
 
 Historical price:
 
@@ -172,12 +172,12 @@ Evidence source:
 Confidence:
 
 - `HIGH` for doc `102451`.
-- `HIGH_WITH_REVIEW` for doc `102452` because Maven serial is partial: `SW85183`.
+- `NEEDS_MANUAL_CONFIRMATION` for doc `102452` because Maven serial is partial: `SW85183`.
 
 NeedsSkuApproval:
 
 - `false` for Air Filter and Oil Filter technical evidence in this preview because exact `SCR-40PM` plus approved `40PM = SCR-40PM` maps to manufacturer compatibility.
-- `true` for oil handling action/quantity.
+- `false` for approved 3L SKR oil top-up inside the SCR Small Service kit.
 
 NeedsPriceApproval:
 
@@ -185,7 +185,7 @@ NeedsPriceApproval:
 
 Reason:
 
-Pricing evidence is strong, but the readiness packet requires Liad approval before using the kit price as an approval-based draft recommendation. Repeated price is not a contract.
+Pricing evidence is strong enough for an approval-based recommendation. Repeated price is not a contract, and the partial serial row still requires manual confirmation.
 
 ### 5.2 Air Filter
 
@@ -267,7 +267,7 @@ Do not assign a separate Oil Filter price. It is included in the bundled kit pri
 
 Description:
 
-Oil handling / added synthetic oil for SCR-40PM Small Service.
+3L SKR oil top-up for SCR-40PM Small Service.
 
 Manufacturer part number:
 
@@ -279,19 +279,19 @@ Shared PM/EPM evidence includes `40PM`.
 
 Evidence source:
 
-- Small Service rule: oil handling expected.
+- Small Service rule: SCR Small Service kit includes 3L SKR oil top-up.
 - Maven kit text: bundled kit includes added synthetic oil.
 - `project-brain/PART_COMPATIBILITY_REGISTRY.md`.
-- `project-brain/MANUFACTURER_KNOWLEDGE_BASE.md`: for SCR compressors, oil handling is often top-up / added oil, but exact action must not be assumed.
+- `project-brain/MANUFACTURER_KNOWLEDGE_BASE.md`: SCR 2000h / 2500h Small Service includes 3L SKR oil top-up.
 
 Confidence:
 
-- Service expectation: `MEDIUM`.
-- Quantity/action confidence: `LOW`.
+- Service expectation and approved kit content: `HIGH`.
+- Separate oil charge confidence: `LOW`.
 
 NeedsSkuApproval:
 
-- `true`.
+- `false` inside the approved SCR Small Service kit.
 
 NeedsPriceApproval:
 
@@ -300,12 +300,13 @@ NeedsPriceApproval:
 Price behavior:
 
 Do not create a separate oil line today. Oil handling is included in the bundled kit description until Liad approves oil action and quantity.
+For Large Service `4000h` / `5000h`, oil must be treated as full oil replacement, not top-up.
 
 ### 5.5 Labor + Service
 
 Description:
 
-Labor/service line only if Liad wants labor separate from bundled kit and work-time evidence supports quantity.
+Labor + Service is a separate commercial line. It is not included in the small service kit unless explicit historical evidence says otherwise.
 
 Manufacturer part number:
 
@@ -315,7 +316,8 @@ Evidence source:
 
 - Fixed AI Draft rule: Technician labor = `275` NIS/hour.
 - Same-customer SCR/40PM history: `225.00-250.00` ILS per labor/service unit.
-- Direct compressor kit docs `102451` and `102452`: no separate compressor labor line.
+- Liad-approved rule: Labor + Service is separate from SCR Small Service kit by default.
+- Direct compressor kit docs `102451` and `102452`: no separate compressor labor line, which is conflict/approval evidence rather than proof that labor is bundled.
 - Maven doc `102453`: report-linked dryer/filter labor, not compressor-kit evidence.
 
 Confidence:
@@ -333,8 +335,8 @@ NeedsPriceApproval:
 Include / exclude reasoning:
 
 - Status: `NEEDS_APPROVAL`.
-- Include if Liad wants labor shown separately from the bundled kit and work-time evidence supports quantity.
-- Exclude if Liad decides the bundled small-service kit already includes labor/service.
+- Include as a separate commercial line when work-time evidence supports quantity.
+- Exclude only if explicit historical evidence says Labor + Service was included in the kit for the specific customer/document.
 - Do not auto-add separate labor if it duplicates bundled kit work.
 
 Price behavior:
@@ -353,10 +355,11 @@ N/A
 
 Evidence source:
 
-- Fixed AI Draft rule: Technician Visit / Travel candidate = `300` NIS base visit.
+- Liad-approved rule: Technician Visit / Travel default suggested price = `300` ILS.
 - Service Report `5806` proves a service event occurred.
 - Maven direct compressor docs show travel/no-charge evidence, so visit/travel pricing must be reviewed rather than auto-added.
 - Maven doc `102453` shows report-linked dryer/filter visit/travel evidence at `250.00` ILS.
+- Nearby customers may be waived, so customer-specific conflict evidence keeps approval required.
 
 Confidence:
 
@@ -374,13 +377,13 @@ Include / exclude reasoning:
 
 - Status: `NEEDS_APPROVAL`.
 - Include because a technician visit/travel event occurred.
-- Do not auto-price as `300` until Liad approves whether Technician Visit / Travel is charged separately or bundled into the service kit/customer billing pattern.
+- Suggest `300` ILS as the default price, but keep approval required because Report 5806 has conflicting/customer-specific evidence.
 - Do not split this into separate Technician Visit and Travel lines.
 - Never add Technician Visit / Travel per compressor row.
 
 Price behavior:
 
-Show fixed rule `300` as a candidate, not an approved price. The engine should present one approval-required Technician Visit / Travel line with conflict evidence: `0`, `250`, and fixed rule `300`.
+Show `300` ILS as the default suggested price. The engine should present one approval-required Technician Visit / Travel line with conflict evidence: `0`, `250`, and fixed rule `300`.
 
 ## 6. Historical Pricing Evidence
 
@@ -388,7 +391,7 @@ Show fixed rule `300` as a candidate, not an approved price. The engine should p
 
 | Evidence | Price | Dates | Confidence |
 |---|---:|---|---|
-| Direct report 5806 compressor kit docs `102451`, `102452` | `1213.38` ILS | `2026-05-18` | `HIGH` / `HIGH_WITH_REVIEW` |
+| Direct report 5806 compressor kit docs `102451`, `102452` | `1213.38` ILS | `2026-05-18` | `HIGH` / `NEEDS_MANUAL_CONFIRMATION` |
 | Same-customer SCR/40PM kit history | `1134.00-1213.38` ILS | `2025-01-27` to `2026-05-18` | `HIGH` for bundled kit |
 
 AI Draft use:
@@ -418,7 +421,9 @@ AI Draft use:
 
 AI Draft use:
 
-- Do not create separate oil price/quantity line without Liad approval.
+- SCR Small Service kit includes 3L SKR oil top-up.
+- Do not create a separate oil price/quantity line without Liad approval.
+- For Large Service `4000h` / `5000h`, treat oil as full oil replacement, not top-up.
 
 ### Labor + Service
 
@@ -429,7 +434,8 @@ AI Draft use:
 
 AI Draft use:
 
-- Approval-required if separate Labor + Service appears.
+- Labor + Service is a separate commercial line by default.
+- Approval-required because quantity and customer-specific price evidence must be reviewed.
 - Do not split Labor and Service unless Liad explicitly approves an exception.
 
 ### Technician Visit / Travel
@@ -442,7 +448,8 @@ AI Draft use:
 
 AI Draft use:
 
-- Approval-required one-line Technician Visit / Travel decision.
+- Use `300` ILS as the default suggested one-line Technician Visit / Travel price.
+- Approval-required when evidence conflicts or customer-specific history exists.
 - Do not generate separate Technician Visit and Travel lines.
 - Do not charge per compressor row.
 
@@ -454,19 +461,21 @@ AI Draft use:
 | Report equipment row `e8c32b28` | serial `SW854751`, small/2000 service, Air/Oil filter replaced | supports kit and technical parts |
 | Report equipment row `6bb28e16` | serial `SW851838`, small/2000 service, Air/Oil filter replaced | supports kit and technical parts |
 | Maven doc `102451` | report `5806`, customer, `40PM`, full serial `SW854751`, small-service kit | high-confidence commercial link |
-| Maven doc `102452` | report `5806`, customer, `40PM`, partial serial `SW85183`, small-service kit | high-with-review commercial link |
+| Maven doc `102452` | report `5806`, customer, `40PM`, partial serial `SW85183`, small-service kit | `NEEDS_MANUAL_CONFIRMATION`; partial serial is not high-with-review |
 | Maven doc `102453` | report `5806`, dryer/filter work | report-linked but not compressor-kit evidence |
 
 ## 8. Missing Information
 
-Missing or unresolved before real draft automation:
+Resolved for approval-based AI Draft readiness:
 
-- Liad approval for the Kit Price Rule.
-- Liad approval for the Default Service Component Evaluation Rule.
-- Liad approval for the Labor Rule.
-- Liad approval for the Technician Visit / Travel Rule.
-- Liad approval for the Oil Quantity Rule.
-- Liad approval for the Partial Serial Rule.
+- SCR Small Service kit content: Air Filter, Oil Filter, 3L SKR oil top-up.
+- Labor + Service is separate by default unless explicit historical evidence says otherwise.
+- Technician Visit / Travel is one line with default suggested price `300` ILS.
+- Large Service oil is full oil replacement, not top-up.
+- Partial serial remains `NEEDS_MANUAL_CONFIRMATION`, not `HIGH_WITH_REVIEW`.
+
+Still unresolved before real draft automation:
+
 - Approved document-type/status policy for Maven rows.
 - Approved stale-price/date-window policy.
 - Approved VAT/tax display policy.
@@ -477,16 +486,12 @@ Missing or unresolved before real draft automation:
 
 ## 9. What Still Requires Liad Approval
 
-Required before moving from this preview to an approval-based AI Draft recommendation:
+Still required before any write/action:
 
-1. Approve bundled kit price `1213.38` ILS as evidence-backed recommendation for Report `5806`, with `NeedsPriceApproval = true`.
-2. Approve no automatic splitting of kit price into Air Filter, Oil Filter, and Oil.
-3. Approve oil handling included in bundled kit, with no separate oil quantity/price line.
-4. Approve one Technician Visit / Travel line only, not per compressor, and decide whether to leave price unresolved or use fixed `300` with approval flag.
-5. Approve labor as optional/separate only when work-time evidence exists, with fixed `275` shown against historical `225-250`.
-6. Approve Maven doc `102452` as `HIGH_WITH_REVIEW`, preserving raw partial serial `SW85183` and not auto-normalizing it to `SW851838`.
-7. Approve the global compressor service document-line rule: every generated or suggested business document line must evaluate Parts lines, Oil handling line if needed, Labor + Service, and Technician Visit / Travel, with `INCLUDED` / `EXCLUDED` / `NEEDS_APPROVAL` reasoning.
-8. Approve the future write path separately before any `BusinessDocument`, `BusinessDocumentItem`, Maven, inventory, or DB action.
+1. Liad approval of the generated recommendation instance.
+2. Manual confirmation for Maven doc `102452` partial serial `SW85183` before treating that row as confirmed equipment identity.
+3. Approval for any customer-specific price conflict, including Labor + Service and Technician Visit / Travel.
+4. Approval of the future write path separately before any `BusinessDocument`, `BusinessDocumentItem`, Maven, inventory, or DB action.
 
 ## 10. Final Preview Output
 
@@ -511,25 +516,26 @@ SCR-40PM 2000h Small Service Kit
 Qty: 2 equipment rows or one line per serial
 Unit price evidence: 1213.38 ILS
 Evidence: Maven docs 102451 and 102452
-Confidence: HIGH / HIGH_WITH_REVIEW
-NeedsSkuApproval: false for Air/Oil Filter evidence, true for oil handling quantity/action
+Confidence: HIGH / NEEDS_MANUAL_CONFIRMATION for partial serial row
+NeedsSkuApproval: false for Air/Oil Filter evidence and approved 3L SKR oil top-up inside kit
 NeedsPriceApproval: true
 
 Parts:
 - Air Filter: 25100043-071
 - Oil Filter: 25200007-005
-- Oil handling candidate: 80000175-039, quantity/action unresolved
+- 3L SKR oil top-up: 80000175-039 candidate evidence, included inside kit
 Status: Included as technical/service evidence; price remains approval-required.
 
 Labor + Service:
-Only if separate from kit and work-time evidence supports quantity.
+Separate commercial line by default unless explicit historical evidence says otherwise.
 Evidence conflict: 225-250 ILS history, 275 ILS fixed rule.
 NeedsPriceApproval: true
 
 Technician Visit / Travel:
 One commercial line only.
 Evidence conflict: 0 ILS direct compressor docs, 250 ILS report-linked dryer work, 300 ILS fixed rule.
-Status: Needs approval; do not split into separate visit/travel lines; do not add per compressor.
+Default suggested price: 300 ILS.
+Status: Needs approval because evidence conflicts/customer-specific history exists; do not split into separate visit/travel lines; do not add per compressor.
 NeedsPriceApproval: true
 
 Final rule:

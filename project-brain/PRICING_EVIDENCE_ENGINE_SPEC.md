@@ -330,6 +330,11 @@ The AI Draft should use engine output this way:
 - The system must explain why each standard line is included, excluded, or approval-required.
 - Labor + Service is one commercial line. It must not be split into separate Labor and Service lines unless Liad explicitly approves an exception.
 - Technician Visit / Travel is one commercial line. It must not be split into separate Technician Visit and Travel lines.
+- SCR compressor 2000h / 2500h Small Service kit includes Air Filter, Oil Filter, and 3L SKR oil top-up.
+- Labor + Service is a separate commercial line. It is not included in the small service kit unless explicit historical evidence says otherwise.
+- Technician Visit / Travel has a default suggested price of `300` ILS. It may be waived for nearby customers, so keep `NeedsApproval = true` when evidence conflicts or customer-specific history exists.
+- For 4000h / 5000h Large Service, oil means full oil replacement. Do not price or describe Large Service oil as top-up.
+- Partial serial evidence remains `NEEDS_MANUAL_CONFIRMATION`; do not classify it as `HIGH_WITH_REVIEW`.
 - Historical bundled kit price must explain whether it covers parts only, parts + labor/service, or parts + labor/service + technician visit/travel.
 - Do not double-charge travel.
 - Do not double-charge technician visit.

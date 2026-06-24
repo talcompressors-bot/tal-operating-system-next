@@ -10,22 +10,33 @@ No implementation, DB write, Prisma change, import, BusinessDocument creation, B
 
 Current AI Draft Recommendation status:
 
-`PARTIALLY`
+`READY_FOR_APPROVAL_BASED_DRAFTS`
 
-Target status:
+Previous target status:
 
 `READY_FOR_APPROVAL_BASED_DRAFTS`
 
-The remaining blockers are not raw evidence blockers. They are approval-decision blockers.
+The prior approval-decision blockers have been resolved by Liad-approved business rules recorded on 2026-06-24.
 
-The evidence is strong enough to support an approval-based AI Draft recommendation for Service Report `5806` if Liad approves six decision rules:
+Approved rules now available for approval-based AI Draft recommendations:
 
 1. Kit Price Rule.
-2. Default Service Component Evaluation Rule.
-3. Labor Rule.
-4. Technician Visit / Travel Rule.
-5. Oil Quantity Rule.
-6. Partial Serial Rule.
+2. Labor Rule.
+3. Technician Visit / Travel Rule.
+4. Oil Quantity Rule.
+5. Partial Serial Rule.
+
+Already approved governance prerequisite:
+
+- Global Business Document Line Evaluation Rule.
+
+Internal SKU readiness boundary:
+
+- Internal SKU naming strategy is deferred.
+- Manufacturer part numbers are sufficient for the current AI Draft intelligence phase.
+- Internal SKU strategy is an inventory architecture decision and must not block AI Draft recommendation readiness.
+- AI Draft may use manufacturer part numbers as technical evidence only.
+- Inventory deduction remains forbidden without the separate inventory transaction gate.
 
 Global business document reasoning model correction:
 
@@ -66,7 +77,8 @@ Recommended readiness model:
 
 ```text
 Evidence packet exists
--> approval decisions recorded
+-> global document-line reasoning rule applies
+-> approved business rules applied
 -> AI Draft may generate recommendation preview
 -> every generated draft still requires user approval
 -> no BusinessDocument/Maven/inventory action without later explicit approval
@@ -97,7 +109,7 @@ Both rows have small/2000h service evidence:
 Liad-approved service pattern:
 
 - `2000h / 2500h = Small Service`.
-- Small Service expected lines: Air Filter, Oil Filter, Oil handling.
+- SCR Small Service default kit includes Air Filter, Oil Filter, and `3L SKR oil top-up`.
 
 Direct Maven linked compressor documents:
 
@@ -137,12 +149,14 @@ Important boundary:
 
 ### Recommended Decision
 
-Approve this rule:
+Approved rule:
 
 ```text
 For Service Report 5806 / SCR-40PM / 2000h Small Service,
-AI Draft may recommend one bundled Small Service Kit line at 1213.38 ILS
-as evidence-backed price, sourced from Maven docs 102451 and 102452.
+AI Draft may recommend one bundled Small Service Kit line containing Air Filter,
+Oil Filter, and 3L SKR oil top-up.
+The 1213.38 ILS price is evidence-backed from Maven docs 102451 and 102452
+and must remain approval-based.
 ```
 
 Required flags:
@@ -159,7 +173,7 @@ Do not approve:
 - treating the price as a contract.
 - applying this kit price to other customers/models automatically.
 
-### What Happens If Approved
+### Readiness Effect
 
 AI Draft can move from evidence-only to approval-based recommendation for the kit line:
 
@@ -175,16 +189,9 @@ The draft can cite:
 - matching service type.
 - linked Maven item rows.
 
-### What Happens If Not Approved
+### Remaining Boundary
 
-AI Draft can still list expected service lines but cannot recommend a price.
-
-Result:
-
-- `recommendedPrice = null`
-- `NeedsPriceApproval = true`
-- output remains `PARTIALLY`
-- Liad must manually enter kit price.
+The kit content is approved. The evidence-backed price can be proposed with `NeedsPriceApproval = true`; it is not a contract and does not approve automatic pricing for future customers/models.
 
 ## 1A. Default Service Component Evaluation Rule
 
@@ -218,9 +225,9 @@ Service Report `5806` proves why this matters:
 | Double billing | High | If labor/service or visit/travel is added without context, it may duplicate bundled kit or charged-once travel. |
 | Pricing ambiguity | Medium | Labor/service and visit/travel have different historical and fixed-rule evidence. |
 
-### Recommended Decision
+### Approved Governance Decision
 
-Approve this global document-line rule:
+This global document-line rule is already approved and must be treated as a readiness prerequisite, not as a remaining approval blocker:
 
 ```text
 Every compressor service business document must evaluate Parts lines, Oil handling line if needed,
@@ -231,7 +238,7 @@ Technician Visit / Travel is one commercial line.
 Labor + Service is one commercial line.
 ```
 
-### What Happens If Approved
+### What This Already Enables
 
 AI Draft previews and future generated customer-facing documents become complete business recommendations, not only technical parts recommendations.
 
@@ -242,15 +249,9 @@ For Service Report `5806`, the preview must explicitly show:
 - Labor + Service needs approval or is excluded if bundled.
 - Technician Visit / Travel evaluated once, with conflict evidence.
 
-### What Happens If Not Approved
+### Remaining Decision Impact
 
-AI Draft output can remain technically useful but commercially incomplete.
-
-Result:
-
-- recommendations may omit labor/service or visit/travel reasoning.
-- Liad must manually detect missing business service lines.
-- readiness should remain below `READY_FOR_APPROVAL_BASED_DRAFTS`.
+This rule removes the old "parts-only recommendation" gap. It does not approve prices, quantities, customer document creation, Maven action, or inventory action.
 
 ## 2. Labor Rule
 
@@ -294,15 +295,15 @@ Current fixed rule:
 | Unknown work time | Medium | Labor quantity must come from report/work-time evidence; if missing, quantity approval is required. |
 | Dryer labor reused for compressor labor | Medium | `102453` is report-linked but not compressor-kit work. |
 
-### Recommended Decision
+### Approved Decision
 
-Approve this rule:
+Approved rule:
 
 ```text
-AI Draft may include labor only when technician work-time evidence exists
-or when Liad explicitly wants labor shown separately from the kit.
+Labor + Service is a separate commercial line.
+It is not included in the small service kit unless explicit historical evidence says otherwise.
 Default labor unit price is 275 NIS/hour from the current fixed rule,
-but Same-customer Maven history 225-250 ILS must be shown as conflict evidence.
+but same-customer Maven history 225-250 ILS must be shown as conflict evidence.
 ```
 
 Required flags:
@@ -311,7 +312,7 @@ Required flags:
 - `NeedsQuantityApproval = true` when work time is missing or ambiguous.
 - Add `possibleKitIncludesLabor = true` when kit line may already cover service labor.
 
-### What Happens If Approved
+### Readiness Effect
 
 AI Draft can include a labor line only with explicit evidence and approval flags:
 
@@ -321,14 +322,9 @@ AI Draft can include a labor line only with explicit evidence and approval flags
 
 The recommendation becomes usable but still approval-based.
 
-### What Happens If Not Approved
+### Remaining Boundary
 
-AI Draft must omit separate labor from the recommendation or show it as unresolved:
-
-- `recommendedPrice = null`
-- `NeedsPriceApproval = true`
-- `NeedsQuantityApproval = true`
-- note: "Labor may be included in bundled small-service kit; Liad decision required."
+Labor + Service should now be evaluated as a separate commercial line by default. If explicit historical evidence proves it was bundled into a kit for a specific customer/document, AI Draft must show that evidence and mark the line `NEEDS_APPROVAL` or `EXCLUDED` with reason.
 
 ## 3. Technician Visit / Travel Rule
 
@@ -370,44 +366,41 @@ Current rule:
 | Mixing compressor and dryer work | Medium | `102453` has 250 travel but belongs to dryer/filter work. |
 | Hidden billing policy | Medium | Travel may be customer/location-specific or charged once per visit. |
 
-### Recommended Decision
+### Approved Decision
 
-Approve this rule:
+Approved rule:
 
 ```text
-For Service Report 5806, AI Draft must not auto-add 300 NIS travel
-to each SCR-40PM compressor kit line.
-Technician Visit / Travel should be represented as one approval-required commercial line.
+Technician Visit / Travel is one commercial line.
+Default suggested price is 300 ILS.
+It may be waived for nearby customers, so keep NeedsApproval = true
+when evidence conflicts or customer-specific history exists.
 AI Draft must not generate separate Technician Visit and Travel lines.
-The recommendation must show direct evidence: compressor docs 102451/102452 = 0 ILS,
+For Service Report 5806, the recommendation must show direct evidence:
+compressor docs 102451/102452 = 0 ILS,
 dryer/filter report doc 102453 = 250 ILS, current fixed rule = 300 ILS.
 ```
 
 Recommended draft behavior:
 
-- `recommendedPrice = null` or `300` only if Liad approves fixed rule override.
-- `NeedsPriceApproval = true`.
+- `recommendedPrice = 300` ILS default suggested price.
+- `NeedsApproval = true` when evidence conflicts or customer-specific history exists.
+- `NeedsPriceApproval = true` for Report 5806 because direct compressor docs, report-linked dryer work, and fixed rule conflict.
 - `NeedsQuantityApproval = false` only if one Technician Visit / Travel line is approved.
 
-### What Happens If Approved
+### Readiness Effect
 
 AI Draft can include one Technician Visit / Travel line with conflict evidence:
 
 | Draft line | Qty | Proposed price | Source | Required flag |
 |---|---:|---:|---|---|
-| Technician Visit / Travel | `1` | `300` ILS if fixed rule approved, otherwise `null` | Fixed rule + Maven conflict evidence | `NeedsPriceApproval = true` |
+| Technician Visit / Travel | `1` | `300` ILS default suggested price | Fixed rule + Maven conflict evidence | `NeedsApproval = true`; `NeedsPriceApproval = true` when conflicts exist |
 
 The draft avoids duplicate per-compressor travel and avoids splitting visit/travel into two charges.
 
-### What Happens If Not Approved
+### Remaining Boundary
 
-AI Draft cannot recommend Technician Visit / Travel price.
-
-Result:
-
-- Technician Visit / Travel appears as unresolved evidence only.
-- `NeedsPriceApproval = true`.
-- Liad must manually choose between `0`, `250`, `300`, or another price.
+The default price is approved for suggestion, not automatic charging. Nearby-customer waiver and customer-specific history still require approval flags when evidence conflicts.
 
 ## 4. Oil Quantity Rule
 
@@ -415,11 +408,17 @@ Result:
 
 Liad-approved Small Service rule:
 
-- Small Service includes Air Filter, Oil Filter, Oil handling.
+- SCR compressor Small Service includes Air Filter, Oil Filter, and `3L SKR oil top-up`.
+
+Liad-approved Large Service rule:
+
+- `4000h / 5000h = Large Service`.
+- Large Service replaces the full oil content.
+- Do not treat Large Service oil as top-up.
 
 Oil handling governance:
 
-- For SCR compressors, oil handling is often oil top-up / added oil.
+- For SCR compressors, 2000h / 2500h Small Service default oil handling is `3L SKR oil top-up`.
 - For ALUP or other compressor models, oil may be replacement.
 - Do not assume oil action or quantity without model/service evidence.
 
@@ -452,42 +451,41 @@ Oil evidence in packet:
 | Pricing oil separately from bundled kit | Medium | Direct kit price already includes added synthetic oil. |
 | Inventory misuse | High | Oil evidence does not approve stock deduction. |
 
-### Recommended Decision
+### Approved Decision
 
-Approve this rule:
+Approved rule:
 
 ```text
 For SCR-40PM 2000h Small Service in Report 5806,
-oil handling may be included in the bundled kit description,
+oil handling is 3L SKR oil top-up inside the bundled kit description,
 but AI Draft must not create a separate oil quantity or oil price line
 unless Liad approves the quantity/action.
+
+For 4000h / 5000h Large Service, AI Draft must treat oil as full oil replacement,
+not oil top-up.
 ```
 
 Required flags:
 
-- `NeedsQuantityApproval = true` for any separate oil line.
+- `NeedsQuantityApproval = false` for the approved SCR Small Service 3L SKR top-up inside the kit.
+- `NeedsQuantityApproval = true` for any separate oil line outside the approved kit.
 - `NeedsPriceApproval = true` for any separate oil line.
-- `oilAction = TOP_UP_OR_ADDED_OIL_UNCONFIRMED` unless Liad approves a specific action.
+- `oilAction = SCR_SMALL_SERVICE_3L_SKR_TOP_UP` for SCR 2000h / 2500h Small Service when model evidence is present.
+- `oilAction = LARGE_SERVICE_FULL_OIL_REPLACEMENT` for 4000h / 5000h Large Service.
 
-### What Happens If Approved
+### Readiness Effect
 
 AI Draft can safely produce:
 
-- one bundled kit line that mentions oil handling.
+- one bundled kit line that mentions `3L SKR oil top-up`.
 - no separate oil quantity line.
-- evidence note: "small-service kit includes added synthetic oil; separate oil quantity not approved."
+- evidence note: "SCR Small Service kit includes Air Filter, Oil Filter, and 3L SKR oil top-up; separate oil line is not approved."
 
 Optional separate oil line remains blocked until quantity/action approval.
 
-### What Happens If Not Approved
+### Remaining Boundary
 
-AI Draft must mark oil handling unresolved:
-
-- expected part/service line remains visible.
-- no price.
-- no quantity.
-- `NeedsQuantityApproval = true`.
-- output remains `PARTIALLY` for oil handling.
+Oil quantity is resolved for SCR Small Service kit content only. Oil price remains governed by kit/pricing evidence. Any non-SCR model, separate oil charge, or Large Service oil quantity still requires model/service evidence and approval flags as applicable.
 
 ## 5. Partial Serial Rule
 
@@ -505,10 +503,15 @@ Maven linked compressor docs:
 | `102451` | `SW854751` | full match |
 | `102452` | `SW85183` | partial serial, likely missing final digit |
 
-`SERVICE_REPORT_5806_COMMERCIAL_EVIDENCE_PACKET.md` classifies:
+`SERVICE_REPORT_5806_COMMERCIAL_EVIDENCE_PACKET.md` previously classified:
 
 - `102451`: `HIGH`.
 - `102452`: `HIGH_WITH_REVIEW`.
+
+Liad-approved correction:
+
+- Partial serial remains `NEEDS_MANUAL_CONFIRMATION`.
+- Do not classify partial serial evidence as `HIGH_WITH_REVIEW`.
 
 ### Historical Evidence
 
@@ -529,12 +532,12 @@ This supports the link but does not automatically normalize the partial serial.
 | Losing evidence traceability | Medium | Raw serial text must be preserved. |
 | Blocking useful evidence unnecessarily | Medium | Report + customer + model + service evidence strongly supports the link, even with serial review. |
 
-### Recommended Decision
+### Approved Decision
 
-Approve this rule:
+Approved rule:
 
 ```text
-Partial serial can support a HIGH_WITH_REVIEW link when report number,
+Partial serial remains NEEDS_MANUAL_CONFIRMATION even when report number,
 customer, exact model/approved alias, and service item evidence all match.
 Partial serial must not be normalized to the full serial automatically.
 AI Draft may use the linked Maven document as evidence only with a review flag.
@@ -543,59 +546,57 @@ AI Draft may use the linked Maven document as evidence only with a review flag.
 For report `5806`:
 
 - `102451` can be treated as `HIGH` link evidence.
-- `102452` can be treated as `HIGH_WITH_REVIEW` link evidence.
+- `102452` must be treated as `NEEDS_MANUAL_CONFIRMATION` link evidence.
 - Raw partial serial `SW85183` must be preserved.
 - Do not rewrite it to `SW851838` unless Liad approves that correction separately.
 
-### What Happens If Approved
+### Readiness Effect
 
 AI Draft can use both compressor Maven docs:
 
 - `102451` as direct full-serial evidence.
-- `102452` as direct report/customer/model/service evidence with serial review flag.
+- `102452` as direct report/customer/model/service evidence with `NEEDS_MANUAL_CONFIRMATION`.
 
 This allows the kit price evidence to cover both compressor rows while still exposing the serial risk.
 
 Required field:
 
-- `partialSerialReviewRequired = true` for the second row/document.
+- `partialSerialConfirmationRequired = true` for the second row/document.
 
-### What Happens If Not Approved
+### Remaining Boundary
 
-AI Draft can use only `102451` as full-serial high-confidence evidence.
+Partial serial evidence can support an approval-based recommendation but cannot be treated as confirmed equipment identity. Final use of the `102452` row requires manual confirmation.
 
-Consequences:
+## Approved Rules That Move To READY_FOR_APPROVAL_BASED_DRAFTS
 
-- second compressor row remains pricing/evidence review only.
-- kit evidence for `102452` cannot be used as high-confidence row-specific evidence.
-- readiness stays `PARTIALLY`.
+Liad-approved decisions now recorded:
 
-## Required Approvals To Move To READY_FOR_APPROVAL_BASED_DRAFTS
-
-Exact approvals required:
-
-| # | Approval | Recommended value | Required to reach readiness? |
+| # | Approval | Approved value | Readiness effect |
 |---:|---|---|---|
-| 1 | Kit Price Rule | Approve bundled SCR-40PM 2000h Small Service Kit at `1213.38` ILS as evidence-backed recommendation price for Report 5806, with `NeedsPriceApproval = true` | Yes |
-| 2 | Global Service Document Line Evaluation Rule | Require every compressor service business document to evaluate Parts lines, Oil handling line if needed, Labor + Service, and Technician Visit / Travel, with include/exclude/approval reasoning | Yes |
-| 3 | Labor Rule | Approve labor as optional/separate only when work-time evidence exists; default `275` ILS/hour may be shown with conflict evidence and approval flag | Yes |
-| 4 | Technician Visit / Travel Rule | Approve one Technician Visit / Travel line only, not per-compressor; show conflict between `0`, `250`, and fixed `300`; keep approval required unless Liad selects default | Yes |
-| 5 | Oil Quantity Rule | Approve oil handling inside bundled kit; block separate oil quantity/price until Liad approves action and quantity | Yes |
-| 6 | Partial Serial Rule | Approve `102452` as `HIGH_WITH_REVIEW` evidence, preserving raw `SW85183` and not auto-normalizing | Yes |
+| 1 | SCR Small Service Kit | Default SCR 2000h / 2500h small-service kit includes Air Filter, Oil Filter, and 3L SKR oil top-up | Resolved kit-content blocker |
+| 2 | Labor + Service | Separate commercial line; not included in small service kit unless explicit historical evidence says otherwise | Resolved labor-in-kit ambiguity |
+| 3 | Technician Visit / Travel | One commercial line; default suggested price `300` ILS; keep approval when conflicts/customer history exist | Resolved default visit/travel suggestion |
+| 4 | Large Service Oil | 4000h / 5000h Large Service replaces full oil content; do not treat as top-up | Resolved large-service oil action rule |
+| 5 | Partial Serial | Partial serial remains `NEEDS_MANUAL_CONFIRMATION`; do not classify as `HIGH_WITH_REVIEW` | Resolved partial-serial confidence policy |
+
+Already approved / not a blocker:
+
+| Rule | Status | Readiness effect |
+|---|---|---|
+| Global Service Document Line Evaluation Rule | Approved governance rule | Required behavior, but no longer an unresolved approval blocker |
+| Internal SKU naming strategy | Deferred | Not a blocker for AI Draft readiness; manufacturer part numbers are sufficient technical evidence for the current phase |
 
 Minimum approval set:
 
 ```text
-Approve bundled kit line at 1213.38 ILS as evidence-backed recommendation.
-Approve mandatory evaluation of Parts lines, Oil handling line if needed, Labor + Service, and Technician Visit / Travel for all compressor service business documents.
-Approve no automatic kit price splitting.
-Approve no separate oil quantity line.
-Approve Technician Visit / Travel as one approval-required line, not per compressor and not split into two lines.
-Approve labor only with approval flag when separate from kit.
-Approve partial serial use as HIGH_WITH_REVIEW, not normalization.
+Approved: SCR Small Service kit includes Air Filter, Oil Filter, and 3L SKR oil top-up.
+Approved: Labor + Service is a separate commercial line unless explicit historical evidence proves otherwise.
+Approved: Technician Visit / Travel is one line with default suggested price 300 ILS and approval flags when conflicts/customer history exist.
+Approved: Large Service replaces full oil content.
+Approved: Partial serial remains NEEDS_MANUAL_CONFIRMATION, not HIGH_WITH_REVIEW.
 ```
 
-If these are approved, status becomes:
+Status is now:
 
 `READY_FOR_APPROVAL_BASED_DRAFTS`
 
@@ -604,6 +605,7 @@ Meaning:
 - AI Draft may produce a recommendation preview.
 - The draft title/header must include `SCR-40PM`.
 - The draft may cite Maven docs `102451` and `102452`.
+- The draft may use manufacturer part numbers as technical evidence without waiting for internal SKU naming.
 - The draft may include approval flags.
 - The draft still requires user approval before any write/action.
 
@@ -622,10 +624,10 @@ If approved, the safest first AI Draft recommendation shape is:
 
 | Line | Qty | Unit price | Source | Confidence | Approval flags |
 |---|---:|---:|---|---|---|
-| `SCR-40PM 2000h Small Service Kit` | `2` equipment rows, or separate one-per-serial display | `1213.38` ILS | Maven docs `102451`, `102452` | `HIGH` / `HIGH_WITH_REVIEW` | `NeedsPriceApproval = true`; partial serial review for `102452` |
-| `Technician Visit / Travel` | `1` | Liad decision required; candidate `300` fixed rule or Maven evidence `0/250` | Fixed rule + Maven conflict evidence | `MEDIUM` | `NeedsPriceApproval = true` |
-| `Labor + Service` | from work-time evidence only | `275` ILS/hour if fixed rule selected | Fixed rule + Maven conflict evidence `225-250` | `MEDIUM` | `NeedsPriceApproval = true`; `NeedsQuantityApproval` if time missing |
-| `Oil handling` | included in kit | no separate price | Small Service rule + Maven kit text | `MEDIUM` | no separate line unless Liad approves quantity/action |
+| `SCR-40PM 2000h Small Service Kit` | `2` equipment rows, or separate one-per-serial display | `1213.38` ILS evidence-backed suggestion | Maven docs `102451`, `102452` | `HIGH` for full serial; `NEEDS_MANUAL_CONFIRMATION` for partial serial | `NeedsPriceApproval = true`; manual serial confirmation for `102452` |
+| `Technician Visit / Travel` | `1` | `300` ILS default suggested price | Fixed rule + Maven conflict evidence | `MEDIUM` | `NeedsApproval = true`; `NeedsPriceApproval = true` because Report 5806 has conflict evidence |
+| `Labor + Service` | from work-time evidence only | `275` ILS/hour if fixed rule selected | Fixed rule + Maven conflict evidence `225-250` | `MEDIUM` | `NeedsPriceApproval = true`; `NeedsQuantityApproval` if time missing; separate line by default |
+| `3L SKR oil top-up` | included in kit | no separate price | Small Service rule + Maven kit text | `HIGH` for SCR Small Service kit content | no separate line unless Liad approves separate oil charge |
 
 Recommended draft title/header:
 
@@ -637,11 +639,11 @@ SCR-40PM - 2000h Small Service - Service Report 5806
 
 Liad decision needed:
 
-1. Approve the six rules above.
-2. Record approved rules in Project Brain decision/governance files.
+1. Record approved rules in Project Brain decision/governance files.
+2. Recheck readiness and remaining blockers.
 3. Only after that, select a separate implementation/spec task for an approval-based AI Draft recommendation preview.
 
-Until these decisions are approved:
+Before these decisions were approved:
 
 `AI Draft Recommendation = PARTIALLY`
 

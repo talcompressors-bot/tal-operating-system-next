@@ -3,6 +3,30 @@
 ## 2026-06-24
 
 Decision:
+Approve AI Draft compressor service business rules for readiness.
+
+Purpose:
+Resolve the remaining AI Draft recommendation readiness decision blockers for approval-based draft previews.
+
+Approved rules:
+
+1. SCR Small Service Kit: for SCR compressor 2000h / 2500h small service, default kit includes Air Filter, Oil Filter, and 3L SKR oil top-up.
+2. Labor + Service: separate commercial line; not included in the small service kit unless explicit historical evidence says otherwise.
+3. Technician Visit / Travel: one commercial line; default suggested price is 300 ILS; keep `NeedsApproval = true` when evidence conflicts or customer-specific history exists because nearby customers may be waived.
+4. Large Service Oil Rule: 4000h / 5000h Large Service replaces the full oil content; do not treat Large Service oil as top-up.
+5. Partial Serial: partial serial remains `NEEDS_MANUAL_CONFIRMATION`; do not classify partial serial as `HIGH_WITH_REVIEW`.
+
+Readiness effect:
+AI Draft recommendation readiness moves to `READY_FOR_APPROVAL_BASED_DRAFTS`. This allows approval-based recommendation previews with evidence, flags, and manual confirmation where required. It does not approve automatic BusinessDocument creation, BusinessDocumentItem creation, Maven/Invoice4U action, inventory deduction, DB writes, Prisma changes, customer sending, or production workflow changes.
+
+Status:
+Approved by Liad. Documentation only.
+
+---
+
+## 2026-06-24
+
+Decision:
 Define planned `EMAIL_DOCUMENT_INTAKE_AGENT`.
 
 Purpose:

@@ -64,14 +64,15 @@ These are service pattern rules only. They help AI Draft recommend expected serv
 
 | Service rule | Definition | Expected parts / handling | Source | Confidence | AI inference | Historical guess | Notes |
 |---|---|---|---|---|---|---|---|
-| Large Service | `4000h` / `5000h` service | Air Filter; Oil Filter; Oil Separator; Oil | Liad Approved | Approved | No | No | Expected service lines only |
-| Small Service | `2000h` / `2500h` service | Air Filter; Oil Filter; Oil handling | Liad Approved | Approved | No | No | Expected service lines only |
+| Large Service | `4000h` / `5000h` service | Air Filter; Oil Filter; Oil Separator; full oil replacement | Liad Approved | Approved | No | No | Do not treat Large Service oil as top-up |
+| Small Service | `2000h` / `2500h` service | Air Filter; Oil Filter; 3L SKR oil top-up for SCR compressors | Liad Approved | Approved | No | No | Default SCR Small Service kit content |
 
 Oil handling rule:
 
 | Context | Rule | Source | Confidence | AI inference | Historical guess | Notes |
 |---|---|---|---|---|---|---|
-| SCR compressors | Oil handling is often oil top-up / added oil | Liad Approved | Approved | No | No | Do not assume action type automatically without model/service evidence |
+| SCR 2000h / 2500h Small Service | Oil handling is 3L SKR oil top-up | Liad Approved | Approved | No | No | Applies when SCR model/service evidence is present |
+| 4000h / 5000h Large Service | Replace the full oil content | Liad Approved | Approved | No | No | Do not treat Large Service oil as top-up |
 | ALUP or other compressor models | Oil handling may be oil replacement | Liad Approved | Approved | No | No | Do not assume action type automatically without model/service evidence |
 
 ## 5. Approved Manufacturer Exceptions
@@ -109,6 +110,9 @@ Applies to:
 | Technician Visit / Travel is one commercial line | Liad Approved | Approved | No | No | Do not generate separate Technician Visit and Travel lines; do not double-charge travel |
 | Labor + Service is one commercial line | Liad Approved | Approved | No | No | Do not split Labor and Service unless Liad explicitly approves an exception; do not double-charge service/labor |
 | Compressor service documents must mark every generated or suggested line as included, excluded, or approval-required | Liad Approved | Approved | No | No | Historical bundled price must explain whether it includes parts only, parts + labor/service, or parts + labor/service + technician visit/travel |
+| Labor + Service is separate from SCR Small Service kit by default | Liad Approved | Approved | No | No | It is not included in the small service kit unless explicit historical evidence says otherwise |
+| Technician Visit / Travel default suggested price is 300 ILS | Liad Approved | Approved | No | No | Keep NeedsApproval when evidence conflicts or customer-specific history exists; nearby customers may be waived |
+| Partial serial remains NEEDS_MANUAL_CONFIRMATION | Liad Approved | Approved | No | No | Do not classify partial serial evidence as HIGH_WITH_REVIEW |
 
 ## 7. Approved Inventory Learning Rules
 
