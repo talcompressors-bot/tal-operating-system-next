@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Manufacturer Parts Registry Import + Service Kit Intelligence MVP completed; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Manufacturer Registry Alias and Conflict Validation completed; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -132,6 +132,18 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 Manufacturer Parts Registry Import + Service Kit Intelligence Planning/MVP is complete as a safe no-DB-write foundation. The PM Series SCR COMP workbook was parsed from its OOXML contents and converted into generated registry fixtures under `data-sources/vendor-spare-parts/generated/`: 9 PM models, 250 manufacturer part rows, 8 service interval kit candidates per PM model, and 69 shared manufacturer SKU overlaps. Runtime now reads the generated registry fixture through `lib/manufacturer-parts-registry.ts` instead of the prior hard-coded 40PM seed; Excel files are not read at runtime. The matcher remains generic: ServiceReport -> equipment model evidence -> Manufacturer Parts Registry fixture -> part category match -> BusinessDocumentItem enrichment. Manufacturer SKU remains internal-only. Customer preview/PDF still uses only linked Tal/internal sales SKU and hides SKU when sales SKU mapping is missing. EPM Series remains partial-only because it is a legacy binary `.xls`; exact sheet/row extraction requires approved parser/conversion tooling or a different environment. No schema changes, DB writes, imports, Maven/Invoice4U calls, customer/email actions, inventory actions, source-system changes, production actions, or package installs occurred.
 
 Current blocker: none for the PM fixture/import MVP and service-kit intelligence planning. Remaining gates: EPM exact extraction tooling approval, future schema/import approval before a real Manufacturer Parts Registry table, explicit DB-write approval before any import, explicit real Maven execution approval, separate customer-facing/email approval, and separate inventory approval.
+
+## Manufacturer Registry Alias and Conflict Validation
+
+Completed as documentation/validation only:
+
+- Verified generated PM registry fixture models are `10PM2`, `15PM2`, `20PM2`, `30PM`, `40PM`, `50PM`, `60PM`, `75PM`, and `100PM`.
+- Verified `20APM` does not exist as an exact model in the generated PM fixture.
+- Verified `20PM2` oil separator evidence from the generated PM fixture: manufacturer `SCR COMP`, series `PM2`, model `20PM2`, part category `OIL_SEPARATOR`, SKU `25350030-021`, source file `data-sources/vendor-spare-parts/Spare Parts Service List(PM Series) rev3 (1).xls`, source sheet `20PM2`, source row `8`, review status `REVIEWED_SAMPLE_CATEGORY`.
+- Verified existing canonical rules in `MANUFACTURER_KNOWLEDGE_BASE.md` and `PART_COMPATIBILITY_REGISTRY.md`: `20APM = 20PM2` is an identity alias only; `20APM Oil Separator = 30PM Oil Separator` is an approved compatibility exception; `20APM Oil Separator != 20PM2 Oil Separator` is an approved non-compatibility rule.
+- Updated `SKU_MATCHING_RULES.md` and `MANUFACTURER_SERVICE_KITS.md` so alias/model normalization conflicts must be marked needs-review and shared SKU overlap must not create shared service kits.
+
+No runtime behavior changed. Customer PDF behavior was not changed. No DB write, schema change, package install, Maven/Invoice4U call, email/customer action, inventory action, source-system action, or production action occurred.
 
 ## Wave 3 PDF Export Smoke Test and Governance Lock
 

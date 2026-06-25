@@ -3,6 +3,32 @@
 ## 2026-06-25
 
 Decision:
+PM/APM aliases must not merge SKU compatibility when a part-specific conflict exists.
+
+Reason:
+The generated PM registry fixture contains exact `20PM2` oil separator evidence, but no exact `20APM` row. Existing canonical knowledge says `20APM = 20PM2` is an identity alias only, while `20APM` oil separator uses the `30PM` oil separator by approved exception and must not use the `20PM2` separator. Allowing alias normalization to merge those rows would produce a wrong SKU for real service kits or inventory.
+
+Evidence:
+
+- Generated PM fixture includes `20PM2` oil separator SKU `25350030-021`, source sheet `20PM2`, source row `8`.
+- Generated PM fixture has `0` exact `20APM` rows.
+- `MANUFACTURER_KNOWLEDGE_BASE.md` records `20APM = 20PM2` as an alias that does not approve oil separator matching.
+- `PART_COMPATIBILITY_REGISTRY.md` records `20APM Oil Separator = 30PM Oil Separator` and `20APM Oil Separator != 20PM2 Oil Separator`.
+
+Rule:
+If alias/model normalization causes a SKU conflict for a part category, mark the line or kit membership as needs-review. Shared SKU overlap does not create a shared service kit.
+
+Boundary:
+Documentation validation only. No runtime behavior change, customer PDF change, DB write, schema change, package install, Maven/Invoice4U call, email/customer action, inventory action, source-system action, or production action occurred.
+
+Status:
+Completed. Future service-kit and inventory work must preserve model-specific and exception-specific compatibility instead of merging by family name.
+
+---
+
+## 2026-06-25
+
+Decision:
 Use generated Manufacturer Parts Registry and service-kit intelligence fixtures as the safe import MVP before any database import.
 
 Reason:

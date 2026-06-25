@@ -1,13 +1,13 @@
 # TASK BOARD
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Manufacturer Parts Registry Import + Service Kit Intelligence MVP completed; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Manufacturer Registry Alias and Conflict Validation completed; no real Maven execution approved yet
 
 ## NOW
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Manufacturer Parts Registry Import + Service Kit Intelligence MVP | Convert trusted SCR COMP PM workbook evidence into reusable generated registry fixtures and derive service-kit intelligence without DB writes | Completed: generated PM registry fixture has 9 models and 250 rows; service-kit fixture has 8 interval kit candidates per model; shared-overlap fixture has 69 shared SKUs; runtime reads generated registry fixture instead of Excel/hard-coded 40PM seed; EPM exact extraction documented as partial-only | No approval needed for generated fixtures/read-runtime wiring; explicit approval remains required before schema changes, DB writes/imports, parser package installs/conversion tooling, Maven/Invoice4U execution, customer-facing/email action, inventory action, source-system/production work, or external export |
+| Manufacturer Registry Alias and Conflict Validation | Verify PM/APM alias and 20APM/20PM2 oil separator conflict before real service-kit or inventory use | Completed: `20APM` is absent from generated PM fixture; `20PM2` oil separator is `25350030-021` from PM sheet `20PM2` row 8; existing canonical rules say `20APM = 20PM2` is identity-only, `20APM Oil Separator = 30PM Oil Separator`, and `20APM Oil Separator != 20PM2 Oil Separator`; active SKU/service-kit rules now require needs-review on alias/model SKU conflicts and forbid treating shared SKU overlap as shared service kit | No approval needed for documentation validation; explicit approval remains required before schema changes, DB writes/imports, parser package installs/conversion tooling, Maven/Invoice4U execution, customer-facing/email action, inventory action, source-system/production work, or external export |
 
 ## NEXT
 
@@ -39,6 +39,7 @@ Mode: CAPABILITY_BUILDING; governance frozen; Manufacturer Parts Registry Import
 
 | Task | Evidence |
 |---|---|
+| Manufacturer Registry Alias and Conflict Validation completed | Commit `PENDING`; verified generated PM fixture and Project Brain compatibility rules. Evidence found: `20PM2` oil separator SKU `25350030-021`, source sheet `20PM2`, row 8. Evidence missing/blocked: exact `20APM` registry row is not in the generated PM fixture; EPM/APM exact source-row extraction remains blocked by legacy binary workbook/tooling gap. Updated `SKU_MATCHING_RULES.md` and `MANUFACTURER_SERVICE_KITS.md` to make alias/model conflicts needs-review and to state shared SKU overlap does not imply shared service kit. No runtime behavior change, customer PDF change, DB write, schema change, package install, Maven/Invoice4U call, email/customer action, inventory action, source-system action, or production action occurred |
 | Manufacturer Parts Registry Import + Service Kit Intelligence MVP completed | Commit `PENDING`; generated `data-sources/vendor-spare-parts/generated/manufacturer-parts-registry.sample.json`, `service-kit-intelligence.sample.json`, `shared-sku-overlap.sample.json`, and `manufacturer-registry-import-summary.sample.json` from the PM Series workbook without DB writes. PM Series extraction found sheets/models `10PM2`, `15PM2`, `20PM2`, `30PM`, `40PM`, `50PM`, `60PM`, `75PM`, and `100PM`; captured 250 registry rows; derived 8 interval kit candidates per PM model; identified 69 shared manufacturer SKUs. EPM Series is legacy binary `.xls` and remains partial-only in this environment. Runtime now reads the generated registry fixture instead of hard-coded 40PM rows and keeps manufacturer SKU internal-only while customer preview/PDF uses only Tal/internal sales SKU. No schema change, DB write/import, package install, Maven/Invoice4U call, email/customer action, inventory action, source-system action, or production action occurred |
 | Governance foundation completed | `PROJECT_OPERATING_PROTOCOL.md` exists and remains highest authority/governor |
 | Project Brain startup alignment Phase 1 | Startup now begins with `PROJECT_INDEX.md`; retired current-task path is a stub |

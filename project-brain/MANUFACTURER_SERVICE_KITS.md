@@ -87,6 +87,26 @@ Service Kit Registry plan:
 4. Add approved internal service-kit identity only after a future schema/import task is explicitly approved.
 5. Reuse this same kit registry for AI Draft, BusinessDocument review, inventory planning, and future purchase orders.
 
+## Alias / Overlap Conflict Rules
+
+Shared manufacturer SKU overlap is not a shared service kit. A service kit is model + service interval + approved service action + approved item set; it is not created from one shared SKU by itself.
+
+Critical SCR rules:
+
+| Rule | Evidence | Service-kit behavior |
+|---|---|---|
+| PM/APM aliases can exist | `MANUFACTURER_KNOWLEDGE_BASE.md` records `20APM = 20PM2` as an approved model identity alias | Alias can support lookup review only; it does not approve kit membership automatically |
+| Similar model names must not merge | `SKU_MATCHING_RULES.md` limits normalization to separators/case noise | `20APM`, `20PM2`, `20PM`, `20EPM`, and similar names require exact evidence or approved alias/exception |
+| `20PM2` oil separator | Generated PM fixture: `20PM2`, `OIL_SEPARATOR`, SKU `25350030-021`, sheet `20PM2`, row 8 | Valid for `20PM2` kit candidates only |
+| `20APM` oil separator | `PART_COMPATIBILITY_REGISTRY.md` says `20APM` oil separator equals `30PM` oil separator by Liad-approved exception | Do not use `20PM2` oil separator in a `20APM` kit from alias alone |
+| `20APM != 20PM2` for oil separator | `MANUFACTURER_KNOWLEDGE_BASE.md` and `PART_COMPATIBILITY_REGISTRY.md` explicitly record non-compatibility | If alias expansion would assign `25350030-021` to `20APM`, mark needs-review/conflict |
+
+Current evidence status:
+
+- `20APM` does not exist as an exact model in the generated PM registry fixture.
+- EPM/APM exact source-row extraction remains blocked by the legacy binary workbook/tooling gap.
+- Future service-kit derivation must preserve model-specific and exception-specific kit membership instead of merging by normalized model family.
+
 ## AI Draft / BusinessDocument Use
 
 Allowed read/review use:

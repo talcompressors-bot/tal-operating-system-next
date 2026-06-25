@@ -28,6 +28,27 @@ Manufacturer Excel row evidence is the primary technical compatibility source. P
 | Manufacturer row match | Select manufacturer part number from reviewed file/sheet/row for model + part category |
 | Manual override | Requires approver, date, reason, and preserved original evidence |
 
+## Alias And Conflict Rules
+
+PM/APM aliases are governed identity hints, not automatic part compatibility.
+
+| Rule | Required behavior |
+|---|---|
+| PM/APM family alias | May help locate candidate manufacturer evidence only when explicitly approved |
+| Similar model names | Must not be merged automatically; normalized model matching removes separators/case noise only |
+| Alias with part conflict | If alias/model normalization causes a different SKU for the same part category, mark `REVIEW_REQUIRED` / needs-review |
+| Compatibility exception | Use only when the exact exception is recorded with evidence, approver, and part category |
+| Shared SKU overlap | Treat as compatibility evidence for that SKU only; it does not approve a shared service kit |
+
+Critical SCR conflict evidence:
+
+| Model / alias | Part category | Evidence | Required outcome |
+|---|---|---|---|
+| `20APM = 20PM2` | Model identity alias | `MANUFACTURER_KNOWLEDGE_BASE.md` says alias is approved but does not approve oil separator matching | Do not merge all parts automatically |
+| `20PM2` | `OIL_SEPARATOR` | PM fixture row: SKU `25350030-021`, source sheet `20PM2`, row 8 | Valid `20PM2` manufacturer evidence only |
+| `20APM` | `OIL_SEPARATOR` | `PART_COMPATIBILITY_REGISTRY.md` says `20APM` oil separator uses `30PM` oil separator by Liad-approved exception | Must not use `20PM2` oil separator from alias alone |
+| `20APM` vs `20PM2` | `OIL_SEPARATOR` | `MANUFACTURER_KNOWLEDGE_BASE.md` and `PART_COMPATIBILITY_REGISTRY.md` explicitly mark `20APM Oil Separator != 20PM2 Oil Separator` | Always needs-review unless explicit exception path is implemented |
+
 No confident match behavior:
 
 - Set review-required state.
@@ -97,6 +118,7 @@ Registry fixture coverage:
 - PM registry rows captured: 250.
 - Shared manufacturer SKUs identified: 69.
 - EPM remains partial-only until approved parser/conversion tooling can preserve exact source rows.
+- `20APM` is not present as an exact model in the generated PM registry fixture. Do not guess `20APM` rows from `20PM2`; use the approved conflict/exception rules above.
 
 ## Future Shared Consumer Rule
 
