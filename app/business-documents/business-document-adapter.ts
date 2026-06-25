@@ -47,6 +47,8 @@ type BusinessDocumentRecord = Pick<
   | "approvedAt"
   | "mavenDocumentNumber"
   | "mavenPdfLink"
+  | "sendByEmail"
+  | "sendByWhatsapp"
   | "sendStatus"
   | "notes"
   | "createdAt"
@@ -88,6 +90,14 @@ export type BusinessDocumentDetail = BusinessDocumentListItem & {
   mavenPdfLink: string;
   sendStatus: string;
   notes: string;
+  reviewStatus: {
+    internalDraft: string;
+    sentState: string;
+    mavenState: string;
+    emailState: string;
+    inventoryState: string;
+  };
+  reviewWarnings: string[];
   lifecycle: {
     draft: string;
     approved: string;
@@ -134,6 +144,8 @@ const businessDocumentSelect = {
   approvedAt: true,
   mavenDocumentNumber: true,
   mavenPdfLink: true,
+  sendByEmail: true,
+  sendByWhatsapp: true,
   sendStatus: true,
   notes: true,
   createdAt: true,
@@ -278,6 +290,72 @@ function mapLifecycle(document: BusinessDocumentRecord) {
   };
 }
 
+function mapReviewStatus(document: BusinessDocumentRecord) {
+  return {
+    internalDraft:
+      document.status === "DRAFT_RECOMMENDED" ||
+      document.status === "WAITING_USER_APPROVAL"
+        ? "Internal Draft"
+        : formatEnum(document.status, "Internal Draft"),
+    sentState:
+      readText(document.sendStatus) ||
+      (document.sendByEmail || document.sendByWhatsapp
+        ? "Send pending review"
+        : "Not sent"),
+    mavenState:
+      document.mavenDocumentNumber || document.mavenPdfLink
+        ? "Maven draft exists"
+        : "No Maven action",
+    emailState:
+      document.sendStatus || document.sendByEmail || document.sendByWhatsapp
+        ? "Delivery review required"
+        : "No email/customer-facing action",
+    inventoryState: "No inventory deduction",
+  };
+}
+
+function buildReviewWarnings(document: BusinessDocumentRecord) {
+  const warnings: string[] = [];
+  const approvalRequiredItems = document.items.filter(
+    (item) => item.needsPriceApproval,
+  );
+  const missingEvidenceItems = document.items.filter(
+    (item) => !summarizePricingEvidence(item.rawSource).length,
+  );
+
+  if (!document.items.length) {
+    warnings.push("No BusinessDocumentItems are linked to this draft.");
+  }
+
+  if (approvalRequiredItems.length) {
+    warnings.push(
+      `${approvalRequiredItems.length} line item(s) still require price approval before any Maven/Invoice4U action.`,
+    );
+  }
+
+  if (missingEvidenceItems.length) {
+    warnings.push(
+      `${missingEvidenceItems.length} line item(s) have no preserved pricing evidence.`,
+    );
+  }
+
+  if (!document.serviceReport) {
+    warnings.push("No source ServiceReport is linked to this draft.");
+  }
+
+  if (document.mavenDocumentNumber || document.mavenPdfLink) {
+    warnings.push("Maven fields are populated; verify no duplicate external action before proceeding.");
+  }
+
+  if (document.sendStatus || document.sendByEmail || document.sendByWhatsapp) {
+    warnings.push("Send fields are populated; verify customer-facing delivery status before proceeding.");
+  }
+
+  return warnings.length
+    ? warnings
+    : ["Review-ready internal draft. User approval is still required before any external action."];
+}
+
 function mapBusinessDocumentListItem(
   document: BusinessDocumentRecord,
 ): BusinessDocumentListItem {
@@ -322,6 +400,8 @@ function mapBusinessDocumentDetail(
     mavenPdfLink: readText(document.mavenPdfLink, "No Maven PDF"),
     sendStatus: readText(document.sendStatus, "No send status"),
     notes: readText(document.notes, "No notes"),
+    reviewStatus: mapReviewStatus(document),
+    reviewWarnings: buildReviewWarnings(document),
     lifecycle: mapLifecycle(document),
     items: document.items.map((item) => ({
       id: readText(item.appsheetItemId) || item.id,

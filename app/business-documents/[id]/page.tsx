@@ -22,11 +22,12 @@ export default async function BusinessDocumentDetailPage({
     <section className="page-shell">
       <div className="detail-header">
         <div>
-          <p className="eyebrow">Business Document</p>
+          <p className="eyebrow">BusinessDocument Review</p>
           <h1>{document.title}</h1>
           <p className="lede">
-            Read-only draft document detail with approval, Maven, and delivery
-            lifecycle placeholders.
+            Internal draft review before Maven, Invoice4U, inventory, email, or
+            customer-facing action. Review every line and pricing evidence
+            before approving the next step.
           </p>
         </div>
         <div className="actions">
@@ -45,6 +46,41 @@ export default async function BusinessDocumentDetailPage({
       </div>
 
       <div className="detail-grid">
+        <article className="info-panel wide">
+          <h2>Review status</h2>
+          <div className="review-status-grid">
+            <div className="review-status-item strong">
+              <span>Draft state</span>
+              <strong>{document.reviewStatus.internalDraft}</strong>
+            </div>
+            <div className="review-status-item">
+              <span>Send state</span>
+              <strong>{document.reviewStatus.sentState}</strong>
+            </div>
+            <div className="review-status-item">
+              <span>Maven / Invoice4U</span>
+              <strong>{document.reviewStatus.mavenState}</strong>
+            </div>
+            <div className="review-status-item">
+              <span>Email / customer</span>
+              <strong>{document.reviewStatus.emailState}</strong>
+            </div>
+            <div className="review-status-item">
+              <span>Inventory</span>
+              <strong>{document.reviewStatus.inventoryState}</strong>
+            </div>
+          </div>
+        </article>
+
+        <article className="info-panel wide">
+          <h2>Approval-required warnings</h2>
+          <ul className="warning-list">
+            {document.reviewWarnings.map((warning) => (
+              <li key={warning}>{warning}</li>
+            ))}
+          </ul>
+        </article>
+
         <article className="info-panel">
           <h2>Document</h2>
           <dl>
@@ -90,20 +126,8 @@ export default async function BusinessDocumentDetailPage({
         </article>
 
         <article className="info-panel wide">
-          <h2>Linked placeholders</h2>
+          <h2>Source links</h2>
           <dl>
-            <div>
-              <dt>AI Draft</dt>
-              <dd>
-                {document.aiDraftId ? (
-                  <Link href={`/ai-drafts/${document.aiDraftId}`}>
-                    {document.aiDraftTitle}
-                  </Link>
-                ) : (
-                  document.aiDraftTitle
-                )}
-              </dd>
-            </div>
             <div>
               <dt>Service Report</dt>
               <dd>
@@ -115,6 +139,10 @@ export default async function BusinessDocumentDetailPage({
                   document.serviceReportNumber
                 )}
               </dd>
+            </div>
+            <div>
+              <dt>Source document ID</dt>
+              <dd>{document.sourceDocumentId}</dd>
             </div>
             <div>
               <dt>Customer</dt>
@@ -129,8 +157,20 @@ export default async function BusinessDocumentDetailPage({
               </dd>
             </div>
             <div>
+              <dt>AI Draft</dt>
+              <dd>
+                {document.aiDraftId ? (
+                  <Link href={`/ai-drafts/${document.aiDraftId}`}>
+                    {document.aiDraftTitle}
+                  </Link>
+                ) : (
+                  document.aiDraftTitle
+                )}
+              </dd>
+            </div>
+            <div>
               <dt>Maven Document</dt>
-              <dd>{document.mavenDocumentNumber}</dd>
+              <dd>{document.reviewStatus.mavenState}</dd>
             </div>
           </dl>
         </article>
@@ -148,7 +188,7 @@ export default async function BusinessDocumentDetailPage({
         </article>
 
         <article className="info-panel wide">
-          <h2>Line items</h2>
+          <h2>Review line items</h2>
           <div className="table-card">
             <table>
               <thead>
@@ -165,12 +205,20 @@ export default async function BusinessDocumentDetailPage({
               <tbody>
                 {document.items.map((item) => (
                   <tr key={item.id}>
-                    <td>{item.name}</td>
+                    <td>
+                      <strong>{item.name}</strong>
+                    </td>
                     <td>{item.quantity}</td>
                     <td>{item.unitPrice}</td>
                     <td>{item.totalPrice}</td>
                     <td>{item.source}</td>
-                    <td>{item.needsPriceApproval}</td>
+                    <td>
+                      {item.needsPriceApproval === "Required" ? (
+                        <span className="warning-pill">Required</span>
+                      ) : (
+                        item.needsPriceApproval
+                      )}
+                    </td>
                     <td>
                       {item.pricingEvidence.length ? (
                         <ul className="pricing-evidence-list">
@@ -197,7 +245,7 @@ export default async function BusinessDocumentDetailPage({
         </article>
 
         <article className="info-panel wide">
-          <h2>Log placeholders</h2>
+          <h2>Internal notes</h2>
           <dl>
             <div>
               <dt>Description</dt>
@@ -209,7 +257,7 @@ export default async function BusinessDocumentDetailPage({
             </div>
             <div>
               <dt>Send status</dt>
-              <dd>{document.sendStatus}</dd>
+              <dd>{document.reviewStatus.sentState}</dd>
             </div>
           </dl>
         </article>
