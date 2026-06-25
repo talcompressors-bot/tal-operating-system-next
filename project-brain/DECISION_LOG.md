@@ -1082,3 +1082,19 @@ No real Maven/Invoice4U call, no external document creation, no email/customer-f
 
 Status:
 Approved and implemented in commit `1ff28a3 Add Maven draft dry-run adapter`.
+
+---
+
+## 2026-06-25
+
+Decision:
+BusinessDocument line blocker correction is implemented as an internal-only line resolution layer on `/business-documents/[id]`.
+
+Reason:
+Maven dry-run validation can identify line blockers, but users need a protected way to correct only the internal draft fields that are required before Maven readiness: quantity, unit price, pricing evidence, and approval-required state. Each correction must preserve audit history and must not imply Maven execution.
+
+Boundaries:
+Line resolution may update only `BusinessDocumentItem` quantity, unit price, total price, pricing evidence in `rawSource`, the item approval-required flag, and `BusinessDocumentLog`. It does not call Maven/Invoice4U, execute AutomationCommands, create external documents, send email, affect inventory, change schema/env, import data, touch source systems, or perform production actions. Maven dry-run is not re-run by line saves; it remains a separate explicit action.
+
+Status:
+Approved and implemented in commit `8538455 Add business document line resolution layer`.
