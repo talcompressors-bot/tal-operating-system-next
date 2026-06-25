@@ -2,12 +2,15 @@
 
 import {
   AutomationCommandType,
-  BusinessDocumentStatus,
   Prisma,
 } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "../../../lib/prisma";
+import {
+  buildMavenDraftPayload,
+  validateMavenDraftPayload,
+} from "../../../lib/maven-draft-payload";
 
 const MAVEN_DRY_RUN_PHRASE = "DRY RUN MAVEN COMMAND";
 
@@ -27,15 +30,6 @@ function readObject(value: Prisma.JsonValue | null) {
   }
 
   return value as Record<string, Prisma.JsonValue>;
-}
-
-function decimalToNumber(value: Prisma.Decimal | null) {
-  if (!value) {
-    return null;
-  }
-
-  const numberValue = Number(value.toString());
-  return Number.isFinite(numberValue) ? numberValue : null;
 }
 
 type DryRunCommand = NonNullable<Awaited<ReturnType<typeof findCommand>>>;
@@ -114,138 +108,6 @@ async function findCommand(commandId: string) {
   });
 }
 
-function validateCommand(command: DryRunCommand) {
-  const blockers: string[] = [];
-  const warnings: string[] = [];
-  const payload = readObject(command.payload);
-  const document = command.businessDocument;
-
-  if (command.commandType !== AutomationCommandType.CREATE_MAVEN_DRAFT) {
-    blockers.push("AutomationCommand type is not CREATE_MAVEN_DRAFT.");
-  }
-
-  if (!document) {
-    blockers.push("AutomationCommand is not linked to a BusinessDocument.");
-    return { blockers, warnings };
-  }
-
-  if (document.status !== BusinessDocumentStatus.APPROVED) {
-    blockers.push("BusinessDocument status is not APPROVED.");
-  }
-
-  if (document.mavenDocumentNumber || document.mavenPdfLink) {
-    blockers.push("BusinessDocument already has Maven output fields populated.");
-  }
-
-  if (!document.customer) {
-    blockers.push("BusinessDocument has no linked customer.");
-  } else {
-    if (!document.customer.name) {
-      blockers.push("Linked customer is missing a name.");
-    }
-
-    if (!document.customer.appsheetCustomerId && !document.customer.businessId) {
-      warnings.push("Customer has no AppSheet customer ID or business ID.");
-    }
-  }
-
-  if (!document.items.length) {
-    blockers.push("BusinessDocument has no line items.");
-  }
-
-  document.items.forEach((item) => {
-    const quantity = decimalToNumber(item.quantity);
-
-    if (!quantity || quantity <= 0) {
-      blockers.push(`${item.itemName} has missing or zero quantity.`);
-    }
-
-    if (!item.unitPrice || !item.totalPrice) {
-      blockers.push(`${item.itemName} is missing trusted unit or total price.`);
-    }
-
-    if (item.needsPriceApproval) {
-      blockers.push(`${item.itemName} still requires price approval.`);
-    }
-  });
-
-  if (payload.businessDocumentId && payload.businessDocumentId !== document.id) {
-    blockers.push("Command payload BusinessDocument ID does not match the linked document.");
-  }
-
-  if (
-    payload.appsheetBusinessDocumentId &&
-    payload.appsheetBusinessDocumentId !== document.appsheetBusinessDocumentId
-  ) {
-    blockers.push("Command payload AppSheet BusinessDocument ID does not match.");
-  }
-
-  if (!command.idempotencyKey) {
-    warnings.push("AutomationCommand has no idempotency key.");
-  }
-
-  return { blockers, warnings };
-}
-
-function buildMavenDraftPayload(command: DryRunCommand) {
-  const document = command.businessDocument;
-
-  if (!document) {
-    return null;
-  }
-
-  return {
-    dryRun: true,
-    command: "CreateMavenDraft",
-    commandId: command.appsheetCommandId || command.id,
-    idempotencyKey: command.idempotencyKey,
-    businessDocumentId: document.appsheetBusinessDocumentId,
-    internalBusinessDocumentId: document.id,
-    documentType: document.documentTypeSelected,
-    title: document.draftTitle,
-    description: document.description,
-    currency: document.currency,
-    subtotalAmount: decimalToNumber(document.subtotalAmount),
-    vatAmount: decimalToNumber(document.vatAmount),
-    totalAmount: decimalToNumber(document.totalAmount),
-    customer: document.customer
-      ? {
-          customerId: document.customer.appsheetCustomerId,
-          name: document.customer.name,
-          businessId: document.customer.businessId,
-          email: document.customer.emailPrimary,
-          phone: document.customer.phonePrimary,
-          address: document.customer.address,
-        }
-      : null,
-    sourceServiceReport: document.serviceReport
-      ? {
-          reportId: document.serviceReport.appsheetReportId,
-          reportCounter: document.serviceReport.reportCounter,
-          reportNumberText: document.serviceReport.reportNumberText,
-        }
-      : null,
-    items: document.items.map((item, index) => ({
-      lineNumber: index + 1,
-      itemId: item.appsheetItemId || item.id,
-      sku: item.product?.sku || null,
-      name: item.itemName,
-      description: item.description,
-      quantity: decimalToNumber(item.quantity),
-      unitPrice: decimalToNumber(item.unitPrice),
-      totalPrice: decimalToNumber(item.totalPrice),
-      needsPriceApproval: item.needsPriceApproval,
-    })),
-    boundaries: {
-      noMavenCall: true,
-      noInvoice4UCall: true,
-      noExternalDocumentCreated: true,
-      noEmail: true,
-      noInventory: true,
-    },
-  };
-}
-
 export async function runMavenDraftDryRun(formData: FormData) {
   const commandId = String(formData.get("commandId") || "").trim();
   const requestedBy = String(formData.get("requestedBy") || "Liad").trim() || "Liad";
@@ -266,7 +128,7 @@ export async function runMavenDraftDryRun(formData: FormData) {
   }
 
   const canonicalCommandId = command.appsheetCommandId || command.id;
-  const { blockers, warnings } = validateCommand(command);
+  const { blockers, warnings } = validateMavenDraftPayload(command);
   const wouldSendToMaven = buildMavenDraftPayload(command);
   const dryRunStatus = blockers.length ? "DRY_RUN_BLOCKED" : "DRY_RUN_VALIDATED";
   const now = new Date();

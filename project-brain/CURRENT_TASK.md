@@ -127,7 +127,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Current Task
 
-Wave 3 Maven Knowledge Layer has started in read-only planning/discovery mode. Wave 2 is frozen except bug fixes. The complete ServiceReport `5806` internal chain remains validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation. The active BusinessDocument `NEXT-AI-DRAFT-5806` has resolved test/manual pricing evidence and positive quantities on all five lines, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. Wave 3 Start changed documentation only, performed no DB writes, and mapped the current dry-run payload to Maven discovery requirements. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for read-only Wave 3 planning. Real Maven execution is still an explicit `APPROVAL_REQUIRED` gate and is not approved. Actual Maven/Invoice4U calls, command execution, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
+Wave 3 Maven Knowledge Layer has started in read-only planning/discovery mode, and the Maven dry-run payload builder/validator has been extracted into a reusable internal module without changing dry-run behavior. Wave 2 is frozen except bug fixes. The complete ServiceReport `5806` internal chain remains validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation. The active BusinessDocument `NEXT-AI-DRAFT-5806` has resolved test/manual pricing evidence and positive quantities on all five lines, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for the extracted payload-builder refactor. Real Maven execution is still an explicit `APPROVAL_REQUIRED` gate and is not approved. Actual Maven/Invoice4U calls, command execution, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
 
 ## Wave 2 Closeout Summary
 
@@ -383,6 +383,43 @@ Wave 3 start decision:
 - Real Maven execution is not approved.
 - Project completion remains `65%`; Wave 3 has started but no Wave 3 runtime/import capability point is claimed yet.
 
+## Wave 3 Maven Payload Builder Extraction
+
+Implementation:
+
+- `lib/maven-draft-payload.ts` now owns `buildMavenDraftPayload`, `validateMavenDraftPayload`, and the `MavenDraftBlockersAndWarnings` type.
+- `app/automation-commands/[id]/actions.ts` still owns the protected dry-run Server Action, exact phrase gate, command lookup, internal AutomationCommand update, route revalidation, and redirect behavior.
+- `scripts/validate-maven-draft-payload.ts` is a focused compile-time validation fixture for the extracted builder/validator using a safe in-memory command shape.
+
+Behavior decision:
+
+- No dry-run behavior changed intentionally.
+- Existing blocker strings and warning strings were preserved.
+- Existing `wouldSendToMaven` payload shape was preserved.
+- Existing dry-run persistence remains limited to `AutomationCommand.rawSource.mavenDryRun`.
+
+Boundaries:
+
+- No real Maven/Invoice4U call.
+- No external execution.
+- No DB writes during implementation or validation.
+- No email/customer-facing action.
+- No inventory action.
+- No source-system or production change.
+
+Validation:
+
+- Focused TypeScript passed for the extracted module, validation fixture, and AutomationCommand dry-run action.
+- Focused TypeScript passed for the Wave 2 AI Draft, BusinessDocument, AutomationCommand pages/actions/adapters plus the new module and validation fixture.
+- `git diff --check` passed with CRLF warnings only.
+- Route validation returned HTTP 200 for `/ai-drafts/preview/5806`, `/business-documents/NEXT-AI-DRAFT-5806`, `/automation-commands/NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806?dryRunStatus=dry-run-validated`, and `/automation-commands`, with expected dry-run, line, pricing, and no-external-action content.
+
+Result:
+
+- Wave 3 now has a reusable internal Maven draft payload/validation foundation.
+- Real Maven execution remains blocked until API-contract evidence, executor ownership, target environment, final payload approval, idempotency checks, allowed post-execution writes, and failure handling are explicitly approved.
+- Project completion remains `65%`; this was a behavior-preserving internal refactor, not a new external runtime/import capability point.
+
 ## Known Active IDs
 
 Source:
@@ -405,15 +442,14 @@ Wave 3 read-only Maven Knowledge Layer discovery is active.
 
 Next candidate tasks, pending explicit selection/approval:
 
-1. Extract Maven dry-run payload builder/validator into a shared internal service without changing runtime behavior.
-2. Read-only Maven source inventory: map `InvoiceMaven*`, `SyncState`, `SyncLog`, `ErrorLog`, and any other Maven-origin tab.
-3. Read-only Maven customer/document/item matching analysis for BusinessDocument `NEXT-AI-DRAFT-5806`.
-4. Real Maven execution approval package, only after API contract evidence is available.
-5. Action Server capability, when explicitly selected and scoped safely.
-6. Email Runtime capability, when explicitly selected and approved.
-7. Inventory Runtime capability, when explicitly selected and approved.
-8. Build hygiene for the existing missing Playwright dependency/type gap, if explicitly selected.
-9. Optional Wave 2 import approval package, only if explicitly approved.
+1. Read-only Maven source inventory: map `InvoiceMaven*`, `SyncState`, `SyncLog`, `ErrorLog`, and any other Maven-origin tab.
+2. Read-only Maven customer/document/item matching analysis for BusinessDocument `NEXT-AI-DRAFT-5806`.
+3. Real Maven execution approval package, only after API contract evidence is available.
+4. Action Server capability, when explicitly selected and scoped safely.
+5. Email Runtime capability, when explicitly selected and approved.
+6. Inventory Runtime capability, when explicitly selected and approved.
+7. Build hygiene for the existing missing Playwright dependency/type gap, if explicitly selected.
+8. Optional Wave 2 import approval package, only if explicitly approved.
 
 Project completion should not be overstated: current evidence-based completion is 65% by the recorded capability formula. Infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells, central work screens, preview intelligence, the AI Draft Recommendation Preview runtime, the pricing-evidence preview layer, protected internal BusinessDocument draft creation, internal BusinessDocument review, the BusinessDocument Approval Workflow, the protected internal Maven draft AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, and the BusinessDocument Line Resolution Layer; production automation readiness remains gated because no Maven/Invoice4U execution, customer-facing send, inventory deduction, or production integration is approved.
 

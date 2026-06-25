@@ -1146,3 +1146,19 @@ Wave 2 is frozen except bug fixes. This Wave 3 start changed Project Brain docum
 
 Status:
 Approved as read-only Wave 3 start. Real Maven execution remains `APPROVAL_REQUIRED`.
+
+---
+
+## 2026-06-25
+
+Decision:
+The Maven dry-run payload builder and validator are extracted into a reusable internal module.
+
+Reason:
+Wave 3 needs one canonical internal path for Maven draft payload validation before any real executor can be considered. The previous dry-run Server Action mixed phrase gating, command lookup, blocker validation, payload construction, persistence, revalidation, and redirects. The extracted module preserves the same blocker/warning logic and payload shape while allowing future dry-run, review, and approved execution code to reuse the same validation/building foundation.
+
+Boundaries:
+No real Maven/Invoice4U call, no external execution, no DB write during implementation/validation, no email/customer-facing action, no inventory action, no schema/env/migration/import/source-system/production action. The existing dry-run route behavior is intended to remain identical; only internal code organization changed.
+
+Status:
+Approved and implemented as Wave 3 internal refactor. Real Maven execution remains `APPROVAL_REQUIRED`.
