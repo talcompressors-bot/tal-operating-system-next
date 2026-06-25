@@ -3,6 +3,25 @@
 ## 2026-06-25
 
 Decision:
+Wave 2 end-to-end staging smoke test was approved for internal DB writes only on ServiceReport `5806`.
+
+Reason:
+Liad explicitly requested validation of the full internal read/protected-write chain: AI Draft Preview, protected BusinessDocument draft creation, BusinessDocument review, protected Maven AutomationCommand creation only, AutomationCommand review, and duplicate blocking.
+
+Observed result:
+The smoke test created BusinessDocument `NEXT-AI-DRAFT-5806` / `1d7f8500-1cb7-4d81-ad3a-b7d5d8b453eb` and AutomationCommand `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` / `db12ee97-0960-4f85-bdd5-f9fa30780885` with idempotency key `maven-draft:1d7f8500-1cb7-4d81-ad3a-b7d5d8b453eb`. Duplicate draft and command attempts were blocked by existing-record/no-form states.
+
+Boundary:
+This approval allowed internal staging DB writes for the smoke test only. It did not allow Maven/Invoice4U calls, command execution, customer-facing email/send, inventory deduction, Google Sheets/AppSheet/Apps Script/source-system changes, schema changes, imports, production integration, or production action.
+
+Status:
+Approved by user request and completed. Runtime bug fixed in commit `3d269fb Handle missing AI draft quantities`.
+
+---
+
+## 2026-06-25
+
+Decision:
 Protected Maven draft AutomationCommand creation is approved only for the internal Next.js Server Action path on `/business-documents/[id]`.
 
 Reason:

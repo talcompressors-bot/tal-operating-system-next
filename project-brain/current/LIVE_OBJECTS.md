@@ -15,13 +15,13 @@ ReportId: 1e25bbb1
 
 ## Business Document
 
-BusinessDocumentId: UNKNOWN
-DocumentStatus: UNKNOWN
+BusinessDocumentId: NEXT-AI-DRAFT-5806 / 1d7f8500-1cb7-4d81-ad3a-b7d5d8b453eb
+DocumentStatus: APPROVED
 
 ## Automation Command
 
-AutomationCommandId: UNKNOWN
-CommandStatus: UNKNOWN
+AutomationCommandId: NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806 / db12ee97-0960-4f85-bdd5-f9fa30780885
+CommandStatus: PENDING
 
 ## Maven Draft
 
@@ -37,7 +37,7 @@ MavenDocumentNumber: UNKNOWN
 Use this file only for verified active IDs or explicit `UNKNOWN` values. Current project phase and task state come from `project-brain/CURRENT_TASK.md` and `project-brain/roadmap/ROADMAP.md`.
 
 Current ID source:
-`project-brain/CURRENT_TASK.md`, `project-brain/AI_DRAFT_READINESS_RECHECK.md`, and `project-brain/AI_DRAFT_RECOMMENDATION_READINESS_DECISION_PACKET.md`.
+`project-brain/CURRENT_TASK.md`, Wave 2 end-to-end staging smoke test, `project-brain/AI_DRAFT_READINESS_RECHECK.md`, and `project-brain/AI_DRAFT_RECOMMENDATION_READINESS_DECISION_PACKET.md`.
 
 Closeout rule:
 If no new work occurred, preserve these IDs and report this source. Do not downgrade known IDs to `UNKNOWN`. If another canonical file reports different active IDs, report the conflict and source files instead of overwriting.
