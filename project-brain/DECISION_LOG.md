@@ -3,6 +3,31 @@
 ## 2026-06-25
 
 Decision:
+Use generated Manufacturer Parts Registry and service-kit intelligence fixtures as the safe import MVP before any database import.
+
+Reason:
+The project needs one reusable registry foundation for many models without relying on Excel files at runtime or creating one-off per-model evidence. The PM Series workbook is parseable in the current environment as OOXML despite the `.xls` extension, while the EPM workbook is legacy binary `.xls` and cannot provide exact sheet/row evidence without approved parser/conversion tooling.
+
+Implemented scope:
+
+1. Generated `data-sources/vendor-spare-parts/generated/manufacturer-parts-registry.sample.json` with 250 PM registry rows across 9 PM models.
+2. Generated `service-kit-intelligence.sample.json` with 8 interval kit candidates per PM model.
+3. Generated `shared-sku-overlap.sample.json` with 69 shared manufacturer SKU overlaps.
+4. Generated `manufacturer-registry-import-summary.sample.json` recording PM coverage and EPM partial-only status.
+5. Updated runtime registry loading to use the generated fixture instead of hard-coded 40PM rows.
+6. Updated reusable Project Brain knowledge bases to record the import plan, service-kit plan, model-to-kit matrix, shared overlap report, and unknowns.
+
+Boundary:
+Safe fixture/read-runtime work only. No DB write, schema change, production import, parser package install, Maven/Invoice4U call, email/customer action, inventory action, source-system action, or production action occurred. Manufacturer SKU remains internal-only; customer-facing documents continue to use only Tal/internal sales SKU.
+
+Status:
+Completed for PM Series MVP. EPM exact extraction, schema promotion, DB import, sales SKU mapping, inventory use, and external export remain separate approval gates.
+
+---
+
+## 2026-06-25
+
+Decision:
 SKU matching runtime must be generic and must not use ServiceReport `5806`, `NEXT-AI-DRAFT-5806`, or `40PM` as architecture gates.
 
 Reason:

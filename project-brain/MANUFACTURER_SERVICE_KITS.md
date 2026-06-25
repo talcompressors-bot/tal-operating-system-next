@@ -4,6 +4,8 @@ Status: Reusable Knowledge Base
 Scope: service interval rules, expected service-kit lines, model/service matching behavior
 Runtime impact: none
 
+Latest intelligence MVP: `data-sources/vendor-spare-parts/generated/service-kit-intelligence.sample.json`
+
 This knowledge base replaces permanent use of per-model service-kit evidence packets. Case-specific research belongs in `project-brain/archive/research/`.
 
 ## Core Service Rules
@@ -41,6 +43,49 @@ Oil handling:
 - Service report evidence cannot update stock or deduct inventory.
 - Oil quantity/action must remain approval-required unless explicit model/service/oil evidence exists.
 - Manufacturer interval quantities require reviewed workbook row semantics before automation.
+
+## Service Kit Intelligence MVP
+
+The current MVP derives interval kit candidates from the PM Series manufacturer workbook fixture. It does not approve inventory, sales bundles, customer-facing SKU display, Maven export, or automatic service-kit ordering.
+
+Model-to-kit matrix:
+
+| Model | Kit candidates | Observed intervals | Current promotion status |
+|---|---:|---|---|
+| `10PM2` | 8 | 2000H, 4000H, 8000H, 12000H, 16000H, 20000H, 24000H, 30000H | No final standard kit promoted; needs review |
+| `15PM2` | 8 | 2000H, 4000H, 8000H, 12000H, 16000H, 20000H, 24000H, 30000H | No final standard kit promoted; needs review |
+| `20PM2` | 8 | 2000H, 4000H, 8000H, 12000H, 16000H, 20000H, 24000H, 30000H | No final standard kit promoted; needs review |
+| `30PM` | 8 | 2000H, 4000H, 8000H, 12000H, 16000H, 20000H, 24000H, 30000H | No final standard kit promoted; needs review |
+| `40PM` | 8 | 2000H, 4000H, 8000H, 12000H, 16000H, 20000H, 24000H, 30000H | No final standard kit promoted; needs review |
+| `50PM` | 8 | 2000H, 4000H, 8000H, 12000H, 16000H, 20000H, 24000H, 30000H | No final standard kit promoted; needs review |
+| `60PM` | 8 | 2000H, 4000H, 8000H, 12000H, 16000H, 20000H, 24000H, 30000H | No final standard kit promoted; needs review |
+| `75PM` | 8 | 2000H, 4000H, 8000H, 12000H, 16000H, 20000H, 24000H, 30000H | No final standard kit promoted; needs review |
+| `100PM` | 8 | 2000H, 4000H, 8000H, 12000H, 16000H, 20000H, 24000H, 30000H | No final standard kit promoted; needs review |
+
+Example candidate kits:
+
+| Model | Interval | Candidate type | Included reviewed sample parts | Needs review reason |
+|---|---|---|---|---|
+| `10PM2` | 2000H | Small service candidate | Air filter `25100020-001`; Oil filter `25200007-005` | Oil top-up action/quantity remains service-rule review |
+| `40PM` | 4000H | Large service candidate | Air filter `25100043-071`; Oil filter `25200007-005`; Oil separator `25300045-023`; Coolant `80000175-039` | Coolant action/quantity remains service-rule review |
+| `100PM` | 4000H | Large service candidate | Air filter `25100015-002P1`; Oil filter `25200018-005`; Oil separator `25300160-121`; Coolant `80000175-039` | Coolant action/quantity remains service-rule review |
+
+Shared SKU overlap highlights from `shared-sku-overlap.sample.json`:
+
+| Manufacturer SKU | Model count | Models | Category |
+|---|---:|---|---|
+| `80000175-039` | 9 | `10PM2`, `15PM2`, `20PM2`, `30PM`, `40PM`, `50PM`, `60PM`, `75PM`, `100PM` | `OIL_COOLANT` |
+| `50725016-006` | 9 | `10PM2`, `15PM2`, `20PM2`, `30PM`, `40PM`, `50PM`, `60PM`, `75PM`, `100PM` | `SENSOR` |
+| `50740008-314` | 9 | `10PM2`, `15PM2`, `20PM2`, `30PM`, `40PM`, `50PM`, `60PM`, `75PM`, `100PM` | `OIL_COOLANT` |
+| `25200007-005` | 6 | `10PM2`, `15PM2`, `20PM2`, `30PM`, `40PM`, `50PM` | `OIL_FILTER` |
+
+Service Kit Registry plan:
+
+1. Keep manufacturer interval kit candidates separate from approved Tal sales/service kit SKUs.
+2. Derive candidate kits by model + interval + source row quantities.
+3. Mark kit membership as review-required when rows have `NEEDS_REVIEW`, `NEEDS_OIL_ACTION_REVIEW`, unknown extra columns, or ambiguous service action.
+4. Add approved internal service-kit identity only after a future schema/import task is explicitly approved.
+5. Reuse this same kit registry for AI Draft, BusinessDocument review, inventory planning, and future purchase orders.
 
 ## AI Draft / BusinessDocument Use
 

@@ -1,61 +1,40 @@
-export type ManufacturerPartRegistryRow = {
-  manufacturer: string;
-  sourceFile: string;
-  sourceSheet: string;
-  manufacturerSku: string;
-  partCategory: string;
-  sourceRow: number;
-  sourceDescription: string;
-  compatibleModels: string[];
-  keywords: string[];
+import registryRows from "../data-sources/vendor-spare-parts/generated/manufacturer-parts-registry.sample.json";
+
+export type ManufacturerServiceInterval = {
+  interval: string;
+  quantity: number | null;
+  rawValue: string;
 };
 
-const PM_SERIES_SOURCE_FILE =
-  "data-sources/vendor-spare-parts/Spare Parts Service List(PM Series) rev3 (1).xls";
+export type ManufacturerExchangeTimes = {
+  first: string | null;
+  second: string | null;
+};
 
-export const manufacturerPartRegistryRows: ManufacturerPartRegistryRow[] = [
-  {
-    manufacturer: "SCR",
-    sourceFile: PM_SERIES_SOURCE_FILE,
-    sourceSheet: "40PM",
-    manufacturerSku: "25100043-071",
-    partCategory: "AIR_FILTER",
-    sourceRow: 6,
-    sourceDescription: "air filter core",
-    compatibleModels: ["40PM", "SCR-40PM", "SCR40PM"],
-    keywords: ["air filter", "airfilter"],
-  },
-  {
-    manufacturer: "SCR",
-    sourceFile: PM_SERIES_SOURCE_FILE,
-    sourceSheet: "40PM",
-    manufacturerSku: "25200007-005",
-    partCategory: "OIL_FILTER",
-    sourceRow: 7,
-    sourceDescription: "Oil Filter",
-    compatibleModels: ["40PM", "SCR-40PM", "SCR40PM"],
-    keywords: ["oil filter", "oilfilter"],
-  },
-  {
-    manufacturer: "SCR",
-    sourceFile: PM_SERIES_SOURCE_FILE,
-    sourceSheet: "40PM",
-    manufacturerSku: "25300045-023",
-    partCategory: "OIL_SEPARATOR",
-    sourceRow: 8,
-    sourceDescription: "oil separator",
-    compatibleModels: ["40PM", "SCR-40PM", "SCR40PM"],
-    keywords: ["oil separator", "separator"],
-  },
-  {
-    manufacturer: "SCR",
-    sourceFile: PM_SERIES_SOURCE_FILE,
-    sourceSheet: "40PM",
-    manufacturerSku: "80000175-039",
-    partCategory: "OIL_COOLANT",
-    sourceRow: 9,
-    sourceDescription: "Coolant",
-    compatibleModels: ["40PM", "SCR-40PM", "SCR40PM"],
-    keywords: ["coolant", "oil top-up", "oil top up", "skr oil", "3l skr", "oil"],
-  },
-];
+export type ManufacturerPartRegistryRow = {
+  manufacturer: string;
+  series: string;
+  model: string;
+  normalizedModel: string;
+  partCategory: string;
+  manufacturerSku: string;
+  manufacturerPartName: string;
+  hebrewDescription: string | null;
+  englishDescription: string;
+  specification: string;
+  unit: string;
+  ratedQuantity: number | null;
+  quotationUsd: number | null;
+  serviceIntervals: ManufacturerServiceInterval[];
+  exchangeTimes: ManufacturerExchangeTimes;
+  remarks: string;
+  extraColumns: Record<string, string>;
+  sourceFile: string;
+  sourceSheet: string;
+  sourceRow: number;
+  active: boolean;
+  reviewStatus: string;
+};
+
+export const manufacturerPartRegistryRows =
+  registryRows as unknown as ManufacturerPartRegistryRow[];

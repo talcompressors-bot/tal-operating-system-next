@@ -66,20 +66,23 @@ No confident match behavior:
 - If no trusted match exists, customer-facing SKU cell is blank or column is hidden.
 - Internal evidence text must not appear on the customer-facing surface.
 
-## Current Runtime Seed: PM 40PM Sample Evidence
+## Current Runtime Registry Fixture
 
 Runtime implementation commit: `cac31e4 Add runtime SKU matching for report 5806`.
-Generalization refactor commit: `PENDING`.
+Generalization refactor commit: `a573122 Generalize SKU runtime matching`.
+Manufacturer registry fixture commit: `PENDING`.
 
 Scope:
 
 - ServiceReport `5806` is a validation sample only.
 - Linked equipment model evidence flows through the generic matcher.
-- Evidence source is a generic manufacturer parts registry seed currently populated with reviewed PM Series workbook rows from `MANUFACTURER_PARTS_REGISTRY.md`.
+- Evidence source is the generated manufacturer parts registry fixture at `data-sources/vendor-spare-parts/generated/manufacturer-parts-registry.sample.json`.
+- Runtime does not read Excel files directly.
 - Runtime does not gate on report number.
+- Runtime matches exact/normalized model evidence and inferred part category against active registry rows.
 - Customer-facing output uses linked Tal sales SKU only, not manufacturer part number.
 
-Trusted seed matches:
+Current validation sample matches for `NEXT-AI-DRAFT-5806`:
 
 | Part category | Item text example | Manufacturer SKU | Source |
 |---|---|---|---|
@@ -87,6 +90,13 @@ Trusted seed matches:
 | OIL_FILTER | Oil Filter | `25200007-005` | PM Series `40PM`, row 7 |
 | OIL_SEPARATOR | Oil Separator | `25300045-023` | PM Series `40PM`, row 8 |
 | OIL_COOLANT | Coolant / SKR oil top-up | `80000175-039` | PM Series `40PM`, row 9 |
+
+Registry fixture coverage:
+
+- PM Series models captured: `10PM2`, `15PM2`, `20PM2`, `30PM`, `40PM`, `50PM`, `60PM`, `75PM`, `100PM`.
+- PM registry rows captured: 250.
+- Shared manufacturer SKUs identified: 69.
+- EPM remains partial-only until approved parser/conversion tooling can preserve exact source rows.
 
 ## Future Shared Consumer Rule
 

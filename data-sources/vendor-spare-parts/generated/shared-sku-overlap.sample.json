@@ -1,0 +1,1368 @@
+﻿[
+    {
+        "manufacturerSku":  "50720200-025",
+        "modelCount":  3,
+        "models":  [
+                       "10PM2",
+                       "15PM2",
+                       "20PM2"
+                   ],
+        "partNames":  [
+                          "Temp. Sensor"
+                      ],
+        "categories":  [
+                           "SENSOR"
+                       ],
+        "sourceRows":  [
+                           "10PM2:4",
+                           "15PM2:4",
+                           "20PM2:4"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50725016-006",
+        "modelCount":  9,
+        "models":  [
+                       "100PM",
+                       "10PM2",
+                       "15PM2",
+                       "20PM2",
+                       "30PM",
+                       "40PM",
+                       "50PM",
+                       "60PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Pressure Sensor"
+                      ],
+        "categories":  [
+                           "SENSOR"
+                       ],
+        "sourceRows":  [
+                           "10PM2:5",
+                           "15PM2:5",
+                           "20PM2:5",
+                           "30PM:5",
+                           "40PM:5",
+                           "50PM:5",
+                           "60PM:5",
+                           "75PM:5",
+                           "100PM:5"
+                       ]
+    },
+    {
+        "manufacturerSku":  "25100020-001",
+        "modelCount":  3,
+        "models":  [
+                       "10PM2",
+                       "15PM2",
+                       "20PM2"
+                   ],
+        "partNames":  [
+                          "air filter core"
+                      ],
+        "categories":  [
+                           "AIR_FILTER"
+                       ],
+        "sourceRows":  [
+                           "10PM2:6",
+                           "15PM2:6",
+                           "20PM2:6"
+                       ]
+    },
+    {
+        "manufacturerSku":  "25200007-005",
+        "modelCount":  6,
+        "models":  [
+                       "10PM2",
+                       "15PM2",
+                       "20PM2",
+                       "30PM",
+                       "40PM",
+                       "50PM"
+                   ],
+        "partNames":  [
+                          "Oil Filter"
+                      ],
+        "categories":  [
+                           "OIL_FILTER"
+                       ],
+        "sourceRows":  [
+                           "10PM2:7",
+                           "15PM2:7",
+                           "20PM2:7",
+                           "30PM:7",
+                           "40PM:7",
+                           "50PM:7"
+                       ]
+    },
+    {
+        "manufacturerSku":  "80000175-039",
+        "modelCount":  9,
+        "models":  [
+                       "100PM",
+                       "10PM2",
+                       "15PM2",
+                       "20PM2",
+                       "30PM",
+                       "40PM",
+                       "50PM",
+                       "60PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Coolant"
+                      ],
+        "categories":  [
+                           "OIL_COOLANT"
+                       ],
+        "sourceRows":  [
+                           "10PM2:9",
+                           "15PM2:9",
+                           "20PM2:9",
+                           "30PM:9",
+                           "40PM:9",
+                           "50PM:9",
+                           "60PM:9",
+                           "75PM:9",
+                           "100PM:9"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50780040-106",
+        "modelCount":  3,
+        "models":  [
+                       "10PM2",
+                       "15PM2",
+                       "20PM2"
+                   ],
+        "partNames":  [
+                          "Inlet Valve"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "10PM2:10",
+                           "15PM2:10",
+                           "20PM2:10"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50715253-004",
+        "modelCount":  3,
+        "models":  [
+                       "10PM2",
+                       "15PM2",
+                       "20PM2"
+                   ],
+        "partNames":  [
+                          "Solenoid Valve",
+                          "Solenoid Valve Module"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "10PM2:11",
+                           "15PM2:11",
+                           "20PM2:11"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50780000-013",
+        "modelCount":  3,
+        "models":  [
+                       "10PM2",
+                       "15PM2",
+                       "20PM2"
+                   ],
+        "partNames":  [
+                          "Inlet Valve Kit"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "10PM2:12",
+                           "15PM2:12",
+                           "20PM2:12"
+                       ]
+    },
+    {
+        "manufacturerSku":  "35350065-002",
+        "modelCount":  3,
+        "models":  [
+                       "10PM2",
+                       "15PM2",
+                       "20PM2"
+                   ],
+        "partNames":  [
+                          "Oil Level Sightglass"
+                      ],
+        "categories":  [
+                           "OIL_COOLANT"
+                       ],
+        "sourceRows":  [
+                           "10PM2:14",
+                           "15PM2:14",
+                           "20PM2:14"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50740008-314",
+        "modelCount":  9,
+        "models":  [
+                       "100PM",
+                       "10PM2",
+                       "15PM2",
+                       "20PM2",
+                       "30PM",
+                       "40PM",
+                       "50PM",
+                       "60PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Oil Return Check Valve"
+                      ],
+        "categories":  [
+                           "OIL_COOLANT"
+                       ],
+        "sourceRows":  [
+                           "10PM2:15",
+                           "15PM2:15",
+                           "20PM2:15",
+                           "30PM:19",
+                           "40PM:19",
+                           "50PM:19",
+                           "60PM:19",
+                           "75PM:19",
+                           "100PM:19"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50728016-002",
+        "modelCount":  1,
+        "models":  [
+                       "10PM2"
+                   ],
+        "partNames":  [
+                          "Pressure Gauge"
+                      ],
+        "categories":  [
+                           "OTHER"
+                       ],
+        "sourceRows":  [
+                           "10PM2:16",
+                           "15PM2:16",
+                           "20PM2:16"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50800010-255",
+        "modelCount":  3,
+        "models":  [
+                       "10PM2",
+                       "15PM2",
+                       "20PM2"
+                   ],
+        "partNames":  [
+                          "Safety Valve"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "10PM2:17",
+                           "15PM2:17",
+                           "20PM2:17"
+                       ]
+    },
+    {
+        "manufacturerSku":  "45064020-006",
+        "modelCount":  3,
+        "models":  [
+                       "10PM2",
+                       "15PM2",
+                       "20PM2"
+                   ],
+        "partNames":  [
+                          "Keypad"
+                      ],
+        "categories":  [
+                           "OTHER"
+                       ],
+        "sourceRows":  [
+                           "10PM2:18",
+                           "15PM2:18",
+                           "20PM2:18"
+                       ]
+    },
+    {
+        "manufacturerSku":  "25350030-021",
+        "modelCount":  2,
+        "models":  [
+                       "15PM2",
+                       "20PM2"
+                   ],
+        "partNames":  [
+                          "oil separator"
+                      ],
+        "categories":  [
+                           "OIL_SEPARATOR"
+                       ],
+        "sourceRows":  [
+                           "15PM2:8",
+                           "20PM2:8"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50809360-501",
+        "modelCount":  2,
+        "models":  [
+                       "15PM2",
+                       "20PM2"
+                   ],
+        "partNames":  [
+                          "Combination Valve"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "15PM2:13",
+                           "20PM2:13"
+                       ]
+    },
+    {
+        "manufacturerSku":  "70025018-193",
+        "modelCount":  2,
+        "models":  [
+                       "10PM2",
+                       "20PM2"
+                   ],
+        "partNames":  [
+                          "Fan (380V/50HZ/3P)"
+                      ],
+        "categories":  [
+                           "OTHER"
+                       ],
+        "sourceRows":  [
+                           "15PM2:21",
+                           "20PM2:21"
+                       ]
+    },
+    {
+        "manufacturerSku":  "00075001-009",
+        "modelCount":  2,
+        "models":  [
+                       "15PM2",
+                       "20PM2"
+                   ],
+        "partNames":  [
+                          "Airend 8BAR"
+                      ],
+        "categories":  [
+                           "AIREND"
+                       ],
+        "sourceRows":  [
+                           "15PM2:23",
+                           "20PM2:23"
+                       ]
+    },
+    {
+        "manufacturerSku":  "00750003A412",
+        "modelCount":  2,
+        "models":  [
+                       "15PM2",
+                       "20PM2"
+                   ],
+        "partNames":  [
+                          "Shaft Seal of Airend"
+                      ],
+        "categories":  [
+                           "AIREND"
+                       ],
+        "sourceRows":  [
+                           "15PM2:24",
+                           "20PM2:24"
+                       ]
+    },
+    {
+        "manufacturerSku":  "01500001-419",
+        "modelCount":  2,
+        "models":  [
+                       "15PM2",
+                       "20PM2"
+                   ],
+        "partNames":  [
+                          "Bearing of Airend"
+                      ],
+        "categories":  [
+                           "AIREND"
+                       ],
+        "sourceRows":  [
+                           "15PM2:25",
+                           "20PM2:25"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50720200-002",
+        "modelCount":  2,
+        "models":  [
+                       "30PM",
+                       "40PM"
+                   ],
+        "partNames":  [
+                          "Temp. Sensor"
+                      ],
+        "categories":  [
+                           "SENSOR"
+                       ],
+        "sourceRows":  [
+                           "30PM:4",
+                           "40PM:4"
+                       ]
+    },
+    {
+        "manufacturerSku":  "25100043-071",
+        "modelCount":  2,
+        "models":  [
+                       "30PM",
+                       "40PM"
+                   ],
+        "partNames":  [
+                          "air filter core"
+                      ],
+        "categories":  [
+                           "AIR_FILTER"
+                       ],
+        "sourceRows":  [
+                           "30PM:6",
+                           "40PM:6"
+                       ]
+    },
+    {
+        "manufacturerSku":  "25300045-023",
+        "modelCount":  2,
+        "models":  [
+                       "30PM",
+                       "40PM"
+                   ],
+        "partNames":  [
+                          "oil separator"
+                      ],
+        "categories":  [
+                           "OIL_SEPARATOR"
+                       ],
+        "sourceRows":  [
+                           "30PM:8",
+                           "40PM:8"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50780065-501",
+        "modelCount":  4,
+        "models":  [
+                       "30PM",
+                       "40PM",
+                       "50PM",
+                       "60PM"
+                   ],
+        "partNames":  [
+                          "Inlet Valve"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "30PM:10",
+                           "40PM:10",
+                           "50PM:10",
+                           "60PM:10"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50780000-032",
+        "modelCount":  4,
+        "models":  [
+                       "30PM",
+                       "40PM",
+                       "50PM",
+                       "60PM"
+                   ],
+        "partNames":  [
+                          "Inlet Valve Kit"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "30PM:11",
+                           "40PM:11",
+                           "50PM:11",
+                           "60PM:11"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50780065-121",
+        "modelCount":  4,
+        "models":  [
+                       "30PM",
+                       "40PM",
+                       "50PM",
+                       "60PM"
+                   ],
+        "partNames":  [
+                          "Inlet Valve"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "30PM:12",
+                           "40PM:12",
+                           "50PM:12",
+                           "60PM:12"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50780000-018",
+        "modelCount":  4,
+        "models":  [
+                       "30PM",
+                       "40PM",
+                       "50PM",
+                       "60PM"
+                   ],
+        "partNames":  [
+                          "Inlet Valve Kit"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "30PM:13",
+                           "40PM:13",
+                           "50PM:13",
+                           "60PM:13"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50710000-004",
+        "modelCount":  4,
+        "models":  [
+                       "30PM",
+                       "40PM",
+                       "50PM",
+                       "60PM"
+                   ],
+        "partNames":  [
+                          "Solenoid Valve Module"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "30PM:14",
+                           "40PM:14",
+                           "50PM:14",
+                           "60PM:14"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50730012-314",
+        "modelCount":  6,
+        "models":  [
+                       "100PM",
+                       "30PM",
+                       "40PM",
+                       "50PM",
+                       "60PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Vent Valve"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "30PM:15",
+                           "40PM:15",
+                           "50PM:15",
+                           "60PM:15",
+                           "75PM:15",
+                           "100PM:15"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50770025-306",
+        "modelCount":  2,
+        "models":  [
+                       "30PM",
+                       "40PM"
+                   ],
+        "partNames":  [
+                          "Minimum Pressure Valve"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "30PM:16",
+                           "40PM:16"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50770000-002",
+        "modelCount":  2,
+        "models":  [
+                       "30PM",
+                       "40PM"
+                   ],
+        "partNames":  [
+                          "MPV Kit"
+                      ],
+        "categories":  [
+                           "OTHER"
+                       ],
+        "sourceRows":  [
+                           "30PM:17",
+                           "40PM:17"
+                       ]
+    },
+    {
+        "manufacturerSku":  "26015001-010",
+        "modelCount":  6,
+        "models":  [
+                       "100PM",
+                       "30PM",
+                       "40PM",
+                       "50PM",
+                       "60PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Oil Level Sightglass"
+                      ],
+        "categories":  [
+                           "OIL_COOLANT"
+                       ],
+        "sourceRows":  [
+                           "30PM:18",
+                           "40PM:18",
+                           "50PM:18",
+                           "60PM:18",
+                           "75PM:18",
+                           "100PM:18"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50801160-017",
+        "modelCount":  6,
+        "models":  [
+                       "100PM",
+                       "30PM",
+                       "40PM",
+                       "50PM",
+                       "60PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Pressure Gauge for oil tank"
+                      ],
+        "categories":  [
+                           "OIL_COOLANT"
+                       ],
+        "sourceRows":  [
+                           "30PM:20",
+                           "40PM:20",
+                           "50PM:20",
+                           "60PM:20",
+                           "75PM:20",
+                           "100PM:20"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50800015-254",
+        "modelCount":  2,
+        "models":  [
+                       "30PM",
+                       "40PM"
+                   ],
+        "partNames":  [
+                          "Safety Valve 8BAR"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "30PM:21",
+                           "40PM:21"
+                       ]
+    },
+    {
+        "manufacturerSku":  "45264100-006",
+        "modelCount":  2,
+        "models":  [
+                       "30PM",
+                       "40PM"
+                   ],
+        "partNames":  [
+                          "PLC"
+                      ],
+        "categories":  [
+                           "OTHER"
+                       ],
+        "sourceRows":  [
+                           "30PM:22",
+                           "40PM:22"
+                       ]
+    },
+    {
+        "manufacturerSku":  "45056004-103",
+        "modelCount":  2,
+        "models":  [
+                       "30PM",
+                       "40PM"
+                   ],
+        "partNames":  [
+                          "Fan Motor Inverter"
+                      ],
+        "categories":  [
+                           "OTHER"
+                       ],
+        "sourceRows":  [
+                           "30PM:25",
+                           "40PM:25"
+                       ]
+    },
+    {
+        "manufacturerSku":  "70025018-183",
+        "modelCount":  2,
+        "models":  [
+                       "30PM",
+                       "40PM"
+                   ],
+        "partNames":  [
+                          "Fan(380V/50HZ/3P)"
+                      ],
+        "categories":  [
+                           "OTHER"
+                       ],
+        "sourceRows":  [
+                           "30PM:26",
+                           "40PM:26"
+                       ]
+    },
+    {
+        "manufacturerSku":  "45018010-050",
+        "modelCount":  5,
+        "models":  [
+                       "100PM",
+                       "30PM",
+                       "40PM",
+                       "50PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Transformer"
+                      ],
+        "categories":  [
+                           "OTHER"
+                       ],
+        "sourceRows":  [
+                           "30PM:28",
+                           "40PM:28",
+                           "50PM:28",
+                           "60PM:28",
+                           "75PM:28",
+                           "100PM:28"
+                       ]
+    },
+    {
+        "manufacturerSku":  "00080002-003",
+        "modelCount":  2,
+        "models":  [
+                       "30PM",
+                       "40PM"
+                   ],
+        "partNames":  [
+                          "Airend 8BAR"
+                      ],
+        "categories":  [
+                           "AIREND"
+                       ],
+        "sourceRows":  [
+                           "30PM:29",
+                           "40PM:29"
+                       ]
+    },
+    {
+        "manufacturerSku":  "00080003-412",
+        "modelCount":  2,
+        "models":  [
+                       "30PM",
+                       "40PM"
+                   ],
+        "partNames":  [
+                          "Shaft Seal of Airend"
+                      ],
+        "categories":  [
+                           "AIREND"
+                       ],
+        "sourceRows":  [
+                           "30PM:30",
+                           "40PM:30"
+                       ]
+    },
+    {
+        "manufacturerSku":  "02450001-419",
+        "modelCount":  2,
+        "models":  [
+                       "30PM",
+                       "40PM"
+                   ],
+        "partNames":  [
+                          "Bearing of Airend"
+                      ],
+        "categories":  [
+                           "AIREND"
+                       ],
+        "sourceRows":  [
+                           "30PM:31",
+                           "40PM:31"
+                       ]
+    },
+    {
+        "manufacturerSku":  "40159032-306",
+        "modelCount":  2,
+        "models":  [
+                       "30PM",
+                       "40PM"
+                   ],
+        "partNames":  [
+                          "Discharge pipe for airend"
+                      ],
+        "categories":  [
+                           "AIREND"
+                       ],
+        "sourceRows":  [
+                           "30PM:32",
+                           "40PM:32"
+                       ]
+    },
+    {
+        "manufacturerSku":  "40249060-009",
+        "modelCount":  2,
+        "models":  [
+                       "30PM",
+                       "40PM"
+                   ],
+        "partNames":  [
+                          "Air Inlet Pipe"
+                      ],
+        "categories":  [
+                           "OTHER"
+                       ],
+        "sourceRows":  [
+                           "30PM:33",
+                           "40PM:33"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50720200-031",
+        "modelCount":  2,
+        "models":  [
+                       "50PM",
+                       "60PM"
+                   ],
+        "partNames":  [
+                          "Temp. Sensor"
+                      ],
+        "categories":  [
+                           "SENSOR"
+                       ],
+        "sourceRows":  [
+                           "50PM:4",
+                           "60PM:4"
+                       ]
+    },
+    {
+        "manufacturerSku":  "25100075-071",
+        "modelCount":  2,
+        "models":  [
+                       "50PM",
+                       "60PM"
+                   ],
+        "partNames":  [
+                          "air filter core"
+                      ],
+        "categories":  [
+                           "AIR_FILTER"
+                       ],
+        "sourceRows":  [
+                           "50PM:6",
+                           "60PM:6"
+                       ]
+    },
+    {
+        "manufacturerSku":  "25300065-031",
+        "modelCount":  2,
+        "models":  [
+                       "50PM",
+                       "60PM"
+                   ],
+        "partNames":  [
+                          "oil separator"
+                      ],
+        "categories":  [
+                           "OIL_SEPARATOR"
+                       ],
+        "sourceRows":  [
+                           "50PM:8",
+                           "60PM:8"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50770032-306",
+        "modelCount":  2,
+        "models":  [
+                       "50PM",
+                       "60PM"
+                   ],
+        "partNames":  [
+                          "Minimum Pressure Valve"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "50PM:16",
+                           "60PM:16"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50770000-004",
+        "modelCount":  2,
+        "models":  [
+                       "50PM",
+                       "60PM"
+                   ],
+        "partNames":  [
+                          "MPV Kit"
+                      ],
+        "categories":  [
+                           "OTHER"
+                       ],
+        "sourceRows":  [
+                           "50PM:17",
+                           "60PM:17"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50800020-254",
+        "modelCount":  2,
+        "models":  [
+                       "50PM",
+                       "60PM"
+                   ],
+        "partNames":  [
+                          "Safety Valve 8BAR"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "50PM:21",
+                           "60PM:21"
+                       ]
+    },
+    {
+        "manufacturerSku":  "45264200-006",
+        "modelCount":  4,
+        "models":  [
+                       "100PM",
+                       "50PM",
+                       "60PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "PLC"
+                      ],
+        "categories":  [
+                           "OTHER"
+                       ],
+        "sourceRows":  [
+                           "50PM:22",
+                           "60PM:22",
+                           "75PM:22",
+                           "100PM:22"
+                       ]
+    },
+    {
+        "manufacturerSku":  "45056150-103",
+        "modelCount":  2,
+        "models":  [
+                       "50PM",
+                       "60PM"
+                   ],
+        "partNames":  [
+                          "Fan Motor Inverter"
+                      ],
+        "categories":  [
+                           "OTHER"
+                       ],
+        "sourceRows":  [
+                           "50PM:25",
+                           "60PM:25"
+                       ]
+    },
+    {
+        "manufacturerSku":  "00105001-412",
+        "modelCount":  2,
+        "models":  [
+                       "50PM",
+                       "60PM"
+                   ],
+        "partNames":  [
+                          "Shaft Seal of Airend"
+                      ],
+        "categories":  [
+                           "AIREND"
+                       ],
+        "sourceRows":  [
+                           "50PM:30",
+                           "60PM:30"
+                       ]
+    },
+    {
+        "manufacturerSku":  "40249080-067",
+        "modelCount":  2,
+        "models":  [
+                       "50PM",
+                       "60PM"
+                   ],
+        "partNames":  [
+                          "Air Inlet Pipe"
+                      ],
+        "categories":  [
+                           "OTHER"
+                       ],
+        "sourceRows":  [
+                           "50PM:34",
+                           "60PM:34"
+                       ]
+    },
+    {
+        "manufacturerSku":  "25200018-005",
+        "modelCount":  3,
+        "models":  [
+                       "100PM",
+                       "60PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Oil Filter"
+                      ],
+        "categories":  [
+                           "OIL_FILTER"
+                       ],
+        "sourceRows":  [
+                           "60PM:7",
+                           "75PM:7",
+                           "100PM:7"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50720200-026",
+        "modelCount":  2,
+        "models":  [
+                       "100PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Temp. Sensor"
+                      ],
+        "categories":  [
+                           "SENSOR"
+                       ],
+        "sourceRows":  [
+                           "75PM:4",
+                           "100PM:4"
+                       ]
+    },
+    {
+        "manufacturerSku":  "25100015-002P1",
+        "modelCount":  2,
+        "models":  [
+                       "100PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "air filter core"
+                      ],
+        "categories":  [
+                           "AIR_FILTER"
+                       ],
+        "sourceRows":  [
+                           "75PM:6",
+                           "100PM:6"
+                       ]
+    },
+    {
+        "manufacturerSku":  "25300160-121",
+        "modelCount":  2,
+        "models":  [
+                       "100PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "oil separator"
+                      ],
+        "categories":  [
+                           "OIL_SEPARATOR"
+                       ],
+        "sourceRows":  [
+                           "75PM:8",
+                           "100PM:8"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50780090-502",
+        "modelCount":  2,
+        "models":  [
+                       "100PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Inlet Valve"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "75PM:10",
+                           "100PM:10"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50780000-033",
+        "modelCount":  2,
+        "models":  [
+                       "100PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Inlet Valve Kit"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "75PM:11",
+                           "100PM:11"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50780085-108",
+        "modelCount":  2,
+        "models":  [
+                       "100PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Inlet Valve"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "75PM:12",
+                           "100PM:12"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50780000-015",
+        "modelCount":  2,
+        "models":  [
+                       "100PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Inlet Valve Kit"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "75PM:13",
+                           "100PM:13"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50715253-005",
+        "modelCount":  2,
+        "models":  [
+                       "100PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Solenoid Valve Module"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "75PM:14",
+                           "100PM:14"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50770050-306",
+        "modelCount":  2,
+        "models":  [
+                       "100PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Minimum Pressure Valve"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "75PM:16",
+                           "100PM:16"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50770000-003",
+        "modelCount":  2,
+        "models":  [
+                       "100PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "MPV Kit"
+                      ],
+        "categories":  [
+                           "OTHER"
+                       ],
+        "sourceRows":  [
+                           "75PM:17",
+                           "100PM:17"
+                       ]
+    },
+    {
+        "manufacturerSku":  "50800025-253",
+        "modelCount":  2,
+        "models":  [
+                       "100PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Safety Valve 8BAR"
+                      ],
+        "categories":  [
+                           "VALVE"
+                       ],
+        "sourceRows":  [
+                           "75PM:21",
+                           "100PM:21"
+                       ]
+    },
+    {
+        "manufacturerSku":  "45056220-103",
+        "modelCount":  2,
+        "models":  [
+                       "100PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Fan Motor Inverter"
+                      ],
+        "categories":  [
+                           "OTHER"
+                       ],
+        "sourceRows":  [
+                           "75PM:25",
+                           "100PM:25"
+                       ]
+    },
+    {
+        "manufacturerSku":  "70025020-106",
+        "modelCount":  2,
+        "models":  [
+                       "100PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Fan(380V/50HZ/3P)"
+                      ],
+        "categories":  [
+                           "OTHER"
+                       ],
+        "sourceRows":  [
+                           "75PM:26",
+                           "100PM:26"
+                       ]
+    },
+    {
+        "manufacturerSku":  "00128001A412",
+        "modelCount":  2,
+        "models":  [
+                       "100PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Shaft Seal of Airend"
+                      ],
+        "categories":  [
+                           "AIREND"
+                       ],
+        "sourceRows":  [
+                           "75PM:30",
+                           "100PM:30"
+                       ]
+    },
+    {
+        "manufacturerSku":  "40159050-418",
+        "modelCount":  2,
+        "models":  [
+                       "100PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Pipe from tank to after cooler"
+                      ],
+        "categories":  [
+                           "COOLER"
+                       ],
+        "sourceRows":  [
+                           "75PM:33",
+                           "100PM:33"
+                       ]
+    },
+    {
+        "manufacturerSku":  "40249100-107",
+        "modelCount":  2,
+        "models":  [
+                       "100PM",
+                       "75PM"
+                   ],
+        "partNames":  [
+                          "Air Inlet Pipe"
+                      ],
+        "categories":  [
+                           "OTHER"
+                       ],
+        "sourceRows":  [
+                           "75PM:34",
+                           "100PM:34"
+                       ]
+    }
+]

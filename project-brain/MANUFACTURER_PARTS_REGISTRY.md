@@ -4,6 +4,8 @@ Status: Reusable Knowledge Base
 Scope: manufacturer spare-parts evidence, model compatibility, source file/sheet/row evidence
 Runtime impact: none
 
+Latest import MVP: `data-sources/vendor-spare-parts/generated/manufacturer-parts-registry.sample.json`
+
 This knowledge base replaces permanent use of model-specific manufacturer evidence packets. Case-specific research may still exist temporarily, but reusable manufacturer part facts must be consolidated here.
 
 ## Source Rules
@@ -21,6 +23,65 @@ This knowledge base replaces permanent use of model-specific manufacturer eviden
 |---|---|---|
 | `data-sources/vendor-spare-parts/Spare Parts Service List(PM Series) rev3 (1).xls` | Office Open XML workbook stored with `.xls` extension; inspectable | Trusted PM/APM manufacturer part evidence when sheet/row reviewed |
 | `data-sources/vendor-spare-parts/Spare Parts Service List(EPM Series) rev2 (1).xls` | Legacy binary `.xls`; partially inspectable by strings only in current environment | Review-only until exact sheet/row extraction is approved |
+
+## Import MVP Fixture
+
+Generated fixture files:
+
+- `data-sources/vendor-spare-parts/generated/manufacturer-parts-registry.sample.json`
+- `data-sources/vendor-spare-parts/generated/service-kit-intelligence.sample.json`
+- `data-sources/vendor-spare-parts/generated/shared-sku-overlap.sample.json`
+- `data-sources/vendor-spare-parts/generated/manufacturer-registry-import-summary.sample.json`
+
+Current fixture status:
+
+| Source | Parse status | Evidence captured |
+|---|---|---|
+| PM Series rev3 | Full current-environment parse from OOXML workbook contents | 9 sheets/models, 250 registry rows, source file/sheet/row, manufacturer SKU, part name, unit, interval quantities, exchange times, remarks, extra columns |
+| EPM Series rev2 | Partial only | Binary strings confirm EPM model and common part-name evidence, but exact rows/sheets require approved parser or conversion tooling |
+
+PM models captured in the fixture:
+
+| Model | Registry row count |
+|---|---:|
+| `10PM2` | 26 |
+| `15PM2` | 19 |
+| `20PM2` | 21 |
+| `30PM` | 30 |
+| `40PM` | 30 |
+| `50PM` | 32 |
+| `60PM` | 30 |
+| `75PM` | 31 |
+| `100PM` | 31 |
+
+Fixture field structure:
+
+| Field | Meaning |
+|---|---|
+| `manufacturer` | Manufacturer name; current PM fixture uses `SCR COMP` |
+| `series` | Source series, such as `PM` |
+| `model` / `normalizedModel` | Sheet model and normalized lookup key |
+| `partCategory` | Derived internal category such as `AIR_FILTER`, `OIL_FILTER`, `OIL_SEPARATOR`, `OIL_COOLANT`, `VALVE`, `SENSOR`, `AIREND`, or `OTHER` |
+| `manufacturerSku` | Manufacturer part number; internal technical evidence only |
+| `manufacturerPartName` | Raw manufacturer part name |
+| `hebrewDescription` | Blank for current PM source; not inferred |
+| `englishDescription` | Same source description normalized for English display/search |
+| `unit` | Source unit |
+| `serviceIntervals` | Interval quantity evidence from 2000H through 30000H when present |
+| `exchangeTimes` | First/second exchange time fields when present |
+| `remarks` | Source remarks |
+| `extraColumns` | Used columns without trusted headers, preserved for review |
+| `sourceFile`, `sourceSheet`, `sourceRow` | Audit/source evidence |
+| `active`, `reviewStatus` | Runtime/filtering and review state |
+
+Import plan:
+
+1. Use generated JSON/TS fixture as the safe no-DB-write import MVP.
+2. Keep runtime reads on the generated registry fixture, not directly on Excel workbooks.
+3. Promote to database tables only after a separately approved schema/import task.
+4. Preserve manufacturer SKU as internal-only evidence and map to Tal/internal sales SKU separately.
+5. Treat manufacturer quotation/cost fields as internal cost evidence only, never customer selling price.
+6. Keep EPM out of trusted row-level matching until exact sheet/row extraction is available.
 
 ## PM Series Workbook Structure
 
@@ -69,6 +130,28 @@ Known non-compatibility:
 | Model | Part category | Not compatible with | Status |
 |---|---|---|---|
 | `20APM` | Oil separator | `20PM2` oil separator | Liad approved |
+
+## MVP Example Rows
+
+| Model | Part category | Manufacturer SKU | Source row | Interval evidence | Review status |
+|---|---|---|---:|---|---|
+| `10PM2` | `AIR_FILTER` | `25100020-001` | 6 | 2000H through 30000H | `REVIEWED_SAMPLE_CATEGORY` |
+| `10PM2` | `OIL_FILTER` | `25200007-005` | 7 | 2000H through 30000H | `REVIEWED_SAMPLE_CATEGORY` |
+| `10PM2` | `OIL_SEPARATOR` | `25350020-021` | 8 | 4000H through 30000H | `REVIEWED_SAMPLE_CATEGORY` |
+| `40PM` | `AIR_FILTER` | `25100043-071` | 6 | 2000H through 30000H | `REVIEWED_SAMPLE_CATEGORY` |
+| `40PM` | `OIL_FILTER` | `25200007-005` | 7 | 2000H through 30000H | `REVIEWED_SAMPLE_CATEGORY` |
+| `40PM` | `OIL_SEPARATOR` | `25300045-023` | 8 | 4000H through 30000H | `REVIEWED_SAMPLE_CATEGORY` |
+| `100PM` | `AIR_FILTER` | `25100015-002P1` | 6 | 2000H through 30000H | `REVIEWED_SAMPLE_CATEGORY` |
+| `100PM` | `OIL_FILTER` | `25200018-005` | 7 | 2000H through 30000H | `REVIEWED_SAMPLE_CATEGORY` |
+| `100PM` | `OIL_SEPARATOR` | `25300160-121` | 8 | 4000H through 30000H | `REVIEWED_SAMPLE_CATEGORY` |
+
+## Unknowns / Needs Review
+
+- EPM workbook exact sheet/row extraction requires an approved parser/conversion path.
+- PM sheets `50PM`, `60PM`, `75PM`, and `100PM` contain used extra columns 20-27 without visible trusted headers; values are preserved under `extraColumns`.
+- Hebrew descriptions are not present in the manufacturer PM source and were not inferred.
+- Oil/coolant rows prove manufacturer compatibility, but service action and exact oil quantity still require service-rule review.
+- Tal sales SKU mapping remains separate and is not inferred from manufacturer SKU.
 
 ## Evidence Fields For Future Registry Rows
 

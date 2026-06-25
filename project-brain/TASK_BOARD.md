@@ -1,13 +1,13 @@
 # TASK BOARD
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; SKU Runtime Generalization Refactor completed; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Manufacturer Parts Registry Import + Service Kit Intelligence MVP completed; no real Maven execution approved yet
 
 ## NOW
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| SKU Runtime Generalization Refactor | Remove ServiceReport-specific and model-specific runtime assumptions from BusinessDocument SKU enrichment | Completed and validated: matcher uses generic model evidence + manufacturer registry rows, 5806/40PM is sample evidence only, internal review shows manufacturer evidence plus missing sales SKU mapping, preview/PDF hide manufacturer SKUs and show SKU only when linked Tal sales SKU exists | No approval needed for this safe read/runtime refactor; explicit approval remains required before schema changes, DB writes, imports, parser package installs, Maven/Invoice4U execution, customer-facing/email action, inventory action, source-system/production work, or external export |
+| Manufacturer Parts Registry Import + Service Kit Intelligence MVP | Convert trusted SCR COMP PM workbook evidence into reusable generated registry fixtures and derive service-kit intelligence without DB writes | Completed: generated PM registry fixture has 9 models and 250 rows; service-kit fixture has 8 interval kit candidates per model; shared-overlap fixture has 69 shared SKUs; runtime reads generated registry fixture instead of Excel/hard-coded 40PM seed; EPM exact extraction documented as partial-only | No approval needed for generated fixtures/read-runtime wiring; explicit approval remains required before schema changes, DB writes/imports, parser package installs/conversion tooling, Maven/Invoice4U execution, customer-facing/email action, inventory action, source-system/production work, or external export |
 
 ## NEXT
 
@@ -39,6 +39,7 @@ Mode: CAPABILITY_BUILDING; governance frozen; SKU Runtime Generalization Refacto
 
 | Task | Evidence |
 |---|---|
+| Manufacturer Parts Registry Import + Service Kit Intelligence MVP completed | Commit `PENDING`; generated `data-sources/vendor-spare-parts/generated/manufacturer-parts-registry.sample.json`, `service-kit-intelligence.sample.json`, `shared-sku-overlap.sample.json`, and `manufacturer-registry-import-summary.sample.json` from the PM Series workbook without DB writes. PM Series extraction found sheets/models `10PM2`, `15PM2`, `20PM2`, `30PM`, `40PM`, `50PM`, `60PM`, `75PM`, and `100PM`; captured 250 registry rows; derived 8 interval kit candidates per PM model; identified 69 shared manufacturer SKUs. EPM Series is legacy binary `.xls` and remains partial-only in this environment. Runtime now reads the generated registry fixture instead of hard-coded 40PM rows and keeps manufacturer SKU internal-only while customer preview/PDF uses only Tal/internal sales SKU. No schema change, DB write/import, package install, Maven/Invoice4U call, email/customer action, inventory action, source-system action, or production action occurred |
 | Governance foundation completed | `PROJECT_OPERATING_PROTOCOL.md` exists and remains highest authority/governor |
 | Project Brain startup alignment Phase 1 | Startup now begins with `PROJECT_INDEX.md`; retired current-task path is a stub |
 | Next.js shadow app created | App exists as shadow/development implementation only |
@@ -158,7 +159,7 @@ Mode: CAPABILITY_BUILDING; governance frozen; SKU Runtime Generalization Refacto
 | Area | Current State |
 |---|---|
 | Infrastructure readiness | High for staging, Prisma, Wave 1 import, and read-only Supabase validation evidence |
-| Workflow UI coverage | Wave 2 Service Workflow Layer is complete and frozen except bug fixes. Wave 3 Maven Knowledge Layer has internal BusinessDocument/payment review, internal HTML preview, temporary PDF download, smoke-tested line-derived totals, ServiceReport `5806` runtime manufacturer SKU matching, and supporting read-only discovery artifacts. Current evidence-based completion is 69% by the recorded capability formula |
+| Workflow UI coverage | Wave 2 Service Workflow Layer is complete and frozen except bug fixes. Wave 3 Maven Knowledge Layer has internal BusinessDocument/payment review, internal HTML preview, temporary PDF download, smoke-tested line-derived totals, ServiceReport `5806` runtime manufacturer SKU matching, generated Manufacturer Parts Registry fixtures, service-kit intelligence, shared SKU overlap evidence, and supporting read-only discovery artifacts. Current evidence-based completion is 70% by the recorded capability formula |
 | Production automation readiness | Gated; Wave 2 produced an inspected pending Maven command and `DRY_RUN_VALIDATED` payload, but real Maven/Invoice4U execution, command execution, email/customer-facing action, inventory action, production integrations, schema changes, migrations, and DB writes outside approved protected flows require explicit human approval |
 
 ## Rules

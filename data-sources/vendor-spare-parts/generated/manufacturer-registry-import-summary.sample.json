@@ -1,0 +1,24 @@
+﻿{
+    "epmParseStatus":  "PARTIAL_ONLY",
+    "epmReason":  "Legacy OLE .xls file; Excel COM unavailable in this environment and no parser package is installed/approved.",
+    "pmModels":  [
+                     "10PM2",
+                     "15PM2",
+                     "20PM2",
+                     "30PM",
+                     "40PM",
+                     "50PM",
+                     "60PM",
+                     "75PM",
+                     "100PM"
+                 ],
+    "pmRegistryRows":  250,
+    "pmSharedSkuCount":  69,
+    "needsReview":  [
+                        "EPM workbook exact sheet/row extraction requires approved parser/conversion tooling.",
+                        "PM sheets 50PM/60PM/75PM/100PM contain used extra columns 20-27 without visible headers; preserved as extraColumns and semantics require review.",
+                        "Hebrew descriptions are not present in source and were not inferred in fixture.",
+                        "Manufacturer quotation/cost values are internal cost evidence only, not customer selling prices.",
+                        "Tal sales SKU mapping remains separate and is not inferred from manufacturer part numbers."
+                    ]
+}

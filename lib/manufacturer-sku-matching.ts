@@ -35,26 +35,67 @@ function normalizeSalesSku(value?: string | null) {
   return value?.trim() || "";
 }
 
+function inferPartCategory(itemName: string) {
+  const normalizedItemName = normalizeText(itemName);
+
+  if (normalizedItemName.includes("air filter")) {
+    return "AIR_FILTER";
+  }
+
+  if (
+    normalizedItemName.includes("oil separator") ||
+    normalizedItemName.includes("separator")
+  ) {
+    return "OIL_SEPARATOR";
+  }
+
+  if (normalizedItemName.includes("oil filter")) {
+    return "OIL_FILTER";
+  }
+
+  if (
+    normalizedItemName.includes("coolant") ||
+    normalizedItemName.includes("oil top up") ||
+    normalizedItemName.includes("oil top-up") ||
+    normalizedItemName.includes("skr oil")
+  ) {
+    return "OIL_COOLANT";
+  }
+
+  return "UNMATCHED";
+}
+
 function modelMatchesEvidence(
   modelEvidence: string[],
   evidence: ManufacturerPartRegistryRow,
 ) {
-  const normalizedEvidenceModels = evidence.compatibleModels.map(normalizeModel);
-
-  return modelEvidence.some((value) =>
-    normalizedEvidenceModels.includes(normalizeModel(value)),
+  const normalizedEvidenceModels = [evidence.model, evidence.normalizedModel].map(
+    normalizeModel,
   );
+
+  return modelEvidence.some((value) => {
+    const normalizedValue = normalizeModel(value);
+
+    return normalizedEvidenceModels.some(
+      (normalizedEvidenceModel) =>
+        normalizedValue === normalizedEvidenceModel ||
+        normalizedValue.endsWith(normalizedEvidenceModel),
+    );
+  });
 }
 
 function findTrustedEvidence(input: { itemName: string; modelEvidence: string[] }) {
-  const normalizedItemName = normalizeText(input.itemName);
+  const partCategory = inferPartCategory(input.itemName);
+
+  if (partCategory === "UNMATCHED") {
+    return null;
+  }
 
   return manufacturerPartRegistryRows.find(
     (evidence) =>
+      evidence.active &&
       modelMatchesEvidence(input.modelEvidence, evidence) &&
-      evidence.keywords.some((keyword) =>
-        normalizedItemName.includes(normalizeText(keyword)),
-      ),
+      evidence.partCategory === partCategory,
   );
 }
 
@@ -123,7 +164,7 @@ export function matchManufacturerSku(input: {
     sourceFile: evidence.sourceFile,
     sourceSheet: evidence.sourceSheet,
     sourceRow: evidence.sourceRow,
-    sourceDescription: evidence.sourceDescription,
-    compatibleModels: evidence.compatibleModels,
+    sourceDescription: evidence.manufacturerPartName,
+    compatibleModels: [evidence.model],
   };
 }

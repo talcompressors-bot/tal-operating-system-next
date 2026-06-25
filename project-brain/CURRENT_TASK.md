@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; ServiceReport 5806 SKU matching runtime MVP completed; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Manufacturer Parts Registry Import + Service Kit Intelligence MVP completed; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -129,7 +129,9 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Current Task
 
-SKU Runtime Generalization Refactor is complete as a read/runtime refactor. The matcher no longer gates on ServiceReport `5806`, `NEXT-AI-DRAFT-5806`, or a hard-coded `40PM` report scope. Runtime now follows the generic flow: ServiceReport -> Equipment model evidence -> generic manufacturer parts registry seed -> SKU matching engine -> BusinessDocumentItem enrichment. The reviewed PM `40PM` rows remain sample registry evidence in `lib/manufacturer-parts-registry.ts`, not one file per model and not a report-specific architecture. BusinessDocument internal review now separates Tal sales SKU from manufacturer part number: manufacturer SKU stays internal evidence, and missing Tal sales SKU mapping is shown as `Needs sales SKU mapping`. Customer-facing preview/PDF uses only linked Tal sales SKU; because the current validation document has no linked sales SKU, `/business-documents/NEXT-AI-DRAFT-5806/preview` hides the SKU column and does not print manufacturer SKUs. Wave 3 Maven Knowledge Layer remains active and Wave 2 remains frozen except bug fixes. The complete ServiceReport `5806` internal chain remains the validation sample only. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for the SKU Runtime Generalization Refactor. Real Maven execution is still an explicit `APPROVAL_REQUIRED` gate and is not approved. Maven/Invoice4U calls, command execution, saved PDF persistence, customer-facing delivery, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
+Manufacturer Parts Registry Import + Service Kit Intelligence Planning/MVP is complete as a safe no-DB-write foundation. The PM Series SCR COMP workbook was parsed from its OOXML contents and converted into generated registry fixtures under `data-sources/vendor-spare-parts/generated/`: 9 PM models, 250 manufacturer part rows, 8 service interval kit candidates per PM model, and 69 shared manufacturer SKU overlaps. Runtime now reads the generated registry fixture through `lib/manufacturer-parts-registry.ts` instead of the prior hard-coded 40PM seed; Excel files are not read at runtime. The matcher remains generic: ServiceReport -> equipment model evidence -> Manufacturer Parts Registry fixture -> part category match -> BusinessDocumentItem enrichment. Manufacturer SKU remains internal-only. Customer preview/PDF still uses only linked Tal/internal sales SKU and hides SKU when sales SKU mapping is missing. EPM Series remains partial-only because it is a legacy binary `.xls`; exact sheet/row extraction requires approved parser/conversion tooling or a different environment. No schema changes, DB writes, imports, Maven/Invoice4U calls, customer/email actions, inventory actions, source-system changes, production actions, or package installs occurred.
+
+Current blocker: none for the PM fixture/import MVP and service-kit intelligence planning. Remaining gates: EPM exact extraction tooling approval, future schema/import approval before a real Manufacturer Parts Registry table, explicit DB-write approval before any import, explicit real Maven execution approval, separate customer-facing/email approval, and separate inventory approval.
 
 ## Wave 3 PDF Export Smoke Test and Governance Lock
 
@@ -1113,8 +1115,8 @@ Current blocker:
 
 Project completion:
 
-- Moves to `69%` by adding one Wave 3 internal SKU evidence runtime capability point.
-- Wave 3 is now `4% / 15% STARTED INTERNAL`.
+- Manufacturer Parts Registry Import + Service Kit Intelligence MVP moves completion to `70%` by adding one Wave 3 generated-registry/service-kit foundation capability point.
+- Wave 3 is now `5% / 15% STARTED INTERNAL`.
 - No real Maven execution, customer delivery, inventory action, broad SKU registry, import, or production readiness point is claimed.
 
 Next approved task:
@@ -1152,7 +1154,7 @@ Next candidate tasks, pending explicit selection/approval:
 9. Build hygiene for the existing missing Playwright dependency/type gap, if explicitly selected.
 10. Optional Wave 2 import approval package, only if explicitly approved.
 
-Project completion should not be overstated: current evidence-based completion is 69% by the recorded capability formula. Infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells, central work screens, preview intelligence, the AI Draft Recommendation Preview runtime, the pricing-evidence preview layer, protected internal BusinessDocument draft creation, internal BusinessDocument review, the BusinessDocument Approval Workflow, the protected internal Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, BusinessDocument Line Resolution Layer, and Wave 3 internal BusinessDocument/payment/HTML/PDF/SKU review surfaces; production automation readiness remains gated because no Maven/Invoice4U execution, customer-facing send, inventory deduction, or production integration is approved.
+Project completion should not be overstated: current evidence-based completion is 70% by the recorded capability formula. Infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells, central work screens, preview intelligence, the AI Draft Recommendation Preview runtime, the pricing-evidence preview layer, protected internal BusinessDocument draft creation, internal BusinessDocument review, the BusinessDocument Approval Workflow, the protected internal Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, BusinessDocument Line Resolution Layer, and Wave 3 internal BusinessDocument/payment/HTML/PDF/SKU/registry/service-kit review surfaces; production automation readiness remains gated because no Maven/Invoice4U execution, customer-facing send, inventory deduction, DB import, inventory action, or production integration is approved.
 
 Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes outside approved protected Server Actions, schema changes, migrations, env changes, Maven/Invoice4U execution, email/customer-facing sends, inventory actions, or source-system actions until Liad explicitly approves that later gate.
 
