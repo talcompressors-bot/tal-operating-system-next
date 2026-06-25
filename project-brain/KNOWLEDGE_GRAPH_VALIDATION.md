@@ -14,16 +14,16 @@ Files used:
 
 - `project-brain/MANUFACTURER_KNOWLEDGE_BASE.md`
 - `project-brain/EQUIPMENT_IDENTITY_REGISTRY_DISCOVERY.md`
-- `project-brain/PARTS_SKU_INTELLIGENCE_SPEC.md`
-- `project-brain/PRICING_EVIDENCE_ENGINE_SPEC.md`
-- `project-brain/SCR_40PM_SERVICE_KIT_EVIDENCE_PACKET.md`
-- `project-brain/INTERNAL_MANUFACTURER_SKU_REGISTRY_SPEC.md`
+- `project-brain/SKU_MATCHING_RULES.md`
+- `project-brain/SERVICE_COMMERCIAL_RULES.md`
+- `project-brain/MANUFACTURER_SERVICE_KITS.md`
+- `project-brain/MANUFACTURER_PARTS_REGISTRY.md`
 - `project-brain/DECISION_LOG.md`
 
 Service Pattern Intelligence status:
 
 - No separate `SERVICE_PATTERN_INTELLIGENCE` report file currently exists in `project-brain`.
-- Service pattern rules currently live in `MANUFACTURER_KNOWLEDGE_BASE.md`, `PARTS_SKU_INTELLIGENCE_SPEC.md`, and `DECISION_LOG.md`.
+- Service pattern rules currently live in `MANUFACTURER_KNOWLEDGE_BASE.md`, `MANUFACTURER_SERVICE_KITS.md`, `SKU_MATCHING_RULES.md`, and `DECISION_LOG.md`.
 
 ## 2. Knowledge Graph
 

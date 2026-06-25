@@ -14,7 +14,7 @@ No code, DB write, Prisma change, import, BusinessDocument creation, BusinessDoc
 - `AI_DRAFT_RUNTIME_BLUEPRINT.md`
 - `AI_DRAFT_RECOMMENDATION_PREVIEW_5806.md`
 - `project-brain/SERVICE_PATTERN_INTELLIGENCE_REGISTRY.md`
-- `project-brain/PRICING_EVIDENCE_ENGINE_SPEC.md`
+- `project-brain/SERVICE_COMMERCIAL_RULES.md`
 - `project-brain/MANUFACTURER_KNOWLEDGE_BASE.md`
 - `project-brain/DECISION_LOG.md`
 

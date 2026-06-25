@@ -40,6 +40,27 @@ Forbidden unless Liad explicitly approves official migration work:
 
 Goal: build the new Next.js system side-by-side while the existing AppSheet system remains production.
 
+## Critical Knowledge Base Rule: Reusable Permanent Knowledge
+
+Case-specific documents may exist only temporarily during research. Permanent knowledge must be consolidated into reusable Knowledge Bases.
+
+Future work must extend reusable Knowledge Bases instead of creating permanent `*_EVIDENCE_PACKET`, `*_DISCOVERY`, `*_SPEC`, per-model, or per-service-report Project Brain documents.
+
+Allowed temporary case documents:
+
+- short-lived research notes while evidence is being gathered
+- archived research files under `project-brain/archive/research/`
+- source-reference artifacts that preserve original evidence without becoming canonical planning surfaces
+
+Permanent knowledge belongs in reusable documents such as:
+
+- `project-brain/MANUFACTURER_PARTS_REGISTRY.md`
+- `project-brain/MANUFACTURER_SERVICE_KITS.md`
+- `project-brain/SERVICE_COMMERCIAL_RULES.md`
+- `project-brain/SERVICE_MAVEN_MAPPING.md`
+- `project-brain/DOCUMENT_ENGINE.md`
+- `project-brain/SKU_MATCHING_RULES.md`
+
 ## Critical Architecture Rule: Server Actions First
 
 All internal Next.js write flows must use Server Actions by default.

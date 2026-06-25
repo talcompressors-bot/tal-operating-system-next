@@ -1,5 +1,7 @@
 # Internal Manufacturer SKU Registry Spec
 
+Status: Legacy specification. Permanent manufacturer SKU registry knowledge now belongs in `MANUFACTURER_PARTS_REGISTRY.md`, `SKU_MATCHING_RULES.md`, and `MANUFACTURER_SERVICE_KITS.md`. Do not extend this file as a permanent planning surface; migrate durable knowledge into the reusable Knowledge Bases.
+
 Date: 2026-06-24
 
 Mode: documentation only.

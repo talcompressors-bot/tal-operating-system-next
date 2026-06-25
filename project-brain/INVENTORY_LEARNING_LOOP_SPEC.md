@@ -175,21 +175,21 @@ Correction examples already approved elsewhere:
 | Layer | Role in inventory learning |
 |---|---|
 | `MANUFACTURER_KNOWLEDGE_BASE.md` | Stores only Liad-approved manufacturer knowledge and corrections |
-| `INTERNAL_MANUFACTURER_SKU_REGISTRY_SPEC.md` | Defines manufacturer part-number evidence and compatible model representation |
+| `MANUFACTURER_PARTS_REGISTRY.md` | Stores reusable manufacturer part-number evidence and compatible model representation |
 | `PART_COMPATIBILITY_REGISTRY.md` | Stores compatibility/incompatibility evidence separate from model alias |
-| `PARTS_SKU_INTELLIGENCE_SPEC.md` | Uses model, service, compatibility, and SKU evidence to suggest draft lines |
-| `SERVICE_PATTERN_INTELLIGENCE_REGISTRY.md` | Defines expected service parts by service type |
-| `PRICING_EVIDENCE_ENGINE_SPEC.md` | Separates customer selling price evidence from manufacturer cost |
+| `SKU_MATCHING_RULES.md` | Uses model, service, compatibility, and SKU evidence to suggest draft lines |
+| `MANUFACTURER_SERVICE_KITS.md` | Defines expected service parts by service type and manufacturer kit evidence |
+| `SERVICE_COMMERCIAL_RULES.md` | Separates customer selling price evidence from manufacturer cost |
 
 ## 10. Reuse Before Create
 
 Reuse these existing registries before creating any implementation table or workflow:
 
 - Manufacturer knowledge: `project-brain/MANUFACTURER_KNOWLEDGE_BASE.md`.
-- Manufacturer SKU evidence: `project-brain/INTERNAL_MANUFACTURER_SKU_REGISTRY_SPEC.md`.
+- Manufacturer SKU evidence: `project-brain/MANUFACTURER_PARTS_REGISTRY.md`.
 - Compatibility evidence: `project-brain/PART_COMPATIBILITY_REGISTRY.md`.
-- Parts recommendation behavior: `project-brain/PARTS_SKU_INTELLIGENCE_SPEC.md`.
-- Pricing evidence boundaries: `project-brain/PRICING_EVIDENCE_ENGINE_SPEC.md`.
+- Parts recommendation behavior: `project-brain/SKU_MATCHING_RULES.md`.
+- Pricing evidence boundaries: `project-brain/SERVICE_COMMERCIAL_RULES.md`.
 - Durable approved decisions: `project-brain/DECISION_LOG.md`.
 
 ## 11. Forbidden Actions

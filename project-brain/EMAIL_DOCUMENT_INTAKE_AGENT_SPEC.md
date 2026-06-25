@@ -243,8 +243,8 @@ Reuse existing systems before implementation:
 - `PROJECT_BRAIN_AGENT` for governance memory.
 - `MAVEN_AGENT` for Maven document matching and draft boundaries.
 - `AI_DRAFT_AGENT` for future business-document recommendation linkage.
-- `PRICING_EVIDENCE_ENGINE_SPEC.md` for price evidence rules.
-- `SERVICE_REPORT_MAVEN_LINK_REGISTRY_SPEC.md` for service/report/Maven linkage.
+- `SERVICE_COMMERCIAL_RULES.md` for price evidence and approval-boundary rules.
+- `SERVICE_MAVEN_MAPPING.md` for service/report/Maven linkage.
 - `AI_DRAFT_RUNTIME_BLUEPRINT.md` for BusinessDocument/Maven approval boundaries.
 
 ## 13. Risks

@@ -21,10 +21,9 @@ Compatibility evidence can support AI Draft recommendations, but it does not app
 Sources used:
 
 - `project-brain/MANUFACTURER_KNOWLEDGE_BASE.md`
-- `project-brain/MANUFACTURER_PARTS_REGISTRY_DISCOVERY.md`
-- `project-brain/INTERNAL_MANUFACTURER_SKU_REGISTRY_SPEC.md`
+- `project-brain/MANUFACTURER_PARTS_REGISTRY.md`
 - `project-brain/SERVICE_PATTERN_INTELLIGENCE_REGISTRY.md`
-- `project-brain/PARTS_SKU_INTELLIGENCE_SPEC.md`
+- `project-brain/SKU_MATCHING_RULES.md`
 - `project-brain/INVENTORY_LEARNING_LOOP_SPEC.md`
 - `project-brain/DECISION_LOG.md`
 
@@ -52,7 +51,7 @@ Shared part compatibility is valid evidence. A shared part is not a duplicate or
 
 | Part | Compatible models | Evidence source | Confidence |
 |---|---|---|---|
-| `80000175-039` / Coolant | `100EPM, 100PM, 10PM2, 125EPM, 150EPM, 15PM2, 20PM2, 25EPM, 30EPM, 30PM, 40EPM, 40PM, 50EPM, 50PM, 60EPM, 60PM, 75EPM, 75PM, 90EPM` | Manufacturer spare-parts workbook extraction / `MANUFACTURER_PARTS_REGISTRY_DISCOVERY.md` | `MANUFACTURER_EVIDENCE` |
+| `80000175-039` / Coolant | `100EPM, 100PM, 10PM2, 125EPM, 150EPM, 15PM2, 20PM2, 25EPM, 30EPM, 30PM, 40EPM, 40PM, 50EPM, 50PM, 60EPM, 60PM, 75EPM, 75PM, 90EPM` | Manufacturer spare-parts workbook extraction / `MANUFACTURER_PARTS_REGISTRY.md` | `MANUFACTURER_EVIDENCE` |
 | `50725016-006` / Pressure Sensor | `100EPM, 100PM, 10PM2, 125EPM, 150EPM, 15PM2, 20PM2, 25EPM, 30EPM, 30PM, 40EPM, 40PM, 50EPM, 50PM, 60EPM, 60PM, 75EPM, 75PM, 90EPM` | Manufacturer spare-parts workbook extraction | `MANUFACTURER_EVIDENCE` |
 | `50740008-314` / Oil Return Check Valve | `100EPM, 100PM, 10PM2, 125EPM, 150EPM, 15PM2, 20PM2, 25EPM, 30EPM, 30PM, 40EPM, 40PM, 50EPM, 50PM, 60EPM, 60PM, 75EPM, 75PM, 90EPM` | Manufacturer spare-parts workbook extraction | `MANUFACTURER_EVIDENCE` |
 | `25200007-005` / Oil Filter | `10PM2, 15PM2, 20PM2, 25EPM, 30EPM, 30PM, 40PM, 50PM` | Manufacturer spare-parts workbook extraction | `MANUFACTURER_EVIDENCE` |

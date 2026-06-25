@@ -1,5 +1,7 @@
 # Parts / SKU Intelligence Spec
 
+Status: Legacy specification. Permanent SKU matching and manufacturer part evidence now belong in `SKU_MATCHING_RULES.md`, `MANUFACTURER_PARTS_REGISTRY.md`, and `MANUFACTURER_SERVICE_KITS.md`. Do not extend this file as a permanent planning surface; migrate durable knowledge into the reusable Knowledge Bases.
+
 Date: 2026-06-24
 Mode: Specification only
 Runtime impact: none

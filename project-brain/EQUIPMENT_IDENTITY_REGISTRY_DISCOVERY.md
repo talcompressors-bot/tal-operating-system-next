@@ -25,8 +25,8 @@ Most important finding: several rows contain `SCR` text but are not SCR compress
 
 - `data-sources/exports/ReportEquipmentItems.csv`
 - `data-sources/exports/ServiceReports.csv`
-- `project-brain/PRICING_EVIDENCE_ENGINE_SPEC.md`
-- `project-brain/PARTS_SKU_INTELLIGENCE_SPEC.md`
+- `project-brain/SERVICE_COMMERCIAL_RULES.md`
+- `project-brain/SKU_MATCHING_RULES.md`
 - `project-brain/DECISION_LOG.md`
 - `project-brain/TASK_BOARD.md`
 - `project-brain/implementation/EQUIPMENT_REGISTRY_IMPLEMENTATION_PLAN.md`

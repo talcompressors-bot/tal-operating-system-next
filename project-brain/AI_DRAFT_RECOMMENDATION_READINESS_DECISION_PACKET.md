@@ -86,9 +86,11 @@ Evidence packet exists
 
 ## Sources Used
 
-- `project-brain/SERVICE_REPORT_5806_COMMERCIAL_EVIDENCE_PACKET.md`
+- `project-brain/SERVICE_COMMERCIAL_RULES.md`
+- `project-brain/SERVICE_MAVEN_MAPPING.md`
+- archived source `project-brain/archive/research/SERVICE_REPORT_5806_COMMERCIAL_EVIDENCE_PACKET.md`
 - `AI_DRAFT_EVIDENCE_PACKET.md`
-- `project-brain/PRICING_EVIDENCE_ENGINE_SPEC.md`
+- `project-brain/SERVICE_COMMERCIAL_RULES.md`
 - `project-brain/MANUFACTURER_KNOWLEDGE_BASE.md`
 - `project-brain/SERVICE_PATTERN_INTELLIGENCE_REGISTRY.md`
 - `project-brain/maps/AI_DRAFT_FIELD_MAPPING.md`
@@ -503,7 +505,7 @@ Maven linked compressor docs:
 | `102451` | `SW854751` | full match |
 | `102452` | `SW85183` | partial serial, likely missing final digit |
 
-`SERVICE_REPORT_5806_COMMERCIAL_EVIDENCE_PACKET.md` previously classified:
+`SERVICE_COMMERCIAL_RULES.md` and archived source `archive/research/SERVICE_REPORT_5806_COMMERCIAL_EVIDENCE_PACKET.md` previously classified:
 
 - `102451`: `HIGH`.
 - `102452`: `HIGH_WITH_REVIEW`.

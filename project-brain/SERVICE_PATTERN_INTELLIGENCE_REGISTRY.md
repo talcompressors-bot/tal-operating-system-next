@@ -24,7 +24,8 @@ Important boundary:
 Evidence sources:
 
 - `project-brain/MANUFACTURER_KNOWLEDGE_BASE.md`
-- `project-brain/PARTS_SKU_INTELLIGENCE_SPEC.md`
+- `project-brain/MANUFACTURER_SERVICE_KITS.md`
+- `project-brain/SKU_MATCHING_RULES.md`
 - `project-brain/DECISION_LOG.md`
 - `data-sources/exports/ReportEquipmentItems.csv`
 - prior service pattern and parts intelligence findings recorded in Project Brain tasks
@@ -128,9 +129,9 @@ Confidence model:
 |---|---:|---|---|---|---|
 | `SCR20APM` | 5 | `טיפול 2000שע`; `טיפול קטן`; `טיפול ראשוני`; `טיפול תקופתי`; `טיפול2000שע` | Air Filter x5; Oil Filter x5 | HIGH | `ReportEquipmentItems.csv`; prior Parts Intelligence findings |
 | `SCR20EPM` | 2 | `טיפול 2000שע`; `טיפול קטן 2000שע` | Air Filter x2; Oil Filter x2 | MEDIUM | `ReportEquipmentItems.csv`; prior Parts Intelligence findings |
-| `SCR-40PM` | 2 | `בוצע טיפול קטן-2000`; `טיפול תקופתי קטן 2000` | Air Filter x2; Oil Filter x2 | MEDIUM | `ReportEquipmentItems.csv`; `SCR_40PM_SERVICE_KIT_EVIDENCE_PACKET.md` |
+| `SCR-40PM` | 2 | `בוצע טיפול קטן-2000`; `טיפול תקופתי קטן 2000` | Air Filter x2; Oil Filter x2 | MEDIUM | `ReportEquipmentItems.csv`; `MANUFACTURER_SERVICE_KITS.md`; archived source `archive/research/SCR_40PM_SERVICE_KIT_EVIDENCE_PACKET.md` |
 | `SCR50EPM` | 2 | `טיפול קטן`; `טיפול קטן/2000` | Air Filter x2; Oil Filter x2 | MEDIUM | `ReportEquipmentItems.csv`; prior Parts Intelligence findings |
-| `SCR20XAמס2` | 2 | belt + air-filter service; `5000` hour oil-free scroll service text | Air Filter x2; Belts x2 | MEDIUM | `ReportEquipmentItems.csv`; `MANUFACTURER_PARTS_REGISTRY_DISCOVERY.md` |
+| `SCR20XAמס2` | 2 | belt + air-filter service; `5000` hour oil-free scroll service text | Air Filter x2; Belts x2 | MEDIUM | `ReportEquipmentItems.csv`; `MANUFACTURER_PARTS_REGISTRY.md`; legacy discovery `MANUFACTURER_PARTS_REGISTRY_DISCOVERY.md` |
 | `10APM` | 2 | installation; periodic large service | Air Filter x2; Oil Filter x2; Oil Separator x2 | MEDIUM | `ReportEquipmentItems.csv` |
 | `SCR10APM` | 2 | installation/plumbing; large service | none observed in replacement flags | LOW | `ReportEquipmentItems.csv` |
 | `SCR10APMבניין /I.B.C` | 1 | small/2000 service | none observed in replacement flags | LOW | `ReportEquipmentItems.csv` |

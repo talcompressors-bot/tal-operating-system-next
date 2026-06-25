@@ -1,5 +1,7 @@
 # Manufacturer Parts Registry Discovery
 
+Status: Legacy discovery artifact. Permanent manufacturer parts knowledge now belongs in `MANUFACTURER_PARTS_REGISTRY.md`; matching policy belongs in `SKU_MATCHING_RULES.md`. Do not extend this file as a permanent planning surface; migrate durable knowledge into reusable Knowledge Bases.
+
 Date: 2026-06-24
 
 Mode: discovery only.

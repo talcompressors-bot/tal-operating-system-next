@@ -468,7 +468,7 @@ This section is the living navigation screen. It summarizes current reality only
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Current milestone | Wave 3 Maven Knowledge Layer started read-only/internal; internal BusinessDocument/payment engine, Hebrew customer-facing BusinessDocument preview/PDF, manufacturer SKU Excel source planning, ServiceReport 5806 SKU matching runtime MVP, Maven sample reference asset, internal PDF export planning, MVP, smoke test, governance lock, and visual polish fixes, Maven payload builder extraction, Maven terminology correction, Maven source inventory, and Maven API placeholders are complete; Wave 2 Service Workflow Layer complete, frozen except bug fixes, and architecture-audited | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Current task | ServiceReport 5806 SKU matching runtime MVP is complete; schema changes, DB writes, imports, real Maven/Invoice4U execution, saved PDF persistence, customer delivery/export, inventory action, and any new npm package install remain separately gated and are not approved | `project-brain/CURRENT_TASK.md` |
+| Current task | Project Brain Knowledge Base Consolidation completed as documentation refactor only: case-specific evidence files were archived, reusable Knowledge Bases were created, and governance now requires permanent knowledge to expand reusable KBs instead of permanent per-case evidence/spec/discovery files. Schema changes, DB writes, imports, real Maven/Invoice4U execution, saved PDF persistence, customer delivery/export, inventory action, runtime changes, and any new npm package install remain separately gated and are not approved | `project-brain/CURRENT_TASK.md` |
 | Next approved task | Wave 3 read-only/internal Maven Knowledge Layer discovery is active. Next candidate tasks are Maven customer/document/item matching analysis for `NEXT-AI-DRAFT-5806`, a real Maven document-generation API contract evidence packet, Maven API secret placement plan, payment attachment readiness plan, or read-only Maven source row-count/schema validation. Real Maven execution for `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` requires separate explicit Liad approval and the readiness checklist in `project-brain/CURRENT_TASK.md`. DB writes outside approved protected Server Actions remain gated and require explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
 | Last Implementation Commit | `cac31e4 Add runtime SKU matching for report 5806` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
@@ -485,6 +485,13 @@ Canonical file links:
 - Data coverage audit: `DATA_COVERAGE_AUDIT.md`
 - System map: `project-brain/maps/SYSTEM_MAP.md`
 - Maven source inventory: `project-brain/migration/MAVEN_SOURCE_INVENTORY.md`
+- Knowledge Base consolidation report: `project-brain/KNOWLEDGE_BASE_CONSOLIDATION_REPORT.md`
+- Manufacturer parts registry KB: `project-brain/MANUFACTURER_PARTS_REGISTRY.md`
+- Manufacturer service kits KB: `project-brain/MANUFACTURER_SERVICE_KITS.md`
+- Service commercial rules KB: `project-brain/SERVICE_COMMERCIAL_RULES.md`
+- Service Maven mapping KB: `project-brain/SERVICE_MAVEN_MAPPING.md`
+- Document engine KB: `project-brain/DOCUMENT_ENGINE.md`
+- SKU matching rules KB: `project-brain/SKU_MATCHING_RULES.md`
 - Migration scope: `project-brain/migration/POSTGRESQL_V1_SCOPE.md`
 - Prisma schema: `prisma/schema.prisma`
 - Protocol: `PROJECT_OPERATING_PROTOCOL.md`

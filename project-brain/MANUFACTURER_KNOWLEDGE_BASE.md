@@ -22,9 +22,9 @@ Do not add discovery findings, probable aliases, historical patterns, or AI gues
 Cross-references:
 
 - Equipment Identity: `project-brain/EQUIPMENT_IDENTITY_REGISTRY_DISCOVERY.md`
-- Parts SKU Intelligence: `project-brain/PARTS_SKU_INTELLIGENCE_SPEC.md`
-- Manufacturer SKU Registry: `project-brain/INTERNAL_MANUFACTURER_SKU_REGISTRY_SPEC.md`
-- Service Pattern Intelligence: `project-brain/PARTS_SKU_INTELLIGENCE_SPEC.md`
+- Manufacturer parts registry: `project-brain/MANUFACTURER_PARTS_REGISTRY.md`
+- SKU matching rules: `project-brain/SKU_MATCHING_RULES.md`
+- Manufacturer service kits: `project-brain/MANUFACTURER_SERVICE_KITS.md`
 - Inventory Learning Loop: `project-brain/INVENTORY_LEARNING_LOOP_SPEC.md`
 - Decision Log: `project-brain/DECISION_LOG.md`
 

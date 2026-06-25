@@ -3,6 +3,30 @@
 ## 2026-06-25
 
 Decision:
+Project Brain permanent knowledge must be consolidated into reusable Knowledge Bases; case-specific documents may exist only temporarily during research.
+
+Reason:
+Wave 2 and Wave 3 created durable evidence in files tied to one compressor model, one ServiceReport, one registry spec, or one-time research packet. That pattern does not scale to thousands of ServiceReports, hundreds of compressor models, and dozens of manufacturers. Permanent knowledge must be reusable and expandable.
+
+Implemented scope:
+
+1. Created reusable Knowledge Bases for manufacturer parts, manufacturer service kits, service commercial rules, ServiceReport-to-Maven mapping, document engine behavior, and SKU matching rules.
+2. Moved the SCR 40PM inventory/service-kit packets, ServiceReport 5806 commercial packet, and ServiceReport Maven link registry spec to `project-brain/archive/research/`.
+3. Updated active Project Brain references to point at reusable Knowledge Bases or archived research evidence.
+4. Added a governance rule to `PROJECT_OPERATING_PROTOCOL.md`: case-specific documents may exist only temporarily during research; permanent knowledge must be consolidated into reusable Knowledge Bases.
+5. Marked older generic spec/discovery documents as legacy planning surfaces that should not be extended as permanent knowledge.
+
+Boundary:
+Documentation refactor only. No runtime behavior changed, no DB write, no schema change, no Maven/Invoice4U call, no email/customer action, no inventory action, no source-system action, and no production action occurred.
+
+Status:
+Completed. Future work should expand reusable Knowledge Bases instead of creating permanent `*_EVIDENCE_PACKET`, `*_DISCOVERY`, `*_SPEC`, per-model, or per-service-report Project Brain files.
+
+---
+
+## 2026-06-25
+
+Decision:
 ServiceReport `5806` may use a read/runtime manufacturer SKU matching layer from trusted PM Series 40PM evidence without schema changes or imports.
 
 Reason:

@@ -336,7 +336,7 @@ Dependencies:
 Exit criteria:
 
 - Recommendation uses `ServiceReports`, `ReportEquipmentItems`, `PartsUsed`, `Customers_Final`, `ProductsCatalog`, `InvoiceMavenDocuments`, and `InvoiceMavenDocumentItems`.
-- Recommendation can cite `project-brain/PARTS_SKU_INTELLIGENCE_SPEC.md` for SKU candidate evidence and `project-brain/PRICING_EVIDENCE_ENGINE_SPEC.md` for price evidence.
+- Recommendation can cite `project-brain/SKU_MATCHING_RULES.md` and `project-brain/MANUFACTURER_PARTS_REGISTRY.md` for SKU candidate evidence and `project-brain/SERVICE_COMMERCIAL_RULES.md` for price evidence.
 - Pricing priority follows: `ProductsCatalog`, same equipment history, same customer history, similar service history, AI estimate with approval flag.
 - Output marks `NeedsPriceApproval`, `NeedsUserApproval`, `MissingData`, and `RiskNotes`.
 - Output separates `NeedsSkuApproval`, `NeedsQuantityApproval`, and `NeedsPriceApproval`.

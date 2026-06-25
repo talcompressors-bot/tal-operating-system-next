@@ -18,7 +18,7 @@ Source governance:
 - `agents/AGENT_REGISTRY.md`
 - `project-brain/roadmap/ROADMAP.md`
 - `AI_DRAFT_RUNTIME_BLUEPRINT.md`
-- `project-brain/SERVICE_REPORT_MAVEN_LINK_REGISTRY_SPEC.md`
+- `project-brain/SERVICE_MAVEN_MAPPING.md`
 
 Google Sheets, Maven, Gmail, and customer emails remain source/reference systems. The email intake packet is evidence only, not action approval.
 

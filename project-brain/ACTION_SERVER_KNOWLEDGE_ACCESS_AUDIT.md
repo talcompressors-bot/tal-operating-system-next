@@ -52,10 +52,10 @@ Files inspected:
 - `Commercial_Intelligence_Source_Audit.md`
 - `Commercial_Intelligence_Verification.md`
 - `Equipment_Commercial_Link_Discovery.md`
-- `project-brain/PRICING_EVIDENCE_ENGINE_SPEC.md`
-- `project-brain/SERVICE_REPORT_MAVEN_LINK_REGISTRY_SPEC.md`
+- `project-brain/SERVICE_COMMERCIAL_RULES.md`
+- `project-brain/SERVICE_MAVEN_MAPPING.md`
 - `project-brain/KNOWLEDGE_GRAPH_VALIDATION.md`
-- `project-brain/SERVICE_REPORT_5806_COMMERCIAL_EVIDENCE_PACKET.md`
+- `project-brain/archive/research/SERVICE_REPORT_5806_COMMERCIAL_EVIDENCE_PACKET.md`
 - `app/service-reports/service-report-adapter.ts`
 - `app/ai-drafts/ai-draft-adapter.ts`
 - `app/business-documents/business-document-adapter.ts`
@@ -187,14 +187,14 @@ Current status:
 
 Related Project Brain layers:
 
-- `project-brain/PRICING_EVIDENCE_ENGINE_SPEC.md`
-- `project-brain/SERVICE_REPORT_MAVEN_LINK_REGISTRY_SPEC.md`
-- `project-brain/PARTS_SKU_INTELLIGENCE_SPEC.md`
+- `project-brain/SERVICE_COMMERCIAL_RULES.md`
+- `project-brain/SERVICE_MAVEN_MAPPING.md`
+- `project-brain/SKU_MATCHING_RULES.md`
 - `project-brain/SERVICE_PATTERN_INTELLIGENCE_REGISTRY.md`
 - `project-brain/PART_COMPATIBILITY_REGISTRY.md`
 - `project-brain/MANUFACTURER_KNOWLEDGE_BASE.md`
 - `project-brain/KNOWLEDGE_GRAPH_VALIDATION.md`
-- `project-brain/SERVICE_REPORT_5806_COMMERCIAL_EVIDENCE_PACKET.md`
+- `project-brain/archive/research/SERVICE_REPORT_5806_COMMERCIAL_EVIDENCE_PACKET.md`
 
 Conclusion:
 
@@ -209,8 +209,8 @@ Evidence that the need exists:
 - `Commercial_Intelligence_Source_Audit.md` states commercial intelligence data is not locally exported and not populated in Supabase staging.
 - `Commercial_Intelligence_Verification.md` verified rich Maven history in Google Sheets: `InvoiceMavenDocuments = 8,358` rows and `InvoiceMavenDocumentItems = 20,678` rows.
 - `Equipment_Commercial_Link_Discovery.md` shows Service Report 5806 linkage requires searching Maven `RawJson`, descriptions, item rows, report numbers, customer names, model text, and serial text.
-- `SERVICE_REPORT_MAVEN_LINK_REGISTRY_SPEC.md` defines an evidence-first registry precisely because Maven links are embedded in free text and raw JSON rather than normalized relationships.
-- `PRICING_EVIDENCE_ENGINE_SPEC.md` defines a future engine so AI Draft pricing can cite ranked evidence instead of ad hoc source scans.
+- `SERVICE_MAVEN_MAPPING.md` defines an evidence-first mapping precisely because Maven links are embedded in free text and raw JSON rather than normalized relationships.
+- `SERVICE_COMMERCIAL_RULES.md` defines reusable pricing and approval boundaries so AI Draft pricing can cite ranked evidence instead of ad hoc source scans.
 
 Practical implication:
 
