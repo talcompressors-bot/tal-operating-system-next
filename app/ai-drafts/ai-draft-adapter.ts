@@ -76,6 +76,13 @@ type AiDraftPreviewLine = {
   confidence: string;
   needsApproval: string;
   reason: string;
+  pricingEvidence: Array<{
+    source: string;
+    unitPrice: string;
+    total: string;
+    confidence: string;
+    note: string;
+  }>;
 };
 
 export type AiDraftRecommendationPreview = {
@@ -186,12 +193,19 @@ function formatDecimal(value: Prisma.Decimal | null, suffix = "") {
   return `${value.toFixed(2)}${suffix}`;
 }
 
-function formatPrice(value: number | null) {
-  if (value === null) {
+function formatPrice(value: number | Prisma.Decimal | null) {
+  if (value === null || value === undefined) {
     return "Needs approval";
   }
 
-  return `${value.toFixed(2)} ILS`;
+  const numericValue =
+    typeof value === "number" ? value : Number(value.toString());
+
+  if (!Number.isFinite(numericValue)) {
+    return "Needs approval";
+  }
+
+  return `${numericValue.toFixed(2)} ILS`;
 }
 
 function normalizeModel(model: string) {
@@ -233,90 +247,322 @@ function isReport5806SmallScrService(report: AiDraftPreviewServiceReport) {
   return hasScr40pm && (serviceText.includes("2000") || serviceText.includes("small"));
 }
 
-function makeLine(
-  item: string,
-  quantity: string,
-  unitPrice: number | null,
-  source: string,
-  confidence: string,
-  needsApproval: boolean,
-  reason: string,
-): AiDraftPreviewLine {
+function parsePrice(value: Prisma.Decimal | null | undefined) {
+  if (!value) {
+    return null;
+  }
+
+  const numericValue = Number(value.toString());
+  return Number.isFinite(numericValue) ? numericValue : null;
+}
+
+function uniquePrices(evidence: PricingEvidence[]) {
+  return Array.from(
+    new Set(
+      evidence
+        .map((item) => item.unitPrice)
+        .filter((value): value is number => value !== null)
+        .map((value) => value.toFixed(2)),
+    ),
+  );
+}
+
+function calculateTotal(unitPrice: number | null, quantity: string) {
   const numericQuantity = Number(quantity);
-  const total =
-    unitPrice !== null && Number.isFinite(numericQuantity)
-      ? `${(unitPrice * numericQuantity).toFixed(2)} ILS`
-      : "Needs approval";
+
+  if (unitPrice === null || !Number.isFinite(numericQuantity)) {
+    return "Needs approval";
+  }
+
+  return `${(unitPrice * numericQuantity).toFixed(2)} ILS`;
+}
+
+type PricingEvidence = {
+  priority: number;
+  source: string;
+  unitPrice: number | null;
+  total: number | null;
+  confidence: string;
+  note: string;
+};
+
+type SuggestedLineDefinition = {
+  item: string;
+  quantity: string;
+  skuCandidates: string[];
+  searchTerms: string[];
+  reason: string;
+};
+
+function summarizeEvidence(evidence: PricingEvidence[]) {
+  if (!evidence.length) {
+    return [];
+  }
+
+  return evidence.slice(0, 5).map((item) => ({
+    source: item.source,
+    unitPrice: formatPrice(item.unitPrice),
+    total: item.total === null ? "No total" : formatPrice(item.total),
+    confidence: item.confidence,
+    note: item.note,
+  }));
+}
+
+function selectTrustedPrice(evidence: PricingEvidence[]) {
+  const tiers = [1, 2, 3, 4];
+
+  for (const tier of tiers) {
+    const tierEvidence = evidence.filter((item) => item.priority === tier);
+    const prices = uniquePrices(tierEvidence);
+
+    if (prices.length === 1) {
+      const unitPrice = Number(prices[0]);
+      return {
+        unitPrice,
+        source: tierEvidence[0].source,
+        confidence: tierEvidence[0].confidence,
+        needsApproval: false,
+        note: tierEvidence[0].note,
+      };
+    }
+
+    if (prices.length > 1) {
+      return {
+        unitPrice: null,
+        source: `${tierEvidence[0].source} conflict`,
+        confidence: "Low",
+        needsApproval: true,
+        note: "Conflicting trusted prices found; manual approval required.",
+      };
+    }
+  }
 
   return {
-    item,
-    quantity,
-    unitPrice: formatPrice(unitPrice),
-    total,
-    source,
-    confidence,
-    needsApproval: needsApproval ? "Required" : "User approval required",
-    reason,
+    unitPrice: null,
+    source: "No trusted pricing evidence",
+    confidence: "Low",
+    needsApproval: true,
+    note: "No ProductCatalog selling price, BusinessDocumentItem price, or Maven item price was found.",
   };
 }
 
-function buildPreviewLines(report: AiDraftPreviewServiceReport) {
+function makeLine(
+  definition: SuggestedLineDefinition,
+  evidence: PricingEvidence[],
+): AiDraftPreviewLine {
+  const selectedPrice = selectTrustedPrice(evidence);
+  const total = calculateTotal(selectedPrice.unitPrice, definition.quantity);
+
+  return {
+    item: definition.item,
+    quantity: definition.quantity,
+    unitPrice: formatPrice(selectedPrice.unitPrice),
+    total,
+    source: selectedPrice.source,
+    confidence: selectedPrice.confidence,
+    needsApproval: selectedPrice.needsApproval
+      ? "Required"
+      : "User approval still required",
+    reason: `${definition.reason} ${selectedPrice.note}`,
+    pricingEvidence: summarizeEvidence(evidence),
+  };
+}
+
+function buildLineDefinitions(report: AiDraftPreviewServiceReport) {
   const equipmentCount = Math.max(report.equipmentItems.length, 1);
   const workHours = report.technicianWorkHours
     ? Number(report.technicianWorkHours.toString())
     : null;
 
-  const lines = [
-    makeLine(
-      "Air Filter",
-      String(equipmentCount),
-      null,
-      "Approved SCR Small Service rule; selling price unavailable",
-      "Medium",
-      true,
-      "Small Service kit includes Air Filter; no ProductsCatalog/Maven selling price available in staging.",
-    ),
-    makeLine(
-      "Oil Filter",
-      String(equipmentCount),
-      null,
-      "Approved SCR Small Service rule; selling price unavailable",
-      "Medium",
-      true,
-      "Small Service kit includes Oil Filter; no ProductsCatalog/Maven selling price available in staging.",
-    ),
-    makeLine(
-      "3L SKR oil top-up",
-      String(equipmentCount * 3),
-      null,
-      "Approved SCR Small Service rule; oil action requires approval",
-      "Medium",
-      true,
-      "Small Service rule includes 3L SKR oil top-up per compressor unless review changes the oil handling.",
-    ),
-    makeLine(
-      "Labor + Service",
-      workHours === null ? "Missing hours" : workHours.toFixed(2),
-      workHours === null ? null : 275,
-      "Fixed labor rule: 275 ILS/hour",
-      workHours === null ? "Low" : "High",
-      workHours === null,
-      workHours === null
-        ? "Technician work time is missing, so labor total needs manual approval."
-        : "Labor + Service stays one commercial line by approved business-document rules.",
-    ),
-    makeLine(
-      "Technician Visit / Travel",
-      "1",
-      300,
-      "Fixed visit rule: 300 ILS",
-      "High",
-      false,
-      "Technician Visit and Travel are one commercial line; final user approval is still required.",
-    ),
+  return [
+    {
+      item: "Air Filter",
+      quantity: String(equipmentCount),
+      skuCandidates: ["25100043-071"],
+      searchTerms: ["Air Filter", "air filter", "מסנן אויר", "25100043-071"],
+      reason: "Small Service kit includes Air Filter.",
+    },
+    {
+      item: "Oil Filter",
+      quantity: String(equipmentCount),
+      skuCandidates: ["25200007-005"],
+      searchTerms: ["Oil Filter", "oil filter", "מסנן שמן", "25200007-005"],
+      reason: "Small Service kit includes Oil Filter.",
+    },
+    {
+      item: "3L SKR oil top-up",
+      quantity: String(equipmentCount * 3),
+      skuCandidates: [],
+      searchTerms: ["SKR oil", "שמן", "oil", "3L"],
+      reason:
+        "Small Service rule includes 3L SKR oil top-up per compressor unless review changes oil handling.",
+    },
+    {
+      item: "Labor + Service",
+      quantity: workHours === null ? "Missing hours" : workHours.toFixed(2),
+      skuCandidates: [],
+      searchTerms: ["Labor + Service", "labor", "service", "עבודה", "שירות"],
+      reason:
+        workHours === null
+          ? "Technician work time is missing, so labor total needs manual approval."
+          : "Labor + Service stays one commercial line by approved business-document rules.",
+    },
+    {
+      item: "Technician Visit / Travel",
+      quantity: "1",
+      skuCandidates: [],
+      searchTerms: ["Technician Visit", "Travel", "visit", "נסיעה", "ביקור"],
+      reason:
+        "Technician Visit and Travel are one commercial line; final user approval is still required.",
+    },
   ];
+}
 
-  return lines;
+async function getPricingEvidenceForLine(definition: SuggestedLineDefinition) {
+  const productTermFilters = definition.searchTerms.flatMap((term) => [
+    { name: { contains: term, mode: "insensitive" as const } },
+    { description: { contains: term, mode: "insensitive" as const } },
+    { compatibleEquipment: { contains: term, mode: "insensitive" as const } },
+  ]);
+  const productSkuFilters = definition.skuCandidates.map((sku) => ({ sku }));
+  const productOrFilters = [...productSkuFilters, ...productTermFilters];
+
+  const businessDocumentItemFilters = [
+    ...definition.skuCandidates,
+    ...definition.searchTerms,
+  ].flatMap((term) => [
+    { itemName: { contains: term, mode: "insensitive" as const } },
+    { description: { contains: term, mode: "insensitive" as const } },
+  ]);
+  const mavenItemFilters = [
+    ...definition.skuCandidates,
+    ...definition.searchTerms,
+  ].map((term) => ({
+    itemDescription: { contains: term, mode: "insensitive" as const },
+  }));
+
+  const [products, businessDocumentItems, mavenItems] = await Promise.all([
+    productOrFilters.length
+      ? prisma.product.findMany({
+          where: { OR: productOrFilters },
+          select: {
+            sku: true,
+            name: true,
+            sellingPrice: true,
+            currency: true,
+          },
+          orderBy: [{ sku: "asc" }, { name: "asc" }],
+          take: 5,
+        })
+      : Promise.resolve([]),
+    businessDocumentItemFilters.length
+      ? prisma.businessDocumentItem.findMany({
+          where: { OR: businessDocumentItemFilters },
+          select: {
+            itemName: true,
+            unitPrice: true,
+            totalPrice: true,
+            source: true,
+            matchConfidence: true,
+            businessDocument: {
+              select: {
+                appsheetBusinessDocumentId: true,
+                sourceReportCounter: true,
+                mavenDocumentNumber: true,
+              },
+            },
+          },
+          orderBy: [{ createdAt: "desc" }, { id: "asc" }],
+          take: 5,
+        })
+      : Promise.resolve([]),
+    mavenItemFilters.length
+      ? prisma.mavenDocumentItem.findMany({
+          where: { OR: mavenItemFilters },
+          select: {
+            itemDescription: true,
+            unitPrice: true,
+            lineTotal: true,
+            documentNumber: true,
+            documentDate: true,
+          },
+          orderBy: [{ documentDate: "desc" }, { id: "asc" }],
+          take: 5,
+        })
+      : Promise.resolve([]),
+  ]);
+
+  const exactSkuSet = new Set(definition.skuCandidates);
+
+  const productEvidence: PricingEvidence[] = products
+    .map((product) => {
+      const unitPrice = parsePrice(product.sellingPrice);
+
+      if (unitPrice === null) {
+        return null;
+      }
+
+      const isDirectSku = product.sku ? exactSkuSet.has(product.sku) : false;
+
+      return {
+        priority: isDirectSku ? 1 : 2,
+        source: isDirectSku ? "ProductCatalog direct SKU" : "ProductCatalog alias",
+        unitPrice,
+        total: null,
+        confidence: isDirectSku ? "High" : "Medium",
+        note: `${product.sku || "No SKU"} - ${product.name} (${product.currency})`,
+      };
+    })
+    .filter((item): item is PricingEvidence => item !== null);
+
+  const businessEvidence: PricingEvidence[] = businessDocumentItems
+    .map((item) => {
+      const unitPrice = parsePrice(item.unitPrice);
+
+      if (unitPrice === null) {
+        return null;
+      }
+
+      const sourceDocument =
+        item.businessDocument.appsheetBusinessDocumentId ||
+        item.businessDocument.mavenDocumentNumber ||
+        "BusinessDocument";
+
+      return {
+        priority: 3,
+        source: "BusinessDocumentItems history",
+        unitPrice,
+        total: parsePrice(item.totalPrice),
+        confidence: item.matchConfidence ? String(item.matchConfidence) : "Medium",
+        note: `${sourceDocument} - ${item.itemName} (${formatEnum(item.source)})`,
+      };
+    })
+    .filter((item): item is PricingEvidence => item !== null);
+
+  const mavenEvidence: PricingEvidence[] = mavenItems
+    .map((item) => {
+      const unitPrice = parsePrice(item.unitPrice);
+
+      if (unitPrice === null) {
+        return null;
+      }
+
+      return {
+        priority: 4,
+        source: "Maven item history",
+        unitPrice,
+        total: parsePrice(item.lineTotal),
+        confidence: "Medium",
+        note: `${item.documentNumber || "No document number"} - ${
+          item.itemDescription || "No item description"
+        }`,
+      };
+    })
+    .filter((item): item is PricingEvidence => item !== null);
+
+  return [...productEvidence, ...businessEvidence, ...mavenEvidence].sort(
+    (left, right) => left.priority - right.priority,
+  );
 }
 
 function buildDataCoverage(
@@ -344,7 +590,7 @@ function buildDataCoverage(
       source: "InvoiceMavenDocumentItems",
       status: counts.mavenItems
         ? `${counts.mavenItems} possible history rows`
-        : "No staging history rows",
+        : "No Maven item history rows",
     },
     {
       source: "BusinessDocuments",
@@ -564,7 +810,15 @@ export async function getAiDraftPreviewByReportCounter(reportCounter: string) {
     prisma.aiDraftSuggestion.count({ where: { serviceReportId: report.id } }),
   ]);
 
-  const lines = isReport5806SmallScrService(report) ? buildPreviewLines(report) : [];
+  const lineDefinitions = isReport5806SmallScrService(report)
+    ? buildLineDefinitions(report)
+    : [];
+  const lineEvidence = await Promise.all(
+    lineDefinitions.map((definition) => getPricingEvidenceForLine(definition)),
+  );
+  const lines = lineDefinitions.map((definition, index) =>
+    makeLine(definition, lineEvidence[index] ?? []),
+  );
   const equipmentModel = formatEquipmentValue(
     report.equipmentItems,
     (item) => item.equipmentModel,
@@ -628,8 +882,9 @@ export async function getAiDraftPreviewByReportCounter(reportCounter: string) {
     },
     risks: lines.length
       ? [
-          "Part selling prices are missing in staging and remain NeedsPriceApproval.",
-          "Labor total depends on technician work hours; missing hours require manual approval.",
+          "Any line without ProductCatalog, BusinessDocumentItem, or Maven item price evidence remains approval-required.",
+          "Conflicting prices are not auto-selected and require manual approval.",
+          "Labor total depends on technician work hours and trusted history; missing evidence remains manual approval.",
           "This preview is not a saved AI draft and does not create BusinessDocuments or Maven drafts.",
         ]
       : [

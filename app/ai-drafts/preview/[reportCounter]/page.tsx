@@ -168,6 +168,7 @@ export default async function AiDraftPreviewPage({
                     <th>Source</th>
                     <th>Confidence</th>
                     <th>Approval</th>
+                    <th>Pricing evidence</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -183,6 +184,23 @@ export default async function AiDraftPreviewPage({
                       <td>{line.source}</td>
                       <td>{line.confidence}</td>
                       <td>{line.needsApproval}</td>
+                      <td>
+                        {line.pricingEvidence.length ? (
+                          <ul className="pricing-evidence-list">
+                            {line.pricingEvidence.map((item) => (
+                              <li
+                                key={`${line.item}-${item.source}-${item.note}`}
+                              >
+                                <strong>{item.source}</strong>
+                                <span>{item.unitPrice}</span>
+                                <span>{item.note}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : (
+                          "No trusted pricing evidence from ProductCatalog, BusinessDocumentItems, or Maven item history"
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

@@ -380,6 +380,28 @@ dd {
   padding-left: 20px;
 }
 
+.pricing-evidence-list {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  min-width: 240px;
+  padding: 0;
+}
+
+.pricing-evidence-list li {
+  border-left: 3px solid var(--border);
+  display: grid;
+  gap: 3px;
+  padding-left: 10px;
+}
+
+.pricing-evidence-list span {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
 .empty-state {
   background: #f8fafc;
   border: 1px solid var(--border);
