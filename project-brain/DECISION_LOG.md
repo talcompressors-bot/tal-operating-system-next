@@ -3,6 +3,25 @@
 ## 2026-06-25
 
 Decision:
+Wave 3 Maven Source Inventory is the canonical read-only inventory for current Maven-related source objects.
+
+Reason:
+Wave 3 cannot proceed toward real Maven execution until the project has an evidence-backed inventory of Maven-related data sources, sync/control objects, Apps Script functions, supporting configuration, relationships, data flow, and migration recommendations. The inventory consolidates existing local repository evidence without touching Maven, AppSheet, Google Sheets, Apps Script deployments, Prisma schema, or the database.
+
+Findings:
+The confirmed real Maven API call in checked local source is document search/import via `searchDocuments`. Checked local source does not prove the real Maven draft-create endpoint, request schema, response schema, error schema, or rate limits. Legacy `createMavenDraft(data)` in checked Apps Script source updates internal workflow state and does not show an external Maven draft-create call. Root `apps-script/MavenAPI.js` and Project Brain snapshot `project-brain/apps-script/MavenAPI.gs` differ and must be reconciled before execution work.
+
+Boundary:
+Documentation-only Project Brain update. No runtime behavior changed, no DB write occurred, no schema change occurred, no import occurred, no Maven/Invoice4U action occurred, no Apps Script/AppSheet/Google Sheets/source-system/production change occurred, no email/customer-facing action occurred, and no inventory action occurred.
+
+Status:
+Completed as read-only Wave 3 discovery. Real Maven execution remains `APPROVAL_REQUIRED`.
+
+---
+
+## 2026-06-25
+
+Decision:
 Wave 2 end-to-end staging smoke test was approved for internal DB writes only on ServiceReport `5806`.
 
 Reason:

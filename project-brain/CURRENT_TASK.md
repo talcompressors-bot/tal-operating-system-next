@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Maven execution readiness gate prepared; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Wave 3 Maven source inventory complete; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -420,6 +420,64 @@ Result:
 - Real Maven execution remains blocked until API-contract evidence, executor ownership, target environment, final payload approval, idempotency checks, allowed post-execution writes, and failure handling are explicitly approved.
 - Project completion remains `65%`; this was a behavior-preserving internal refactor, not a new external runtime/import capability point.
 
+## Wave 3 Read-Only Maven Source Inventory
+
+Scope:
+
+- Wave 3 Maven source inventory was completed as documentation-only discovery.
+- No runtime behavior changed.
+- No DB write, schema change, import, Maven/Invoice4U execution, Apps Script deployment, AppSheet change, Google Sheets write, email/customer-facing action, inventory action, source-system change, or production action occurred.
+
+Artifact:
+
+- Canonical inventory file: `project-brain/migration/MAVEN_SOURCE_INVENTORY.md`.
+
+Objects inventoried:
+
+- Maven imported history/reference data: `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, `InvoiceMavenCustomers`, and `InvoiceMavenItems`.
+- Sync/observability state: `SyncState`, `SyncLog`, and `ErrorLog`.
+- Business workflow bridge objects: `BusinessDocuments`, `BusinessDocumentItems`, `BusinessDocumentLog`, `AutomationCommands`, and selected `ServiceReports` Maven flags.
+- Supporting config/governance: `Lists`, `AutomationRegistry`, `AppMenu`, Apps Script properties, and Maven-related Apps Script functions.
+
+Produced:
+
+1. Maven Object Inventory with purpose, primary key, relationships, read/write direction, fields, required/optional fields, current usage, dependencies, and migration recommendation.
+2. Maven Relationship Diagram.
+3. Maven Data Flow for historical sync, command/draft bridge, and current Next.js dry-run.
+4. Migration Recommendation for every Maven-related object.
+5. Unknowns / Missing Evidence list.
+
+Key findings:
+
+- The confirmed real Maven API call in checked local source is document search/import: `POST https://app.invoice-maven.co.il/api/documents/searchDocuments`.
+- Checked local source does not prove the real Maven draft-create endpoint, request schema, response schema, error schema, or rate limits.
+- Legacy `createMavenDraft(data)` in checked Apps Script source logs/updates internal workflow state and is potentially misleading by name; no external Maven draft-create call was found in that function.
+- Root `apps-script/MavenAPI.js` and Project Brain snapshot `project-brain/apps-script/MavenAPI.gs` differ; production-current source must be reconciled before any real executor work.
+- `InvoiceMavenDocumentItems` remains the strongest current Maven line-level pricing evidence source; `InvoiceMavenItems` requires reconciliation with `ProductsCatalog` before it can safely support execution.
+
+Migration recommendations:
+
+- Keep in Next.js/PostgreSQL: Maven documents, document items, customers, items, sync state/logs/errors, BusinessDocuments, BusinessDocumentItems, BusinessDocumentLog, and AutomationCommands.
+- Retire AppSheet/UI support tables only after native Next.js replacements exist and AppSheet retirement is approved.
+- Do not migrate Apps Script backfill functions as runtime; convert only to one-off approved repair/import utilities if needed.
+- Keep exactly one command executor owner for real Maven work; never allow legacy Apps Script and Next.js to execute the same command path in parallel.
+
+Current blocker:
+
+- None for read-only source inventory.
+- Real Maven execution remains blocked by missing primary Maven create-draft API contract evidence and lack of explicit Liad approval.
+
+Validation:
+
+- Evidence source reads were local/repository-only.
+- `git diff --check` is required before closeout.
+- TypeScript and route validation are not required for this docs-only Project Brain inventory because no runtime files changed.
+
+Project completion:
+
+- Remains `65%`.
+- Wave 3 Maven Knowledge Layer is still `0% / 15% STARTED READ-ONLY`; this inventory improves readiness but does not add a runtime/import capability point.
+
 ## Known Active IDs
 
 Source:
@@ -442,9 +500,9 @@ Wave 3 read-only Maven Knowledge Layer discovery is active.
 
 Next candidate tasks, pending explicit selection/approval:
 
-1. Read-only Maven source inventory: map `InvoiceMaven*`, `SyncState`, `SyncLog`, `ErrorLog`, and any other Maven-origin tab.
-2. Read-only Maven customer/document/item matching analysis for BusinessDocument `NEXT-AI-DRAFT-5806`.
-3. Real Maven execution approval package, only after API contract evidence is available.
+1. Read-only Maven customer/document/item matching analysis for BusinessDocument `NEXT-AI-DRAFT-5806`.
+2. Real Maven create-draft API contract evidence packet, only from primary Maven/API or production-current source evidence.
+3. Read-only Maven source row-count/schema validation from approved staging/PostgreSQL or connector reads.
 4. Action Server capability, when explicitly selected and scoped safely.
 5. Email Runtime capability, when explicitly selected and approved.
 6. Inventory Runtime capability, when explicitly selected and approved.
