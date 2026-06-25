@@ -28,15 +28,19 @@ export default async function BusinessDocumentPreviewPage({
       </div>
 
       <article className="document-paper" aria-label="BusinessDocument HTML preview">
+        <div className="document-safe-boundary">
+          Internal HTML preview only - not a tax document, not sent, not exported
+        </div>
+
         <header className="document-preview-header">
           <div className="company-block">
             <div className="company-logo" aria-label="Tal Compressors logo placeholder">
               TAL
             </div>
             <div>
-              <h1>טל קומפרסורים</h1>
-              <p>Tal Compressors</p>
-              <p>מסמך פנימי לבדיקה בלבד</p>
+              <h1>Tal Compressors</h1>
+              <p>Compressor service, parts, and maintenance</p>
+              <p className="muted-small">Logo asset gap: no approved repo logo was found.</p>
             </div>
           </div>
 
@@ -52,13 +56,17 @@ export default async function BusinessDocumentPreviewPage({
                 <dt>Status</dt>
                 <dd>{document.reviewStatus.internalDraft}</dd>
               </div>
+              <div>
+                <dt>External state</dt>
+                <dd>No Maven action</dd>
+              </div>
             </dl>
           </div>
         </header>
 
         <section className="document-preview-meta">
           <div className="preview-party-block">
-            <h3>לקוח</h3>
+            <h3>Customer</h3>
             <p>{document.customerName}</p>
             <dl>
               <div>
@@ -94,25 +102,55 @@ export default async function BusinessDocumentPreviewPage({
                 <dt>Currency</dt>
                 <dd>{document.totalAmount.replace(/[0-9.,\s]/g, "") || "ILS"}</dd>
               </div>
+              <div>
+                <dt>Balance due</dt>
+                <dd>{document.engineReview.totals.balanceDue}</dd>
+              </div>
             </dl>
           </div>
         </section>
 
         <section className="preview-title-band">
-          <p>{document.title}</p>
-          <span>{document.description}</span>
+          <div>
+            <span>Document number</span>
+            <strong>{document.id}</strong>
+          </div>
+          <div>
+            <span>Document type</span>
+            <strong>
+              {document.engineReview.documentType.label} /{" "}
+              {document.engineReview.documentType.code}
+            </strong>
+          </div>
+          <div>
+            <span>Source</span>
+            <strong>{document.serviceReportNumber}</strong>
+          </div>
+        </section>
+
+        <section className="document-subject">
+          <h2>{document.title}</h2>
+          <p>{document.description}</p>
         </section>
 
         <section className="document-line-table" aria-label="Business document items">
           <table>
+            <colgroup>
+              <col className="item-index-column" />
+              <col />
+              <col className="item-source-column" />
+              <col className="item-quantity-column" />
+              <col className="item-money-column" />
+              <col className="item-money-column" />
+            </colgroup>
             <thead>
               <tr>
                 <th>#</th>
-                <th>תיאור</th>
-                <th>מקור</th>
-                <th>כמות</th>
-                <th>מחיר יחידה</th>
-                <th>סה״כ</th>
+                <th>Description</th>
+                <th>Source</th>
+                <th>Qty</th>
+                <th>Unit price</th>
+                <th>Total</th>
               </tr>
             </thead>
             <tbody>
@@ -144,9 +182,11 @@ export default async function BusinessDocumentPreviewPage({
 
         <section className="document-totals-section">
           <div className="document-notes">
-            <h3>הערות</h3>
+            <h3>Notes</h3>
             <p>{document.notes}</p>
-            <p>{document.engineReview.exportReadiness.boundary}</p>
+            <p className="document-boundary-note">
+              {document.engineReview.exportReadiness.boundary}
+            </p>
           </div>
 
           <dl className="document-totals-box">
@@ -178,6 +218,7 @@ export default async function BusinessDocumentPreviewPage({
             <strong>Digital signature area</strong>
             <span>Not signed. Internal preview only.</span>
           </div>
+          <div className="signature-line" aria-label="Signature placeholder" />
           <div>
             <strong>External boundary</strong>
             <span>No Maven/Invoice4U action. No email. No inventory deduction.</span>

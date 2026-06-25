@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Wave 3 internal BusinessDocument HTML preview implemented; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Wave 3 internal BusinessDocument HTML preview accuracy pass implemented; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`368cd1b Add business document HTML preview`
+PENDING: BusinessDocument HTML preview accuracy pass implementation commit
 
 ## Last Closeout Commit
 
@@ -129,7 +129,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Current Task
 
-Wave 3 Maven Knowledge Layer has a read-only internal BusinessDocument HTML preview route at `/business-documents/[id]/preview`, visually structured after the Maven sample PDF and powered by the existing BusinessDocument adapter plus internal engine output. Wave 2 is frozen except bug fixes. The complete ServiceReport `5806` internal chain remains validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation -> internal HTML preview. The active BusinessDocument `NEXT-AI-DRAFT-5806` has resolved test/manual pricing evidence and positive quantities on all five lines, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for the read-only HTML preview. Real Maven execution is still an explicit `APPROVAL_REQUIRED` gate and is not approved. Actual PDF generation, Maven/Invoice4U calls, command execution, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
+Wave 3 Maven Knowledge Layer has a read-only internal BusinessDocument HTML preview route at `/business-documents/[id]/preview`, visually structured after the Maven sample PDF and powered by the existing BusinessDocument adapter plus internal engine output. The preview accuracy pass tightened the print-document proportions, metadata strip, RTL table alignment, fixed item/totals columns, signature line, no-external-action boundary strip, and A4 print CSS. The uploaded `document_102488.pdf` sample was not present in the repository, so the comparison used the user-provided sample section list rather than direct PDF rendering; no safe Tal logo asset was found, so the placeholder remains and the gap is visible on the preview. Wave 2 is frozen except bug fixes. The complete ServiceReport `5806` internal chain remains validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation -> internal HTML preview. The active BusinessDocument `NEXT-AI-DRAFT-5806` has resolved test/manual pricing evidence and positive quantities on all five lines, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for the read-only HTML preview accuracy pass. Real Maven execution is still an explicit `APPROVAL_REQUIRED` gate and is not approved. Actual PDF generation, Maven/Invoice4U calls, command execution, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
 
 ## Wave 2 Closeout Summary
 
@@ -670,6 +670,55 @@ Project completion:
 - Moves to `67%` by adding one Wave 3 internal HTML preview capability point.
 - Wave 3 is now `2% / 15% STARTED INTERNAL`.
 - No production-readiness, real Maven execution, PDF generation, email, inventory, or cutover points are claimed.
+
+## Wave 3 Preview Accuracy Pass Against Maven Sample
+
+Implemented:
+
+- Improved `/business-documents/[id]/preview` spacing and print-document proportions.
+- Added a visible internal-only boundary strip.
+- Tightened company/header and document identity layout.
+- Reworked metadata into a Maven-style document-number/type/source strip.
+- Added fixed table column classes, stronger header styling, alternating line backgrounds, and tighter RTL alignment.
+- Reworked totals block spacing and total emphasis.
+- Added a signature line and stronger footer boundary.
+- Added explicit A4 `@page` print CSS.
+- Kept due date empty because no trusted field exists.
+- Kept logo placeholder because no approved Tal logo asset exists in the repo.
+
+Evidence gaps:
+
+- `document_102488.pdf` was not found in the repository during local search, so direct PDF rendering comparison was not possible in this pass.
+- Existing image assets found were dependency icons and an AppSheet screenshot, not a safe Tal logo asset.
+
+Validation:
+
+- Focused TypeScript check passed for `app/business-documents/[id]/preview/page.tsx`, `app/business-documents/business-document-adapter.ts`, and `lib/business-document-engine.ts`.
+- Repo-wide TypeScript still fails on pre-existing unrelated AI Draft pricing-evidence typing and missing Playwright dependency/type issues.
+- `git diff --check` passed with CRLF warnings only.
+- Route validation returned HTTP 200 for `/business-documents/NEXT-AI-DRAFT-5806/preview` and `/business-documents/NEXT-AI-DRAFT-5806`.
+- Preview content validation confirmed `Internal HTML preview only - not a tax document`, `Logo asset gap`, `Document type`, `Source`, `Air Filter`, `Subtotal`, `VAT`, `Balance due`, `Digital signature area`, and `No Maven/Invoice4U action`.
+
+Boundaries:
+
+- HTML/CSS only.
+- No PDF generation.
+- No Maven/Invoice4U call.
+- No external API call.
+- No email/customer-facing action.
+- No inventory deduction.
+- No DB write.
+- No schema/Prisma change.
+- No source-system or production action.
+
+Current blocker:
+
+- None for the preview accuracy pass.
+- Direct visual parity remains limited until `document_102488.pdf` or a rendered sample screenshot is available in the workspace.
+
+Project completion:
+
+- Remains `67%`; this is an accuracy/refinement pass on an existing Wave 3 preview capability, not a new capability point.
 
 ## Known Active IDs
 

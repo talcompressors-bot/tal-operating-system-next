@@ -3,6 +3,32 @@
 ## 2026-06-25
 
 Decision:
+BusinessDocument HTML preview accuracy pass remains HTML/CSS-only and does not create PDF or external output.
+
+Reason:
+Wave 3 needs the internal preview to more closely resemble Maven-style output before any real Maven/Invoice4U execution is approved, while preserving `BusinessDocument` as the source of truth and avoiding external side effects.
+
+Approved implementation scope:
+
+1. Improve `/business-documents/[id]/preview` spacing, metadata layout, RTL table alignment, totals block, footer/signature area, and print CSS.
+2. Keep the preview generic for all BusinessDocument engine document types.
+3. Keep due date as a safe empty state when no trusted field exists.
+4. Replace the placeholder logo only if a safe existing Tal logo asset exists in the repo.
+
+Evidence:
+Local search did not find `document_102488.pdf` in the repository and did not find an approved Tal logo asset. Existing image assets were dependency icons and an AppSheet screenshot, so the logo placeholder remains and the gap is visible in the preview.
+
+Boundary:
+HTML/CSS-only refinement. No PDF generation, no Maven/Invoice4U call, no external API call, no email/customer-facing action, no inventory deduction, no DB write, no schema/Prisma change, no source-system change, and no production action occurred.
+
+Status:
+Approved by user request and implemented as a read-only preview accuracy pass. Direct visual parity remains limited until the Maven sample PDF or a rendered sample screenshot is available in the workspace.
+
+---
+
+## 2026-06-25
+
+Decision:
 BusinessDocument internal HTML preview is implemented as a read-only Next.js preview, not PDF generation or external export.
 
 Reason:
