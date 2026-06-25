@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-PENDING: BusinessDocument HTML preview accuracy pass implementation commit
+`0ff5720 Refine business document HTML preview`
 
 ## Last Closeout Commit
 
