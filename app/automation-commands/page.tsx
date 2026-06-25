@@ -29,6 +29,7 @@ export default async function AutomationCommandsPage() {
             <tr>
               <th>Command</th>
               <th>Status</th>
+              <th>Dry-run result</th>
               <th>Type / action</th>
               <th>Source object</th>
               <th>Service report</th>
@@ -47,6 +48,7 @@ export default async function AutomationCommandsPage() {
                   </Link>
                 </td>
                 <td>{command.status}</td>
+                <td>{command.dryRunResult}</td>
                 <td>{command.commandType}</td>
                 <td>
                   {command.sourceObjectId ? (
@@ -78,7 +80,7 @@ export default async function AutomationCommandsPage() {
             ))}
             {!commands.length ? (
               <tr>
-                <td colSpan={9}>
+                <td colSpan={10}>
                   No automation commands are available yet. This read-only shell
                   is ready for future command queue rows without executing any
                   Maven, Invoice4U, email, or database write action.

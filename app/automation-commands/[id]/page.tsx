@@ -1,18 +1,40 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAutomationCommandById } from "../automation-command-adapter";
+import { runMavenDraftDryRun } from "./actions";
 
 export const dynamic = "force-dynamic";
 
 type AutomationCommandDetailPageProps = {
   params: Promise<{ id: string }>;
+  searchParams?: Promise<{ dryRunStatus?: string }>;
 };
+
+function getDryRunStatusMessage(status?: string) {
+  switch (status) {
+    case "dry-run-validated":
+      return "Maven draft dry-run validation completed. No Maven/Invoice4U call, external document, email, or inventory action occurred.";
+    case "dry-run-blocked":
+      return "Maven draft dry-run found validation blockers. No external action occurred.";
+    case "approval-required":
+      return "Exact dry-run approval phrase is required before validating the Maven payload.";
+    case "missing-command":
+      return "Dry-run request was missing an AutomationCommand identifier.";
+    case "not-found":
+      return "AutomationCommand was not found for dry-run validation.";
+    default:
+      return "";
+  }
+}
 
 export default async function AutomationCommandDetailPage({
   params,
+  searchParams,
 }: AutomationCommandDetailPageProps) {
   const { id } = await params;
+  const { dryRunStatus } = (await searchParams) || {};
   const command = await getAutomationCommandById(id);
+  const dryRunStatusMessage = getDryRunStatusMessage(dryRunStatus);
 
   if (!command) {
     notFound();
@@ -67,6 +89,80 @@ export default async function AutomationCommandDetailPage({
             </div>
           </div>
         </article>
+
+        {command.canRunMavenDryRun ? (
+          <article className="info-panel wide">
+            <h2>Maven execution adapter dry run</h2>
+            <div className="approval-panel">
+              <p>{command.dryRunReview.boundary}</p>
+              {dryRunStatusMessage ? (
+                <p className="status-note">{dryRunStatusMessage}</p>
+              ) : null}
+              <dl>
+                <div>
+                  <dt>Dry-run status</dt>
+                  <dd>{command.dryRunReview.status}</dd>
+                </div>
+                <div>
+                  <dt>Validated at</dt>
+                  <dd>{command.dryRunReview.validatedAt}</dd>
+                </div>
+                <div>
+                  <dt>Requested by</dt>
+                  <dd>{command.dryRunReview.requestedBy}</dd>
+                </div>
+              </dl>
+
+              {command.dryRunReview.blockers.length ? (
+                <ul className="warning-list">
+                  {command.dryRunReview.blockers.map((blocker) => (
+                    <li key={blocker}>{blocker}</li>
+                  ))}
+                </ul>
+              ) : null}
+
+              {command.dryRunReview.warnings.length ? (
+                <ul className="warning-list neutral">
+                  {command.dryRunReview.warnings.map((warning) => (
+                    <li key={warning}>{warning}</li>
+                  ))}
+                </ul>
+              ) : null}
+
+              {command.dryRunReview.wouldSendSummary.length ? (
+                <div>
+                  <h3>Would send to Maven</h3>
+                  <ul className="warning-list neutral">
+                    {command.dryRunReview.wouldSendSummary.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <p>No dry-run Maven payload has been generated yet.</p>
+              )}
+
+              <form action={runMavenDraftDryRun} className="approval-form">
+                <input name="commandId" type="hidden" value={command.id} />
+                <label>
+                  Requested by
+                  <input name="requestedBy" type="text" defaultValue="Liad" />
+                </label>
+                <label>
+                  Dry-run phrase
+                  <input
+                    name="approvalText"
+                    type="text"
+                    placeholder={command.dryRunPhrase}
+                  />
+                </label>
+                <button className="button" type="submit">
+                  Validate Maven draft dry run
+                </button>
+              </form>
+            </div>
+          </article>
+        ) : null}
 
         <article className="info-panel">
           <h2>Command status</h2>

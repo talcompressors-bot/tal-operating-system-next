@@ -43,6 +43,7 @@ export type AutomationCommandListItem = {
   id: string;
   title: string;
   status: string;
+  dryRunResult: string;
   commandType: string;
   sourceObjectId: string;
   sourceObjectLabel: string;
@@ -65,6 +66,17 @@ export type AutomationCommandDetail = AutomationCommandListItem & {
   idempotencyKey: string;
   payloadSummary: string[];
   rawSourceSummary: string[];
+  canRunMavenDryRun: boolean;
+  dryRunPhrase: string;
+  dryRunReview: {
+    status: string;
+    validatedAt: string;
+    requestedBy: string;
+    blockers: string[];
+    warnings: string[];
+    wouldSendSummary: string[];
+    boundary: string;
+  };
   safetyBoundary: {
     execution: string;
     maven: string;
@@ -172,6 +184,20 @@ function summarizeJson(value: Prisma.JsonValue | null) {
       return `${key}: ${String(entry)}`;
     })
     .slice(0, 10);
+}
+
+function readRecord(value: Prisma.JsonValue | null | undefined) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return undefined;
+  }
+
+  return value as Record<string, unknown>;
+}
+
+function readStringArray(value: unknown) {
+  return Array.isArray(value)
+    ? value.map((item) => readText(item)).filter(Boolean)
+    : [];
 }
 
 function isUuid(value: string) {
@@ -290,6 +316,38 @@ function getRetryErrorPlaceholder(command: AutomationCommandRecord) {
   return "No retry or error recorded";
 }
 
+function summarizeMavenDryRun(rawSource: Prisma.JsonValue | null) {
+  const rawRecord = readRecord(rawSource);
+  const dryRun = readRecord(rawRecord?.mavenDryRun as Prisma.JsonValue);
+  const wouldSend = readRecord(dryRun?.wouldSendToMaven as Prisma.JsonValue);
+  const customer = readRecord(wouldSend?.customer as Prisma.JsonValue);
+  const sourceServiceReport = readRecord(
+    wouldSend?.sourceServiceReport as Prisma.JsonValue,
+  );
+  const items = Array.isArray(wouldSend?.items) ? wouldSend.items : [];
+
+  return {
+    status: readText(dryRun?.status, "No dry-run result"),
+    validatedAt: readText(dryRun?.validatedAt, "Not validated"),
+    requestedBy: readText(dryRun?.requestedBy, "No requester"),
+    blockers: readStringArray(dryRun?.blockers),
+    warnings: readStringArray(dryRun?.warnings),
+    wouldSendSummary: wouldSend
+      ? [
+          `Command: ${readText(wouldSend.command, "Not recorded")}`,
+          `BusinessDocument: ${readText(wouldSend.businessDocumentId, "Not recorded")}`,
+          `Customer: ${readText(customer?.name, "Not recorded")}`,
+          `Document type: ${formatEnum(wouldSend.documentType, "Not recorded")}`,
+          `Source ServiceReport: ${readText(sourceServiceReport?.reportCounter, "Not recorded")}`,
+          `Line items: ${items.length}`,
+          `Dry run: ${readText(wouldSend.dryRun, "true")}`,
+        ]
+      : [],
+    boundary:
+      "Dry-run adapter only. No Maven/Invoice4U call, external document creation, email/customer-facing action, or inventory action occurred.",
+  };
+}
+
 function mapAutomationCommandListItem(
   command: AutomationCommandRecord,
 ): AutomationCommandListItem {
@@ -300,6 +358,7 @@ function mapAutomationCommandListItem(
     id: readText(command.appsheetCommandId) || command.id,
     title: readText(command.commandName, "Untitled automation command"),
     status: mapStatus(command.status),
+    dryRunResult: readText(command.result, "No dry run"),
     commandType: formatEnum(command.commandType),
     sourceObjectId: sourceObject.id,
     sourceObjectLabel: sourceObject.label,
@@ -327,6 +386,9 @@ function mapAutomationCommandDetail(
     idempotencyKey: readText(command.idempotencyKey, "No idempotency key"),
     payloadSummary: summarizeJson(command.payload),
     rawSourceSummary: summarizeJson(command.rawSource),
+    canRunMavenDryRun: command.commandType === "CREATE_MAVEN_DRAFT",
+    dryRunPhrase: "DRY RUN MAVEN COMMAND",
+    dryRunReview: summarizeMavenDryRun(command.rawSource),
     safetyBoundary: {
       execution: getExecutionBoundary(command),
       maven: "No Maven/Invoice4U call from this review page",
