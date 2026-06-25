@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; PDF export visual polish bugfix completed; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Hebrew customer-facing PDF layout fix completed; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`737245c Polish business document PDF totals layout`
+`PENDING - Hebrew customer-facing PDF layout fix commit`
 
 ## Last Closeout Commit
 
@@ -219,6 +219,51 @@ Current blocker:
 Project completion:
 
 - Remains `68%`; this was a visual bugfix for an existing capability, not a new capability point.
+
+## Wave 3 Hebrew Customer-Facing PDF Layout Fix
+
+Completed:
+
+- Converted visible document labels on `/business-documents/[id]/preview` and the generated PDF to Hebrew RTL.
+- Changed table headers to `מספר`, `תיאור`, `כמות`, `מחיר`, and `סה"כ`.
+- Changed totals labels to `סה"כ`, `מע"מ 17%`, `סה"כ לתשלום`, `שולם`, and `יתרה לתשלום`.
+- Removed internal staging notes, pricing evidence, source/debug fields, boundary text, unsupported/legacy type text, and Maven references from the preview/PDF surface.
+- Kept internal warnings and governance context on the BusinessDocument review page only.
+- Replaced the PDF attachment filename with `NEXT-AI-DRAFT-5806.pdf`.
+- Tightened CSS/print layout so the PDF renders as one readable A4 page without cutting.
+
+Validation:
+
+- Focused TypeScript check passed for the BusinessDocument preview/PDF route, adapter, and engine files.
+- Preview route `/business-documents/NEXT-AI-DRAFT-5806/preview` returned HTTP 200.
+- PDF route `/business-documents/NEXT-AI-DRAFT-5806/pdf` returned HTTP 200.
+- PDF response `Content-Type` remained `application/pdf`.
+- PDF response signature remained `%PDF-`.
+- PDF response attachment filename is `NEXT-AI-DRAFT-5806.pdf`.
+- Preview content confirms totals `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`.
+- Preview content checks confirmed no `Internal`, no `pricing evidence`, no `Unsupported`, and no `Maven` text on the customer-facing preview surface.
+- Temporary Chrome PDF viewer render confirmed one page (`1 / 1`), Hebrew RTL readability, visible totals, notes, and footer without cutting.
+- Temporary validation PDF/screenshot files were removed.
+
+Boundaries:
+
+- Preview/PDF visual/layout bugfix only.
+- No DB write.
+- No Maven/Invoice4U call.
+- No email/customer action.
+- No inventory action.
+- No schema change.
+- No totals logic change.
+- No source-system or production action.
+
+Current blocker:
+
+- None for internal Hebrew customer-facing preview/PDF rendering.
+- Real Maven/Invoice4U execution, saved file persistence, and customer delivery remain separate approval gates.
+
+Project completion:
+
+- Remains `68%`; this was a visual/layout hardening pass on the existing Wave 3 PDF capability, not a new capability point.
 
 ## Wave 2 Closeout Summary
 

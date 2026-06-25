@@ -606,9 +606,9 @@ dd {
   box-shadow: 0 18px 40px rgba(23, 32, 51, 0.1);
   color: #172033;
   display: grid;
-  gap: 22px;
-  min-height: 1180px;
-  padding: 42px 46px 38px;
+  gap: 12px;
+  min-height: 1080px;
+  padding: 28px 38px 28px;
 }
 
 .document-safe-boundary {
@@ -627,20 +627,20 @@ dd {
 .document-preview-meta,
 .document-totals-section {
   display: grid;
-  gap: 20px;
-  grid-template-columns: 1fr 300px;
+  gap: 12px;
+  grid-template-columns: 1fr 280px;
 }
 
 .document-preview-header {
   align-items: start;
   border-bottom: 2px solid #172033;
-  padding-bottom: 22px;
+  padding-bottom: 12px;
 }
 
 .company-block {
   align-items: center;
   display: flex;
-  gap: 18px;
+  gap: 14px;
 }
 
 .company-logo {
@@ -650,15 +650,15 @@ dd {
   display: inline-flex;
   font-size: 22px;
   font-weight: 800;
-  height: 70px;
+  height: 58px;
   justify-content: center;
   letter-spacing: 0.08em;
-  width: 104px;
+  width: 88px;
 }
 
 .company-block h1,
 .document-identity h2 {
-  font-size: 26px;
+  font-size: 21px;
   margin: 0 0 6px;
 }
 
@@ -677,7 +677,7 @@ dd {
 
 .document-identity {
   border: 1px solid #172033;
-  padding: 16px;
+  padding: 10px;
 }
 
 .preview-party-block,
@@ -686,7 +686,7 @@ dd {
 .document-totals-box,
 .document-preview-footer > div {
   border: 1px solid var(--border);
-  padding: 16px;
+  padding: 10px;
 }
 
 .preview-party-block h3,
@@ -727,11 +727,11 @@ dd {
 
 .document-subject {
   display: grid;
-  gap: 8px;
+  gap: 4px;
 }
 
 .document-subject h2 {
-  font-size: 24px;
+  font-size: 19px;
   margin: 0;
 }
 
@@ -754,19 +754,21 @@ dd {
 
 .document-line-table table {
   border: 1px solid #172033;
-  min-width: 860px;
+  min-width: 0;
 }
 
 .document-line-table th {
   background: #172033;
   color: #ffffff;
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: 0;
-  padding-bottom: 11px;
-  padding-top: 11px;
+  padding-bottom: 7px;
+  padding-top: 7px;
 }
 
 .document-line-table td {
+  padding-bottom: 7px;
+  padding-top: 7px;
   vertical-align: top;
 }
 
@@ -802,10 +804,6 @@ dd {
   width: 46px;
 }
 
-.item-source-column {
-  width: 112px;
-}
-
 .item-quantity-column {
   width: 84px;
 }
@@ -825,7 +823,7 @@ dd {
   border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
-  padding: 9px 0;
+  padding: 6px 0;
 }
 
 .document-totals-box div:last-child {
@@ -836,25 +834,19 @@ dd {
   border-bottom-color: #172033;
   border-top: 2px solid #172033;
   color: #172033;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 800;
   margin-top: 2px;
-  padding-top: 12px;
-}
-
-.document-boundary-note {
-  border-top: 1px solid var(--border);
-  margin-top: 14px !important;
-  padding-top: 12px;
+  padding-top: 8px;
 }
 
 .document-preview-footer {
   align-items: end;
   border-top: 2px solid #172033;
   display: grid;
-  gap: 18px;
-  grid-template-columns: 1fr 220px 1fr;
-  padding-top: 22px;
+  gap: 12px;
+  grid-template-columns: 1fr 1fr;
+  padding-top: 10px;
 }
 
 .document-preview-footer strong,
@@ -894,15 +886,58 @@ dd {
   .document-paper {
     border: 0;
     box-shadow: none;
+    font-size: 10.5px;
+    gap: 6px;
     min-height: auto;
     padding: 0;
   }
 
   .document-line-table {
-    margin-bottom: 12px;
+    margin-bottom: 4px;
   }
 
   .document-totals-section {
+    gap: 8px;
+    grid-template-columns: 1fr 245px;
+    padding-top: 2px;
+  }
+
+  .document-preview-header,
+  .document-preview-meta,
+  .document-totals-section,
+  .document-preview-footer {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .document-line-table th,
+  .document-line-table td {
+    padding: 5px 8px;
+  }
+
+  .company-logo {
+    height: 58px;
+    width: 88px;
+  }
+
+  .company-block h1,
+  .document-identity h2 {
+    font-size: 21px;
+  }
+
+  .document-subject h2 {
+    font-size: 16px;
+  }
+
+  .preview-party-block,
+  .preview-date-block,
+  .document-notes,
+  .document-totals-box,
+  .document-preview-footer > div {
+    padding: 8px;
+  }
+
+  .document-preview-footer {
     padding-top: 8px;
   }
 }

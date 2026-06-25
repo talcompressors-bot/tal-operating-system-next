@@ -3,6 +3,28 @@
 ## 2026-06-25
 
 Decision:
+The BusinessDocument preview/PDF surface should be Hebrew RTL and customer-facing, while internal warnings and evidence remain only on the review page.
+
+Reason:
+The internal PDF route is still not approved for customer delivery, but the visual output should be clean enough for customer-facing review and future export readiness. Internal staging notes, evidence/debug fields, boundary warnings, and source-system terminology create confusion and must not appear in the preview/PDF surface.
+
+Implemented fix:
+Converted visible preview/PDF document labels to Hebrew, simplified the document metadata, translated known service lines, removed pricing evidence/source/debug/internal boundary text from the preview/PDF, renamed the attachment to `NEXT-AI-DRAFT-5806.pdf`, and compacted print CSS so the PDF renders as one A4 page.
+
+Validation:
+Preview route returned HTTP 200, PDF route returned HTTP 200 with `application/pdf`, totals remained `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`, preview content no longer contains `Internal`, `pricing evidence`, `Unsupported`, or `Maven`, and Chrome PDF viewer rendered one readable Hebrew page without cutting.
+
+Boundary:
+Preview/PDF layout change only. No DB write, Maven/Invoice4U call, email/customer action, inventory action, schema change, totals logic change, file persistence, source-system action, or production action occurred.
+
+Status:
+Completed as customer-facing layout hardening for the existing internal PDF capability. Actual customer delivery remains gated.
+
+---
+
+## 2026-06-25
+
+Decision:
 The internal PDF subtotal-row visual defect is fixed with print CSS only.
 
 Reason:

@@ -16,7 +16,7 @@ function getBaseUrl(request: Request) {
 
 function getSafeFileName(id: string) {
   const safeId = id.replace(/[^a-z0-9_-]+/gi, "-").replace(/^-+|-+$/g, "");
-  return `${safeId || "business-document"}-internal-preview.pdf`;
+  return `${safeId || "business-document"}.pdf`;
 }
 
 function getChromiumExecutablePath() {

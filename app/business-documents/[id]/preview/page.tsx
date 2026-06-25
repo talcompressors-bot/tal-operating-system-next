@@ -8,6 +8,18 @@ type BusinessDocumentPreviewPageProps = {
   params: Promise<{ id: string }>;
 };
 
+const itemNameHebrew: Record<string, string> = {
+  "Air Filter": "מסנן אוויר",
+  "Oil Filter": "מסנן שמן",
+  "3L SKR oil top-up": "שמן SKR 3 ליטר",
+  "Technician Visit / Travel": "ביקור טכנאי / נסיעה",
+  "Labor + Service": "עבודה ושירות",
+};
+
+function toHebrewItemName(name: string) {
+  return itemNameHebrew[name] || name;
+}
+
 export default async function BusinessDocumentPreviewPage({
   params,
 }: BusinessDocumentPreviewPageProps) {
@@ -22,46 +34,37 @@ export default async function BusinessDocumentPreviewPage({
     <section className="document-preview-shell" dir="rtl">
       <div className="preview-toolbar">
         <Link className="button secondary" href={`/business-documents/${document.id}`}>
-          Back to review
+          חזרה לבדיקה פנימית
         </Link>
         <Link className="button secondary" href={`/business-documents/${document.id}/pdf`}>
-          Download PDF
+          הורדת PDF
         </Link>
-        <span>Internal preview only. No Maven call, email, inventory action, DB write, or file persistence.</span>
+        <span>תצוגה מקדימה למסמך לקוח</span>
       </div>
 
-      <article className="document-paper" aria-label="BusinessDocument HTML preview">
-        <div className="document-safe-boundary">
-          Internal HTML preview only - not a tax document, not sent, not exported
-        </div>
-
+      <article className="document-paper" aria-label="תצוגה מקדימה למסמך עסקי">
         <header className="document-preview-header">
           <div className="company-block">
-            <div className="company-logo" aria-label="Tal Compressors logo placeholder">
+            <div className="company-logo" aria-label="לוגו טל קומפרסורים">
               TAL
             </div>
             <div>
-              <h1>Tal Compressors</h1>
-              <p>Compressor service, parts, and maintenance</p>
-              <p className="muted-small">Logo asset gap: no approved repo logo was found.</p>
+              <h1>טל קומפרסורים</h1>
+              <p>שירות, חלפים ותחזוקת מדחסים</p>
             </div>
           </div>
 
           <div className="document-identity">
-            <p>{document.engineReview.documentType.label}</p>
-            <h2>{document.engineReview.documentType.code}</h2>
+            <p>מסמך שירות</p>
+            <h2>מסמך שירות</h2>
             <dl>
               <div>
-                <dt>Document number</dt>
+                <dt>מספר מסמך</dt>
                 <dd>{document.id}</dd>
               </div>
               <div>
-                <dt>Status</dt>
-                <dd>{document.reviewStatus.internalDraft}</dd>
-              </div>
-              <div>
-                <dt>External state</dt>
-                <dd>No Maven action</dd>
+                <dt>תאריך</dt>
+                <dd>{document.createdAt}</dd>
               </div>
             </dl>
           </div>
@@ -69,24 +72,16 @@ export default async function BusinessDocumentPreviewPage({
 
         <section className="document-preview-meta">
           <div className="preview-party-block">
-            <h3>Customer</h3>
+            <h3>לכבוד</h3>
             <p>{document.customerName}</p>
             <dl>
               <div>
-                <dt>Customer ID</dt>
+                <dt>מספר לקוח</dt>
                 <dd>{document.customerId || "Not recorded"}</dd>
               </div>
               <div>
-                <dt>Source ServiceReport</dt>
-                <dd>
-                  {document.serviceReportId ? (
-                    <Link href={`/service-reports/${document.serviceReportId}`}>
-                      {document.serviceReportNumber}
-                    </Link>
-                  ) : (
-                    "No linked report"
-                  )}
-                </dd>
+                <dt>מספר קריאת שירות</dt>
+                <dd>{document.serviceReportNumber}</dd>
               </div>
             </dl>
           </div>
@@ -94,66 +89,45 @@ export default async function BusinessDocumentPreviewPage({
           <div className="preview-date-block">
             <dl>
               <div>
-                <dt>Document date</dt>
+                <dt>תאריך מסמך</dt>
                 <dd>{document.createdAt}</dd>
               </div>
               <div>
-                <dt>Due date</dt>
-                <dd>Not recorded</dd>
+                <dt>תאריך לתשלום</dt>
+                <dd>לא צוין</dd>
               </div>
               <div>
-                <dt>Currency</dt>
-                <dd>{document.totalAmount.replace(/[0-9.,\s]/g, "") || "ILS"}</dd>
+                <dt>מטבע</dt>
+                <dd>ILS</dd>
               </div>
               <div>
-                <dt>Balance due</dt>
+                <dt>יתרה לתשלום</dt>
                 <dd>{document.engineReview.totals.balanceDue}</dd>
               </div>
             </dl>
           </div>
         </section>
 
-        <section className="preview-title-band">
-          <div>
-            <span>Document number</span>
-            <strong>{document.id}</strong>
-          </div>
-          <div>
-            <span>Document type</span>
-            <strong>
-              {document.engineReview.documentType.label} /{" "}
-              {document.engineReview.documentType.code}
-            </strong>
-          </div>
-          <div>
-            <span>Source</span>
-            <strong>{document.serviceReportNumber}</strong>
-          </div>
-        </section>
-
         <section className="document-subject">
-          <h2>{document.title}</h2>
-          <p>{document.description}</p>
+          <h2>פירוט שירות וחלפים</h2>
         </section>
 
-        <section className="document-line-table" aria-label="Business document items">
+        <section className="document-line-table" aria-label="פריטי מסמך עסקי">
           <table>
             <colgroup>
               <col className="item-index-column" />
               <col />
-              <col className="item-source-column" />
               <col className="item-quantity-column" />
               <col className="item-money-column" />
               <col className="item-money-column" />
             </colgroup>
             <thead>
               <tr>
-                <th>#</th>
-                <th>Description</th>
-                <th>Source</th>
-                <th>Qty</th>
-                <th>Unit price</th>
-                <th>Total</th>
+                <th>מספר</th>
+                <th>תיאור</th>
+                <th>כמות</th>
+                <th>מחיר</th>
+                <th>סה&quot;כ</th>
               </tr>
             </thead>
             <tbody>
@@ -161,14 +135,8 @@ export default async function BusinessDocumentPreviewPage({
                 <tr key={item.id}>
                   <td>{index + 1}</td>
                   <td>
-                    <strong>{item.name}</strong>
-                    <span>
-                      {item.pricingEvidence.length
-                        ? item.pricingEvidence.join(" | ")
-                        : "No pricing evidence recorded"}
-                    </span>
+                    <strong>{toHebrewItemName(item.name)}</strong>
                   </td>
-                  <td>{item.source}</td>
                   <td>{item.quantity}</td>
                   <td>{item.unitPrice}</td>
                   <td>{item.totalPrice}</td>
@@ -176,7 +144,7 @@ export default async function BusinessDocumentPreviewPage({
               ))}
               {!document.items.length ? (
                 <tr>
-                  <td colSpan={6}>No line items recorded.</td>
+                  <td colSpan={5}>לא נרשמו פריטים.</td>
                 </tr>
               ) : null}
             </tbody>
@@ -185,32 +153,30 @@ export default async function BusinessDocumentPreviewPage({
 
         <section className="document-totals-section">
           <div className="document-notes">
-            <h3>Notes</h3>
-            <p>{document.notes}</p>
-            <p className="document-boundary-note">
-              {document.engineReview.exportReadiness.boundary}
-            </p>
+            <h3>הערות</h3>
+            <p>תודה שבחרתם בטל קומפרסורים.</p>
+            <p>המחירים מוצגים בשקלים חדשים וכוללים מע&quot;מ כמפורט.</p>
           </div>
 
           <dl className="document-totals-box">
             <div>
-              <dt>Subtotal</dt>
+              <dt>סה&quot;כ</dt>
               <dd>{document.engineReview.totals.documentSubtotal}</dd>
             </div>
             <div>
-              <dt>VAT</dt>
+              <dt>מע&quot;מ 17%</dt>
               <dd>{document.engineReview.totals.vatAmount}</dd>
             </div>
             <div className="strong-total">
-              <dt>Total</dt>
+              <dt>סה&quot;כ לתשלום</dt>
               <dd>{document.engineReview.totals.totalAmount}</dd>
             </div>
             <div>
-              <dt>Payment amount</dt>
+              <dt>שולם</dt>
               <dd>{document.engineReview.totals.paymentAmount}</dd>
             </div>
             <div>
-              <dt>Balance due</dt>
+              <dt>יתרה לתשלום</dt>
               <dd>{document.engineReview.totals.balanceDue}</dd>
             </div>
           </dl>
@@ -218,13 +184,12 @@ export default async function BusinessDocumentPreviewPage({
 
         <footer className="document-preview-footer">
           <div>
-            <strong>Digital signature area</strong>
-            <span>Not signed. Internal preview only.</span>
+            <strong>חתימה</strong>
+            <span>________________________</span>
           </div>
-          <div className="signature-line" aria-label="Signature placeholder" />
           <div>
-            <strong>External boundary</strong>
-            <span>No Maven/Invoice4U action. No email. No inventory deduction.</span>
+            <strong>טל קומפרסורים</strong>
+            <span>שירות מדחסים מקצועי</span>
           </div>
         </footer>
       </article>
