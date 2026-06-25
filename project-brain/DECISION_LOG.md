@@ -3,13 +3,38 @@
 ## 2026-06-25
 
 Decision:
+Correct Wave 3 Maven terminology: Maven does not create internal drafts.
+
+Reason:
+The project wording from Wave 2 used "Maven draft" as a shorthand, but the actual internal draft object is `BusinessDocument`. Maven is the external document generation/output system only. Keeping the distinction explicit prevents future executor work from treating Maven as the owner of draft state.
+
+Approved terminology:
+
+1. `BusinessDocument` is the internal draft and review object.
+2. `BusinessDocumentItems` are the internal draft lines.
+3. Maven/Invoice4U is document generation/output only.
+4. `CREATE_MAVEN_DRAFT` is a legacy/internal command type name introduced during Wave 2 and must be treated as compatibility terminology.
+5. Future command naming should use `CREATE_MAVEN_DOCUMENT`.
+6. Existing staging IDs, command types, and code paths are not renamed now because renaming could break idempotency, route links, smoke-test evidence, and existing staging rows.
+
+Boundary:
+Documentation-only correction in Project Brain and Decision Log. No runtime behavior changed, no code was renamed, no staging IDs changed, no DB write occurred, no schema change occurred, no import occurred, no Maven/Invoice4U action occurred, no Apps Script/AppSheet/Google Sheets/source-system/production change occurred, no email/customer-facing action occurred, and no inventory action occurred.
+
+Status:
+Approved by user request. Future Wave 3 naming should say Maven document generation/output, not Maven draft creation.
+
+---
+
+## 2026-06-25
+
+Decision:
 Wave 3 Maven Source Inventory is the canonical read-only inventory for current Maven-related source objects.
 
 Reason:
 Wave 3 cannot proceed toward real Maven execution until the project has an evidence-backed inventory of Maven-related data sources, sync/control objects, Apps Script functions, supporting configuration, relationships, data flow, and migration recommendations. The inventory consolidates existing local repository evidence without touching Maven, AppSheet, Google Sheets, Apps Script deployments, Prisma schema, or the database.
 
 Findings:
-The confirmed real Maven API call in checked local source is document search/import via `searchDocuments`. Checked local source does not prove the real Maven draft-create endpoint, request schema, response schema, error schema, or rate limits. Legacy `createMavenDraft(data)` in checked Apps Script source updates internal workflow state and does not show an external Maven draft-create call. Root `apps-script/MavenAPI.js` and Project Brain snapshot `project-brain/apps-script/MavenAPI.gs` differ and must be reconciled before execution work.
+The confirmed real Maven API call in checked local source is document search/import via `searchDocuments`. Checked local source does not prove a real Maven document-generation endpoint, request schema, response schema, error schema, or rate limits. Legacy `createMavenDraft(data)` in checked Apps Script source updates internal workflow state and does not show an external Maven document-generation call. Root `apps-script/MavenAPI.js` and Project Brain snapshot `project-brain/apps-script/MavenAPI.gs` differ and must be reconciled before execution work.
 
 Boundary:
 Documentation-only Project Brain update. No runtime behavior changed, no DB write occurred, no schema change occurred, no import occurred, no Maven/Invoice4U action occurred, no Apps Script/AppSheet/Google Sheets/source-system/production change occurred, no email/customer-facing action occurred, and no inventory action occurred.
@@ -25,7 +50,7 @@ Decision:
 Wave 2 end-to-end staging smoke test was approved for internal DB writes only on ServiceReport `5806`.
 
 Reason:
-Liad explicitly requested validation of the full internal read/protected-write chain: AI Draft Preview, protected BusinessDocument draft creation, BusinessDocument review, protected Maven AutomationCommand creation only, AutomationCommand review, and duplicate blocking.
+Liad explicitly requested validation of the full internal read/protected-write chain: AI Draft Preview, protected internal BusinessDocument draft creation, BusinessDocument review, protected Maven document-generation AutomationCommand creation only, AutomationCommand review, and duplicate blocking.
 
 Observed result:
 The smoke test created BusinessDocument `NEXT-AI-DRAFT-5806` / `1d7f8500-1cb7-4d81-ad3a-b7d5d8b453eb` and AutomationCommand `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` / `db12ee97-0960-4f85-bdd5-f9fa30780885` with idempotency key `maven-draft:1d7f8500-1cb7-4d81-ad3a-b7d5d8b453eb`. Duplicate draft and command attempts were blocked by existing-record/no-form states.
@@ -41,16 +66,16 @@ Approved by user request and completed. Runtime bug fixed in commit `3d269fb Han
 ## 2026-06-25
 
 Decision:
-Protected Maven draft AutomationCommand creation is approved only for the internal Next.js Server Action path on `/business-documents/[id]`.
+Protected Maven document-generation AutomationCommand creation is approved only for the internal Next.js Server Action path on `/business-documents/[id]`.
 
 Reason:
-Liad explicitly approved creating an internal AutomationCommand for Maven draft creation from an approved BusinessDocument. The approved scope requires an exact approval phrase, BusinessDocument status `APPROVED` or `READY_TO_SEND`, idempotency by BusinessDocument, command-status visibility on the review page, and no customer-facing or external-system action.
+Liad explicitly approved creating an internal AutomationCommand for Maven document generation/output from an approved internal `BusinessDocument` draft. The approved scope requires an exact approval phrase, BusinessDocument status `APPROVED` or `READY_TO_SEND`, idempotency by BusinessDocument, command-status visibility on the review page, and no customer-facing or external-system action.
 
 Boundaries:
-This approval allows creating only one internal pending `AutomationCommand` of type `CREATE_MAVEN_DRAFT` for an eligible BusinessDocument. It does not allow Maven/Invoice4U API calls, email/customer-facing action, inventory deduction, BusinessDocument mutation, schema changes, Prisma changes, imports, source-system changes, production integration, or duplicate commands for the same BusinessDocument.
+This approval allows creating only one internal pending `AutomationCommand` of type `CREATE_MAVEN_DRAFT` for an eligible BusinessDocument. `CREATE_MAVEN_DRAFT` is a legacy/internal Wave 2 compatibility name; the intended future name is `CREATE_MAVEN_DOCUMENT`. This approval does not allow Maven/Invoice4U API calls, email/customer-facing action, inventory deduction, BusinessDocument mutation, schema changes, Prisma changes, imports, source-system changes, production integration, or duplicate commands for the same BusinessDocument.
 
 Status:
-Approved and implemented in commit `5fafc36 Add Maven draft command gate`.
+Approved and implemented in commit `5fafc36 Add Maven draft command gate`; terminology corrected after implementation without renaming existing code or staging IDs.
 
 ---
 
@@ -1091,16 +1116,16 @@ Approved and implemented in commit `b475f13 Add business document approval workf
 ## 2026-06-25
 
 Decision:
-`CREATE_MAVEN_DRAFT` execution adapter is implemented first as a Next.js dry-run Server Action on `/automation-commands/[id]`.
+Legacy `CREATE_MAVEN_DRAFT` execution adapter is implemented first as a Next.js dry-run Server Action on `/automation-commands/[id]`.
 
 Reason:
-The project needs to validate the Maven payload shape and BusinessDocument readiness before any real Maven/Invoice4U execution. The dry-run reads the existing AutomationCommand payload, validates that the linked BusinessDocument is `APPROVED`, validates customer/document/line item readiness, stores what would be sent to Maven, and preserves idempotency evidence without marking the command externally completed.
+The project needs to validate the Maven document-generation payload shape and internal BusinessDocument draft readiness before any real Maven/Invoice4U execution. The dry-run reads the existing AutomationCommand payload, validates that the linked BusinessDocument is `APPROVED`, validates customer/document/line item readiness, stores what would be sent to Maven for document output, and preserves idempotency evidence without marking the command externally completed. `CREATE_MAVEN_DRAFT` is retained only as a Wave 2 legacy/internal compatibility name.
 
 Boundaries:
 No real Maven/Invoice4U call, no external document creation, no email/customer-facing action, no inventory action, no command execution completion, no schema/env/migration change, no import, no source-system action, and no production action. Dry-run state is recorded only on the internal `AutomationCommand`.
 
 Status:
-Approved and implemented in commit `1ff28a3 Add Maven draft dry-run adapter`.
+Approved and implemented in commit `1ff28a3 Add Maven draft dry-run adapter`; terminology corrected after implementation without renaming existing code or staging IDs.
 
 ---
 
@@ -1126,7 +1151,7 @@ Decision:
 Wave 2 Service Workflow Layer is complete, and real Maven execution is the next explicit approval gate.
 
 Reason:
-ServiceReport `5806` completed the full internal Wave 2 chain: AI Draft Preview, trusted pricing evidence display, protected internal BusinessDocument creation, BusinessDocument review and approval, protected Maven AutomationCommand creation, AutomationCommand queue/detail review, Maven dry-run, protected line resolution, and final Maven dry-run validation. The active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` is `PENDING` with `DRY_RUN_VALIDATED`, blocker count `0`, no warnings, `processedAt=null`, `completedAt=null`, and `externalStateChanged=false`.
+ServiceReport `5806` completed the full internal Wave 2 chain: AI Draft Preview, trusted pricing evidence display, protected internal BusinessDocument draft creation, BusinessDocument review and approval, protected Maven document-generation AutomationCommand creation, AutomationCommand queue/detail review, Maven dry-run, protected line resolution, and final Maven dry-run validation. The active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` is `PENDING` with `DRY_RUN_VALIDATED`, blocker count `0`, no warnings, `processedAt=null`, `completedAt=null`, and `externalStateChanged=false`.
 
 Boundaries:
 Wave 2 closeout does not approve real Maven/Invoice4U execution, AutomationCommand execution, external document creation, email/customer-facing action, inventory deduction, production action, schema/env/migration change, import, or source-system action. Real Maven execution requires a separate explicit Liad approval after the Maven Execution Readiness Checklist in `project-brain/CURRENT_TASK.md` is satisfied.
@@ -1158,7 +1183,7 @@ Decision:
 Wave 3 Maven Knowledge Layer starts as read-only discovery and payload mapping only.
 
 Reason:
-Wave 2 produced a validated internal BusinessDocument and pending `CREATE_MAVEN_DRAFT` AutomationCommand with a dry-run payload, but real Maven execution still lacks primary evidence for the actual Maven create-draft API contract. Current checked Apps Script evidence shows `createMavenDraft(data)` logging the webhook payload and updating `BusinessDocuments` / `AutomationCommands` sheet status, but it does not prove a real external Maven draft-create request. Wave 3 must therefore first map the current BusinessDocument-to-Maven payload, required Maven fields, source history tables, missing customer/document/item/tax/duplicate rules, and extraction plan for a reusable payload builder before any execution adapter is considered.
+Wave 2 produced a validated internal BusinessDocument draft and pending legacy `CREATE_MAVEN_DRAFT` AutomationCommand with a dry-run payload, but real Maven execution still lacks primary evidence for the actual Maven document-generation API contract. Current checked Apps Script evidence shows `createMavenDraft(data)` logging the webhook payload and updating `BusinessDocuments` / `AutomationCommands` sheet status, but it does not prove a real external Maven document-generation request. Wave 3 must therefore first map the current BusinessDocument-to-Maven output payload, required Maven fields, source history tables, missing customer/document/item/tax/duplicate rules, and extraction plan for a reusable payload builder before any execution adapter is considered.
 
 Boundaries:
 Wave 2 is frozen except bug fixes. This Wave 3 start changed Project Brain documentation only. No runtime behavior changed, no DB writes occurred, no Maven/Invoice4U action occurred, no AutomationCommand execution occurred, no email/customer-facing action occurred, no inventory action occurred, no schema/env/migration/import/source-system/production action occurred, and no new standalone governance document was created.
@@ -1174,7 +1199,7 @@ Decision:
 The Maven dry-run payload builder and validator are extracted into a reusable internal module.
 
 Reason:
-Wave 3 needs one canonical internal path for Maven draft payload validation before any real executor can be considered. The previous dry-run Server Action mixed phrase gating, command lookup, blocker validation, payload construction, persistence, revalidation, and redirects. The extracted module preserves the same blocker/warning logic and payload shape while allowing future dry-run, review, and approved execution code to reuse the same validation/building foundation.
+Wave 3 needs one canonical internal path for Maven document-generation payload validation before any real executor can be considered. The previous dry-run Server Action mixed phrase gating, command lookup, blocker validation, payload construction, persistence, revalidation, and redirects. The extracted module preserves the same blocker/warning logic and payload shape while allowing future dry-run, review, and approved execution code to reuse the same validation/building foundation.
 
 Boundaries:
 No real Maven/Invoice4U call, no external execution, no DB write during implementation/validation, no email/customer-facing action, no inventory action, no schema/env/migration/import/source-system/production action. The existing dry-run route behavior is intended to remain identical; only internal code organization changed.
