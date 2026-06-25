@@ -1050,3 +1050,19 @@ The index should show Project Reality Check and link to canonical owner files wi
 
 Status:
 Approved.
+
+---
+
+## 2026-06-25
+
+Decision:
+BusinessDocument internal approval/rejection workflow is implemented only through protected Next.js Server Actions on `/business-documents/[id]`.
+
+Reason:
+The internal BusinessDocument draft needs an auditable approval state before any Maven/Invoice4U or customer-facing action. Approval requires the exact phrase `APPROVE BUSINESS DOCUMENT`; unresolved pricing or quantity issues block approval unless an explicit override checkbox is selected. Return-to-review requires a reason. These actions may update only internal `BusinessDocument` status/approval fields and create `BusinessDocumentLog` audit rows.
+
+Boundaries:
+No Maven/Invoice4U call, no automatic AutomationCommand creation, no email/customer-facing action, no inventory deduction, no schema/env/migration change, no import, no source-system action, and no production action.
+
+Status:
+Approved and implemented in commit `b475f13 Add business document approval workflow`.
