@@ -3,7 +3,7 @@
 Status: Current object tracking file
 
 Current phase:
-Wave 2 Service Workflow Layer
+Wave 2 Service Workflow Layer complete; real Maven execution gate pending explicit approval
 
 Verification note:
 Values below are preserved from the last known project state unless marked `UNKNOWN`. Do not invent missing IDs.
@@ -54,6 +54,23 @@ DryRunBlockerCount: 0
 ExternalStateChanged: false
 ProcessedAt: null
 CompletedAt: null
+
+## Maven Execution Readiness
+
+ReadinessStatus: READY_FOR_EXPLICIT_APPROVAL_GATE
+RealMavenExecutionApproved: false
+ExecutionGate: APPROVAL_REQUIRED
+RequiredBeforeExecution:
+- Explicit Liad approval for real Maven execution of NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806
+- Confirm single executor ownership before any Maven call
+- Re-read AutomationCommand and BusinessDocument immediately before execution
+- Re-run dry-run and require DRY_RUN_VALIDATED with blocker count 0
+- Review final would-send Maven payload with Liad
+- Confirm manual/test pricing evidence is acceptable for real Maven draft creation or replace it with trusted production evidence
+- Confirm target Maven environment and credentials
+- Confirm idempotency and no existing Maven output fields
+- Define allowed post-execution internal updates and failure handling
+- Keep email/customer-facing action and inventory deduction separately gated
 
 ## Maven Draft
 

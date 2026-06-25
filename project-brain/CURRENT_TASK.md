@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; BusinessDocument Line Resolution Layer complete; no next implementation task approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; Maven execution readiness gate prepared; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -15,7 +15,7 @@ Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is appl
 
 ## Current Milestone
 
-Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, Wave 2 connector dry-run validation, real Prisma staging connectivity validation, Customers read-only module implementation, automatic Project Brain closeout sync governance, multi-agent operating workflow docs, ReportEquipmentItems / Equipment read-only module implementation, PartsUsed read-only module implementation, data coverage audit, Service Report central work-screen enhancement, bidirectional module navigation, Service Reports list context enhancement, AI Draft Suggestions shell, BusinessDocuments shell, AutomationCommands shell, SCR matching preview panel, AI Draft Recommendation Preview runtime for Service Report `5806`, Maven Knowledge / Pricing Evidence Layer for the AI Draft Preview, AI Draft Approval to BusinessDocument Draft runtime, BusinessDocument Review and Approval Page, protected Maven draft AutomationCommand gate, AutomationCommand Detail and Queue Review, BusinessDocument Approval Workflow, BusinessDocument Approval Workflow POST Smoke Test, Maven Execution Adapter Dry Run, BusinessDocument Line Resolution Layer, completion model update to 65%, AI Draft/parts/pricing/equipment intelligence documentation, global business document line governance, AI Draft recommendation readiness business-rule approval, Action Server Knowledge Layer roadmap planning, Email Document Intake Agent planning, active-ID startup/closeout preservation rules, Orchestrator Decision Engine governance, Executive Orchestrator Phase 2 governance, and Project Execution Mode transition to `CAPABILITY_BUILDING` are complete.
+Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, Wave 2 connector dry-run validation, real Prisma staging connectivity validation, Customers read-only module implementation, automatic Project Brain closeout sync governance, multi-agent operating workflow docs, ReportEquipmentItems / Equipment read-only module implementation, PartsUsed read-only module implementation, data coverage audit, Service Report central work-screen enhancement, bidirectional module navigation, Service Reports list context enhancement, AI Draft Suggestions shell, BusinessDocuments shell, AutomationCommands shell, SCR matching preview panel, AI Draft Recommendation Preview runtime for Service Report `5806`, Maven Knowledge / Pricing Evidence Layer for the AI Draft Preview, AI Draft Approval to BusinessDocument Draft runtime, BusinessDocument Review and Approval Page, protected Maven draft AutomationCommand gate, AutomationCommand Detail and Queue Review, BusinessDocument Approval Workflow, BusinessDocument Approval Workflow POST Smoke Test, Maven Execution Adapter Dry Run, BusinessDocument Line Resolution Layer, Wave 2 Line Resolution POST Smoke Test, Wave 2 closeout and Maven execution readiness checklist, completion model update to 65%, AI Draft/parts/pricing/equipment intelligence documentation, global business document line governance, AI Draft recommendation readiness business-rule approval, Action Server Knowledge Layer roadmap planning, Email Document Intake Agent planning, active-ID startup/closeout preservation rules, Orchestrator Decision Engine governance, Executive Orchestrator Phase 2 governance, and Project Execution Mode transition to `CAPABILITY_BUILDING` are complete.
 
 ## Last Implementation Commit
 
@@ -127,7 +127,66 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Current Task
 
-Wave 2 Line Resolution POST Smoke Test is complete. The active BusinessDocument `NEXT-AI-DRAFT-5806` now has resolved test/manual pricing evidence and positive quantities on all five lines, `BusinessDocumentLog` audit rows for each correction, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Future tasks must prioritize working runtime capabilities instead of documentation expansion. No next implementation task is approved yet. Current blocker: none for the line-resolution POST smoke test; Maven execution remains gated until explicit real-execution approval is granted. Actual Maven/Invoice4U calls, command execution, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
+Wave 2 is complete and closed for ServiceReport `5806`. The complete internal chain is validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation. The active BusinessDocument `NEXT-AI-DRAFT-5806` now has resolved test/manual pricing evidence and positive quantities on all five lines, `BusinessDocumentLog` audit rows for each correction, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for Wave 2. Real Maven execution is now the next explicit `APPROVAL_REQUIRED` gate and is not approved. Actual Maven/Invoice4U calls, command execution, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
+
+## Wave 2 Closeout Summary
+
+ServiceReport `5806` / `1e25bbb1` complete chain:
+
+1. AI Draft Preview route `/ai-drafts/preview/5806` produced internal suggested lines.
+2. Pricing evidence layer displayed trusted evidence or approval-required empty state without inventing prices.
+3. Protected approval created BusinessDocument `NEXT-AI-DRAFT-5806` / `1d7f8500-1cb7-4d81-ad3a-b7d5d8b453eb`.
+4. BusinessDocument review displayed source ServiceReport link, items, pricing evidence, warnings, and no-external-action boundaries.
+5. BusinessDocument approval workflow approved the internal draft with explicit override history.
+6. Protected Maven command gate created one AutomationCommand `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` / `db12ee97-0960-4f85-bdd5-f9fa30780885` with idempotency key `maven-draft:1d7f8500-1cb7-4d81-ad3a-b7d5d8b453eb`.
+7. AutomationCommand review showed command payload, source BusinessDocument, source ServiceReport, and not-executed boundaries.
+8. Maven dry-run initially blocked on missing prices and zero labor quantity.
+9. Line Resolution POST smoke test corrected five draft lines with internal test/manual evidence and one audit log per line.
+10. Final Maven dry-run result is `DRY_RUN_VALIDATED`, blocker count `0`, warnings `0`, command status `PENDING`, `processedAt=null`, `completedAt=null`, and `externalStateChanged=false`.
+
+Final line values:
+
+- Air Filter: quantity `3`, unit price `120`, total `360`, `needsPriceApproval=false`.
+- Technician Visit / Travel: quantity `1`, unit price `300`, total `300`, `needsPriceApproval=false`.
+- Oil Filter: quantity `3`, unit price `90`, total `270`, `needsPriceApproval=false`.
+- 3L SKR oil top-up: quantity `9`, unit price `45`, total `405`, `needsPriceApproval=false`.
+- Labor + Service: quantity `2`, unit price `275`, total `550`, `needsPriceApproval=false`.
+
+Boundaries confirmed:
+
+- No Maven/Invoice4U call.
+- No AutomationCommand execution.
+- No external document creation.
+- No email/customer-facing action.
+- No inventory deduction.
+- No production/source-system touch.
+- No schema/env/migration/import change.
+- No customer-facing send or payment update.
+
+Wave 2 completion decision:
+
+- Mark Wave 2 Service Workflow Layer complete because all approved Wave 2 workflow criteria are satisfied: read-only workflow surfaces exist; protected internal write gates are idempotent and audited; BusinessDocument approval and line resolution are validated; AutomationCommand queue/detail review is visible before execution; Maven dry-run validates the would-send payload; ServiceReport `5806` chain has reached `DRY_RUN_VALIDATED`; all forbidden external actions remained untouched.
+- Project completion remains `65%`: Wave 2 contributes its full `15% / 15%`; no Wave 3, Wave 4, real automation runtime, or production-readiness percentage is claimed.
+
+## Maven Execution Readiness Checklist
+
+Real Maven execution is `APPROVAL_REQUIRED` and may not proceed until all items below are confirmed:
+
+1. Liad explicitly approves real Maven execution for AutomationCommand `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806`.
+2. Confirm the exact execution path and owner: Next.js Server Action executor, legacy AppSheet Bot / Apps Script executor, or another approved single owner. Do not allow two executors for the same command.
+3. Re-read the live AutomationCommand and confirm `status=PENDING`, `result=DRY_RUN_VALIDATED`, `processedAt=null`, `completedAt=null`, and idempotency key `maven-draft:1d7f8500-1cb7-4d81-ad3a-b7d5d8b453eb`.
+4. Re-read the linked BusinessDocument and confirm `status=APPROVED`, `approvalStatus=APPROVED`, no Maven document number/PDF link exists, and all five line values still match the final values listed above.
+5. Re-run dry-run immediately before execution and require `DRY_RUN_VALIDATED`, blocker count `0`, warnings reviewed, and `externalStateChanged=false`.
+6. Review the dry-run `wouldSendToMaven` payload line by line with Liad, including customer, source ServiceReport, item names, quantities, unit prices, totals, currency, and document type.
+7. Confirm manual/test pricing evidence is acceptable for real Maven draft creation or replace it with trusted production pricing evidence before execution.
+8. Confirm target environment and credentials are correct for Maven; do not use production/customer-facing systems accidentally.
+9. Confirm duplicate protection: no existing Maven document fields on the BusinessDocument and no completed Maven command for the same idempotency key.
+10. Define the exact post-execution internal updates allowed after a successful Maven response, including command status/result, Maven document id/number/PDF link fields, and audit log.
+11. Define the exact failure handling: command remains inspectable, error is recorded, no retry loop without explicit approval, and no customer-facing action.
+12. Confirm email/customer send remains separately gated after Maven draft creation.
+13. Confirm inventory deduction remains separately gated and is not part of Maven execution.
+14. Confirm rollback/containment plan: if a Maven draft is created incorrectly, handle it through Maven’s allowed manual correction/cancellation path and preserve internal audit history.
+15. Record the final approval phrase and operator identity before implementation or execution. No phrase is active in runtime yet for real execution.
 
 ## Known Active IDs
 

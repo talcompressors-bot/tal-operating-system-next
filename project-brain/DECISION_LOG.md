@@ -1098,3 +1098,19 @@ Line resolution may update only `BusinessDocumentItem` quantity, unit price, tot
 
 Status:
 Approved and implemented in commit `8538455 Add business document line resolution layer`.
+
+---
+
+## 2026-06-25
+
+Decision:
+Wave 2 Service Workflow Layer is complete, and real Maven execution is the next explicit approval gate.
+
+Reason:
+ServiceReport `5806` completed the full internal Wave 2 chain: AI Draft Preview, trusted pricing evidence display, protected internal BusinessDocument creation, BusinessDocument review and approval, protected Maven AutomationCommand creation, AutomationCommand queue/detail review, Maven dry-run, protected line resolution, and final Maven dry-run validation. The active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` is `PENDING` with `DRY_RUN_VALIDATED`, blocker count `0`, no warnings, `processedAt=null`, `completedAt=null`, and `externalStateChanged=false`.
+
+Boundaries:
+Wave 2 closeout does not approve real Maven/Invoice4U execution, AutomationCommand execution, external document creation, email/customer-facing action, inventory deduction, production action, schema/env/migration change, import, or source-system action. Real Maven execution requires a separate explicit Liad approval after the Maven Execution Readiness Checklist in `project-brain/CURRENT_TASK.md` is satisfied.
+
+Status:
+Approved as documentation/state closeout only. Wave 2 is complete at `15% / 15%`; project completion remains `65%`.
