@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-PENDING: Internal PDF export planning commit
+`df0c144 Plan internal PDF export path`
 
 ## Last Closeout Commit
 
