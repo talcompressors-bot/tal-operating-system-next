@@ -3,6 +3,22 @@
 ## 2026-06-25
 
 Decision:
+AI Draft Approval to BusinessDocument Draft runtime is approved only for the protected Next.js Server Action path on `/ai-drafts/preview/[reportCounter]`.
+
+Reason:
+Liad explicitly approved converting an approved AI Draft Preview into an internal BusinessDocument draft and BusinessDocumentItems. The approved scope requires explicit user approval before creation, idempotency by ServiceReport, preserved item pricing evidence, and a block or explicit override when required pricing evidence is missing.
+
+Boundaries:
+This approval does not allow Maven/Invoice4U action, AutomationCommand creation, customer-facing email/send action, inventory deduction, schema changes, Prisma changes, imports, source-system changes, production integration, or duplicate BusinessDocument drafts for the same ServiceReport.
+
+Status:
+Approved.
+
+---
+
+## 2026-06-25
+
+Decision:
 Transition project execution mode from governance building to `CAPABILITY_BUILDING`.
 
 Purpose:
