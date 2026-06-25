@@ -1,5 +1,6 @@
 import type {
   AiDraftSuggestion,
+  AutomationCommand,
   BusinessDocument,
   BusinessDocumentItem,
   BusinessDocumentLog,
@@ -25,6 +26,19 @@ type BusinessDocumentAiDraft = Pick<
 type BusinessDocumentMavenDocument = Pick<
   MavenDocument,
   "mavenDocumentExternalId" | "documentNumber"
+>;
+
+type BusinessDocumentAutomationCommand = Pick<
+  AutomationCommand,
+  | "id"
+  | "appsheetCommandId"
+  | "commandType"
+  | "status"
+  | "requestedBy"
+  | "requestedAt"
+  | "result"
+  | "errorMessage"
+  | "createdAt"
 >;
 
 type BusinessDocumentRecord = Pick<
@@ -59,6 +73,7 @@ type BusinessDocumentRecord = Pick<
   mavenDocument: BusinessDocumentMavenDocument | null;
   items: BusinessDocumentItem[];
   logs: BusinessDocumentLog[];
+  automationCommands: BusinessDocumentAutomationCommand[];
 };
 
 export type BusinessDocumentListItem = {
@@ -98,6 +113,22 @@ export type BusinessDocumentDetail = BusinessDocumentListItem & {
     inventoryState: string;
   };
   reviewWarnings: string[];
+  commandReview: {
+    canCreateMavenCommand: boolean;
+    blockedReason: string;
+    approvalPhrase: string;
+    latestCommandId: string;
+    latestCommandStatus: string;
+  };
+  automationCommands: Array<{
+    id: string;
+    commandType: string;
+    status: string;
+    requestedBy: string;
+    requestedAt: string;
+    result: string;
+    errorMessage: string;
+  }>;
   lifecycle: {
     draft: string;
     approved: string;
@@ -179,6 +210,23 @@ const businessDocumentSelect = {
   },
   logs: {
     orderBy: [{ createdAt: "desc" }, { id: "asc" }],
+  },
+  automationCommands: {
+    where: {
+      commandType: "CREATE_MAVEN_DRAFT",
+    },
+    orderBy: [{ createdAt: "desc" }, { id: "asc" }],
+    select: {
+      id: true,
+      appsheetCommandId: true,
+      commandType: true,
+      status: true,
+      requestedBy: true,
+      requestedAt: true,
+      result: true,
+      errorMessage: true,
+      createdAt: true,
+    },
   },
 } satisfies Prisma.BusinessDocumentSelect;
 
@@ -356,6 +404,78 @@ function buildReviewWarnings(document: BusinessDocumentRecord) {
     : ["Review-ready internal draft. User approval is still required before any external action."];
 }
 
+function mapCommandReview(document: BusinessDocumentRecord) {
+  const allowedStatus =
+    document.status === "APPROVED" || document.status === "READY_TO_SEND";
+  const latestCommand = document.automationCommands[0];
+  const approvalRequiredItems = document.items.filter(
+    (item) => item.needsPriceApproval,
+  );
+
+  if (latestCommand) {
+    return {
+      canCreateMavenCommand: false,
+      blockedReason:
+        "A Maven draft AutomationCommand already exists for this BusinessDocument.",
+      approvalPhrase: "CREATE MAVEN COMMAND",
+      latestCommandId: latestCommand.appsheetCommandId || latestCommand.id,
+      latestCommandStatus: formatEnum(latestCommand.status),
+    };
+  }
+
+  if (!allowedStatus) {
+    return {
+      canCreateMavenCommand: false,
+      blockedReason:
+        "BusinessDocument status must be Approved or Ready To Send before a Maven draft command can be queued.",
+      approvalPhrase: "CREATE MAVEN COMMAND",
+      latestCommandId: "No command",
+      latestCommandStatus: "No command",
+    };
+  }
+
+  if (document.mavenDocumentNumber || document.mavenPdfLink) {
+    return {
+      canCreateMavenCommand: false,
+      blockedReason:
+        "Maven fields are already populated; duplicate Maven draft commands are blocked.",
+      approvalPhrase: "CREATE MAVEN COMMAND",
+      latestCommandId: "No command",
+      latestCommandStatus: "No command",
+    };
+  }
+
+  if (!document.items.length) {
+    return {
+      canCreateMavenCommand: false,
+      blockedReason:
+        "BusinessDocumentItems are required before a Maven draft command can be queued.",
+      approvalPhrase: "CREATE MAVEN COMMAND",
+      latestCommandId: "No command",
+      latestCommandStatus: "No command",
+    };
+  }
+
+  if (approvalRequiredItems.length) {
+    return {
+      canCreateMavenCommand: false,
+      blockedReason:
+        "Price approval must be resolved for every line before a Maven draft command can be queued.",
+      approvalPhrase: "CREATE MAVEN COMMAND",
+      latestCommandId: "No command",
+      latestCommandStatus: "No command",
+    };
+  }
+
+  return {
+    canCreateMavenCommand: true,
+    blockedReason: "Ready for explicit Maven draft command approval.",
+    approvalPhrase: "CREATE MAVEN COMMAND",
+    latestCommandId: "No command",
+    latestCommandStatus: "No command",
+  };
+}
+
 function mapBusinessDocumentListItem(
   document: BusinessDocumentRecord,
 ): BusinessDocumentListItem {
@@ -402,6 +522,16 @@ function mapBusinessDocumentDetail(
     notes: readText(document.notes, "No notes"),
     reviewStatus: mapReviewStatus(document),
     reviewWarnings: buildReviewWarnings(document),
+    commandReview: mapCommandReview(document),
+    automationCommands: document.automationCommands.map((command) => ({
+      id: command.appsheetCommandId || command.id,
+      commandType: formatEnum(command.commandType),
+      status: formatEnum(command.status),
+      requestedBy: readText(command.requestedBy, "No user"),
+      requestedAt: formatDate(command.requestedAt || command.createdAt),
+      result: readText(command.result, "No result"),
+      errorMessage: readText(command.errorMessage, "No error"),
+    })),
     lifecycle: mapLifecycle(document),
     items: document.items.map((item) => ({
       id: readText(item.appsheetItemId) || item.id,

@@ -1,18 +1,48 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getBusinessDocumentById } from "../business-document-adapter";
+import { createMavenDraftAutomationCommand } from "./actions";
 
 export const dynamic = "force-dynamic";
 
 type BusinessDocumentDetailPageProps = {
   params: Promise<{ id: string }>;
+  searchParams?: Promise<{ commandStatus?: string }>;
 };
+
+function getCommandStatusMessage(status?: string) {
+  switch (status) {
+    case "created":
+      return "Maven draft AutomationCommand was created as an internal pending command only.";
+    case "approval-required":
+      return "Exact approval phrase is required before creating a Maven draft AutomationCommand.";
+    case "status-not-ready":
+      return "BusinessDocument must be Approved or Ready To Send before a Maven draft command can be queued.";
+    case "maven-exists":
+      return "Maven fields are already populated; duplicate command creation is blocked.";
+    case "missing-items":
+      return "BusinessDocumentItems are required before command creation.";
+    case "price-approval-required":
+      return "All item price approval warnings must be resolved before command creation.";
+    case "existing-command":
+      return "A Maven draft AutomationCommand already exists for this BusinessDocument.";
+    case "not-found":
+      return "BusinessDocument was not found for command creation.";
+    case "missing-document":
+      return "Command creation was missing a BusinessDocument identifier.";
+    default:
+      return "";
+  }
+}
 
 export default async function BusinessDocumentDetailPage({
   params,
+  searchParams,
 }: BusinessDocumentDetailPageProps) {
   const { id } = await params;
+  const { commandStatus } = (await searchParams) || {};
   const document = await getBusinessDocumentById(id);
+  const commandStatusMessage = getCommandStatusMessage(commandStatus);
 
   if (!document) {
     notFound();
@@ -79,6 +109,108 @@ export default async function BusinessDocumentDetailPage({
               <li key={warning}>{warning}</li>
             ))}
           </ul>
+        </article>
+
+        <article className="info-panel wide">
+          <h2>Maven draft command gate</h2>
+          <div className="approval-panel">
+            <p>
+              This creates one internal AutomationCommand only. It does not call
+              Maven/Invoice4U, send email, contact customers, or deduct
+              inventory.
+            </p>
+            {commandStatusMessage ? (
+              <p className="status-note">{commandStatusMessage}</p>
+            ) : null}
+            <dl>
+              <div>
+                <dt>Command readiness</dt>
+                <dd>{document.commandReview.blockedReason}</dd>
+              </div>
+              <div>
+                <dt>Latest command</dt>
+                <dd>{document.commandReview.latestCommandId}</dd>
+              </div>
+              <div>
+                <dt>Latest command status</dt>
+                <dd>{document.commandReview.latestCommandStatus}</dd>
+              </div>
+            </dl>
+
+            {document.commandReview.canCreateMavenCommand ? (
+              <form
+                action={createMavenDraftAutomationCommand}
+                className="approval-form"
+              >
+                <input
+                  name="businessDocumentId"
+                  type="hidden"
+                  value={document.id}
+                />
+                <label>
+                  Requested by
+                  <input name="requestedBy" type="text" defaultValue="Liad" />
+                </label>
+                <label>
+                  Approval phrase
+                  <input
+                    name="approvalText"
+                    type="text"
+                    placeholder={document.commandReview.approvalPhrase}
+                  />
+                </label>
+                <button className="button" type="submit">
+                  Create internal Maven draft command
+                </button>
+              </form>
+            ) : (
+              <p className="status-note">
+                Command creation is blocked until the readiness condition is
+                satisfied.
+              </p>
+            )}
+          </div>
+        </article>
+
+        <article className="info-panel wide">
+          <h2>Automation command status</h2>
+          <div className="table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Command</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Requested by</th>
+                  <th>Requested</th>
+                  <th>Result</th>
+                  <th>Error</th>
+                </tr>
+              </thead>
+              <tbody>
+                {document.automationCommands.map((command) => (
+                  <tr key={command.id}>
+                    <td>
+                      <Link href={`/automation-commands/${command.id}`}>
+                        {command.id}
+                      </Link>
+                    </td>
+                    <td>{command.commandType}</td>
+                    <td>{command.status}</td>
+                    <td>{command.requestedBy}</td>
+                    <td>{command.requestedAt}</td>
+                    <td>{command.result}</td>
+                    <td>{command.errorMessage}</td>
+                  </tr>
+                ))}
+                {!document.automationCommands.length ? (
+                  <tr>
+                    <td colSpan={7}>No Maven draft AutomationCommand exists.</td>
+                  </tr>
+                ) : null}
+              </tbody>
+            </table>
+          </div>
         </article>
 
         <article className="info-panel">
