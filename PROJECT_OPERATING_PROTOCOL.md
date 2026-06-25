@@ -755,6 +755,7 @@ Do not ask Liad for approval when executing AUTO_APPROVED actions. Only stop for
 APPROVAL_REQUIRED work must stop and request explicit approval before proceeding:
 
 - env changes
+- installing any new npm package; approval must name each package explicitly
 - `prisma/schema.prisma` changes
 - Prisma `db push`
 - Prisma `migrate`

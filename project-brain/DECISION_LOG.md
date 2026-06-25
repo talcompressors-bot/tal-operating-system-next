@@ -3,6 +3,44 @@
 ## 2026-06-25
 
 Decision:
+Codex must not install new npm packages without explicit approval per package.
+
+Reason:
+The internal PDF export MVP required Playwright and exposed that dependency changes can alter runtime surface, package metadata, audit posture, and deployment assumptions. Future dependency additions must therefore be treated as explicit package-level approval gates, even when the surrounding task is otherwise approved.
+
+Rule:
+Before running an npm install that adds a new package, Codex must stop and obtain approval naming the exact package or packages to add. Existing validation commands and installs that do not add packages remain governed by the normal task scope and sandbox rules.
+
+Status:
+Governance lock added to `PROJECT_OPERATING_PROTOCOL.md` after the PDF export smoke test. No automatic audit fix was run.
+
+---
+
+## 2026-06-25
+
+Decision:
+BusinessDocument review/PDF totals must display effective line-derived totals when stored BusinessDocument header totals are missing or stale.
+
+Reason:
+The PDF smoke test for `NEXT-AI-DRAFT-5806` found that the generated PDF opened correctly and RTL content was readable, but the totals block showed `ILS 0.00` because the staging BusinessDocument header totals were stale while line corrections had valid item totals. The internal preview/PDF review surface must not show stale zero totals when trusted line totals exist.
+
+Implemented fix:
+`lib/business-document-engine.ts` now uses current line totals as the effective subtotal when stored header subtotal is missing or mismatched, calculates 17% VAT when stored VAT/total are missing, and records warnings that stored totals are missing/stale. This is a read/display calculation only and does not write database totals.
+
+Validation:
+Preview content now contains `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`. PDF route returned HTTP 200, `application/pdf`, `%PDF-`, and 82704 bytes. Chrome PDF viewer rendered the generated PDF and page 2 showed subtotal `ILS 1885.00`, VAT `ILS 320.45`, total `ILS 2205.45`, and balance due `ILS 2205.45`.
+
+Boundary:
+No DB write, no file persistence by the app, no saved PDF record, no sent/exported status mutation, no Maven/Invoice4U call, no external API call, no email/customer-facing action, no inventory action, no schema/Prisma change, and no production/source-system action occurred.
+
+Status:
+Implemented as a smoke-test bug fix and governance lock. A minor visual overlap line crosses the subtotal row in the PDF viewer and remains a layout polish gap.
+
+---
+
+## 2026-06-25
+
+Decision:
 Internal BusinessDocument PDF export is implemented first as a temporary-download-only route, not as an external export or saved document workflow.
 
 Reason:

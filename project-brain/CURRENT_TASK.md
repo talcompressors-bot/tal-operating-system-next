@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; internal PDF export MVP implemented; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; PDF export smoke test and governance lock completed; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`1277121 Add internal business document PDF export`
+`PENDING - PDF export smoke test and governance lock commit`
 
 ## Last Closeout Commit
 
@@ -130,6 +130,57 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 ## Current Task
 
 Wave 3 Maven Knowledge Layer has a read-only internal BusinessDocument HTML preview route at `/business-documents/[id]/preview`, visually structured after the Maven sample PDF and powered by the existing BusinessDocument adapter plus internal engine output. The internal PDF export MVP is implemented at `GET /business-documents/[id]/pdf`; it renders the existing preview route with Playwright/Chromium, streams an A4 `application/pdf` attachment, and performs no DB write, file persistence, saved PDF record, sent/exported status mutation, Maven/Invoice4U call, email/customer-facing action, or inventory action. The Maven sample PDF is imported as a Project Brain reference artifact at `project-brain/reference/maven-samples/document_102488.pdf`. The preview accuracy pass tightened the print-document proportions, metadata strip, RTL table alignment, fixed item/totals columns, signature line, no-external-action boundary strip, and A4 print CSS. No safe Tal logo asset was found, so the placeholder remains and the gap is visible on the preview. Local Poppler/Ghostscript/ImageMagick render tools are unavailable and headless Chrome did not emit screenshot files in this environment, so direct rendered visual comparison remains limited; route/content validation still passes against the preview and PDF header validation passes. Wave 2 is frozen except bug fixes. The complete ServiceReport `5806` internal chain remains validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation -> internal HTML preview -> internal temporary PDF download. The active BusinessDocument `NEXT-AI-DRAFT-5806` has resolved test/manual pricing evidence and positive quantities on all five lines, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for the internal PDF export MVP. Real Maven execution is still an explicit `APPROVAL_REQUIRED` gate and is not approved. Maven/Invoice4U calls, command execution, saved PDF persistence, customer-facing delivery, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
+
+## Wave 3 PDF Export Smoke Test and Governance Lock
+
+Completed:
+
+- Opened `/business-documents/NEXT-AI-DRAFT-5806/pdf` through Chrome/Playwright. The route correctly starts an attachment download named `NEXT-AI-DRAFT-5806-internal-preview.pdf`.
+- Rendered the temporary downloaded PDF in Chrome's PDF viewer for manual inspection.
+- Confirmed the PDF opens correctly and has two pages.
+- Confirmed Hebrew/RTL customer and document layout is readable.
+- Confirmed after a read/display bug fix that totals match the expected smoke values: subtotal `1885.00 ILS`, VAT `320.45 ILS` at 17%, total `2205.45 ILS`, and balance due `2205.45 ILS`.
+- Confirmed a read-only DB check shows no sent/exported state changed: `status=APPROVED`, `sendStatus=null`, `mavenPdfLink=null`, and `mavenDocumentNumber=null`.
+- Confirmed the app route performs no file persistence; temporary local smoke-test download/screenshot files were removed after inspection.
+- Documented npm audit findings without running `npm audit fix`.
+- Added governance lock in `PROJECT_OPERATING_PROTOCOL.md`: Codex must not install new npm packages without explicit approval per package.
+
+Smoke-test bug fix:
+
+- The first PDF render showed `ILS 0.00` totals because stored BusinessDocument header totals are stale while corrected line items total `1885`.
+- `lib/business-document-engine.ts` now uses current line totals as the effective review/PDF subtotal when stored header totals are missing or stale, calculates 17% VAT when stored VAT/total are missing, and records warnings for missing/stale stored totals.
+- This is read/display logic only. It does not write corrected totals back to the database.
+
+npm audit findings:
+
+- `next` direct dependency has a critical aggregate finding under the installed `15.3.4`; npm reports fix available at `next@15.5.19` without a semver-major upgrade.
+- `postcss` transitive dependency has a moderate finding via `next`; npm reports the same `next@15.5.19` fix path.
+- No automatic fix was run.
+
+Known visual gap:
+
+- Chrome's PDF viewer shows a minor horizontal overlap line crossing the subtotal row on page 2. Totals are readable and correct, but print layout polish remains before customer-facing export.
+
+Boundaries:
+
+- No Maven/Invoice4U call.
+- No external API call.
+- No email/customer-facing action.
+- No inventory action.
+- No DB write.
+- No schema/Prisma change.
+- No saved PDF/file persistence by the app.
+- No sent/exported status mutation.
+- No source-system or production action.
+
+Current blocker:
+
+- None for internal PDF smoke validation.
+- Customer-facing PDF/export remains blocked by the real external execution/customer delivery gates and by remaining layout polish.
+
+Project completion:
+
+- Remains `68%`; this was smoke validation plus a bug fix/governance lock for an existing Wave 3 capability, not a new capability point.
 
 ## Wave 2 Closeout Summary
 

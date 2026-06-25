@@ -100,6 +100,10 @@ function formatAmount(value: number, currency: string) {
   return `${value.toFixed(2)} ${currency}`;
 }
 
+function roundMoney(value: number) {
+  return Math.round((value + Number.EPSILON) * 100) / 100;
+}
+
 function readJsonObject(value: Prisma.JsonValue | null) {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     return {};
@@ -156,9 +160,23 @@ export function buildBusinessDocumentEngineReview(
     (sum, item) => sum + decimalToNumber(item.totalPrice),
     0,
   );
-  const documentSubtotal = decimalToNumber(input.subtotalAmount);
-  const vatAmount = decimalToNumber(input.vatAmount);
-  const totalAmount = decimalToNumber(input.totalAmount) || documentSubtotal + vatAmount;
+  const storedSubtotal = decimalToNumber(input.subtotalAmount);
+  const storedVatAmount = decimalToNumber(input.vatAmount);
+  const storedTotalAmount = decimalToNumber(input.totalAmount);
+  const hasLineSubtotal = lineSubtotal > 0;
+  const hasStoredSubtotal = storedSubtotal > 0;
+  const documentSubtotal =
+    hasLineSubtotal && (!hasStoredSubtotal || Math.abs(lineSubtotal - storedSubtotal) > 0.01)
+      ? lineSubtotal
+      : storedSubtotal;
+  const vatAmount =
+    documentSubtotal > 0 && (!storedVatAmount || !storedTotalAmount)
+      ? roundMoney(documentSubtotal * 0.17)
+      : storedVatAmount;
+  const totalAmount =
+    storedTotalAmount && Math.abs(storedTotalAmount - (documentSubtotal + vatAmount)) <= 0.01
+      ? storedTotalAmount
+      : roundMoney(documentSubtotal + vatAmount);
   const paymentAmount = readPaymentAmount(input.rawSource);
   const balanceDue = totalAmount - paymentAmount;
   const detectedSources = readPaymentSources(input.rawSource);
@@ -183,12 +201,16 @@ export function buildBusinessDocumentEngineReview(
     blockers.push("All lines require a positive quantity.");
   }
 
-  if (!input.totalAmount) {
+  if (totalAmount <= 0) {
     blockers.push("Total amount is required before approval/export readiness.");
   }
 
-  if (Math.abs(lineSubtotal - documentSubtotal) > 0.01) {
-    warnings.push("Line subtotal and BusinessDocument subtotal do not match.");
+  if (hasLineSubtotal && hasStoredSubtotal && Math.abs(lineSubtotal - storedSubtotal) > 0.01) {
+    warnings.push("Line subtotal and stored BusinessDocument subtotal do not match; review display uses current line totals.");
+  }
+
+  if (hasLineSubtotal && !hasStoredSubtotal) {
+    warnings.push("Stored BusinessDocument subtotal is missing; review display uses current line totals.");
   }
 
   if (typeDefinition?.requiresPayment && paymentAmount <= 0) {
