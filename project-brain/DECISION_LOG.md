@@ -3,6 +3,37 @@
 ## 2026-06-25
 
 Decision:
+Internal PDF export should be implemented first as a temporary-download-only Playwright/Chromium print-to-PDF route from the existing BusinessDocument HTML preview.
+
+Reason:
+The existing `/business-documents/[id]/preview` route is already the internal source for the Maven-style document layout and uses the BusinessDocument engine output. Reusing that HTML/CSS as the print source avoids a duplicate PDF template and keeps BusinessDocument as the source of truth.
+
+Recommended path:
+
+1. Add `GET /business-documents/[id]/pdf` in a future approved implementation task.
+2. Use Playwright/Chromium server-side `page.pdf()` with `format: "A4"`, `printBackground: true`, and `preferCSSPageSize: true`.
+3. Load the existing preview route and stream the PDF as `application/pdf`.
+4. Start with temporary download only; do not write DB rows, save files, update Maven fields, create AutomationCommands, or send anything.
+5. Add saved-file storage and audit logging only as a later explicitly approved protected write capability.
+
+Dependency and validation requirements:
+
+- Resolve Playwright dependency/types before implementation.
+- Confirm Chromium availability in the target server environment.
+- Validate generated PDF against `project-brain/reference/maven-samples/document_102488.pdf` using approved renderer tooling.
+- Check Hebrew/RTL rendering, fonts, A4 size, margins, row/page breaks, totals block, footer, and signature area.
+
+Boundary:
+Planning only. No runtime behavior changed, no PDF generation occurred, no dependency was installed, no Maven/Invoice4U call occurred, no external API call occurred, no email/customer-facing action occurred, no inventory action occurred, no DB write occurred, no schema/Prisma change occurred, and no production/source-system action occurred.
+
+Status:
+Approved by user request as planning. Implementation remains `APPROVAL_REQUIRED` because it adds PDF generation dependencies/runtime behavior and may later lead to file/DB writes.
+
+---
+
+## 2026-06-25
+
+Decision:
 Maven sample PDF may be stored as a Project Brain reference artifact for preview accuracy work.
 
 Reason:

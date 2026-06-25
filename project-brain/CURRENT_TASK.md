@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Maven sample reference asset imported for preview accuracy; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; internal PDF export planning completed; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`f1dcd47 Add Maven sample reference PDF`
+PENDING: Internal PDF export planning commit
 
 ## Last Closeout Commit
 
@@ -129,7 +129,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Current Task
 
-Wave 3 Maven Knowledge Layer has a read-only internal BusinessDocument HTML preview route at `/business-documents/[id]/preview`, visually structured after the Maven sample PDF and powered by the existing BusinessDocument adapter plus internal engine output. The Maven sample PDF is now imported as a Project Brain reference artifact at `project-brain/reference/maven-samples/document_102488.pdf`. The preview accuracy pass tightened the print-document proportions, metadata strip, RTL table alignment, fixed item/totals columns, signature line, no-external-action boundary strip, and A4 print CSS. No safe Tal logo asset was found, so the placeholder remains and the gap is visible on the preview. Local Poppler/Ghostscript/ImageMagick render tools are unavailable and headless Chrome did not emit screenshot files in this environment, so direct rendered visual comparison remains limited; route/content validation still passes against the preview. Wave 2 is frozen except bug fixes. The complete ServiceReport `5806` internal chain remains validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation -> internal HTML preview. The active BusinessDocument `NEXT-AI-DRAFT-5806` has resolved test/manual pricing evidence and positive quantities on all five lines, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for the reference asset import; direct screenshot comparison needs a working local PDF/browser renderer. Real Maven execution is still an explicit `APPROVAL_REQUIRED` gate and is not approved. Actual PDF generation, Maven/Invoice4U calls, command execution, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
+Wave 3 Maven Knowledge Layer has a read-only internal BusinessDocument HTML preview route at `/business-documents/[id]/preview`, visually structured after the Maven sample PDF and powered by the existing BusinessDocument adapter plus internal engine output. Internal PDF export planning is complete and recommends server-side Playwright/Chromium `page.pdf()` from the existing preview route as the safest implementation path, with temporary download-only output first and no DB/file persistence until a later explicit approval. The Maven sample PDF is imported as a Project Brain reference artifact at `project-brain/reference/maven-samples/document_102488.pdf`. The preview accuracy pass tightened the print-document proportions, metadata strip, RTL table alignment, fixed item/totals columns, signature line, no-external-action boundary strip, and A4 print CSS. No safe Tal logo asset was found, so the placeholder remains and the gap is visible on the preview. Local Poppler/Ghostscript/ImageMagick render tools are unavailable and headless Chrome did not emit screenshot files in this environment, so direct rendered visual comparison remains limited; route/content validation still passes against the preview. Wave 2 is frozen except bug fixes. The complete ServiceReport `5806` internal chain remains validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation -> internal HTML preview. The active BusinessDocument `NEXT-AI-DRAFT-5806` has resolved test/manual pricing evidence and positive quantities on all five lines, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for PDF export planning; actual PDF generation implementation requires explicit approval and dependency/tooling validation. Real Maven execution is still an explicit `APPROVAL_REQUIRED` gate and is not approved. Actual PDF generation, Maven/Invoice4U calls, command execution, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
 
 ## Wave 2 Closeout Summary
 
@@ -749,6 +749,80 @@ Boundaries:
 Project completion:
 
 - Remains `67%`; this imported evidence for an existing preview capability and did not add a new runtime capability point.
+
+## Wave 3 Internal PDF Export Planning
+
+Manual structure comparison against Maven sample fields:
+
+- Maven sample reference: `project-brain/reference/maven-samples/document_102488.pdf`.
+- Current preview route: `/business-documents/NEXT-AI-DRAFT-5806/preview`.
+- Covered by current preview: logo/company area, customer block, document date, due-date empty state, document type/title/number metadata, line-item table, subtotal/VAT/total/payment/balance block, notes, footer, digital-signature area, no-external-action boundary.
+- Known gaps before real PDF export: no approved Tal logo asset, due date has no trusted field, direct raster comparison remains blocked by local renderer/tooling limits, final fonts and Hebrew/RTL pagination must be verified in generated PDF.
+
+Recommended implementation path:
+
+1. Use server-side Playwright/Chromium `page.pdf()` against the existing internal preview URL.
+2. Prefer a protected GET route `/business-documents/[id]/pdf` that streams `application/pdf` as an internal temporary download.
+3. Keep the existing HTML preview as the single layout source; do not build a separate PDF template unless Playwright output proves insufficient.
+4. Add an explicit internal-only boundary in the PDF response filename/content until external export is approved.
+5. Do not save a PDF file, create a `BusinessDocumentLog`, mutate `BusinessDocument`, or create `AutomationCommand` in the first implementation.
+6. Later, after explicit approval, add saved-file persistence and audit rows as a separate protected write capability.
+
+Dependencies needed:
+
+- Add `playwright` or `playwright-core` plus a known Chromium executable strategy.
+- Current repo-wide TypeScript already reports missing Playwright types in existing scripts, so dependency/build hygiene should be resolved before relying on Playwright for PDF generation.
+- If bundled Chromium install is not allowed, use an approved server Chromium path configured outside git.
+- Keep Poppler/Ghostscript/ImageMagick optional for validation only, not for generation.
+
+Route/action design:
+
+- Recommended first route: `GET /business-documents/[id]/pdf`.
+- Route behavior: fetch/validate BusinessDocument by id, build absolute internal preview URL, launch Chromium, load `/business-documents/[id]/preview`, wait for network idle, call `page.pdf({ format: "A4", printBackground: true, preferCSSPageSize: true })`, return bytes with `Content-Disposition: attachment; filename="business-document-{id}-internal-preview.pdf"`.
+- Access: internal-only route; if auth is added later, require authenticated internal user and explicit UI confirmation.
+- Alternative: protected Server Action button "Generate internal PDF" that redirects/downloads. This is useful when auth/approval tracking exists, but route streaming is simpler for first temporary-download implementation.
+
+Storage strategy:
+
+- Phase 1: temporary download only. No DB write, no file storage, no Drive storage, no Maven/Invoice4U field update.
+- Phase 2, later approval: save generated PDF to approved internal storage, create audit log row, optionally attach to BusinessDocument. This requires explicit approval because it is a DB/file write workflow.
+- Customer-facing delivery remains a separate email/send approval gate.
+
+Risks:
+
+- Hebrew/RTL rendering can shift if Chromium font fallback differs between local/dev/server.
+- Missing Hebrew-capable fonts can cause tofu boxes or spacing changes.
+- A4 margins and table pagination may split rows badly unless CSS uses page-break controls.
+- `position: fixed` headers/footers can behave differently in Chromium print mode.
+- Long notes or many lines may overflow one page; multi-page header/footer behavior must be defined.
+- Dependency size and deployment constraints for Playwright/Chromium may affect hosting.
+- Internal-only boundary text must not appear on future customer-facing PDFs unless intentionally retained.
+
+Validation plan:
+
+1. Install/approve PDF generation dependency in a separate implementation task.
+2. Generate PDF for `NEXT-AI-DRAFT-5806` only.
+3. Validate HTTP status, content type, content disposition, nonzero PDF byte size, and no DB row changes.
+4. Render generated PDF and `document_102488.pdf` to images using approved renderer tooling.
+5. Compare visually for header, customer block, metadata, line table, totals, notes, footer, signature area, A4 page size, margins, Hebrew/RTL alignment, and page breaks.
+6. Run focused TypeScript and route validation.
+7. Confirm no Maven/Invoice4U call, no email/customer action, no inventory action, no AutomationCommand execution, and no source-system action.
+
+Boundaries for this planning task:
+
+- Planning only.
+- No runtime behavior changed.
+- No PDF generation.
+- No Maven/Invoice4U call.
+- No external API call.
+- No email/customer-facing action.
+- No inventory deduction.
+- No DB write.
+- No schema/Prisma change.
+
+Project completion:
+
+- Remains `67%`; this is planning for a future internal PDF export capability, not implementation.
 
 ## Known Active IDs
 
