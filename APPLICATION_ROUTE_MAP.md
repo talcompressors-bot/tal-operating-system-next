@@ -1,6 +1,6 @@
 # Application Route Map
 
-Last updated: 2026-06-23
+Last updated: 2026-06-25
 
 Scope: currently implemented Next.js `app/**/page.tsx` routes only.
 
@@ -20,6 +20,7 @@ Record counts were verified with read-only Prisma count queries against the curr
 | `/parts-used/[id]` | Parts Used detail | Implemented, read-only | Supabase PostgreSQL via Prisma `PartUsed` with linked service-report/product context when present | 0 addressable parts-used rows | `PartsUsed` detail view |
 | `/ai-drafts` | AI Draft Suggestions list | Implemented, read-only empty-state shell | Supabase PostgreSQL via Prisma `AiDraftSuggestion` | 0 | `AIDraftSuggestions` table list view |
 | `/ai-drafts/[id]` | AI Draft Suggestion detail | Implemented, read-only empty-state shell | Supabase PostgreSQL via Prisma `AiDraftSuggestion` with linked customer/service-report context when present | 0 addressable AI draft rows | `AIDraftSuggestions` detail view |
+| `/ai-drafts/preview/[reportCounter]` | AI Draft Recommendation Preview | Implemented, read-only runtime preview for Service Report `5806` | Supabase PostgreSQL via Prisma `ServiceReport`, `ReportEquipmentItem`, `PartsUsed`, `Product`, `MavenDocumentItem`, `BusinessDocument`, `BusinessDocumentItem`, and `AiDraftSuggestion` read-only checks | 1 validated preview route | AI Draft recommendation review before draft creation |
 | `/business-documents` | Business Documents list | Implemented, read-only empty-state shell | Supabase PostgreSQL via Prisma `BusinessDocument` | 0 | `BusinessDocuments` table list view |
 | `/business-documents/[id]` | Business Document detail | Implemented, read-only empty-state shell | Supabase PostgreSQL via Prisma `BusinessDocument` with linked items/logs/customer/service-report/AI-draft/Maven context when present | 0 addressable business document rows | `BusinessDocuments` detail view |
 | `/automation-commands` | Automation Commands list | Implemented, read-only empty-state shell | Supabase PostgreSQL via Prisma `AutomationCommand` | 0 | Automation command queue/list view |

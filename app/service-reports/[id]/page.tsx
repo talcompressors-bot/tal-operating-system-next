@@ -29,9 +29,15 @@ export default async function ServiceReportDetailPage({
           <p className="lede">{report.customer}</p>
         </div>
         <div className="actions">
-          <button className="button disabled" disabled type="button">
-            Create AI Draft
-          </button>
+          {report.aiDraftPreviewHref ? (
+            <Link className="button" href={report.aiDraftPreviewHref}>
+              Preview AI Draft
+            </Link>
+          ) : (
+            <button className="button disabled" disabled type="button">
+              Create AI Draft
+            </button>
+          )}
           <button className="button disabled" disabled type="button">
             Create Business Draft
           </button>

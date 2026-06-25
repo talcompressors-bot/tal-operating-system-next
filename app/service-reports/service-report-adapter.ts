@@ -69,6 +69,7 @@ export type ServiceReportView = {
   equipmentCue: string;
   lifecycle: LifecycleState;
   scrMatchingPreview: ScrMatchingPreview;
+  aiDraftPreviewHref: string;
 };
 
 export type ServiceReportListFilters = {
@@ -370,6 +371,8 @@ function mapServiceReport(
     equipmentCue: buildEquipmentCue(equipment),
     lifecycle: mapLifecycle(report),
     scrMatchingPreview: buildScrMatchingPreview(equipment),
+    aiDraftPreviewHref:
+      readText(report.reportCounter) === "5806" ? "/ai-drafts/preview/5806" : "",
   };
 }
 

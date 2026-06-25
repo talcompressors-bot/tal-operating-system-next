@@ -1,4 +1,10 @@
-import type { AiDraftSuggestion, Customer, Prisma, ServiceReport } from "@prisma/client";
+import type {
+  AiDraftSuggestion,
+  Customer,
+  Prisma,
+  ReportEquipmentItem,
+  ServiceReport,
+} from "@prisma/client";
 import { prisma } from "../../lib/prisma";
 
 type AiDraftServiceReport = Pick<
@@ -54,6 +60,52 @@ export type AiDraftDetail = AiDraftListItem & {
   sourceSummary: string;
   approvalPlaceholder: string;
   mavenLifecyclePlaceholder: string;
+};
+
+type AiDraftPreviewServiceReport = ServiceReport & {
+  customer: AiDraftCustomer | null;
+  equipmentItems: ReportEquipmentItem[];
+};
+
+type AiDraftPreviewLine = {
+  item: string;
+  quantity: string;
+  unitPrice: string;
+  total: string;
+  source: string;
+  confidence: string;
+  needsApproval: string;
+  reason: string;
+};
+
+export type AiDraftRecommendationPreview = {
+  id: string;
+  reportId: string;
+  reportCounter: string;
+  serviceDate: string;
+  technician: string;
+  customerId: string;
+  customerName: string;
+  equipmentType: string;
+  model: string;
+  serial: string;
+  hp: string;
+  serviceType: string;
+  technicianWorkTime: string;
+  visitRequired: string;
+  technicianNotes: string;
+  documentType: string;
+  documentReason: string;
+  subtotal: string;
+  approvalStatus: string;
+  dataCoverage: Array<{ source: string; status: string }>;
+  lines: AiDraftPreviewLine[];
+  historicalMatches: {
+    sameEquipment: string;
+    sameCustomer: string;
+    similarService: string;
+  };
+  risks: string[];
 };
 
 const aiDraftSelect = {
@@ -116,6 +168,212 @@ function formatMoney(value: Prisma.Decimal | null) {
 
 function formatDate(value: Date) {
   return value.toISOString().slice(0, 10);
+}
+
+function formatOptionalDate(value: Date | null) {
+  if (!value) {
+    return "No service date";
+  }
+
+  return value.toISOString().slice(0, 10);
+}
+
+function formatDecimal(value: Prisma.Decimal | null, suffix = "") {
+  if (!value) {
+    return "";
+  }
+
+  return `${value.toFixed(2)}${suffix}`;
+}
+
+function formatPrice(value: number | null) {
+  if (value === null) {
+    return "Needs approval";
+  }
+
+  return `${value.toFixed(2)} ILS`;
+}
+
+function normalizeModel(model: string) {
+  return model.toUpperCase().replace(/[^A-Z0-9]/g, "");
+}
+
+function formatEquipmentValue(
+  equipment: ReportEquipmentItem[],
+  picker: (item: ReportEquipmentItem) => string | null,
+  fallback: string,
+) {
+  const values = equipment.map(picker).map((value) => readText(value)).filter(Boolean);
+
+  return values.length ? values.join(", ") : fallback;
+}
+
+function isReport5806SmallScrService(report: AiDraftPreviewServiceReport) {
+  if (report.reportCounter !== 5806) {
+    return false;
+  }
+
+  const hasScr40pm = report.equipmentItems.some((item) =>
+    normalizeModel(readText(item.equipmentModel)).includes("SCR40PM"),
+  );
+  const serviceText = [
+    report.serviceType,
+    report.serviceDescription,
+    report.workPerformed,
+    report.technicianSummary,
+    report.recommendations,
+    ...report.equipmentItems.flatMap((item) => [
+      item.serviceDescription,
+      item.technicianRecommendations,
+    ]),
+  ]
+    .map((value) => readText(value).toLowerCase())
+    .join(" ");
+
+  return hasScr40pm && (serviceText.includes("2000") || serviceText.includes("small"));
+}
+
+function makeLine(
+  item: string,
+  quantity: string,
+  unitPrice: number | null,
+  source: string,
+  confidence: string,
+  needsApproval: boolean,
+  reason: string,
+): AiDraftPreviewLine {
+  const numericQuantity = Number(quantity);
+  const total =
+    unitPrice !== null && Number.isFinite(numericQuantity)
+      ? `${(unitPrice * numericQuantity).toFixed(2)} ILS`
+      : "Needs approval";
+
+  return {
+    item,
+    quantity,
+    unitPrice: formatPrice(unitPrice),
+    total,
+    source,
+    confidence,
+    needsApproval: needsApproval ? "Required" : "User approval required",
+    reason,
+  };
+}
+
+function buildPreviewLines(report: AiDraftPreviewServiceReport) {
+  const equipmentCount = Math.max(report.equipmentItems.length, 1);
+  const workHours = report.technicianWorkHours
+    ? Number(report.technicianWorkHours.toString())
+    : null;
+
+  const lines = [
+    makeLine(
+      "Air Filter",
+      String(equipmentCount),
+      null,
+      "Approved SCR Small Service rule; selling price unavailable",
+      "Medium",
+      true,
+      "Small Service kit includes Air Filter; no ProductsCatalog/Maven selling price available in staging.",
+    ),
+    makeLine(
+      "Oil Filter",
+      String(equipmentCount),
+      null,
+      "Approved SCR Small Service rule; selling price unavailable",
+      "Medium",
+      true,
+      "Small Service kit includes Oil Filter; no ProductsCatalog/Maven selling price available in staging.",
+    ),
+    makeLine(
+      "3L SKR oil top-up",
+      String(equipmentCount * 3),
+      null,
+      "Approved SCR Small Service rule; oil action requires approval",
+      "Medium",
+      true,
+      "Small Service rule includes 3L SKR oil top-up per compressor unless review changes the oil handling.",
+    ),
+    makeLine(
+      "Labor + Service",
+      workHours === null ? "Missing hours" : workHours.toFixed(2),
+      workHours === null ? null : 275,
+      "Fixed labor rule: 275 ILS/hour",
+      workHours === null ? "Low" : "High",
+      workHours === null,
+      workHours === null
+        ? "Technician work time is missing, so labor total needs manual approval."
+        : "Labor + Service stays one commercial line by approved business-document rules.",
+    ),
+    makeLine(
+      "Technician Visit / Travel",
+      "1",
+      300,
+      "Fixed visit rule: 300 ILS",
+      "High",
+      false,
+      "Technician Visit and Travel are one commercial line; final user approval is still required.",
+    ),
+  ];
+
+  return lines;
+}
+
+function buildDataCoverage(
+  counts: {
+    partsUsed: number;
+    products: number;
+    mavenItems: number;
+    businessDocuments: number;
+    businessDocumentItems: number;
+    aiDraftSuggestions: number;
+  },
+) {
+  return [
+    { source: "ServiceReports", status: "Loaded source report" },
+    { source: "ReportEquipmentItems", status: "Loaded linked equipment" },
+    {
+      source: "PartsUsed",
+      status: counts.partsUsed ? `${counts.partsUsed} linked rows` : "No linked rows",
+    },
+    {
+      source: "ProductsCatalog",
+      status: counts.products ? `${counts.products} candidate rows` : "No candidate rows",
+    },
+    {
+      source: "InvoiceMavenDocumentItems",
+      status: counts.mavenItems
+        ? `${counts.mavenItems} possible history rows`
+        : "No staging history rows",
+    },
+    {
+      source: "BusinessDocuments",
+      status: counts.businessDocuments
+        ? `${counts.businessDocuments} linked rows`
+        : "No linked rows",
+    },
+    {
+      source: "BusinessDocumentItems",
+      status: counts.businessDocumentItems
+        ? `${counts.businessDocumentItems} linked rows`
+        : "No linked rows",
+    },
+    {
+      source: "AIDraftSuggestions",
+      status: counts.aiDraftSuggestions
+        ? `${counts.aiDraftSuggestions} linked rows`
+        : "No saved draft rows",
+    },
+  ];
+}
+
+function sumKnownTotals(lines: AiDraftPreviewLine[]) {
+  const total = lines.reduce((sum, line) => {
+    const amount = Number(line.total.replace(" ILS", ""));
+    return Number.isFinite(amount) ? sum + amount : sum;
+  }, 0);
+
+  return total > 0 ? `${total.toFixed(2)} ILS known + approval-required lines` : "All price lines need approval";
 }
 
 function formatReportNumber(report: AiDraftServiceReport | null) {
@@ -249,4 +507,134 @@ export async function getAiDraftById(id: string) {
   });
 
   return draft ? mapAiDraftDetail(draft) : undefined;
+}
+
+export async function getAiDraftPreviewByReportCounter(reportCounter: string) {
+  const numericReportCounter = Number(reportCounter);
+
+  if (!Number.isInteger(numericReportCounter)) {
+    return undefined;
+  }
+
+  const report = await prisma.serviceReport.findUnique({
+    where: { reportCounter: numericReportCounter },
+    include: {
+      customer: {
+        select: {
+          appsheetCustomerId: true,
+          name: true,
+        },
+      },
+      equipmentItems: {
+        orderBy: [{ equipmentNumber: "asc" }, { appsheetItemId: "asc" }],
+      },
+    },
+  });
+
+  if (!report) {
+    return undefined;
+  }
+
+  const skuCandidates = ["25200007-005", "25100043-071"];
+  const [
+    partsUsed,
+    products,
+    mavenItems,
+    businessDocuments,
+    businessDocumentItems,
+    aiDraftSuggestions,
+  ] = await Promise.all([
+    prisma.partUsed.count({ where: { serviceReportId: report.id } }),
+    prisma.product.count({ where: { sku: { in: skuCandidates } } }),
+    prisma.mavenDocumentItem.count({
+      where: {
+        OR: skuCandidates.map((sku) => ({
+          itemDescription: { contains: sku, mode: "insensitive" },
+        })),
+      },
+    }),
+    prisma.businessDocument.count({ where: { serviceReportId: report.id } }),
+    prisma.businessDocumentItem.count({
+      where: {
+        OR: skuCandidates.map((sku) => ({
+          itemName: { contains: sku, mode: "insensitive" },
+        })),
+      },
+    }),
+    prisma.aiDraftSuggestion.count({ where: { serviceReportId: report.id } }),
+  ]);
+
+  const lines = isReport5806SmallScrService(report) ? buildPreviewLines(report) : [];
+  const equipmentModel = formatEquipmentValue(
+    report.equipmentItems,
+    (item) => item.equipmentModel,
+    "No model",
+  );
+  const equipmentType = formatEquipmentValue(
+    report.equipmentItems,
+    (item) => item.equipmentType,
+    "No equipment type",
+  );
+
+  return {
+    id: `preview-${reportCounter}`,
+    reportId: report.appsheetReportId,
+    reportCounter: readText(report.reportCounter, reportCounter),
+    serviceDate: formatOptionalDate(report.serviceDate),
+    technician: readText(report.technicianName, "UNKNOWN TECHNICIAN"),
+    customerId: readText(report.customer?.appsheetCustomerId),
+    customerName: readText(report.customer?.name, "UNKNOWN CUSTOMER"),
+    equipmentType,
+    model: equipmentModel,
+    serial: formatEquipmentValue(
+      report.equipmentItems,
+      (item) => item.serialNumber,
+      "No serial",
+    ),
+    hp: "No HP field in staging",
+    serviceType: isReport5806SmallScrService(report)
+      ? "SCR Small Service / 2000h"
+      : readText(report.serviceType, "Needs manual review"),
+    technicianWorkTime: formatDecimal(report.technicianWorkHours, " hours") || "Missing hours",
+    visitRequired: "Yes - fixed visit line included for review",
+    technicianNotes:
+      readText(report.workPerformed) ||
+      readText(report.technicianSummary) ||
+      readText(report.recommendations, "No technician notes"),
+    documentType: "Service document / quote recommendation",
+    documentReason:
+      "Service was performed; this preview prepares approval-based commercial lines without creating any draft rows.",
+    subtotal: sumKnownTotals(lines),
+    approvalStatus: "User approval required before any BusinessDocument, Maven, inventory, email, or customer-facing action",
+    dataCoverage: buildDataCoverage({
+      partsUsed,
+      products,
+      mavenItems,
+      businessDocuments,
+      businessDocumentItems,
+      aiDraftSuggestions,
+    }),
+    lines,
+    historicalMatches: {
+      sameEquipment: mavenItems
+        ? `${mavenItems} possible Maven item history rows`
+        : "No same-equipment Maven selling-price history available in staging",
+      sameCustomer: businessDocuments
+        ? `${businessDocuments} linked business document rows`
+        : "No linked customer business document history available in staging",
+      similarService: products
+        ? `${products} product catalog candidates found`
+        : "No ProductsCatalog candidate selling prices available in staging",
+    },
+    risks: lines.length
+      ? [
+          "Part selling prices are missing in staging and remain NeedsPriceApproval.",
+          "Labor total depends on technician work hours; missing hours require manual approval.",
+          "This preview is not a saved AI draft and does not create BusinessDocuments or Maven drafts.",
+        ]
+      : [
+          "No safe recommendation lines were generated for this report.",
+          "Use manual review until model, service type, and evidence match approved rules.",
+        ],
+  } satisfies AiDraftRecommendationPreview;
 }
