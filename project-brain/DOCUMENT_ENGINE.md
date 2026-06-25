@@ -55,7 +55,7 @@ Future attachment work requires separately approved storage, access-control, ret
 - `/business-documents/[id]/preview` is the customer-facing Hebrew RTL HTML preview.
 - `/business-documents/[id]/pdf` is an internal temporary download route.
 - PDF export does not persist a file, update sent/exported status, create Maven records, send email, or affect inventory.
-- Customer-facing preview/PDF may show trusted SKU column only when a confident SKU match exists.
+- Customer-facing preview/PDF may show a SKU column only when a trusted Tal sales SKU exists. Manufacturer part numbers are internal technical evidence and must not appear as customer-facing SKU values.
 
 ## External Export Gate
 

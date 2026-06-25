@@ -3,6 +3,31 @@
 ## 2026-06-25
 
 Decision:
+SKU matching runtime must be generic and must not use ServiceReport `5806`, `NEXT-AI-DRAFT-5806`, or `40PM` as architecture gates.
+
+Reason:
+Knowledge Base Consolidation made the 5806/40PM evidence a validation sample. Keeping report/model gates in runtime would block reuse across future ServiceReports and risk printing manufacturer part numbers as customer-facing SKUs.
+
+Implemented scope:
+
+1. Extracted the reviewed PM 40PM rows into one generic manufacturer parts registry seed module.
+2. Refactored the SKU matcher to use model evidence, manufacturer registry rows, item category keywords, and optional linked Tal sales SKU.
+3. Removed ServiceReport-number gating from the matcher.
+4. Updated BusinessDocument enrichment to pass linked `Product.sku` as the customer-facing sales SKU source.
+5. Updated the internal review page to show manufacturer part numbers internally and show `Needs sales SKU mapping` when no Tal sales SKU exists.
+6. Updated the customer preview/PDF to show SKU only from Tal sales SKU and hide manufacturer part numbers.
+
+Boundary:
+Read/runtime refactor only. No DB write, schema change, Prisma change, import, Maven/Invoice4U call, email/customer action, inventory action, source-system action, or production action occurred.
+
+Status:
+Completed. ServiceReport `5806` and PM `40PM` remain validation samples only.
+
+---
+
+## 2026-06-25
+
+Decision:
 Project Brain permanent knowledge must be consolidated into reusable Knowledge Bases; case-specific documents may exist only temporarily during research.
 
 Reason:

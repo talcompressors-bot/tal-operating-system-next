@@ -1,13 +1,13 @@
 # TASK BOARD
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Project Brain Knowledge Base Consolidation completed; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; SKU Runtime Generalization Refactor completed; no real Maven execution approved yet
 
 ## NOW
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Project Brain Knowledge Base Consolidation | Refactor case-specific Project Brain evidence into reusable Knowledge Bases without losing information | Completed as documentation-only refactor; archived one-time evidence under `project-brain/archive/research/`, created reusable KBs, fixed active references, and added governance requiring permanent knowledge consolidation | No approval needed for this completed docs-only task; explicit approval remains required before schema changes, DB writes, imports, parser package installs, Maven/Invoice4U execution, customer-facing/email action, inventory action, runtime changes, source-system/production work, or external export |
+| SKU Runtime Generalization Refactor | Remove ServiceReport-specific and model-specific runtime assumptions from BusinessDocument SKU enrichment | Completed and validated: matcher uses generic model evidence + manufacturer registry rows, 5806/40PM is sample evidence only, internal review shows manufacturer evidence plus missing sales SKU mapping, preview/PDF hide manufacturer SKUs and show SKU only when linked Tal sales SKU exists | No approval needed for this safe read/runtime refactor; explicit approval remains required before schema changes, DB writes, imports, parser package installs, Maven/Invoice4U execution, customer-facing/email action, inventory action, source-system/production work, or external export |
 
 ## NEXT
 

@@ -2,11 +2,12 @@
 
 Last updated: 2026-06-25
 
-Update note - ServiceReport 5806 SKU Matching Runtime MVP:
+Update note - SKU Runtime Generalization Refactor:
 
-- `/business-documents/[id]` now shows read/runtime manufacturer SKU match status for BusinessDocument lines when the source ServiceReport is `5806` and linked equipment model evidence supports `40PM` / `SCR-40PM`.
-- Internal review shows trusted SKU, manufacturer, confidence, source PM Series Excel file, sheet, row, compatible models, and needs-review state.
-- `/business-documents/[id]/preview` and `/business-documents/[id]/pdf` show a Hebrew trusted SKU column (`מק"ט`) only when a confident PM Series match exists; unmatched lines stay blank on the customer-facing surface.
+- `/business-documents/[id]` now shows read/runtime manufacturer SKU match status through the generic ServiceReport -> Equipment model -> Manufacturer Parts Registry -> SKU Matching Engine flow.
+- ServiceReport `5806` and PM `40PM` rows remain validation/sample registry evidence only, not runtime architecture gates.
+- Internal review shows Tal sales SKU, manufacturer SKU, manufacturer, confidence, source PM Series Excel file, sheet, row, compatible models, needs-review state, and `Needs sales SKU mapping` when no sales SKU exists.
+- `/business-documents/[id]/preview` and `/business-documents/[id]/pdf` show a Hebrew SKU column only when a linked Tal sales SKU exists. Manufacturer part numbers remain internal-only and are hidden from the customer-facing surface.
 - This route behavior is read-only enrichment from existing BusinessDocument and ServiceReport reads. No SKU import, schema change, DB write, Maven/Invoice4U call, email/customer action, inventory action, or source-system action is part of the route update.
 
 Scope: currently implemented Next.js `app/**/page.tsx` routes plus internal route handlers that provide user-visible runtime capability.

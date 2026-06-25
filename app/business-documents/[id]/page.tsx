@@ -583,6 +583,7 @@ export default async function BusinessDocumentDetailPage({
                   <th>Total</th>
                   <th>Source</th>
                   <th>Price approval</th>
+                  <th>Sales SKU</th>
                   <th>Manufacturer SKU</th>
                   <th>SKU evidence</th>
                   <th>Pricing evidence</th>
@@ -606,10 +607,17 @@ export default async function BusinessDocumentDetailPage({
                       )}
                     </td>
                     <td>
+                      {item.manufacturerSkuMatch.salesSku ? (
+                        <strong>{item.manufacturerSkuMatch.salesSku}</strong>
+                      ) : (
+                        <span className="warning-pill">Needs sales SKU mapping</span>
+                      )}
+                    </td>
+                    <td>
                       {item.manufacturerSkuMatch.trusted ? (
                         <strong>{item.manufacturerSkuMatch.manufacturerSku}</strong>
                       ) : (
-                        <span className="warning-pill">SKU review required</span>
+                        <span className="warning-pill">Manufacturer SKU review required</span>
                       )}
                     </td>
                     <td>
@@ -645,6 +653,14 @@ export default async function BusinessDocumentDetailPage({
                             {item.manufacturerSkuMatch.needsReview ? "Yes" : "No"}
                           </span>
                         </li>
+                        <li>
+                          <span>
+                            Needs sales SKU mapping:{" "}
+                            {item.manufacturerSkuMatch.needsSalesSkuMapping
+                              ? "Yes"
+                              : "No"}
+                          </span>
+                        </li>
                       </ul>
                     </td>
                     <td>
@@ -664,7 +680,7 @@ export default async function BusinessDocumentDetailPage({
                 ))}
                 {!document.items.length ? (
                   <tr>
-                    <td colSpan={9}>No business document items linked.</td>
+                    <td colSpan={10}>No business document items linked.</td>
                   </tr>
                 ) : null}
               </tbody>

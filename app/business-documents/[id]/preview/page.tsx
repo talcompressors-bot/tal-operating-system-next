@@ -30,8 +30,8 @@ export default async function BusinessDocumentPreviewPage({
     notFound();
   }
 
-  const showTrustedSkuColumn = document.items.some(
-    (item) => item.manufacturerSkuMatch.trusted,
+  const showSalesSkuColumn = document.items.some(
+    (item) => item.manufacturerSkuMatch.salesSku,
   );
 
   return (
@@ -121,7 +121,7 @@ export default async function BusinessDocumentPreviewPage({
             <colgroup>
               <col className="item-index-column" />
               <col />
-              {showTrustedSkuColumn ? <col className="item-sku-column" /> : null}
+              {showSalesSkuColumn ? <col className="item-sku-column" /> : null}
               <col className="item-quantity-column" />
               <col className="item-money-column" />
               <col className="item-money-column" />
@@ -130,7 +130,7 @@ export default async function BusinessDocumentPreviewPage({
               <tr>
                 <th>מספר</th>
                 <th>תיאור</th>
-                {showTrustedSkuColumn ? <th>מק&quot;ט</th> : null}
+                {showSalesSkuColumn ? <th>מק&quot;ט</th> : null}
                 <th>כמות</th>
                 <th>מחיר</th>
                 <th>סה&quot;כ</th>
@@ -143,12 +143,8 @@ export default async function BusinessDocumentPreviewPage({
                   <td>
                     <strong>{toHebrewItemName(item.name)}</strong>
                   </td>
-                  {showTrustedSkuColumn ? (
-                    <td>
-                      {item.manufacturerSkuMatch.trusted
-                        ? item.manufacturerSkuMatch.manufacturerSku
-                        : ""}
-                    </td>
+                  {showSalesSkuColumn ? (
+                    <td>{item.manufacturerSkuMatch.salesSku}</td>
                   ) : null}
                   <td>{item.quantity}</td>
                   <td>{item.unitPrice}</td>
@@ -157,7 +153,7 @@ export default async function BusinessDocumentPreviewPage({
               ))}
               {!document.items.length ? (
                 <tr>
-                  <td colSpan={showTrustedSkuColumn ? 6 : 5}>לא נרשמו פריטים.</td>
+                  <td colSpan={showSalesSkuColumn ? 6 : 5}>לא נרשמו פריטים.</td>
                 </tr>
               ) : null}
             </tbody>

@@ -60,19 +60,24 @@ No confident match behavior:
 
 ## Customer-Facing Display Rule
 
-- Customer preview/PDF shows SKU only when trusted.
+- Customer preview/PDF shows SKU only when a trusted Tal sales SKU exists.
+- Manufacturer part numbers are internal technical evidence only and must not be printed as the customer-facing SKU.
+- If manufacturer evidence exists but no sales SKU mapping exists, customer-facing SKU is hidden and internal review shows `Needs sales SKU mapping`.
 - If no trusted match exists, customer-facing SKU cell is blank or column is hidden.
 - Internal evidence text must not appear on the customer-facing surface.
 
-## Current Runtime Seed: ServiceReport 5806
+## Current Runtime Seed: PM 40PM Sample Evidence
 
 Runtime implementation commit: `cac31e4 Add runtime SKU matching for report 5806`.
+Generalization refactor commit: `PENDING`.
 
 Scope:
 
-- ServiceReport `5806` only.
-- Linked equipment model evidence must support `40PM` / `SCR-40PM`.
-- Evidence source must be PM Series workbook rows from `MANUFACTURER_PARTS_REGISTRY.md`.
+- ServiceReport `5806` is a validation sample only.
+- Linked equipment model evidence flows through the generic matcher.
+- Evidence source is a generic manufacturer parts registry seed currently populated with reviewed PM Series workbook rows from `MANUFACTURER_PARTS_REGISTRY.md`.
+- Runtime does not gate on report number.
+- Customer-facing output uses linked Tal sales SKU only, not manufacturer part number.
 
 Trusted seed matches:
 

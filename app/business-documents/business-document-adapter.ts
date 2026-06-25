@@ -7,6 +7,7 @@ import type {
   Customer,
   MavenDocument,
   Prisma,
+  Product,
   ReportEquipmentItem,
   ServiceReport,
 } from "@prisma/client";
@@ -16,7 +17,7 @@ import {
   type BusinessDocumentEngineReview,
 } from "../../lib/business-document-engine";
 import {
-  matchManufacturerSkuForServiceReport5806,
+  matchManufacturerSku,
   type ManufacturerSkuMatch,
 } from "../../lib/manufacturer-sku-matching";
 
@@ -61,6 +62,10 @@ type BusinessDocumentAutomationCommand = Pick<
   | "createdAt"
 >;
 
+type BusinessDocumentItemRecord = BusinessDocumentItem & {
+  product: Pick<Product, "sku"> | null;
+};
+
 type BusinessDocumentRecord = Pick<
   BusinessDocument,
   | "id"
@@ -92,7 +97,7 @@ type BusinessDocumentRecord = Pick<
   serviceReport: BusinessDocumentServiceReport | null;
   aiDraftSuggestion: BusinessDocumentAiDraft | null;
   mavenDocument: BusinessDocumentMavenDocument | null;
-  items: BusinessDocumentItem[];
+  items: BusinessDocumentItemRecord[];
   logs: BusinessDocumentLog[];
   automationCommands: BusinessDocumentAutomationCommand[];
 };
@@ -253,6 +258,13 @@ const businessDocumentSelect = {
   },
   items: {
     orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+    include: {
+      product: {
+        select: {
+          sku: true,
+        },
+      },
+    },
   },
   logs: {
     orderBy: [{ createdAt: "desc" }, { id: "asc" }],
@@ -612,7 +624,6 @@ function mapBusinessDocumentDetail(
     rawSource: document.rawSource,
     items: document.items,
   });
-  const serviceReportNumber = formatReportNumber(document.serviceReport);
   const modelEvidence = buildModelEvidence(document.serviceReport);
 
   return {
@@ -657,10 +668,10 @@ function mapBusinessDocumentDetail(
       needsPriceApproval: item.needsPriceApproval ? "Required" : "No",
       needsPriceApprovalChecked: item.needsPriceApproval,
       pricingEvidence: summarizePricingEvidence(item.rawSource),
-      manufacturerSkuMatch: matchManufacturerSkuForServiceReport5806({
-        serviceReportNumber,
+      manufacturerSkuMatch: matchManufacturerSku({
         modelEvidence,
         itemName: item.itemName,
+        salesSku: item.product?.sku,
       }),
     })),
     logs: document.logs.map((log) => ({
