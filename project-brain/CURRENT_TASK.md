@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`PENDING - Internal PDF export MVP commit`
+`1277121 Add internal business document PDF export`
 
 ## Last Closeout Commit
 
