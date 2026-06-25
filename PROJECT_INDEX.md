@@ -469,7 +469,7 @@ This section is the living navigation screen. It summarizes current reality only
 | Current milestone | Wave 1 Next.js read/display validation PASS after PostgreSQL read switch | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Current task | SCR matching preview panel is implemented and validated; no next implementation task is approved yet | `project-brain/CURRENT_TASK.md` |
 | Next approved task | None. Next candidate tasks are Maven/Invoice4U lifecycle tracking shell; build hygiene for the existing missing Playwright dependency/type gap if explicitly selected; optional Wave 2 import approval package only if explicitly approved. DB import/write work remains gated and requires explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
-| Last Implementation Commit | `76a9ba6 Upgrade orchestrator executive decision engine` | Git history; `project-brain/CURRENT_TASK.md` |
+| Last Implementation Commit | `c205dfb Transition project to capability building` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
 | Blocked/forbidden actions | No production writes, Prisma migration, DB creation, Sheets/AppSheet/Maven actions, new planning/control files, new agents, or implementation before Reality Check | `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md` |
@@ -549,7 +549,7 @@ Current Project Tree Position:
 - Governance Status: `FROZEN`
 - Current Priority: Working runtime capabilities instead of documentation expansion
 - Current Task: transition from governance building to capability building; no next implementation task is approved yet
-- Last Completed Task: Executive Orchestrator Phase 2 governance upgrade
+- Last Completed Task: Project Execution Mode transition to `CAPABILITY_BUILDING`
 - Next Task: None approved. Highest-value runtime candidate is AI Draft Preview for Service Report `5806`; other runtime candidates are Action Server, Email Runtime, and Inventory Runtime when explicitly selected/approved.
 - Estimated completion %: 56%
 - Completion basis: capability-weighted evidence, not completed-waves / total-waves.

@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`76a9ba6 Upgrade orchestrator executive decision engine`
+`c205dfb Transition project to capability building`
 
 ## Last Closeout Commit
 
@@ -111,6 +111,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - Completion model correction completed on 2026-06-24: `project-brain/FULL_PROJECT_DISCOVERY_AUDIT.md` found that the canonical 60% claim did not match the listed capability contributions. The current formula is Governance 15 + Supabase/Prisma 15 + Import/Wave 1 10 + Wave 1 UI 10 + Wave 2 6 + remaining pending capabilities 0 = 56. No evidence-based formula currently justifies increasing Wave 2 from 6% to 10%, so canonical completion is corrected to 56%. No code, Prisma, DB, agents, planning systems, business logic, workflows, source systems, or production systems were changed.
 - AI Draft readiness and email intake schema documentation completed in commit `be89380 Document AI draft readiness rules`: approved SCR Small Service, Labor + Service, Technician Visit / Travel, Large Service oil, and partial-serial rules were documented; AI Draft readiness was rechecked as `READY_FOR_APPROVAL_BASED_DRAFTS`; `project-brain/EMAIL_INTAKE_EVIDENCE_PACKET_SCHEMA.md` was added. Validation: `git diff --check` passed with CRLF warnings only. No code, Prisma, DB, imports, Maven/Invoice4U, inventory, email runtime, source-system, customer-facing, or production workflow changes occurred.
 - Executive Orchestrator governance completed in commit `76a9ba6 Upgrade orchestrator executive decision engine`: startup/closeout active-ID preservation rules were hardened; `ORCHESTRATOR_AGENT` was upgraded into the Executive Decision Engine with mandatory Executive Cycle, consultation summaries, scoring, duplicate-proof gates, self-improvement evidence packets, and Reality Check KPIs; Project Brain governance files were synchronized. Validation: `git diff --check` passed with CRLF warnings only before commit. No code, runtime, DB, Prisma, Maven, Inventory, email, source-system, customer-facing, or production changes occurred.
+- Project execution mode transition completed in commit `c205dfb Transition project to capability building`: project mode is now `CAPABILITY_BUILDING`, governance status is `FROZEN`, and future task intake prioritizes working runtime capabilities over documentation expansion. Validation: `git diff --check` passed with CRLF warnings only before commit. No code, runtime, DB, Prisma, Maven, Inventory, email, source-system, customer-facing, or production changes occurred.
 
 ## Current Task
 
