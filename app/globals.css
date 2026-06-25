@@ -774,6 +774,13 @@ dd {
   background: #f8fafc;
 }
 
+.document-line-table tr,
+.document-totals-section,
+.document-totals-box {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
 .document-line-table th,
 .document-line-table td {
   text-align: right;
@@ -810,6 +817,7 @@ dd {
 .document-totals-box {
   display: grid;
   align-self: start;
+  background: #ffffff;
 }
 
 .document-totals-box div {
@@ -888,6 +896,14 @@ dd {
     box-shadow: none;
     min-height: auto;
     padding: 0;
+  }
+
+  .document-line-table {
+    margin-bottom: 12px;
+  }
+
+  .document-totals-section {
+    padding-top: 8px;
   }
 }
 

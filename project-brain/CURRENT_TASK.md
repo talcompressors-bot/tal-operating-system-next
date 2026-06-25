@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; PDF export smoke test and governance lock completed; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; PDF export visual polish bugfix completed; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`PENDING - PDF export smoke test and governance lock commit`
+`PENDING - PDF visual polish bugfix commit`
 
 ## Last Closeout Commit
 
@@ -181,6 +181,44 @@ Current blocker:
 Project completion:
 
 - Remains `68%`; this was smoke validation plus a bug fix/governance lock for an existing Wave 3 capability, not a new capability point.
+
+## Wave 3 PDF Visual Polish Bugfix
+
+Completed:
+
+- Fixed the minor horizontal line crossing the subtotal row in the internal PDF export.
+- Change is CSS/print-layout only in `app/globals.css`.
+- Added print-safe `break-inside` / `page-break-inside` rules for line rows and totals blocks, gave the totals box a white background, and added print spacing between the line table and totals section.
+
+Validation:
+
+- Focused TypeScript check passed for the BusinessDocument preview/PDF route and adapter/engine files.
+- Preview route `/business-documents/NEXT-AI-DRAFT-5806/preview` returned HTTP 200.
+- PDF route `/business-documents/NEXT-AI-DRAFT-5806/pdf` returned HTTP 200.
+- PDF response `Content-Type` remained `application/pdf`.
+- Totals still rendered in the preview as `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`.
+- Temporary Chrome PDF viewer render of page 2 confirmed the subtotal row is no longer crossed by the horizontal line.
+- Temporary validation PDF/screenshot files were removed.
+
+Boundaries:
+
+- CSS/preview/PDF visual bugfix only.
+- No DB write.
+- No Maven/Invoice4U call.
+- No email/customer action.
+- No inventory action.
+- No schema change.
+- No totals logic change.
+- No source-system or production action.
+
+Current blocker:
+
+- None for internal PDF visual polish.
+- Customer-facing export remains gated by explicit external/customer delivery approval.
+
+Project completion:
+
+- Remains `68%`; this was a visual bugfix for an existing capability, not a new capability point.
 
 ## Wave 2 Closeout Summary
 

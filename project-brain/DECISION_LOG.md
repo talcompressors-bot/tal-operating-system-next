@@ -3,6 +3,28 @@
 ## 2026-06-25
 
 Decision:
+The internal PDF subtotal-row visual defect is fixed with print CSS only.
+
+Reason:
+The PDF smoke test found a minor horizontal line crossing the subtotal row on page 2. This was a print layout collision between the line table and totals block, not a data/totals issue.
+
+Implemented fix:
+`app/globals.css` adds print-safe break avoidance for line rows and totals blocks, keeps the totals box on a white background, and adds print spacing between the line table and totals section.
+
+Validation:
+Preview route returned HTTP 200, PDF route returned HTTP 200 with `application/pdf`, totals remained `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`, and temporary Chrome PDF viewer rendering confirmed the subtotal row is no longer crossed by the line.
+
+Boundary:
+CSS/preview/PDF visual bugfix only. No DB write, Maven/Invoice4U call, email/customer action, inventory action, schema change, totals logic change, file persistence, source-system action, or production action occurred.
+
+Status:
+Completed as a visual polish bugfix for the existing internal PDF export capability.
+
+---
+
+## 2026-06-25
+
+Decision:
 Codex must not install new npm packages without explicit approval per package.
 
 Reason:
