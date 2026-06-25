@@ -103,6 +103,8 @@ export type BusinessDocumentDetail = BusinessDocumentListItem & {
     unitPrice: string;
     totalPrice: string;
     source: string;
+    needsPriceApproval: string;
+    pricingEvidence: string[];
   }>;
   logs: Array<{
     id: string;
@@ -203,6 +205,36 @@ function formatDate(value: Date | null) {
   return value.toISOString().slice(0, 10);
 }
 
+function summarizePricingEvidence(rawSource: Prisma.JsonValue) {
+  if (!rawSource || typeof rawSource !== "object" || Array.isArray(rawSource)) {
+    return [];
+  }
+
+  const record = rawSource as Record<string, unknown>;
+  const evidence = record.pricingEvidence;
+
+  if (!Array.isArray(evidence)) {
+    return [];
+  }
+
+  return evidence
+    .map((item) => {
+      if (!item || typeof item !== "object" || Array.isArray(item)) {
+        return "";
+      }
+
+      const evidenceRecord = item as Record<string, unknown>;
+      return [
+        readText(evidenceRecord.source),
+        readText(evidenceRecord.unitPrice),
+        readText(evidenceRecord.note),
+      ]
+        .filter(Boolean)
+        .join(" - ");
+    })
+    .filter(Boolean);
+}
+
 function formatReportNumber(report: BusinessDocumentServiceReport | null) {
   if (!report) {
     return "No linked report";
@@ -298,6 +330,8 @@ function mapBusinessDocumentDetail(
       unitPrice: formatMoney(item.unitPrice, document.currency),
       totalPrice: formatMoney(item.totalPrice, document.currency),
       source: formatEnum(item.source),
+      needsPriceApproval: item.needsPriceApproval ? "Required" : "No",
+      pricingEvidence: summarizePricingEvidence(item.rawSource),
     })),
     logs: document.logs.map((log) => ({
       id: readText(log.appsheetLogId) || log.id,

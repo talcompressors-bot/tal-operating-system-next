@@ -1,17 +1,21 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAiDraftPreviewByReportCounter } from "../../ai-draft-adapter";
+import { approveAiDraftPreviewToBusinessDocument } from "./actions";
 
 export const dynamic = "force-dynamic";
 
 type AiDraftPreviewPageProps = {
   params: Promise<{ reportCounter: string }>;
+  searchParams?: Promise<{ draftStatus?: string }>;
 };
 
 export default async function AiDraftPreviewPage({
   params,
+  searchParams,
 }: AiDraftPreviewPageProps) {
   const { reportCounter } = await params;
+  const status = (await searchParams)?.draftStatus;
   const preview = await getAiDraftPreviewByReportCounter(reportCounter);
 
   if (!preview) {
@@ -152,6 +156,90 @@ export default async function AiDraftPreviewPage({
               <dd>{preview.subtotal}</dd>
             </div>
           </dl>
+        </article>
+
+        <article className="info-panel wide">
+          <h2>Protected draft creation</h2>
+          {status ? (
+            <p className="status-note">
+              {status === "approval-required"
+                ? "Type APPROVE DRAFT before creating an internal BusinessDocument draft."
+                : null}
+              {status === "pricing-override-required"
+                ? "Some lines are missing trusted pricing evidence. Confirm the pricing override before creating the draft."
+                : null}
+              {status === "invalid-quantity"
+                ? "Draft creation is blocked because at least one line has an invalid quantity."
+                : null}
+              {status === "existing"
+                ? "An existing BusinessDocument draft already covers this ServiceReport."
+                : null}
+            </p>
+          ) : null}
+          {preview.creation.existingBusinessDocumentId ? (
+            <div className="approval-panel">
+              <p>
+                Draft creation is blocked because this ServiceReport already
+                has a BusinessDocument draft.
+              </p>
+              <Link
+                className="button secondary"
+                href={`/business-documents/${preview.creation.existingBusinessDocumentId}`}
+              >
+                Open existing draft
+              </Link>
+            </div>
+          ) : preview.creation.canCreate ? (
+            <form
+              action={approveAiDraftPreviewToBusinessDocument}
+              className="approval-form"
+            >
+              <input
+                name="reportCounter"
+                type="hidden"
+                value={preview.reportCounter}
+              />
+              <label>
+                Approved by
+                <input name="approvedBy" defaultValue="Liad" />
+              </label>
+              <label>
+                Approval phrase
+                <input
+                  name="approvalText"
+                  placeholder="APPROVE DRAFT"
+                  aria-label="Type APPROVE DRAFT"
+                />
+              </label>
+              {preview.creation.requiresPricingOverride ? (
+                <label className="checkbox-row">
+                  <input name="overrideMissingPricing" type="checkbox" />
+                  Create draft with pricing override; missing price lines remain
+                  approval-required.
+                </label>
+              ) : null}
+              {preview.creation.missingPricingLines.length ? (
+                <p className="table-note">
+                  Missing or approval-required pricing:
+                  {" "}
+                  {preview.creation.missingPricingLines.join(", ")}
+                </p>
+              ) : null}
+              <button className="button" type="submit">
+                Create internal BusinessDocument draft
+              </button>
+              <p className="table-note">
+                This Server Action creates only internal BusinessDocument draft
+                rows and items. It does not create Maven/Invoice4U documents,
+                send email, or deduct inventory.
+              </p>
+            </form>
+          ) : (
+            <p className="empty-state">
+              Draft creation is unavailable because no safe recommendation
+              lines were generated.
+            </p>
+          )}
         </article>
 
         <article className="info-panel wide">

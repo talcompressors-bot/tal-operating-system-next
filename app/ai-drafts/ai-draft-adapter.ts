@@ -85,6 +85,14 @@ type AiDraftPreviewLine = {
   }>;
 };
 
+export type AiDraftPreviewCreationState = {
+  canCreate: boolean;
+  existingBusinessDocumentId: string;
+  existingBusinessDocumentTitle: string;
+  requiresPricingOverride: boolean;
+  missingPricingLines: string[];
+};
+
 export type AiDraftRecommendationPreview = {
   id: string;
   reportId: string;
@@ -105,6 +113,7 @@ export type AiDraftRecommendationPreview = {
   documentReason: string;
   subtotal: string;
   approvalStatus: string;
+  creation: AiDraftPreviewCreationState;
   dataCoverage: Array<{ source: string; status: string }>;
   lines: AiDraftPreviewLine[];
   historicalMatches: {
@@ -622,6 +631,33 @@ function sumKnownTotals(lines: AiDraftPreviewLine[]) {
   return total > 0 ? `${total.toFixed(2)} ILS known + approval-required lines` : "All price lines need approval";
 }
 
+function buildCreationState(
+  lines: AiDraftPreviewLine[],
+  existingBusinessDocument: {
+    appsheetBusinessDocumentId: string;
+    draftTitle: string | null;
+  } | null,
+): AiDraftPreviewCreationState {
+  const missingPricingLines = lines
+    .filter(
+      (line) =>
+        line.unitPrice === "Needs approval" ||
+        line.total === "Needs approval" ||
+        line.needsApproval === "Required",
+    )
+    .map((line) => line.item);
+
+  return {
+    canCreate: !existingBusinessDocument && Boolean(lines.length),
+    existingBusinessDocumentId:
+      existingBusinessDocument?.appsheetBusinessDocumentId ?? "",
+    existingBusinessDocumentTitle:
+      existingBusinessDocument?.draftTitle ?? "Existing BusinessDocument draft",
+    requiresPricingOverride: missingPricingLines.length > 0,
+    missingPricingLines,
+  };
+}
+
 function formatReportNumber(report: AiDraftServiceReport | null) {
   if (!report) {
     return "No linked report";
@@ -809,6 +845,14 @@ export async function getAiDraftPreviewByReportCounter(reportCounter: string) {
     }),
     prisma.aiDraftSuggestion.count({ where: { serviceReportId: report.id } }),
   ]);
+  const existingBusinessDocument = await prisma.businessDocument.findFirst({
+    where: { serviceReportId: report.id },
+    select: {
+      appsheetBusinessDocumentId: true,
+      draftTitle: true,
+    },
+    orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+  });
 
   const lineDefinitions = isReport5806SmallScrService(report)
     ? buildLineDefinitions(report)
@@ -860,6 +904,7 @@ export async function getAiDraftPreviewByReportCounter(reportCounter: string) {
       "Service was performed; this preview prepares approval-based commercial lines without creating any draft rows.",
     subtotal: sumKnownTotals(lines),
     approvalStatus: "User approval required before any BusinessDocument, Maven, inventory, email, or customer-facing action",
+    creation: buildCreationState(lines, existingBusinessDocument),
     dataCoverage: buildDataCoverage({
       partsUsed,
       products,

@@ -267,6 +267,47 @@ tr:last-child td {
   cursor: not-allowed;
 }
 
+.approval-form,
+.approval-panel {
+  display: grid;
+  gap: 14px;
+  max-width: 720px;
+}
+
+.approval-form label {
+  display: grid;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.approval-form input:not([type="checkbox"]) {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font: inherit;
+  padding: 10px 12px;
+}
+
+.approval-form .checkbox-row {
+  align-items: start;
+  display: grid;
+  font-weight: 600;
+  gap: 10px;
+  grid-template-columns: 18px 1fr;
+}
+
+.approval-form input[type="checkbox"] {
+  margin-top: 3px;
+}
+
+.status-note {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 6px;
+  color: #9a3412;
+  margin-top: 0;
+  padding: 10px 12px;
+}
+
 .detail-grid {
   display: grid;
   gap: 18px;

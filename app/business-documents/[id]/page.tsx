@@ -158,6 +158,8 @@ export default async function BusinessDocumentDetailPage({
                   <th>Unit price</th>
                   <th>Total</th>
                   <th>Source</th>
+                  <th>Price approval</th>
+                  <th>Pricing evidence</th>
                 </tr>
               </thead>
               <tbody>
@@ -168,11 +170,25 @@ export default async function BusinessDocumentDetailPage({
                     <td>{item.unitPrice}</td>
                     <td>{item.totalPrice}</td>
                     <td>{item.source}</td>
+                    <td>{item.needsPriceApproval}</td>
+                    <td>
+                      {item.pricingEvidence.length ? (
+                        <ul className="pricing-evidence-list">
+                          {item.pricingEvidence.map((evidence) => (
+                            <li key={evidence}>
+                              <span>{evidence}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        "No preserved pricing evidence"
+                      )}
+                    </td>
                   </tr>
                 ))}
                 {!document.items.length ? (
                   <tr>
-                    <td colSpan={5}>No business document items linked.</td>
+                    <td colSpan={7}>No business document items linked.</td>
                   </tr>
                 ) : null}
               </tbody>
