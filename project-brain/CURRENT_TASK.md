@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Wave 3 internal business document/payment engine implemented; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Wave 3 internal BusinessDocument HTML preview implemented; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`4b87e1b Add internal business document payment engine`
+PENDING: Internal BusinessDocument HTML preview implementation commit
 
 ## Last Closeout Commit
 
@@ -124,11 +124,12 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 - Maven Execution Adapter Dry Run implemented in commit `1ff28a3 Add Maven draft dry-run adapter`: `/automation-commands/[id]` now includes a protected legacy `CREATE_MAVEN_DRAFT` dry-run Server Action requiring exact phrase `DRY RUN MAVEN COMMAND`. The action reads the AutomationCommand payload, validates the linked BusinessDocument internal draft is `APPROVED`, checks customer/document/line item readiness, builds a dry-run Maven document-generation payload, stores the result under `AutomationCommand.rawSource.mavenDryRun`, and leaves external execution state uncompleted. Staging dry-run on `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` produced `DRY_RUN_BLOCKED` because five lines are missing trusted prices and `Labor + Service` has zero quantity. Command status remained `PENDING`, `processedAt=null`, `completedAt=null`, Maven fields stayed null, and `externalStateChanged=false`. Validation: focused TypeScript passed; `git diff --check` passed with CRLF warnings only; route validation returned HTTP 200 for `/automation-commands/NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806?dryRunStatus=dry-run-blocked`, `/automation-commands/NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806`, `/automation-commands`, and `/business-documents/NEXT-AI-DRAFT-5806`, with expected dry-run result, blockers, would-send summary, and no-external-action text. No Maven/Invoice4U call, external document generation, email/customer-facing action, inventory action, schema/env/migration change, import, source-system action, or production action occurred. Current blocker is `none` for the dry-run adapter; project completion is now 64%.
 - BusinessDocument Line Resolution Layer implemented in commit `8538455 Add business document line resolution layer`: `/business-documents/[id]` now includes protected internal line-correction forms and a Server Action that updates only `BusinessDocumentItem` quantity, unit price, total price, approval-required flag, and pricing evidence in `rawSource`, while writing `BusinessDocumentLog` audit history for every correction. Validation: focused TypeScript passed; `git diff --check` passed with CRLF warnings only; GET route validation returned HTTP 200 for `/business-documents/NEXT-AI-DRAFT-5806`, `/business-documents/NEXT-AI-DRAFT-5806?lineStatus=line-saved`, and `/automation-commands/NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806`, with expected line-resolution UI, status messaging, pricing evidence fields, and no-external-action text. No correction POST was submitted during validation, so no DB rows were changed by validation. No Maven/Invoice4U call, AutomationCommand execution, email/customer-facing action, inventory deduction, schema/env/migration change, import, source-system action, or production action occurred. Current blocker is `none` for the layer; Maven dry-run remains a separate explicit action after actual corrections; project completion is now 65%.
 - Internal Business Document and Payment Engine implemented in commit `4b87e1b Add internal business document payment engine`: `lib/business-document-engine.ts` now calculates internal BusinessDocument VAT, totals, payment amount, balance due, receipt-payment requirements, export blockers, warnings, supported document types, supported payment sources, and future check/bank-proof attachment readiness. `/business-documents/[id]` renders the engine review panel and keeps external export blocked until explicit approval. Validation: focused TypeScript passed for touched files; repo-wide TypeScript still fails on pre-existing unrelated AI Draft pricing-evidence typing and missing Playwright dependency/type issues; `git diff --check` passed with CRLF warnings only; route validation returned HTTP 200 for `/business-documents` and `/business-documents/NEXT-AI-DRAFT-5806`, with expected engine panel, document types, payment sources, balance due, and blocked-export boundary. No DB write, schema change, Maven/Invoice4U call, real export implementation, email/customer action, inventory deduction, source-system action, production action, or attachment upload/storage implementation occurred. Current blocker is `none`; next task is Maven customer/document/item matching analysis, Maven document-generation API contract evidence, Maven API secret placement planning, payment attachment readiness planning, or read-only Maven source row-count/schema validation; project completion is now 66%.
+- Internal BusinessDocument HTML Preview implemented in commit `PENDING`: `/business-documents/[id]/preview` renders a read-only Hebrew RTL HTML document preview based on the Maven sample PDF structure, including company/logo area, customer block, document date/due-date placeholder, document title/type/number, line table, subtotal/VAT/total/payment/balance, notes, footer, and digital-signature area. It reuses the existing BusinessDocument adapter and internal engine output and links from the BusinessDocument review page. Validation: focused TypeScript passed for touched files; `git diff --check` passed with CRLF warnings only; route validation returned HTTP 200 for `/business-documents/NEXT-AI-DRAFT-5806` and `/business-documents/NEXT-AI-DRAFT-5806/preview`, with expected `טל קומפרסורים`, `Tal Compressors`, document number, source ServiceReport, Air Filter line, Subtotal, VAT, Balance due, Digital signature area, and no-Maven boundary content. No PDF generation, DB write, schema change, Maven/Invoice4U call, real export implementation, email/customer action, inventory deduction, source-system action, or production action occurred. Current blocker is `none`; next task is Maven customer/document/item matching analysis, Maven document-generation API contract evidence, Maven API secret placement planning, payment attachment readiness planning, or read-only Maven source row-count/schema validation; project completion is now 67%.
 - Wave 2 Line Resolution POST Smoke Test completed on 2026-06-25 against BusinessDocument `NEXT-AI-DRAFT-5806` / `1d7f8500-1cb7-4d81-ad3a-b7d5d8b453eb`: internal staging DB writes were used only to validate line correction and dry-run revalidation. Five line corrections were saved with test/manual pricing evidence and `BusinessDocumentLog` audit rows: `a3c0f56b-bb70-4c85-999d-30b26075ac67`, `7a8a2933-a591-441b-ab11-fafbf0bae1db`, `534763b1-29b5-4258-9214-0121d51e32da`, `66ecc9ec-e2cd-4d0c-bb7e-7ff26313ad9c`, and `1f76221b-0f9c-4039-a096-699b7da314a9`. Final line values are Air Filter `qty=3`, `unit=120`, `total=360`; Technician Visit / Travel `qty=1`, `unit=300`, `total=300`; Oil Filter `qty=3`, `unit=90`, `total=270`; 3L SKR oil top-up `qty=9`, `unit=45`, `total=405`; Labor + Service `qty=2`, `unit=275`, `total=550`; all have `needsPriceApproval=false`. Recalculated BusinessDocument blocker count is `0`. Maven dry-run was rerun only after fixes and produced `DRY_RUN_VALIDATED` with blocker count `0`, warnings `0`, `externalStateChanged=false`, AutomationCommand status still `PENDING`, `processedAt=null`, and `completedAt=null`. Validation: focused TypeScript passed; `git diff --check` passed; route validation outside the sandbox returned HTTP 200 for `/business-documents/NEXT-AI-DRAFT-5806`, `/automation-commands/NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806`, and `/automation-commands/NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806?dryRunStatus=dry-run-validated`. No Maven/Invoice4U call, command execution, external document creation, email/customer-facing action, inventory deduction, schema/env/migration change, import, source-system action, or production action occurred. Current blocker is `none`; project completion remains 65% because this was validation of an existing capability, not a new capability point.
 
 ## Current Task
 
-Wave 3 Maven Knowledge Layer has started in read-only planning/discovery mode, and the Maven dry-run payload builder/validator has been extracted into a reusable internal module without changing dry-run behavior. Wave 2 is frozen except bug fixes. The complete ServiceReport `5806` internal chain remains validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation. The active BusinessDocument `NEXT-AI-DRAFT-5806` has resolved test/manual pricing evidence and positive quantities on all five lines, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for the extracted payload-builder refactor. Real Maven execution is still an explicit `APPROVAL_REQUIRED` gate and is not approved. Actual Maven/Invoice4U calls, command execution, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
+Wave 3 Maven Knowledge Layer has a read-only internal BusinessDocument HTML preview route at `/business-documents/[id]/preview`, visually structured after the Maven sample PDF and powered by the existing BusinessDocument adapter plus internal engine output. Wave 2 is frozen except bug fixes. The complete ServiceReport `5806` internal chain remains validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation -> internal HTML preview. The active BusinessDocument `NEXT-AI-DRAFT-5806` has resolved test/manual pricing evidence and positive quantities on all five lines, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for the read-only HTML preview. Real Maven execution is still an explicit `APPROVAL_REQUIRED` gate and is not approved. Actual PDF generation, Maven/Invoice4U calls, command execution, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
 
 ## Wave 2 Closeout Summary
 
@@ -627,6 +628,48 @@ Project completion:
 
 - Moves to `66%` by adding one Wave 3 internal review/validation capability point.
 - This does not approve external execution.
+
+## Wave 3 Internal BusinessDocument HTML Preview
+
+Implemented:
+
+- New route `/business-documents/[id]/preview`.
+- Read-only Maven-sample-inspired HTML layout with logo/company area, customer block, document date/due-date placeholder, title/type/number, item table, subtotal/VAT/total/payment/balance, notes, footer, and digital-signature area.
+- Uses the existing BusinessDocument adapter and `engineReview` output.
+- Supports generic BusinessDocument document types through the engine label/code.
+- Review page now links to the preview.
+
+Validation:
+
+- Focused TypeScript check passed for `app/business-documents/business-document-adapter.ts`, `app/business-documents/[id]/page.tsx`, `app/business-documents/[id]/preview/page.tsx`, and `lib/business-document-engine.ts`.
+- `git diff --check` passed with CRLF warnings only.
+- Route validation returned HTTP 200 for `/business-documents/NEXT-AI-DRAFT-5806` and `/business-documents/NEXT-AI-DRAFT-5806/preview`.
+- Preview content validation confirmed `טל קומפרסורים`, `Tal Compressors`, `Document number`, `NEXT-AI-DRAFT-5806`, `Source ServiceReport`, `Air Filter`, `Subtotal`, `VAT`, `Balance due`, `Digital signature area`, and `No Maven/Invoice4U action`.
+
+Boundaries:
+
+- HTML preview only.
+- No PDF generation.
+- No Maven/Invoice4U call.
+- No email/customer-facing action.
+- No inventory deduction.
+- No DB write.
+- No schema/Prisma change.
+- No source-system or production action.
+
+Current blocker:
+
+- None for the HTML preview.
+
+Next task:
+
+- Candidate tasks are Maven customer/document/item matching analysis for `NEXT-AI-DRAFT-5806`, real Maven document-generation API contract evidence packet, Maven API secret placement plan, payment attachment readiness plan, or read-only Maven source row-count/schema validation.
+
+Project completion:
+
+- Moves to `67%` by adding one Wave 3 internal HTML preview capability point.
+- Wave 3 is now `2% / 15% STARTED INTERNAL`.
+- No production-readiness, real Maven execution, PDF generation, email, inventory, or cutover points are claimed.
 
 ## Known Active IDs
 

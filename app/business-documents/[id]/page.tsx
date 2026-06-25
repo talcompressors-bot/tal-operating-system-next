@@ -119,6 +119,12 @@ export default async function BusinessDocumentDetailPage({
           <Link className="button secondary" href="/business-documents">
             Back to documents
           </Link>
+          <Link
+            className="button secondary"
+            href={`/business-documents/${document.id}/preview`}
+          >
+            HTML preview
+          </Link>
           {document.serviceReportId ? (
             <Link
               className="button secondary"

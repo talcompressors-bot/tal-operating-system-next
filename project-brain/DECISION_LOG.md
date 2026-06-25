@@ -3,6 +3,30 @@
 ## 2026-06-25
 
 Decision:
+BusinessDocument internal HTML preview is implemented as a read-only Next.js preview, not PDF generation or external export.
+
+Reason:
+Wave 3 needs an internal visual review surface that resembles the Maven output document before any Maven/Invoice4U execution is approved. The preview must keep `BusinessDocument` as the source of truth, use the internal engine output for totals/payment/balance, and support generic document types rather than invoice-only rendering.
+
+Approved implementation scope:
+
+1. Add `/business-documents/[id]/preview` as a GET-only HTML preview route.
+2. Reuse the existing BusinessDocument adapter and internal engine review output.
+3. Render a Hebrew RTL document layout with company/logo area, customer block, document date/due-date placeholder, document title/type/number, item table, subtotal/VAT/total/payment/balance, notes, footer, and digital-signature area.
+4. Link the preview from the BusinessDocument review page.
+5. Update route map and Project Brain only.
+
+Boundary:
+HTML preview only. No PDF generation, no Maven/Invoice4U call, no external API call, no email/customer-facing action, no inventory deduction, no DB write, no schema/Prisma change, no source-system change, and no production action occurred.
+
+Status:
+Approved by user request and implemented as a read-only internal review capability. PDF generation and real external output remain `APPROVAL_REQUIRED`.
+
+---
+
+## 2026-06-25
+
+Decision:
 Internal BusinessDocument and Payment Engine is implemented as a review/validation layer only.
 
 Reason:

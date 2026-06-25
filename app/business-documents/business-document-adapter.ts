@@ -110,6 +110,7 @@ export type BusinessDocumentDetail = BusinessDocumentListItem & {
   mavenPdfLink: string;
   sendStatus: string;
   notes: string;
+  createdAt: string;
   reviewStatus: {
     internalDraft: string;
     sentState: string;
@@ -584,6 +585,7 @@ function mapBusinessDocumentDetail(
     mavenPdfLink: readText(document.mavenPdfLink, "No Maven PDF"),
     sendStatus: readText(document.sendStatus, "No send status"),
     notes: readText(document.notes, "No notes"),
+    createdAt: formatDate(document.createdAt),
     reviewStatus: mapReviewStatus(document),
     reviewWarnings: buildReviewWarnings(document),
     approvalReview: buildApprovalReview(document),
