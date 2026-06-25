@@ -1,13 +1,13 @@
 # TASK BOARD
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; internal PDF export planning completed; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; internal PDF export MVP implemented; no real Maven execution approved yet
 
 ## NOW
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Internal PDF export planning | Define the safest path to export the existing BusinessDocument HTML preview to an internal PDF later | Planning recommends Playwright/Chromium server-side print-to-PDF from the existing preview route, first as temporary download-only `/business-documents/[id]/pdf`, with no DB/file persistence until later approval; risks and validation plan are recorded | Yes before installing dependencies, generating PDFs, saving files, DB writes, real Maven/Invoice4U execution, customer-facing/email action, inventory action, schema/env/import/source-system/production work, or external export |
+| Maven matching / API contract discovery | Continue Wave 3 read-only/internal Maven Knowledge Layer after the internal PDF export MVP | Next selected task should validate Maven customer/document/item matching, primary API contract evidence, secret placement plan, payment attachment readiness, or Maven source row-count/schema validation | Explicit approval remains required before real Maven/Invoice4U execution, customer-facing/email action, inventory action, DB writes outside approved protected actions, schema/env/import/source-system/production work, or external export |
 
 ## NEXT
 
@@ -130,6 +130,7 @@ Mode: CAPABILITY_BUILDING; governance frozen; internal PDF export planning compl
 | BusinessDocument HTML Preview accuracy pass implemented | Commit `0ff5720 Refine business document HTML preview`; `/business-documents/[id]/preview` received an HTML/CSS-only accuracy pass: tighter print-document proportions, metadata strip, RTL table alignment, fixed item/totals columns, stronger totals emphasis, signature line, no-external-action boundary strip, and A4 print CSS. Local search did not find `document_102488.pdf` or a safe Tal logo asset, so direct PDF rendering comparison and logo replacement remain gaps. Validation: focused TypeScript passed; repo-wide TypeScript still fails on pre-existing unrelated AI Draft pricing-evidence typing and missing Playwright dependency/type issues; `git diff --check` passed with CRLF warnings only; route validation returned HTTP 200 for `/business-documents/NEXT-AI-DRAFT-5806/preview` and `/business-documents/NEXT-AI-DRAFT-5806`; no PDF generation, DB write, schema change, Maven/Invoice4U call, external API call, email/customer action, inventory deduction, source-system action, or production action occurred. Completion remains 67% |
 | Maven sample asset imported | Commit `f1dcd47 Add Maven sample reference PDF`; uploaded sample copied to `project-brain/reference/maven-samples/document_102488.pdf` as reference-only artifact, observed size `61973` bytes. Preview route `/business-documents/NEXT-AI-DRAFT-5806/preview` revalidated with HTTP 200 and expected preview boundary/metadata/totals/signature content. Direct rendered visual comparison could not be completed locally because Poppler/Ghostscript/ImageMagick are unavailable, `sharp` cannot rasterize the PDF, Python is unavailable as a working runtime, and headless Chrome did not emit screenshot files. No runtime behavior changed; no PDF generation, Maven/Invoice4U call, external API call, email/customer action, inventory action, DB write, schema change, source-system action, or production action occurred. Completion remains 67% |
 | Internal PDF Export Planning completed | Commit `df0c144 Plan internal PDF export path`; recommended implementation path is server-side Playwright/Chromium `page.pdf()` against `/business-documents/[id]/preview`, exposed first as temporary-download-only `GET /business-documents/[id]/pdf`. Plan records dependency needs, Hebrew/RTL/font/page-size risks, temporary vs saved-file storage strategy, route/action design, and validation steps against `project-brain/reference/maven-samples/document_102488.pdf`. No runtime behavior changed, no PDF generation occurred, no dependency was installed, no Maven/Invoice4U call, external API call, email/customer action, inventory action, DB write, schema change, source-system action, or production action occurred. Completion remains 67% |
+| Internal PDF Export MVP implemented | Commit `PENDING - Internal PDF export MVP commit`; `GET /business-documents/[id]/pdf` renders the existing internal preview route with Playwright/Chromium and streams an A4 `application/pdf` attachment as a temporary download. Review and preview pages link to the route. Validation confirmed HTTP 200, `application/pdf`, attachment filename `NEXT-AI-DRAFT-5806-internal-preview.pdf`, `%PDF-` signature, and 82096 bytes. No Maven/Invoice4U call, external API call, email/customer action, inventory action, DB write, schema change, file persistence, sent/exported status mutation, source-system action, or production action occurred. Completion is now 68% |
 
 ## BLOCKED / NOT STARTED
 
@@ -152,7 +153,7 @@ Mode: CAPABILITY_BUILDING; governance frozen; internal PDF export planning compl
 | Area | Current State |
 |---|---|
 | Infrastructure readiness | High for staging, Prisma, Wave 1 import, and read-only Supabase validation evidence |
-| Workflow UI coverage | Wave 2 Service Workflow Layer is complete and frozen except bug fixes. Wave 3 Maven Knowledge Layer has internal BusinessDocument/payment review, internal HTML preview, and supporting read-only discovery artifacts. Current evidence-based completion is 67% by the recorded capability formula |
+| Workflow UI coverage | Wave 2 Service Workflow Layer is complete and frozen except bug fixes. Wave 3 Maven Knowledge Layer has internal BusinessDocument/payment review, internal HTML preview, temporary PDF download, and supporting read-only discovery artifacts. Current evidence-based completion is 68% by the recorded capability formula |
 | Production automation readiness | Gated; Wave 2 produced an inspected pending Maven command and `DRY_RUN_VALIDATED` payload, but real Maven/Invoice4U execution, command execution, email/customer-facing action, inventory action, production integrations, schema changes, migrations, and DB writes outside approved protected flows require explicit human approval |
 
 ## Rules

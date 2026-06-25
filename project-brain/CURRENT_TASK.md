@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; internal PDF export planning completed; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; internal PDF export MVP implemented; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`df0c144 Plan internal PDF export path`
+`PENDING - Internal PDF export MVP commit`
 
 ## Last Closeout Commit
 
@@ -129,7 +129,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Current Task
 
-Wave 3 Maven Knowledge Layer has a read-only internal BusinessDocument HTML preview route at `/business-documents/[id]/preview`, visually structured after the Maven sample PDF and powered by the existing BusinessDocument adapter plus internal engine output. Internal PDF export planning is complete and recommends server-side Playwright/Chromium `page.pdf()` from the existing preview route as the safest implementation path, with temporary download-only output first and no DB/file persistence until a later explicit approval. The Maven sample PDF is imported as a Project Brain reference artifact at `project-brain/reference/maven-samples/document_102488.pdf`. The preview accuracy pass tightened the print-document proportions, metadata strip, RTL table alignment, fixed item/totals columns, signature line, no-external-action boundary strip, and A4 print CSS. No safe Tal logo asset was found, so the placeholder remains and the gap is visible on the preview. Local Poppler/Ghostscript/ImageMagick render tools are unavailable and headless Chrome did not emit screenshot files in this environment, so direct rendered visual comparison remains limited; route/content validation still passes against the preview. Wave 2 is frozen except bug fixes. The complete ServiceReport `5806` internal chain remains validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation -> internal HTML preview. The active BusinessDocument `NEXT-AI-DRAFT-5806` has resolved test/manual pricing evidence and positive quantities on all five lines, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for PDF export planning; actual PDF generation implementation requires explicit approval and dependency/tooling validation. Real Maven execution is still an explicit `APPROVAL_REQUIRED` gate and is not approved. Actual PDF generation, Maven/Invoice4U calls, command execution, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
+Wave 3 Maven Knowledge Layer has a read-only internal BusinessDocument HTML preview route at `/business-documents/[id]/preview`, visually structured after the Maven sample PDF and powered by the existing BusinessDocument adapter plus internal engine output. The internal PDF export MVP is implemented at `GET /business-documents/[id]/pdf`; it renders the existing preview route with Playwright/Chromium, streams an A4 `application/pdf` attachment, and performs no DB write, file persistence, saved PDF record, sent/exported status mutation, Maven/Invoice4U call, email/customer-facing action, or inventory action. The Maven sample PDF is imported as a Project Brain reference artifact at `project-brain/reference/maven-samples/document_102488.pdf`. The preview accuracy pass tightened the print-document proportions, metadata strip, RTL table alignment, fixed item/totals columns, signature line, no-external-action boundary strip, and A4 print CSS. No safe Tal logo asset was found, so the placeholder remains and the gap is visible on the preview. Local Poppler/Ghostscript/ImageMagick render tools are unavailable and headless Chrome did not emit screenshot files in this environment, so direct rendered visual comparison remains limited; route/content validation still passes against the preview and PDF header validation passes. Wave 2 is frozen except bug fixes. The complete ServiceReport `5806` internal chain remains validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation -> internal HTML preview -> internal temporary PDF download. The active BusinessDocument `NEXT-AI-DRAFT-5806` has resolved test/manual pricing evidence and positive quantities on all five lines, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for the internal PDF export MVP. Real Maven execution is still an explicit `APPROVAL_REQUIRED` gate and is not approved. Maven/Invoice4U calls, command execution, saved PDF persistence, customer-facing delivery, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
 
 ## Wave 2 Closeout Summary
 
@@ -824,6 +824,43 @@ Project completion:
 
 - Remains `67%`; this is planning for a future internal PDF export capability, not implementation.
 
+## Wave 3 Internal PDF Export MVP
+
+Implemented:
+
+- New route `GET /business-documents/[id]/pdf`.
+- The route validates the internal BusinessDocument with the existing adapter, loads `/business-documents/[id]/preview` through Playwright/Chromium, prints A4 with print CSS and Hebrew RTL preview layout, and streams the result as an attachment.
+- Review page `/business-documents/[id]` and preview page `/business-documents/[id]/preview` now link to the internal PDF download route.
+- PDF response is temporary-download only: no DB write, no file persistence, no saved PDF record, and no sent/exported status mutation.
+
+Validation:
+
+- Focused TypeScript check passed for `app/business-documents/[id]/pdf/route.ts`, `app/business-documents/[id]/page.tsx`, `app/business-documents/[id]/preview/page.tsx`, `app/business-documents/business-document-adapter.ts`, and `lib/business-document-engine.ts`.
+- Route validation returned HTTP 200 for `/business-documents/NEXT-AI-DRAFT-5806` and `/business-documents/NEXT-AI-DRAFT-5806/preview`; both pages contain the PDF link.
+- PDF route validation returned HTTP 200 for `/business-documents/NEXT-AI-DRAFT-5806/pdf`, `Content-Type: application/pdf`, `Content-Disposition: attachment; filename="NEXT-AI-DRAFT-5806-internal-preview.pdf"`, `%PDF-` signature, and `82096` bytes.
+- `git diff --check` passed with CRLF warnings only.
+
+Boundaries:
+
+- No Maven/Invoice4U call.
+- No external API call.
+- No email/customer-facing action.
+- No inventory action.
+- No DB write.
+- No schema/Prisma change.
+- No file persistence or saved PDF record.
+- BusinessDocument is not marked sent, exported, or externally completed.
+
+Current blocker:
+
+- None for the internal temporary PDF download.
+- Remaining PDF parity gaps: no approved Tal logo asset, due date has no trusted field, and direct raster comparison against `project-brain/reference/maven-samples/document_102488.pdf` still needs approved renderer tooling.
+
+Project completion:
+
+- Moves to `68%` by adding one Wave 3 internal PDF export capability point.
+- This does not approve real Maven/Invoice4U execution, customer-facing document delivery, saved-file persistence, or audit-log writes.
+
 ## Known Active IDs
 
 Source:
@@ -857,7 +894,7 @@ Next candidate tasks, pending explicit selection/approval:
 9. Build hygiene for the existing missing Playwright dependency/type gap, if explicitly selected.
 10. Optional Wave 2 import approval package, only if explicitly approved.
 
-Project completion should not be overstated: current evidence-based completion is 65% by the recorded capability formula. Infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells, central work screens, preview intelligence, the AI Draft Recommendation Preview runtime, the pricing-evidence preview layer, protected internal BusinessDocument draft creation, internal BusinessDocument review, the BusinessDocument Approval Workflow, the protected internal Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, and the BusinessDocument Line Resolution Layer; production automation readiness remains gated because no Maven/Invoice4U execution, customer-facing send, inventory deduction, or production integration is approved.
+Project completion should not be overstated: current evidence-based completion is 68% by the recorded capability formula. Infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells, central work screens, preview intelligence, the AI Draft Recommendation Preview runtime, the pricing-evidence preview layer, protected internal BusinessDocument draft creation, internal BusinessDocument review, the BusinessDocument Approval Workflow, the protected internal Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, BusinessDocument Line Resolution Layer, and Wave 3 internal BusinessDocument/payment/HTML/PDF review surfaces; production automation readiness remains gated because no Maven/Invoice4U execution, customer-facing send, inventory deduction, or production integration is approved.
 
 Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes outside approved protected Server Actions, schema changes, migrations, env changes, Maven/Invoice4U execution, email/customer-facing sends, inventory actions, or source-system actions until Liad explicitly approves that later gate.
 

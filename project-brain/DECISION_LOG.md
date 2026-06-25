@@ -3,6 +3,33 @@
 ## 2026-06-25
 
 Decision:
+Internal BusinessDocument PDF export is implemented first as a temporary-download-only route, not as an external export or saved document workflow.
+
+Reason:
+The existing `/business-documents/[id]/preview` route is already the internal Maven-style source layout. Rendering that route through Playwright/Chromium keeps one HTML/CSS source for review output while avoiding a duplicate PDF template.
+
+Implemented scope:
+
+1. Add `GET /business-documents/[id]/pdf`.
+2. Validate the BusinessDocument by existing adapter before rendering.
+3. Load `/business-documents/[id]/preview` and call Playwright/Chromium `page.pdf()` with A4, print CSS, and background printing.
+4. Stream `application/pdf` as an attachment.
+5. Add internal PDF links from BusinessDocument review and preview pages.
+
+Boundary:
+Temporary download only. No DB write, no file persistence, no saved PDF record, no BusinessDocument sent/exported status mutation, no Maven/Invoice4U call, no external API call, no email/customer-facing action, no inventory action, no schema/Prisma change, and no production/source-system action occurred.
+
+Validation:
+Focused TypeScript passed. Route validation for `NEXT-AI-DRAFT-5806` returned HTTP 200 for review and preview pages with PDF links. PDF route returned HTTP 200, `Content-Type: application/pdf`, attachment filename `NEXT-AI-DRAFT-5806-internal-preview.pdf`, `%PDF-` signature, and `82096` bytes.
+
+Status:
+Approved by user request and implemented as an internal Wave 3 review capability. Real Maven/Invoice4U execution, customer-facing delivery, saved PDF persistence, and audit-log writes remain separate approval gates.
+
+---
+
+## 2026-06-25
+
+Decision:
 Internal PDF export should be implemented first as a temporary-download-only Playwright/Chromium print-to-PDF route from the existing BusinessDocument HTML preview.
 
 Reason:

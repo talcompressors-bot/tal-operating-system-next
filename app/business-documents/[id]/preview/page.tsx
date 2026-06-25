@@ -24,7 +24,10 @@ export default async function BusinessDocumentPreviewPage({
         <Link className="button secondary" href={`/business-documents/${document.id}`}>
           Back to review
         </Link>
-        <span>HTML preview only. No PDF generation, Maven call, email, or inventory action.</span>
+        <Link className="button secondary" href={`/business-documents/${document.id}/pdf`}>
+          Download PDF
+        </Link>
+        <span>Internal preview only. No Maven call, email, inventory action, DB write, or file persistence.</span>
       </div>
 
       <article className="document-paper" aria-label="BusinessDocument HTML preview">

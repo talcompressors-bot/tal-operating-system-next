@@ -466,10 +466,10 @@ This section is the living navigation screen. It summarizes current reality only
 | Field | Current Reality | Canonical Evidence |
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
-| Current milestone | Wave 3 Maven Knowledge Layer started read-only; internal BusinessDocument/payment engine, internal BusinessDocument HTML preview plus accuracy pass, Maven sample reference asset, internal PDF export planning, Maven payload builder extraction, Maven terminology correction, Maven source inventory, and Maven API placeholders are complete; Wave 2 Service Workflow Layer complete, frozen except bug fixes, and architecture-audited | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Current task | Internal PDF export planning is complete; real PDF generation and Maven/Invoice4U execution remain separately gated and are not approved | `project-brain/CURRENT_TASK.md` |
+| Current milestone | Wave 3 Maven Knowledge Layer started read-only/internal; internal BusinessDocument/payment engine, internal BusinessDocument HTML preview plus accuracy pass, Maven sample reference asset, internal PDF export planning and MVP, Maven payload builder extraction, Maven terminology correction, Maven source inventory, and Maven API placeholders are complete; Wave 2 Service Workflow Layer complete, frozen except bug fixes, and architecture-audited | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current task | Internal PDF export MVP is implemented as temporary download only; real Maven/Invoice4U execution, saved PDF persistence, and customer-facing export remain separately gated and are not approved | `project-brain/CURRENT_TASK.md` |
 | Next approved task | Wave 3 read-only/internal Maven Knowledge Layer discovery is active. Next candidate tasks are Maven customer/document/item matching analysis for `NEXT-AI-DRAFT-5806`, a real Maven document-generation API contract evidence packet, Maven API secret placement plan, payment attachment readiness plan, or read-only Maven source row-count/schema validation. Real Maven execution for `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` requires separate explicit Liad approval and the readiness checklist in `project-brain/CURRENT_TASK.md`. DB writes outside approved protected Server Actions remain gated and require explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
-| Last Implementation Commit | `df0c144 Plan internal PDF export path` | Git history; `project-brain/CURRENT_TASK.md` |
+| Last Implementation Commit | `PENDING - Internal PDF export MVP commit` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
 | Blocked/forbidden actions | No production writes, Prisma migration, DB creation, Sheets/AppSheet/Maven actions, new planning/control files, new agents, or implementation before Reality Check | `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md` |
@@ -545,26 +545,26 @@ NEXT APPROVAL GATE
 
 Current Project Tree Position:
 
-- Current Wave: Wave 3 Maven Knowledge Layer / internal PDF export planning completed; real Maven execution gate pending explicit approval
+- Current Wave: Wave 3 Maven Knowledge Layer / internal PDF export MVP implemented; real Maven execution gate pending explicit approval
 - Project Mode: `CAPABILITY_BUILDING`
 - Governance Status: `FROZEN`
 - Current Priority: Working runtime capabilities instead of documentation expansion
-- Current Task: Internal PDF export planning is complete; no real PDF generation or Maven execution is approved yet
-- Last Completed Task: Internal PDF Export Planning
+- Current Task: Internal PDF export MVP is implemented as temporary download only; no real Maven execution, saved PDF persistence, or customer-facing export is approved yet
+- Last Completed Task: Internal PDF Export MVP
 - Next Task: Candidate tasks are Maven customer/document/item matching analysis for `NEXT-AI-DRAFT-5806`, real Maven document-generation API contract evidence packet, Maven API secret placement plan, payment attachment readiness plan, or read-only Maven source row-count/schema validation. Real Maven execution for `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` remains a separate approval gate.
-- Estimated completion %: 67%
+- Estimated completion %: 68%
 - Completion basis: capability-weighted evidence, not completed-waves / total-waves.
 - Governance / Project Brain / Git workflow: 15% / 15% COMPLETE
 - Supabase + Prisma Data Layer: 15% / 15% COMPLETE
 - Import Framework + Wave 1 Import: 10% / 10% COMPLETE
 - Wave 1 Service Reports UI: 10% / 10% COMPLETE
 - Wave 2 Workflow Layer: 15% / 15% COMPLETE
-- Wave 3 Maven Knowledge Layer: 2% / 15% STARTED INTERNAL
+- Wave 3 Maven Knowledge Layer: 3% / 15% STARTED INTERNAL
 - Wave 4 Inventory Layer: 0% / 10% PENDING
 - Wave 5 Offline First: 0% / 5% PENDING
 - Wave 6 Automation Runtime: 0% / 3% PENDING
 - Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 0% / 2% PENDING
-- Completion formula: 15 + 15 + 10 + 10 + 15 + 2 + 0 + 0 + 0 + 0 = 67.
+- Completion formula: 15 + 15 + 10 + 10 + 15 + 3 + 0 + 0 + 0 + 0 = 68.
 - Critical Path: read-only Maven customer/item/API-contract discovery -> approved Maven secret placement outside git -> real Maven execution approval gate if selected -> payment attachment approval gate if selected -> AI Draft Recommendation Readiness generalization -> Action Server Knowledge Layer -> Email Document Intake evidence planning -> Wave 4 Inventory Layer -> Wave 5 Offline First -> Wave 6 Automation Runtime -> Wave 7 Production Shadow -> Wave 8 Production Cutover -> Wave 9 AppSheet Retirement
 - Next Approval Gate: Liad must explicitly approve any real Maven execution. Real execution approval must cover `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806`, primary Maven document-generation API contract evidence, executor ownership, target Maven environment, final dry-run payload, idempotency check, allowed post-execution writes, failure handling, and rollback/containment plan. Email/customer-facing action and inventory action remain separate gates.
 
@@ -605,27 +605,27 @@ Current evidence-based estimate:
 - Import Framework + Wave 1 Import: 10% / 10% COMPLETE
 - Wave 1 Service Reports UI: 10% / 10% COMPLETE
 - Wave 2 Workflow Layer: 15% / 15% COMPLETE
-- Wave 3 Maven Knowledge Layer: 2% / 15% STARTED INTERNAL
+- Wave 3 Maven Knowledge Layer: 3% / 15% STARTED INTERNAL
 - Wave 4 Inventory Layer: 0% / 10% PENDING
 - Wave 5 Offline First: 0% / 5% PENDING
 - Wave 6 Automation Runtime: 0% / 3% PENDING
 - Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 0% / 2% PENDING
 
-Current estimated completion: 67%.
+Current estimated completion: 68%.
 
-This estimate is valid because the first four capabilities are complete by Project Brain evidence and Wave 2 has 15% documented contribution from the read-only Equipment, PartsUsed, Service Report central work-screen, bidirectional navigation, Service Reports list context, AI Draft Suggestions shell, BusinessDocuments shell, AutomationCommands shell, SCR matching preview panel enhancements, the AI Draft Recommendation Preview runtime for Service Report `5806`, the Maven Knowledge / Pricing Evidence Layer for that preview, the protected AI Draft Approval to BusinessDocument Draft runtime, the BusinessDocument Review and Approval Page, the BusinessDocument Approval Workflow, the protected Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, and BusinessDocument Line Resolution Layer. Wave 3 has started with read-only discovery/planning artifacts, an extracted internal Maven payload builder/validator, Maven API placeholders, the internal BusinessDocument/payment review engine, and the internal BusinessDocument HTML preview, adding 2% of the Wave 3 capability weight. If any of those capabilities are later found partial, estimate lower and explain why.
+This estimate is valid because the first four capabilities are complete by Project Brain evidence and Wave 2 has 15% documented contribution from the read-only Equipment, PartsUsed, Service Report central work-screen, bidirectional navigation, Service Reports list context, AI Draft Suggestions shell, BusinessDocuments shell, AutomationCommands shell, SCR matching preview panel enhancements, the AI Draft Recommendation Preview runtime for Service Report `5806`, the Maven Knowledge / Pricing Evidence Layer for that preview, the protected AI Draft Approval to BusinessDocument Draft runtime, the BusinessDocument Review and Approval Page, the BusinessDocument Approval Workflow, the protected Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, and BusinessDocument Line Resolution Layer. Wave 3 has started with read-only discovery/planning artifacts, an extracted internal Maven payload builder/validator, Maven API placeholders, the internal BusinessDocument/payment review engine, the internal BusinessDocument HTML preview, and the temporary internal PDF download route, adding 3% of the Wave 3 capability weight. If any of those capabilities are later found partial, estimate lower and explain why.
 
 Readiness split:
 
 - Infrastructure readiness: high for staging, Prisma, Wave 1 import, and read-only Supabase validation evidence.
-- Workflow UI coverage: Wave 2 workflow coverage is complete and frozen except bug fixes. Wave 3 Maven Knowledge Layer has internal BusinessDocument/payment review, internal HTML preview, and read-only discovery/planning artifacts.
+- Workflow UI coverage: Wave 2 workflow coverage is complete and frozen except bug fixes. Wave 3 Maven Knowledge Layer has internal BusinessDocument/payment review, internal HTML preview, internal temporary PDF download, and read-only discovery/planning artifacts.
 - Production automation readiness: gated; protected internal command creation exists, but Maven/Invoice4U execution, email/customer-facing actions, inventory actions, DB imports, production integrations, schema changes, and migrations require separate explicit human approval.
 
 | Area | Current Status | Canonical Owner |
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md` |
-| Current task | Internal PDF export planning is complete; real PDF generation and Maven execution are not approved | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `APPLICATION_ROUTE_MAP.md`, `project-brain/reference/maven-samples/document_102488.pdf`, `project-brain/migration/MAVEN_SOURCE_INVENTORY.md`, `.env.staging.example`, `lib/business-document-engine.ts` |
+| Current task | Internal PDF export MVP is implemented as temporary download only; real Maven execution, saved PDF persistence, and customer-facing export are not approved | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `APPLICATION_ROUTE_MAP.md`, `project-brain/reference/maven-samples/document_102488.pdf`, `project-brain/migration/MAVEN_SOURCE_INVENTORY.md`, `.env.staging.example`, `lib/business-document-engine.ts` |
 | Next approved task | Wave 3 read-only/internal Maven Knowledge Layer discovery is active. Next candidate tasks are Maven customer/document/item matching analysis for `NEXT-AI-DRAFT-5806`, a real Maven document-generation API contract evidence packet, Maven API secret placement plan, payment attachment readiness plan, or read-only Maven source row-count/schema validation. Real Maven execution for `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` requires separate explicit Liad approval and the readiness checklist in `project-brain/CURRENT_TASK.md`. DB writes outside approved protected Server Actions remain gated and require explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
 | Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; AI Draft Recommendation Readiness; Action Server Knowledge Layer; Email Document Intake evidence planning; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; real Maven execution gate | `project-brain/TASK_BOARD.md` |

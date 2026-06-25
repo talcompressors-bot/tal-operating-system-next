@@ -125,6 +125,12 @@ export default async function BusinessDocumentDetailPage({
           >
             HTML preview
           </Link>
+          <Link
+            className="button secondary"
+            href={`/business-documents/${document.id}/pdf`}
+          >
+            Download PDF
+          </Link>
           {document.serviceReportId ? (
             <Link
               className="button secondary"
