@@ -1,13 +1,17 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getBusinessDocumentById } from "../business-document-adapter";
-import { createMavenDraftAutomationCommand } from "./actions";
+import {
+  approveBusinessDocument,
+  createMavenDraftAutomationCommand,
+  returnBusinessDocumentToReview,
+} from "./actions";
 
 export const dynamic = "force-dynamic";
 
 type BusinessDocumentDetailPageProps = {
   params: Promise<{ id: string }>;
-  searchParams?: Promise<{ commandStatus?: string }>;
+  searchParams?: Promise<{ approvalStatus?: string; commandStatus?: string }>;
 };
 
 function getCommandStatusMessage(status?: string) {
@@ -35,13 +39,35 @@ function getCommandStatusMessage(status?: string) {
   }
 }
 
+function getApprovalStatusMessage(status?: string) {
+  switch (status) {
+    case "approved":
+      return "BusinessDocument was approved internally. No Maven/Invoice4U, AutomationCommand, email, or inventory action was performed.";
+    case "returned":
+      return "BusinessDocument was returned to review with an audit reason.";
+    case "approval-required":
+      return "Exact approval phrase is required before internal approval.";
+    case "override-required":
+      return "Pricing or quantity issues remain. Confirm the explicit override before approval.";
+    case "reason-required":
+      return "A review reason is required before returning the BusinessDocument to review.";
+    case "not-found":
+      return "BusinessDocument was not found for approval workflow.";
+    case "missing-document":
+      return "Approval workflow was missing a BusinessDocument identifier.";
+    default:
+      return "";
+  }
+}
+
 export default async function BusinessDocumentDetailPage({
   params,
   searchParams,
 }: BusinessDocumentDetailPageProps) {
   const { id } = await params;
-  const { commandStatus } = (await searchParams) || {};
+  const { approvalStatus, commandStatus } = (await searchParams) || {};
   const document = await getBusinessDocumentById(id);
+  const approvalStatusMessage = getApprovalStatusMessage(approvalStatus);
   const commandStatusMessage = getCommandStatusMessage(commandStatus);
 
   if (!document) {
@@ -109,6 +135,82 @@ export default async function BusinessDocumentDetailPage({
               <li key={warning}>{warning}</li>
             ))}
           </ul>
+        </article>
+
+        <article className="info-panel wide">
+          <h2>BusinessDocument approval workflow</h2>
+          <div className="approval-panel">
+            <p>{document.approvalReview.boundary}</p>
+            {approvalStatusMessage ? (
+              <p className="status-note">{approvalStatusMessage}</p>
+            ) : null}
+            {document.approvalReview.blockers.length ? (
+              <ul className="warning-list">
+                {document.approvalReview.blockers.map((blocker) => (
+                  <li key={blocker}>{blocker}</li>
+                ))}
+              </ul>
+            ) : (
+              <ul className="warning-list neutral">
+                <li>No pricing or quantity blockers are currently detected.</li>
+              </ul>
+            )}
+
+            <form action={approveBusinessDocument} className="approval-form">
+              <input
+                name="businessDocumentId"
+                type="hidden"
+                value={document.id}
+              />
+              <label>
+                Approved by
+                <input name="approvedBy" type="text" defaultValue="Liad" />
+              </label>
+              <label>
+                Approval phrase
+                <input
+                  name="approvalText"
+                  type="text"
+                  placeholder={document.approvalReview.approvalPhrase}
+                />
+              </label>
+              {document.approvalReview.blockers.length ? (
+                <label className="checkbox-row">
+                  <input name="overrideReviewBlockers" type="checkbox" />
+                  Approve with explicit pricing or quantity override; unresolved
+                  issues stay visible in the audit trail.
+                </label>
+              ) : null}
+              <button className="button" type="submit">
+                Approve BusinessDocument
+              </button>
+            </form>
+
+            <form
+              action={returnBusinessDocumentToReview}
+              className="approval-form"
+            >
+              <input
+                name="businessDocumentId"
+                type="hidden"
+                value={document.id}
+              />
+              <label>
+                Reviewed by
+                <input name="reviewedBy" type="text" defaultValue="Liad" />
+              </label>
+              <label>
+                Return reason
+                <textarea
+                  name="reason"
+                  placeholder="Explain what needs to be fixed before approval"
+                />
+              </label>
+              <button className="button secondary" type="submit">
+                Return to review
+              </button>
+            </form>
+          </div>
         </article>
 
         <article className="info-panel wide">
@@ -392,6 +494,39 @@ export default async function BusinessDocumentDetailPage({
               <dd>{document.reviewStatus.sentState}</dd>
             </div>
           </dl>
+        </article>
+
+        <article className="info-panel wide">
+          <h2>Status history</h2>
+          <div className="table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>Result</th>
+                  <th>User</th>
+                  <th>Date</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {document.logs.map((log) => (
+                  <tr key={log.id}>
+                    <td>{log.action}</td>
+                    <td>{log.result}</td>
+                    <td>{log.performedBy}</td>
+                    <td>{log.createdAt}</td>
+                    <td>{log.notes}</td>
+                  </tr>
+                ))}
+                {!document.logs.length ? (
+                  <tr>
+                    <td colSpan={5}>No BusinessDocument status history yet.</td>
+                  </tr>
+                ) : null}
+              </tbody>
+            </table>
+          </div>
         </article>
       </div>
     </section>

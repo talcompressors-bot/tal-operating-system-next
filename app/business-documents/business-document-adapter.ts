@@ -113,6 +113,12 @@ export type BusinessDocumentDetail = BusinessDocumentListItem & {
     inventoryState: string;
   };
   reviewWarnings: string[];
+  approvalReview: {
+    canApproveWithoutOverride: boolean;
+    blockers: string[];
+    approvalPhrase: string;
+    boundary: string;
+  };
   commandReview: {
     canCreateMavenCommand: boolean;
     blockedReason: string;
@@ -153,6 +159,7 @@ export type BusinessDocumentDetail = BusinessDocumentListItem & {
     result: string;
     performedBy: string;
     createdAt: string;
+    notes: string;
   }>;
 };
 
@@ -404,6 +411,41 @@ function buildReviewWarnings(document: BusinessDocumentRecord) {
     : ["Review-ready internal draft. User approval is still required before any external action."];
 }
 
+function buildApprovalReview(document: BusinessDocumentRecord) {
+  const blockers: string[] = [];
+  const priceApprovalItems = document.items.filter(
+    (item) => item.needsPriceApproval || !item.unitPrice || !item.totalPrice,
+  );
+  const quantityIssueItems = document.items.filter((item) => {
+    const quantity = Number(item.quantity.toString());
+    return !Number.isFinite(quantity) || quantity <= 0;
+  });
+
+  if (!document.items.length) {
+    blockers.push("No BusinessDocumentItems are linked.");
+  }
+
+  if (priceApprovalItems.length) {
+    blockers.push(
+      `${priceApprovalItems.length} line item(s) still require pricing review or an explicit approval override.`,
+    );
+  }
+
+  if (quantityIssueItems.length) {
+    blockers.push(
+      `${quantityIssueItems.length} line item(s) have missing or zero quantity and require an explicit approval override.`,
+    );
+  }
+
+  return {
+    canApproveWithoutOverride: blockers.length === 0,
+    blockers,
+    approvalPhrase: "APPROVE BUSINESS DOCUMENT",
+    boundary:
+      "Approval updates only the internal BusinessDocument and audit log. It does not call Maven/Invoice4U, create AutomationCommands, send email, or deduct inventory.",
+  };
+}
+
 function mapCommandReview(document: BusinessDocumentRecord) {
   const allowedStatus =
     document.status === "APPROVED" || document.status === "READY_TO_SEND";
@@ -522,6 +564,7 @@ function mapBusinessDocumentDetail(
     notes: readText(document.notes, "No notes"),
     reviewStatus: mapReviewStatus(document),
     reviewWarnings: buildReviewWarnings(document),
+    approvalReview: buildApprovalReview(document),
     commandReview: mapCommandReview(document),
     automationCommands: document.automationCommands.map((command) => ({
       id: command.appsheetCommandId || command.id,
@@ -549,6 +592,7 @@ function mapBusinessDocumentDetail(
       result: readText(log.result, "No result"),
       performedBy: readText(log.performedBy, "No user"),
       createdAt: formatDate(log.createdAt),
+      notes: readText(log.notes, "No notes"),
     })),
   };
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  ApprovalStatus,
   AutomationCommandStatus,
   AutomationCommandType,
   BusinessDocumentStatus,
@@ -11,6 +12,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "../../../lib/prisma";
 
 const APPROVAL_PHRASE = "CREATE MAVEN COMMAND";
+const BUSINESS_DOCUMENT_APPROVAL_PHRASE = "APPROVE BUSINESS DOCUMENT";
 
 function isUuid(value: string) {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
@@ -20,6 +22,200 @@ function isUuid(value: string) {
 
 function buildRedirect(documentId: string, status: string) {
   return `/business-documents/${documentId}?commandStatus=${status}`;
+}
+
+function buildApprovalRedirect(documentId: string, status: string) {
+  return `/business-documents/${documentId}?approvalStatus=${status}`;
+}
+
+async function findBusinessDocumentForApproval(businessDocumentId: string) {
+  return prisma.businessDocument.findFirst({
+    where: {
+      OR: [
+        { appsheetBusinessDocumentId: businessDocumentId },
+        ...(isUuid(businessDocumentId) ? [{ id: businessDocumentId }] : []),
+      ],
+    },
+    select: {
+      id: true,
+      appsheetBusinessDocumentId: true,
+      status: true,
+      approvalStatus: true,
+      items: {
+        select: {
+          id: true,
+          itemName: true,
+          quantity: true,
+          unitPrice: true,
+          totalPrice: true,
+          needsPriceApproval: true,
+        },
+      },
+    },
+  });
+}
+
+function getApprovalBlockers(
+  document: NonNullable<Awaited<ReturnType<typeof findBusinessDocumentForApproval>>>,
+) {
+  const blockers: string[] = [];
+
+  if (!document.items.length) {
+    blockers.push("No BusinessDocumentItems are linked.");
+  }
+
+  const priceApprovalItems = document.items.filter(
+    (item) => item.needsPriceApproval || !item.unitPrice || !item.totalPrice,
+  );
+  const quantityIssueItems = document.items.filter((item) => {
+    const quantity = Number(item.quantity.toString());
+    return !Number.isFinite(quantity) || quantity <= 0;
+  });
+
+  if (priceApprovalItems.length) {
+    blockers.push(
+      `${priceApprovalItems.length} line item(s) still have required pricing review.`,
+    );
+  }
+
+  if (quantityIssueItems.length) {
+    blockers.push(
+      `${quantityIssueItems.length} line item(s) have missing or zero quantity.`,
+    );
+  }
+
+  return blockers;
+}
+
+export async function approveBusinessDocument(formData: FormData) {
+  const businessDocumentId = String(
+    formData.get("businessDocumentId") || "",
+  ).trim();
+  const approvalText = String(formData.get("approvalText") || "").trim();
+  const approvedBy = String(formData.get("approvedBy") || "Liad").trim() || "Liad";
+  const overrideReviewBlockers = formData.get("overrideReviewBlockers") === "on";
+
+  if (!businessDocumentId) {
+    redirect("/business-documents?approvalStatus=missing-document");
+  }
+
+  if (approvalText !== BUSINESS_DOCUMENT_APPROVAL_PHRASE) {
+    redirect(buildApprovalRedirect(businessDocumentId, "approval-required"));
+  }
+
+  const document = await findBusinessDocumentForApproval(businessDocumentId);
+
+  if (!document) {
+    redirect("/business-documents?approvalStatus=not-found");
+  }
+
+  const canonicalDocumentId = document.appsheetBusinessDocumentId;
+  const blockers = getApprovalBlockers(document);
+
+  if (blockers.length && !overrideReviewBlockers) {
+    redirect(buildApprovalRedirect(canonicalDocumentId, "override-required"));
+  }
+
+  const now = new Date();
+
+  await prisma.$transaction(async (tx) => {
+    await tx.businessDocument.update({
+      where: { id: document.id },
+      data: {
+        status: BusinessDocumentStatus.APPROVED,
+        approvalStatus: ApprovalStatus.APPROVED,
+        approvedBy,
+        approvedAt: now,
+        sourceStatusText: blockers.length
+          ? "Approved with explicit review override"
+          : "Approved for internal next-step review",
+      },
+    });
+
+    await tx.businessDocumentLog.create({
+      data: {
+        businessDocumentId: document.id,
+        action: "BUSINESS_DOCUMENT_APPROVED",
+        performedBy: approvedBy,
+        result: blockers.length
+          ? "Approved with explicit pricing or quantity override"
+          : "Approved BusinessDocument for internal next-step review",
+        notes:
+          "No Maven/Invoice4U action, no AutomationCommand creation, no email/customer-facing action, and no inventory deduction occurred.",
+        rawData: {
+          approvalPhrase: BUSINESS_DOCUMENT_APPROVAL_PHRASE,
+          overrideReviewBlockers,
+          blockers,
+          noMavenCall: true,
+          noAutomationCommandCreated: true,
+          noEmail: true,
+          noInventory: true,
+        } satisfies Prisma.InputJsonValue,
+      },
+    });
+  });
+
+  revalidatePath("/business-documents");
+  revalidatePath(`/business-documents/${canonicalDocumentId}`);
+
+  redirect(buildApprovalRedirect(canonicalDocumentId, "approved"));
+}
+
+export async function returnBusinessDocumentToReview(formData: FormData) {
+  const businessDocumentId = String(
+    formData.get("businessDocumentId") || "",
+  ).trim();
+  const reviewedBy = String(formData.get("reviewedBy") || "Liad").trim() || "Liad";
+  const reason = String(formData.get("reason") || "").trim();
+
+  if (!businessDocumentId) {
+    redirect("/business-documents?approvalStatus=missing-document");
+  }
+
+  if (reason.length < 5) {
+    redirect(buildApprovalRedirect(businessDocumentId, "reason-required"));
+  }
+
+  const document = await findBusinessDocumentForApproval(businessDocumentId);
+
+  if (!document) {
+    redirect("/business-documents?approvalStatus=not-found");
+  }
+
+  const canonicalDocumentId = document.appsheetBusinessDocumentId;
+
+  await prisma.$transaction(async (tx) => {
+    await tx.businessDocument.update({
+      where: { id: document.id },
+      data: {
+        status: BusinessDocumentStatus.WAITING_USER_APPROVAL,
+        approvalStatus: ApprovalStatus.NEEDS_MORE_INFO,
+        sourceStatusText: "Returned to review",
+      },
+    });
+
+    await tx.businessDocumentLog.create({
+      data: {
+        businessDocumentId: document.id,
+        action: "BUSINESS_DOCUMENT_RETURNED_TO_REVIEW",
+        performedBy: reviewedBy,
+        result: "Returned to review with reason",
+        notes: reason,
+        rawData: {
+          reason,
+          noMavenCall: true,
+          noAutomationCommandCreated: true,
+          noEmail: true,
+          noInventory: true,
+        } satisfies Prisma.InputJsonValue,
+      },
+    });
+  });
+
+  revalidatePath("/business-documents");
+  revalidatePath(`/business-documents/${canonicalDocumentId}`);
+
+  redirect(buildApprovalRedirect(canonicalDocumentId, "returned"));
 }
 
 export async function createMavenDraftAutomationCommand(formData: FormData) {

@@ -280,11 +280,17 @@ tr:last-child td {
   font-weight: 700;
 }
 
-.approval-form input:not([type="checkbox"]) {
+.approval-form input:not([type="checkbox"]),
+.approval-form textarea {
   border: 1px solid var(--border);
   border-radius: 6px;
   font: inherit;
   padding: 10px 12px;
+}
+
+.approval-form textarea {
+  min-height: 96px;
+  resize: vertical;
 }
 
 .approval-form .checkbox-row {
