@@ -3,6 +3,38 @@
 ## 2026-06-25
 
 Decision:
+Manufacturer Excel spare-parts files are the trusted technical SKU/model compatibility source for future SKU registry planning.
+
+Reason:
+The repo already contains manufacturer spare-parts workbooks under `data-sources/vendor-spare-parts/`. The PM workbook has clear model-specific sheets with manufacturer codes and part descriptions. Historical service/invoice/catalog sources can support pricing, usage, or internal SKU mapping, but they must not override manufacturer compatibility without an approved manual override.
+
+Observed evidence:
+
+- `Spare Parts Service List(PM Series) rev3 (1).xls` is inspectable as Office Open XML despite the `.xls` extension. It contains model sheets including `10PM2`, `15PM2`, `20PM2`, `30PM`, `40PM`, `50PM`, `60PM`, `75PM`, and `100PM`.
+- PM columns include `Item`, `Model`, `Code`, `spare parts name`, `specification`, `Unit`, interval quantity columns, exchange-time fields, and remarks.
+- `40PM` examples include air filter `25100043-071`, oil filter `25200007-005`, oil separator `25300045-023`, and coolant `80000175-039`.
+- `Spare Parts Service List(EPM Series) rev2 (1).xls` is legacy binary `.xls`; binary strings confirm EPM model and part-name coverage, but exact sheet/row evidence requires approved conversion/parser tooling.
+
+Rules:
+
+1. Map ServiceReport equipment model to compatible SKU list only through exact/approved model normalization and reviewed workbook rows.
+2. Map AI suggested item to manufacturer SKU only when model, part category, and source row evidence are high confidence.
+3. If no confident match exists, set SKU review required.
+4. Customer-facing PDF shows SKU only when trusted and approved for display.
+5. Internal review shows matched SKU, manufacturer, confidence, source Excel file/sheet/row, compatible models, and needs-review flag.
+6. Future inventory and purchase orders must use the same SKU registry and internal SKU mapping layer.
+
+Boundary:
+Planning/read-only only. No schema change, DB write, import, parser package install, Maven/Invoice4U call, email/customer action, inventory action, source-system action, or production action occurred.
+
+Status:
+Approved by user request as planning. Future import/schema/runtime SKU matching requires separate explicit approval.
+
+---
+
+## 2026-06-25
+
+Decision:
 The BusinessDocument preview/PDF surface should be Hebrew RTL and customer-facing, while internal warnings and evidence remain only on the review page.
 
 Reason:

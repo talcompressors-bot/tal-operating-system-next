@@ -129,6 +129,99 @@ Future registry rows should be evidence-first and reviewable.
 | `compatibilityRuleType` | `MANUFACTURER_ROW`, `APPROVED_EXCEPTION`, `HISTORICAL_SECONDARY`, or `UNKNOWN` |
 | `compatibilityExceptionNote` | Required when compatibility differs from model alias expectations |
 
+## Observed Manufacturer Excel Source Inventory
+
+Read-only inspection on 2026-06-25 found the current manufacturer spare-parts files under `data-sources/vendor-spare-parts/`:
+
+| File | Format observed | Current evidence status | Notes |
+|---|---|---|---|
+| `Spare Parts Service List(PM Series) rev3 (1).xls` | Office Open XML workbook stored with `.xls` extension | Inspectable by workbook XML extraction | Contains one sheet per PM/APM-compatible model family: `10PM2`, `15PM2`, `20PM2`, `30PM`, `40PM`, `50PM`, `60PM`, `75PM`, `100PM` |
+| `Spare Parts Service List(EPM Series) rev2 (1).xls` | Legacy binary `.xls` | Partially inspectable by binary strings only in the current environment | Strings confirm EPM model coverage including `25EPM`, `30EPM`, `40EPM`, `50EPM`, `60EPM`, `75EPM`, `90EPM`, `100EPM`, `125EPM`, `150EPM`, plus part names such as air filter, oil filter, oil separator, valves, coolers, motor, airend, and oil quantities |
+
+Parser/tooling evidence:
+
+- No repo-local `xlsx` or `exceljs` package is installed, and new npm packages require explicit package-by-package approval.
+- Excel COM could not open workbooks in the current session.
+- PM workbook XML was inspected without adding packages by expanding the zipped workbook structure.
+- EPM workbook requires an approved `.xls` parser, LibreOffice conversion, Excel session, or a converted `.xlsx/.csv` copy before exact sheet/row extraction can be trusted.
+
+## Observed PM Workbook Structure
+
+The PM workbook uses consistent model sheets. Each inspected sheet has this structure:
+
+| Row / columns | Meaning |
+|---|---|
+| Row 1 | Title such as `Recommendatory Spare parts of SCR40PM series` |
+| Row 2 | Header row: `Item`, `Model`, `Code`, `spare parts name`, `specification`, `Unit`, `Rated qty for each`, `Quotation (US$) Per Each`, service interval columns such as `2000H`, `4000H`, `8000H`, through `30000H`, `the first exchange time`, `the second exchange time`, `Remark` |
+| Row 3 | Interval quantity labels |
+| Rows 4+ | Part rows where `Model` is the model key, `Code` is the manufacturer SKU/part number, and `spare parts name` is the part description |
+
+Observed PM examples:
+
+| Sheet | Model | Example part category | Manufacturer code | Description | Row evidence |
+|---|---|---|---|---|---|
+| `40PM` | `40PM` | Air filter | `25100043-071` | `air filter core` | Row 6 |
+| `40PM` | `40PM` | Oil filter | `25200007-005` | `Oil Filter` | Row 7 |
+| `40PM` | `40PM` | Oil separator | `25300045-023` | `oil separator` | Row 8 |
+| `40PM` | `40PM` | Oil/coolant | `80000175-039` | `Coolant`; remark includes required oil quantity | Row 9 |
+
+## Future SKU Registry Schema Plan
+
+Do not migrate yet. A later approved schema should separate manufacturer technical identity from Tal internal inventory identity.
+
+Recommended future tables or equivalent model areas:
+
+| Future object | Purpose | Key fields |
+|---|---|---|
+| `ManufacturerSkuSourceFile` | One row per vendor workbook/import batch | `id`, `manufacturer`, `fileName`, `fileHash`, `sourcePath`, `uploadedAt/importedAt`, `parserVersion`, `reviewStatus` |
+| `ManufacturerSkuSourceSheet` | One row per workbook sheet/model section | `id`, `sourceFileId`, `sheetName`, `sourceSeries`, `sourceModel`, `title`, `rowCount`, `columnMap`, `reviewStatus` |
+| `ManufacturerSku` | Canonical manufacturer part number | `id`, `manufacturer`, `manufacturerPartNumber`, `normalizedPartNumber`, `partDescription`, `partCategory`, `unit`, `costEvidence`, `currency`, `status` |
+| `ManufacturerSkuCompatibility` | Many-to-many model compatibility evidence | `id`, `manufacturerSkuId`, `sourceSheetId`, `sourceRowNumber`, `sourceModel`, `normalizedModel`, `compatibleModel`, `partCategory`, `serviceIntervals`, `ratedQty`, `exchangeTime`, `remark`, `confidence`, `needsReview` |
+| `InternalSkuMapping` | Tal internal SKU mapping to manufacturer part/equivalent | `id`, `internalSku`, `manufacturerSkuId`, `mappingType`, `approvedBy`, `approvedAt`, `status`, `notes` |
+| `SkuMatchAuditEvidence` | Evidence for AI Draft / BusinessDocument / inventory decisions | `id`, `sourceFileId`, `sourceSheetId`, `sourceRowNumber`, `serviceReportId`, `businessDocumentItemId`, `matchedModel`, `matchedPartType`, `confidence`, `needsReview`, `decision` |
+
+Required audit/source fields:
+
+- `manufacturer`
+- `sourceFileName`
+- `sourceFileHash`
+- `sourceSheetName`
+- `sourceRowNumber`
+- `sourceColumnMap`
+- `rawModel`
+- `normalizedModel`
+- `manufacturerPartNumber`
+- `partDescription`
+- `partCategory`
+- `compatibleModels`
+- `serviceIntervalColumns`
+- `ratedQuantity`
+- `exchangeTime`
+- `remark`
+- `parserVersion`
+- `importBatchId`
+- `reviewedBy`
+- `reviewedAt`
+- `needsReview`
+- `manualOverrideReason`
+
+## Gradual Import And Enrichment Plan
+
+1. Inventory source workbooks and compute file hashes without writing DB rows.
+2. Convert or parse PM/EPM files into reviewed intermediate rows.
+3. Normalize model names into canonical tokens such as `SCR40PM`, `40PM`, and approved aliases without merging part compatibility.
+4. Normalize part descriptions into part categories such as `AIR_FILTER`, `OIL_FILTER`, `OIL_SEPARATOR`, `OIL_COOLANT`, `VALVE`, `SENSOR`, `COOLER`, `AIREND`, and `OTHER`.
+5. Load reviewed rows into the future registry only after explicit schema/import approval.
+6. Enrich with Liad-approved internal SKU mappings over time.
+7. Let AI Draft, BusinessDocument review, inventory, and purchase orders consume the same registry after approval.
+8. Keep every enrichment row auditable back to file/sheet/row or manual override evidence.
+
+Customer-facing output rule:
+
+- Customer-facing PDFs may show SKU only when the SKU is trusted and approved for display.
+- If the match is manufacturer-only but internal SKU mapping is not approved, hide SKU from customer-facing PDF and show the evidence only on internal review.
+- If no confident match exists, show no SKU on customer-facing PDF and set SKU review required internally.
+
 ## AI Draft Behavior
 
 AI Draft may use the manufacturer SKU registry to select the correct internal part candidate only as evidence for a draft recommendation.

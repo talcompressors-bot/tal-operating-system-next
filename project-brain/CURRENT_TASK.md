@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Hebrew customer-facing PDF layout fix completed; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; manufacturer SKU Excel source planning completed; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`b93c303 Make business document PDF Hebrew customer facing`
+`PENDING - Manufacturer SKU Excel source planning commit`
 
 ## Last Closeout Commit
 
@@ -264,6 +264,80 @@ Current blocker:
 Project completion:
 
 - Remains `68%`; this was a visual/layout hardening pass on the existing Wave 3 PDF capability, not a new capability point.
+
+## Wave 3 Manufacturer SKU Excel Source Planning
+
+Completed:
+
+- Inventoried existing spreadsheet SKU/source files in the repo.
+- Extended `project-brain/INTERNAL_MANUFACTURER_SKU_REGISTRY_SPEC.md`.
+- Extended `project-brain/PARTS_SKU_INTELLIGENCE_SPEC.md`.
+- No new planning file was created because existing Project Brain owner specs already existed.
+
+Observed source files:
+
+| File | Evidence status | Notes |
+|---|---|---|
+| `data-sources/vendor-spare-parts/Spare Parts Service List(PM Series) rev3 (1).xls` | Inspected through Office Open XML extraction | `.xls` extension but zipped workbook structure; sheets `10PM2`, `15PM2`, `20PM2`, `30PM`, `40PM`, `50PM`, `60PM`, `75PM`, `100PM` |
+| `data-sources/vendor-spare-parts/Spare Parts Service List(EPM Series) rev2 (1).xls` | Partial binary-string evidence only | Legacy binary `.xls`; strings confirm EPM model coverage and part categories, but exact sheet/row extraction requires approved parser/conversion |
+| `data-sources/exports/*.csv` | Existing Wave 1 exports | Service/equipment/customer evidence only; not manufacturer SKU authority |
+
+Observed PM workbook structure:
+
+- Row 1 contains title such as `Recommendatory Spare parts of SCR40PM series`.
+- Row 2 contains columns: `Item`, `Model`, `Code`, `spare parts name`, `specification`, `Unit`, `Rated qty for each`, quotation/cost, service interval columns, exchange time, and remark.
+- Rows 4+ contain manufacturer part rows.
+- `Code` is the manufacturer SKU / part number.
+- `Model` is the source model.
+- `spare parts name` is the part description.
+- For `40PM`, observed examples include `25100043-071` air filter core, `25200007-005` Oil Filter, `25300045-023` oil separator, and `80000175-039` Coolant.
+
+Planning decisions:
+
+- Manufacturer Excel files are trusted technical SKU/model compatibility sources.
+- Manufacturer workbook prices/costs are not customer selling prices.
+- ServiceReport equipment model should map to a compatible SKU list only through exact/approved model normalization and reviewed workbook rows.
+- AI suggested items should map to manufacturer SKU only when model, part category, and source row evidence are high confidence.
+- If no confident match exists, set SKU review required and do not show SKU on customer-facing PDF.
+- Customer-facing PDF may show SKU only when trusted and approved for display.
+- Internal review should show matched SKU, manufacturer, confidence, source Excel file/sheet/row, compatible models, and needs-review flag.
+- Future inventory and purchase orders must consume the same SKU registry and internal SKU mapping layer.
+
+Future schema plan:
+
+- Do not migrate yet.
+- Later approved schema should separate `ManufacturerSkuSourceFile`, `ManufacturerSkuSourceSheet`, `ManufacturerSku`, `ManufacturerSkuCompatibility`, `InternalSkuMapping`, and `SkuMatchAuditEvidence`.
+- Required audit fields include source file hash/name, sheet, row, raw/normalized model, manufacturer part number, description, part category, compatible models, interval quantity evidence, parser version, review flag, approver, and manual override reason.
+
+Matching rules recorded:
+
+1. Exact model match.
+2. Approved normalized model match.
+3. Part keyword/category match.
+4. Manufacturer SKU row match.
+5. Manual override with source evidence and reason.
+
+Unknowns / missing evidence:
+
+- EPM workbook exact sheets/columns/rows are not fully extracted yet because the file is legacy binary `.xls` and no approved parser/conversion is available in this session.
+- Manufacturer name is inferred from source context but should be explicitly recorded during import review.
+- Internal Tal SKU mapping is still separate from manufacturer part number and remains unapproved unless Liad approves the mapping.
+- Customer-facing SKU display policy needs a future UI/runtime task before any PDF SKU rendering.
+
+Boundaries:
+
+- Planning/read-only only.
+- No schema changes.
+- No DB writes.
+- No import.
+- No Maven/Invoice4U call.
+- No email/customer action.
+- No inventory action.
+- No production/source-system action.
+
+Project completion:
+
+- Remains `68%`; this is planning/enrichment of existing SKU governance, not a new runtime capability.
 
 ## Wave 2 Closeout Summary
 
