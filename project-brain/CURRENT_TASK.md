@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`PENDING - PDF visual polish bugfix commit`
+`737245c Polish business document PDF totals layout`
 
 ## Last Closeout Commit
 
