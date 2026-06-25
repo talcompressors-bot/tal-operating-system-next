@@ -23,6 +23,7 @@ Do not leave important knowledge only in chat.
 - project-brain/CURRENT_TASK.md
 - project-brain/TASK_BOARD.md
 - project-brain/DECISION_LOG.md
+- project-brain/current/LIVE_OBJECTS.md for active IDs, when present
 
 If `PROJECT_INDEX.md` has not been read first, STOP.
 
@@ -39,20 +40,29 @@ When the user says `by codex`, run this workflow:
 5. Identify changed files.
 6. Summarize completed work.
 7. Summarize uncommitted changes.
-8. Update canonical state files when needed and either approved or allowed by the Autonomous Work Loop:
+8. Load and preserve known active IDs from canonical Project Brain state. Report the source file for each ID. If no new work occurred, do not downgrade known IDs to `UNKNOWN`.
+9. Update canonical state files when needed and either approved or allowed by the Autonomous Work Loop:
    - `PROJECT_INDEX.md`
    - `project-brain/CURRENT_TASK.md`
    - `project-brain/TASK_BOARD.md`
    - `project-brain/DECISION_LOG.md` if decisions changed
    - Last Closeout Commit only for meaningful closeout/state-sync milestones, not every closeout metadata commit
    - Last Implementation Commit only when actual implementation changed
-9. Verify no forbidden systems were touched.
-10. Verify next approved task is clear.
-11. Commit only approved files, or safe/scoped/validated AUTO_ALLOWED documentation and read-only app changes.
-12. Push to `origin/main`.
-13. Confirm clean `git status --short --branch`.
-14. Confirm whether follow-up sync is required. Closeout-only metadata commits do not require another sync just to record their own hash.
-15. Print next `hey codex` startup point.
+10. Verify no forbidden systems were touched.
+11. Verify next approved task is clear.
+12. Commit only approved files, or safe/scoped/validated AUTO_ALLOWED documentation and read-only app changes.
+13. Push to `origin/main`.
+14. Confirm clean `git status --short --branch`.
+15. Confirm whether follow-up sync is required. Closeout-only metadata commits do not require another sync just to record their own hash.
+16. Print next `hey codex` startup point.
+
+Active ID closeout rule:
+
+- Canonical lookup order is `project-brain/CURRENT_TASK.md`, then task-specific evidence docs referenced by the current task, then `project-brain/current/LIVE_OBJECTS.md`.
+- Report `ReportCounter`, `ReportId`, `BusinessDocumentId`, `AutomationCommandId`, and `MavenDocumentId` with a source for each value.
+- If no new work occurred, preserve the last known active IDs from canonical Project Brain state.
+- Use `UNKNOWN` only when the canonical files truly do not contain the ID.
+- If canonical files contain conflicting active IDs, report the conflict and sources instead of overwriting either value or silently reporting `UNKNOWN`.
 
 ---
 
@@ -353,6 +363,7 @@ Update or confirm:
 - Task Board
 - Decision Log, if decisions changed
 - Next approved task
+- Known Active IDs and source files
 
 ---
 
@@ -370,6 +381,7 @@ Update or confirm:
 - What was tested
 - Results
 - Session handoff notes
+- Known Active IDs preserved or conflicts reported with sources
 
 ---
 

@@ -1,18 +1,20 @@
 # TASK BOARD
 
-Last updated: 2026-06-24
-Mode: Completion model corrected to 56%; no next implementation task approved yet
+Last updated: 2026-06-25
+Mode: Executive Orchestrator Phase 2 governance upgraded; no next implementation task approved yet
 
 ## NOW
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Await next task selection | Keep state accurate after read-only shell, SCR preview progress, evidence-layer documentation, AI Draft readiness approval, global document-line governance, and email intake planning | No implementation task is currently approved; AI Draft is `READY_FOR_APPROVAL_BASED_DRAFTS`; completion remains 56%; candidate tasks are listed below; DB import/write/runtime/source-system work remains gated | Yes before starting any DB import/write/schema/env/source-system/Maven/Invoice4U/email runtime work; explicit selection required before the next implementation task |
+| Await next task selection through Executive Orchestrator | Keep state accurate after read-only shell, SCR preview progress, evidence-layer documentation, AI Draft readiness approval, global document-line governance, email intake planning, active-ID protocol hardening, Project Executive governance upgrade, and Phase 2 Executive Decision Engine upgrade | No implementation task is currently approved; every future task must pass through `agents/ORCHESTRATOR_AGENT.md` for Understand/Discover/Consult/Score/Decide/Execute/Validate/Learn/Improve, specialist consultation, executive scoring, duplicate-proof review, authority-level, validation, and capability-vs-document review; completion remains 56%; DB import/write/runtime/source-system work remains gated | Yes before starting any DB import/write/schema/env/source-system/Maven/Invoice4U/email runtime work; explicit selection required before the next implementation task |
 
 ## NEXT
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
+| Executive Orchestrator cycle | Run every selected task through Understand, Discover, Consult, Score, Decide, Execute, Validate, Learn, and Improve | Decision output includes consulted agent opinions, Executive Scores, duplicate-prevention proof, selected path, authority level, and Reality Check KPIs | No approval for read-only/documentation AUTO_EXECUTE work; approval required for any gated system or business decision |
+| Orchestrator Decision Engine intake | Run every selected task, idea, bug, feature, investigation, proposal, or request through the existing `ORCHESTRATOR_AGENT` Project Executive matrix before work begins | Decision output identifies whether the task should exist, what can be reused, which specialist owns it, required/optional/forbidden tools, business evidence priority, architecture impact, authority level, validation, rollback, and whether the result adds a capability or only a document | No approval for read-only/documentation AUTO_EXECUTE work; approval required for any gated system or business decision |
 | AI Draft Recommendation Preview runtime/shell mission packet | Define the no-write implementation mission for a read-only approval-based AI Draft preview for Service Report `5806` | Mission packet identifies scope, files, agents, validation, rollback, approval gates, and protected systems; no runtime is implemented by the packet | Selection/approval required before implementation; explicit approval required before any BusinessDocument, Maven, DB, inventory, email, or customer-facing action |
 | Maven/Invoice4U lifecycle tracking shell | Add read-only lifecycle tracking placeholders for Maven/Invoice4U state without sending or creating documents | Existing models/routes are used or shell is empty-state-first; no Maven/Invoice4U production action occurs | Selection/approval required before starting; explicit approval required before any Maven/Invoice4U write or integration action |
 | AI Draft Recommendation Readiness approvals | Completed: Liad decisions recorded for SCR Small Service kit, Labor + Service, Technician Visit / Travel, Large Service oil, and partial serial confidence | AI Draft is `READY_FOR_APPROVAL_BASED_DRAFTS`; no document is created; future generated draft still requires approval flags and manual confirmation where required | Complete for documentation; explicit approval required before any implementation or write/action |
@@ -96,6 +98,8 @@ Mode: Completion model corrected to 56%; no next implementation task approved ye
 | Global business document line rule documented | `AI_DRAFT_RUNTIME_BLUEPRINT.md`, `AI_DRAFT_RECOMMENDATION_PREVIEW_5806.md`, `project-brain/MANUFACTURER_KNOWLEDGE_BASE.md`, `project-brain/SERVICE_PATTERN_INTELLIGENCE_REGISTRY.md`, `project-brain/PRICING_EVIDENCE_ENGINE_SPEC.md`, `project-brain/AI_DRAFT_RECOMMENDATION_READINESS_DECISION_PACKET.md`, `agents/MAVEN_AGENT.md`, and `project-brain/SERVICE_REPORT_MAVEN_LINK_REGISTRY_SPEC.md` now record that compressor service documents use Parts lines, Oil handling if needed, one `Labor + Service` line, and one `Technician Visit / Travel` line. No code, DB, Prisma, Maven, inventory, or runtime changes occurred |
 | Email Document Intake Agent specified | `project-brain/EMAIL_DOCUMENT_INTAKE_AGENT_SPEC.md` defines planned/non-executable `EMAIL_DOCUMENT_INTAKE_AGENT` under `ORCHESTRATOR_AGENT`, with evidence packets for PO/RFQ/customer replies/document-chain matching; `agents/AGENT_REGISTRY.md`, `project-brain/roadmap/ROADMAP.md`, and `project-brain/DECISION_LOG.md` were updated. No Gmail runtime, email send, DB write, BusinessDocument creation, Maven action, inventory action, or automation runtime occurred |
 | AI Draft readiness rules and email intake schema documented | Commit `be89380 Document AI draft readiness rules`; AI Draft is now `READY_FOR_APPROVAL_BASED_DRAFTS` for approval-based previews; added `project-brain/AI_DRAFT_READINESS_RECHECK.md` and `project-brain/EMAIL_INTAKE_EVIDENCE_PACKET_SCHEMA.md`; validation `git diff --check` passed with CRLF warnings only; no code, DB, Prisma, imports, Maven/Invoice4U, inventory, email runtime, source-system, customer-facing, or production workflow changes occurred |
+| Orchestrator Decision Engine governance upgraded | `agents/ORCHESTRATOR_AGENT.md` now acts as the existing Project Executive for all task intake; `PROJECT_OPERATING_PROTOCOL.md` and `PROJECT_INDEX.md` require every future task to pass through the decision engine; `project-brain/DECISION_LOG.md` records the approved authority levels and reuse-before-create rule; no new PM Agent, duplicate governance, runtime implementation, DB, Prisma, Maven, Inventory, or customer-facing action occurred |
+| Executive Orchestrator Phase 2 governance upgraded | `agents/ORCHESTRATOR_AGENT.md` now requires the full Executive Cycle, consultation summaries from relevant existing agents, Executive Scoring, duplicate-proof gates before any new Agent/Registry/Spec/Rule/Knowledge Base/Roadmap Item, self-improvement review after every completed task, and Reality Check KPI reporting. `PROJECT_OPERATING_PROTOCOL.md`, `PROJECT_INDEX.md`, `project-brain/DECISION_LOG.md`, `project-brain/CURRENT_TASK.md`, and `project-brain/TASK_BOARD.md` were extended; no new Executive Agent, runtime implementation, DB, Prisma, Maven, Inventory, or customer-facing action occurred |
 
 ## BLOCKED / NOT STARTED
 
@@ -121,7 +125,16 @@ Mode: Completion model corrected to 56%; no next implementation task approved ye
 
 - No production writes.
 - Autonomous Work Loop is active for safe tasks.
-- Codex is the main Orchestrator and must route work to existing agent owners by role.
+- Codex is the main Orchestrator and Project Executive; every task must pass through the Orchestrator Decision Engine before work begins.
+- Every task must run the Executive Cycle: Understand, Discover, Consult, Score, Decide, Execute, Validate, Learn, Improve.
+- Before choosing a solution, Codex must consult relevant existing agents and summarize recommendation, risks, evidence, confidence, and better alternatives.
+- Every candidate task or path must be scored for Business Value, Technical Value, Project Acceleration, Reuse Score, Duplicate Risk, Runtime Impact, Long-term Value, Complexity, and Estimated Time.
+- Reuse before create is mandatory: do not create a new Agent, Registry, Spec, Roadmap item, or Knowledge Base until existing assets have been searched, verified, and rejected as insufficient.
+- Creating an Agent, Registry, Spec, Rule, Knowledge Base, or Roadmap Item without already-searched/already-verified/already-rejected proof is `FORBIDDEN`.
+- Project progress is measured by new capabilities, not by number of new documents. If the output is only a new document, first check whether it can be merged, appended to an existing document, or converted into an actual capability.
+- Reality Checks should report duplicate work prevented, reuse percentage, capabilities added, documentation created, capability/documentation ratio, project acceleration score, outstanding executive decisions, and highest-value next task.
+- Orchestrator authority levels are `AUTO_EXECUTE`, `REPORT_ONLY`, `APPROVAL_REQUIRED`, and `FORBIDDEN`.
+- Codex must route work to existing agent owners by role.
 - Codex must not ask Liad for every small step; it must work, validate, collect proof, update Project Brain, and stop only at meaningful APPROVAL_REQUIRED gates.
 - AUTO_ALLOWED work may proceed without routine confirmation when it is the next approved task: repo inspection, local tests/type checks, read-only DB queries, read-only UI validation, documentation updates, read-only UI/display mapping fixes, local validation reports, Project Brain updates after completed safe work, and safe/scoped commit-push after validation.
 - AUTO_APPROVED actions must run without asking Liad for approval:

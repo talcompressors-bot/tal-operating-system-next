@@ -39,7 +39,8 @@ Read these files in order when they exist:
 5. `project-brain/CURRENT_TASK.md`
 6. `project-brain/TASK_BOARD.md`
 7. `project-brain/DECISION_LOG.md`
-8. Relevant task-specific docs
+8. `project-brain/current/LIVE_OBJECTS.md` for active IDs, when present
+9. Relevant task-specific docs
 
 If a file is missing or empty, report that as a documentation gap instead of inventing content.
 
@@ -100,6 +101,14 @@ Always preserve and report known values for:
 - `MavenDocumentId`
 
 If a value is not known, write `UNKNOWN`. Never invent IDs.
+
+Active ID source rules:
+
+- Load active IDs from canonical Project Brain state, not chat memory.
+- Canonical lookup order is `project-brain/CURRENT_TASK.md`, then task-specific evidence docs referenced by the current task, then `project-brain/current/LIVE_OBJECTS.md`.
+- Report the source file for each known active ID.
+- Use `UNKNOWN` only when the canonical files truly do not contain the ID.
+- If canonical files contain conflicting active IDs, report the conflict and source files instead of choosing one silently.
 
 ## Stable Systems To Protect
 

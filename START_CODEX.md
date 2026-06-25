@@ -35,6 +35,7 @@ When activated:
 - project-brain/CURRENT_TASK.md
 - project-brain/TASK_BOARD.md
 - project-brain/DECISION_LOG.md
+- project-brain/current/LIVE_OBJECTS.md for active IDs, when present
 - relevant task-specific docs
 
 Do not read Project Brain files until the repository has been checked and fast-forwarded from `origin/main` when the working tree is clean.
@@ -52,6 +53,15 @@ When the user says `hey codex`:
 9. Continue if live Git latest commit is recorded as Last Implementation Commit or Last Closeout Commit, or if live Git latest commit is only a closeout/state-sync metadata commit newer than Last Closeout Commit. If live Git contains unclassified implementation, code, schema, or governance behavior changes, report mismatch and recommend state sync before implementation.
 10. Continue from next approved task only.
 11. Do not invent new tasks.
+
+Active ID startup rule:
+
+- Load known active IDs from canonical Project Brain state before reporting Reality Check or closeout.
+- Canonical lookup order is `project-brain/CURRENT_TASK.md`, then task-specific evidence docs referenced by the current task, then `project-brain/current/LIVE_OBJECTS.md`.
+- Report the source file for each known active ID.
+- If no new work occurred, preserve the last known active IDs from canonical Project Brain state.
+- Use `UNKNOWN` only when the canonical files truly do not contain the ID.
+- If canonical files contain conflicting active IDs, report the conflict and sources instead of choosing one silently or downgrading to `UNKNOWN`.
 
 If the task conflicts with `PROJECT_INDEX.md` or `PROJECT_OPERATING_PROTOCOL.md`, STOP and report the conflict.
 

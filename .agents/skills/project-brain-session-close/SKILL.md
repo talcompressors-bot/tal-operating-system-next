@@ -21,6 +21,7 @@ Read these files when they exist:
 6. `project-brain/CURRENT_TASK.md`
 7. `project-brain/TASK_BOARD.md`
 8. `project-brain/DECISION_LOG.md`
+9. `project-brain/current/LIVE_OBJECTS.md` for active IDs, when present
 
 Also inspect:
 
@@ -42,6 +43,15 @@ Always preserve and report:
 - `MavenDocumentId`
 
 If a value is unknown, write `UNKNOWN`. Never invent IDs.
+
+Closeout active ID source rules:
+
+- Load active IDs from canonical Project Brain state before producing the closeout.
+- Canonical lookup order is `project-brain/CURRENT_TASK.md`, then task-specific evidence docs referenced by the current task, then `project-brain/current/LIVE_OBJECTS.md`.
+- Report the source file for each known active ID.
+- If no new work occurred, preserve the last known active IDs from canonical Project Brain state.
+- Use `UNKNOWN` only when the canonical files truly do not contain the ID.
+- If canonical files contain conflicting active IDs, report the conflict and source files instead of overwriting or silently downgrading to `UNKNOWN`.
 
 ## Stable Systems To Protect
 
@@ -66,20 +76,21 @@ Follow this order:
 5. Identify changed files.
 6. Summarize completed work.
 7. Summarize uncommitted changes.
-8. Update canonical state files when needed and either approved or allowed by the Autonomous Work Loop:
+8. Load and preserve known active IDs from canonical Project Brain state; if no new work occurred, do not downgrade known IDs to `UNKNOWN`.
+9. Update canonical state files when needed and either approved or allowed by the Autonomous Work Loop:
    - `PROJECT_INDEX.md`
    - `project-brain/CURRENT_TASK.md`
    - `project-brain/TASK_BOARD.md`
    - `project-brain/DECISION_LOG.md` if decisions changed
    - Last Closeout Commit only for meaningful closeout/state-sync milestones, not every closeout metadata commit
    - Last Implementation Commit only when actual implementation changed
-9. Verify no forbidden systems were touched.
-10. Verify next approved task is clear.
-11. Commit only approved files, or safe/scoped/validated AUTO_ALLOWED documentation and read-only app changes.
-12. Push to `origin/main`.
-13. Confirm clean `git status --short --branch`.
-14. Confirm whether follow-up sync is required. Closeout-only metadata commits do not require another sync just to record their own hash.
-15. Print next `hey codex` startup point.
+10. Verify no forbidden systems were touched.
+11. Verify next approved task is clear.
+12. Commit only approved files, or safe/scoped/validated AUTO_ALLOWED documentation and read-only app changes.
+13. Push to `origin/main`.
+14. Confirm clean `git status --short --branch`.
+15. Confirm whether follow-up sync is required. Closeout-only metadata commits do not require another sync just to record their own hash.
+16. Print next `hey codex` startup point.
 
 ## Project Brain Update Targets
 
@@ -424,11 +435,11 @@ Verification
 - Commit mismatch status:
 
 Known Active IDs
-- ReportCounter:
-- ReportId:
-- BusinessDocumentId:
-- AutomationCommandId:
-- MavenDocumentId:
+- ReportCounter: value and source file, or `UNKNOWN` only if absent from canonical files
+- ReportId: value and source file, or `UNKNOWN` only if absent from canonical files
+- BusinessDocumentId: value and source file, or `UNKNOWN` only if absent from canonical files
+- AutomationCommandId: value and source file, or `UNKNOWN` only if absent from canonical files
+- MavenDocumentId: value and source file, or `UNKNOWN` only if absent from canonical files
 
 Stable Systems
 - ...

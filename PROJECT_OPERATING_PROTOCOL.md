@@ -268,8 +268,9 @@ Before analysis, planning, code changes, schema work, deployment, or production 
 9. Read `project-brain/CURRENT_TASK.md`.
 10. Read `project-brain/TASK_BOARD.md`.
 11. Read `project-brain/DECISION_LOG.md`.
-12. Read relevant task-specific docs.
-13. Produce a short Project Reality Check.
+12. Read `project-brain/current/LIVE_OBJECTS.md` for active IDs when present.
+13. Read relevant task-specific docs.
+14. Produce a short Project Reality Check.
 
 If Project Brain files are read before the repository has been checked and fast-forwarded when clean, STOP and restart the startup sequence.
 
@@ -287,6 +288,7 @@ Project Reality Check must include:
 - commit comparison between live Git, Last Implementation Commit, and Last Closeout Commit in `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`
 - blocked or forbidden actions
 - canonical files relevant to the requested work
+- known active IDs with source files, or active ID conflicts with source files
 
 Project Reality Check must compare:
 
@@ -326,20 +328,21 @@ When the user says `by codex`, Codex must:
 5. Identify changed files.
 6. Summarize completed work.
 7. Summarize uncommitted changes.
-8. Update canonical state files when needed and either approved or allowed by the Autonomous Work Loop:
+8. Load and preserve known active IDs from canonical Project Brain state; if no new work occurred, do not downgrade known IDs to `UNKNOWN`.
+9. Update canonical state files when needed and either approved or allowed by the Autonomous Work Loop:
    - `PROJECT_INDEX.md`
    - `project-brain/CURRENT_TASK.md`
    - `project-brain/TASK_BOARD.md`
    - `project-brain/DECISION_LOG.md` if decisions changed
    - Last Closeout Commit only for meaningful closeout/state-sync milestones, not every closeout metadata commit
    - Last Implementation Commit only when actual implementation changed
-9. Verify no forbidden systems were touched.
-10. Verify next approved task is clear.
-11. Commit only approved files, or safe/scoped Project Brain closeout sync files allowed by the Autonomous Work Loop.
-12. Push to `origin/main`.
-13. Confirm clean `git status --short --branch`.
-14. Confirm whether follow-up sync is required. Closeout-only metadata commits do not require another sync just to record their own hash.
-15. Print next `hey codex` startup point.
+10. Verify no forbidden systems were touched.
+11. Verify next approved task is clear.
+12. Commit only approved files, or safe/scoped Project Brain closeout sync files allowed by the Autonomous Work Loop.
+13. Push to `origin/main`.
+14. Confirm clean `git status --short --branch`.
+15. Confirm whether follow-up sync is required. Closeout-only metadata commits do not require another sync just to record their own hash.
+16. Print next `hey codex` startup point.
 
 At session close or handoff:
 
@@ -376,6 +379,100 @@ Default decision:
 
 Creating new components requires a clear reason and approval.
 
+Never create a new agent, registry, spec, roadmap item, or knowledge base until all existing assets have been searched, verified, and rejected as insufficient. Search, verify, reuse, extend, and only then request approval to create.
+
+## 10A. Orchestrator Decision Engine
+
+Every new task, idea, bug, feature, investigation, proposal, or request must pass through `agents/ORCHESTRATOR_AGENT.md` before work begins.
+
+The Orchestrator acts as the existing Project Executive. Do not create a separate PM Agent while the current Orchestrator, Project Brain, Task Board, and Project Index can be extended.
+
+The Orchestrator must optimize for:
+
+- least duplication
+- maximum reuse
+- shortest safe path
+- highest business value
+- highest project acceleration
+- evidence-based decisions
+- minimal token usage
+- minimal user interruptions
+- minimal unnecessary documentation, agents, and complexity
+
+The project is measured by new capabilities, not by the number of new documents. If a task produces only a new document, the Orchestrator must check whether the content can be merged into or used to extend an existing document, or whether the project should implement or unlock the capability instead.
+
+Every task must run the Executive Cycle from `agents/ORCHESTRATOR_AGENT.md`:
+
+1. Understand.
+2. Discover.
+3. Consult.
+4. Score.
+5. Decide.
+6. Execute.
+7. Validate.
+8. Learn.
+9. Improve.
+
+Before execution, the Orchestrator must answer the seven-stage decision matrix from `agents/ORCHESTRATOR_AGENT.md`:
+
+1. Should this task exist?
+2. Reuse before create.
+3. Agent discovery.
+4. Business knowledge.
+5. Architecture.
+6. Execution.
+7. Success and capability gained.
+
+Every task must receive one authority level:
+
+- `AUTO_EXECUTE`: safe, scoped, approved/current, and within AUTO_ALLOWED rules.
+- `REPORT_ONLY`: read-only discovery, analysis, evidence packet, or recommendation without implementation.
+- `APPROVAL_REQUIRED`: production, financial, customer-facing, schema, DB write/import, source-system, external action, dependency/env change, or business decision requiring Liad.
+- `FORBIDDEN`: explicitly forbidden by current state, protocol, missing approval, duplicate creation, or protected-system boundary.
+
+The Orchestrator must consult relevant specialist owners from `agents/AGENT_REGISTRY.md` and use Project Brain workflow roles for Map Guard, Builder, QA, and Reviewer. It may delegate execution, but it retains responsibility for routing quality, approval gates, evidence, and Project Brain closeout.
+
+Each consulted agent or workflow role must contribute or be summarized with:
+
+- recommendation
+- risks
+- evidence
+- confidence
+- better alternatives
+
+The Orchestrator must summarize consulted opinions before deciding. Planned or non-executable agents may contribute only from their approved specification/status and must not be treated as active runtime owners.
+
+Every candidate task or solution path must receive Executive Scores before selection:
+
+- Business Value
+- Technical Value
+- Project Acceleration
+- Reuse Score
+- Duplicate Risk
+- Runtime Impact
+- Long-term Value
+- Complexity
+- Estimated Time
+
+The highest-value safe task should normally be selected. If not, the Orchestrator must record why.
+
+Before creating any Agent, Registry, Spec, Rule, Knowledge Base, or Roadmap Item, the Orchestrator must prove:
+
+- already searched
+- already verified
+- already rejected as insufficient
+
+If this proof is missing, creating the duplicate is `FORBIDDEN`; extend, merge, or reuse existing assets instead.
+
+Continuous improvement rule:
+If Codex discovers a better workflow, safer workflow, faster workflow, reusable solution, duplicate, unnecessary document, or missing question, it must create an Evidence Packet and present the recommendation to Liad. After approval, update Project Brain and teach the affected agents by extending existing files.
+
+Executive self-improvement rule:
+After every completed task, the Orchestrator must ask whether it could have been completed faster, with fewer files, fewer agents, fewer tokens, less duplication, or less user involvement. If yes, generate an Improvement Evidence Packet for Liad. After approval, update Project Brain and teach future agents by extending existing owner files.
+
+Reality Check KPI rule:
+Every Reality Check should report duplicate work prevented, reuse percentage, capabilities added, documentation created, capability/documentation ratio, project acceleration score, outstanding executive decisions, and highest-value next task. Use `UNKNOWN` when evidence is insufficient.
+
 ## 11. Current State Before Future State Rule
 
 Before recommending future architecture work, verify the current system:
@@ -406,6 +503,14 @@ Never invent:
 - Maven state
 - deployment status
 - approval status
+
+Active ID evidence rule:
+- Known active IDs must be loaded from canonical Project Brain state before startup or closeout reports.
+- Canonical lookup order is `project-brain/CURRENT_TASK.md`, then task-specific evidence docs referenced by the current task, then `project-brain/current/LIVE_OBJECTS.md`.
+- Closeout must report the source file for each known active ID.
+- If no new work occurred, closeout must preserve the last known active IDs from canonical Project Brain state.
+- `UNKNOWN` may be used only when the canonical files truly do not contain the active ID.
+- If active IDs conflict across canonical files, report the conflict and source files instead of overwriting or silently downgrading to `UNKNOWN`.
 
 ## 13. Multi-Company Rule
 

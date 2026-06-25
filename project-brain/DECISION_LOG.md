@@ -1,5 +1,56 @@
 # DECISION LOG
 
+## 2026-06-25
+
+Decision:
+Upgrade `ORCHESTRATOR_AGENT` Phase 2 into the Executive Decision Engine.
+
+Purpose:
+Make the existing Orchestrator maximize project value, reduce duplicate work, consult the right specialist agents, score alternatives, and improve the project after each completed task without creating a new Executive Agent or duplicate governance.
+
+Approved rules:
+
+1. Do not create a new Executive Agent. Extend `agents/ORCHESTRATOR_AGENT.md` and existing Project Brain governance only.
+2. Every task must execute the Executive Cycle: Understand, Discover, Consult, Score, Decide, Execute, Validate, Learn, Improve.
+3. Before choosing a solution, the Orchestrator must consult all relevant existing agents, governance systems, and Project Brain workflow roles. Each consultation must include recommendation, risks, evidence, confidence, and better alternatives.
+4. Every candidate task or solution path must be scored for Business Value, Technical Value, Project Acceleration, Reuse Score, Duplicate Risk, Runtime Impact, Long-term Value, Complexity, and Estimated Time.
+5. Before creating any Agent, Registry, Spec, Rule, Knowledge Base, or Roadmap Item, the Orchestrator must prove existing assets were already searched, already verified, and already rejected. Without that proof, creation is `FORBIDDEN`.
+6. After every completed task, the Orchestrator must check whether it could have been completed faster, with fewer files, fewer agents, fewer tokens, less duplication, or less user involvement. If yes, produce an Improvement Evidence Packet for Liad.
+7. Every Reality Check should report duplicate work prevented, reuse percentage, capabilities added, documentation created, capability/documentation ratio, project acceleration score, outstanding executive decisions, and highest-value next task.
+8. The Orchestrator's purpose is to maximize project value while minimizing duplication, token usage, user interruptions, unnecessary documentation, unnecessary agents, and unnecessary complexity.
+
+Boundary:
+Documentation/governance only. No runtime implementation, DB, Prisma, Maven, Inventory, Google Sheets, AppSheet, Apps Script, Drive, email, customer-facing action, production action, or new agent occurred.
+
+Status:
+Approved by user request; implemented by extending existing governance.
+
+---
+
+Decision:
+Upgrade `ORCHESTRATOR_AGENT` into the Project Executive Decision Engine.
+
+Purpose:
+Make every new task, idea, bug, feature, investigation, proposal, or request pass through one evidence-based routing and reuse decision before work begins.
+
+Approved rules:
+
+1. Do not create a new PM Agent. Extend `agents/ORCHESTRATOR_AGENT.md` and existing Project Brain governance.
+2. The Orchestrator must optimize for least duplication, maximum reuse, shortest safe path, highest business value, highest project acceleration, and evidence-based decisions.
+3. Every task must be classified through the Orchestrator Question Matrix: task existence, reuse-before-create, agent discovery, business knowledge, architecture, execution, and success/capability gained.
+4. Every task receives one authority level: `AUTO_EXECUTE`, `REPORT_ONLY`, `APPROVAL_REQUIRED`, or `FORBIDDEN`.
+5. The project is measured by new capabilities, not the number of new documents. If a task only creates a document, the Orchestrator must check whether it can be merged, extend an existing document, or unlock a real capability.
+6. New agents, registries, specs, roadmap items, or knowledge bases remain forbidden until existing assets are searched, verified, and rejected as insufficient.
+7. Continuous-improvement findings require an Evidence Packet and Liad approval before Project Brain or agent instructions are updated.
+
+Boundary:
+Documentation/governance only. No runtime implementation, DB, Prisma, Maven, Inventory, Google Sheets, AppSheet, Apps Script, Drive, email, customer-facing action, or production action occurred.
+
+Status:
+Approved by user request; implemented as existing-governance extension.
+
+---
+
 ## 2026-06-24
 
 Decision:

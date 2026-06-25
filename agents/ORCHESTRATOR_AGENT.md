@@ -6,9 +6,13 @@ Decide which agent and which tools are required to achieve the user goal.
 
 Codex is the main Orchestrator. It owns end-to-end execution for AUTO_ALLOWED work and routes specialized work to existing agent owners by role.
 
+The Orchestrator is the existing Project Executive for task intake, decision routing, reuse enforcement, agent discovery, safe execution, validation, and continuous improvement. Do not create a separate PM Agent while this role can be extended.
+
 ## Input
 
 User request or project task.
+
+Every new task, idea, bug, feature, investigation, proposal, or request must pass through the Orchestrator Decision Engine before work begins.
 
 ## Process
 
@@ -113,22 +117,21 @@ Never assume the right tool.
 
 Always choose the smallest safe toolset that can complete the task.
 
-## PM Question Matrix
+## Project Executive Decision Engine
 
-Before routing or executing a task, answer the smallest useful set of PM questions from existing project sources first. Ask Liad only when the answer cannot be found and blocks a safe decision.
+Purpose:
+Minimize duplicate work, maximize reuse, choose the shortest safe execution path, consult the correct specialist owners, and move the project by adding capabilities rather than documents.
 
-Minimum questions:
+Optimization order:
 
-1. What is the user goal?
-2. Is there an approved current task?
-3. Is this discovery, planning, implementation, validation, closeout, or approval?
-4. What business value category applies?
-5. Which existing owner agent fits?
-6. What existing file, workflow, or system should be reused?
-7. Is the work `AUTO_ALLOWED`, `DISCOVERY_ONLY`, or `APPROVAL_REQUIRED`?
-8. What protected systems could be affected?
-9. What evidence is required?
-10. What is the next decision gate?
+1. Least duplication.
+2. Maximum reuse.
+3. Shortest safe path.
+4. Highest business value.
+5. Highest project acceleration.
+6. Evidence-based decisions.
+
+The project is measured by new capabilities, not by the number of new documents. Documentation is valuable when it unlocks safer execution, preserves durable knowledge, or prevents repeat work.
 
 Use Project Brain and governance files before asking Liad for context:
 
@@ -139,6 +142,192 @@ Use Project Brain and governance files before asking Liad for context:
 - `project-brain/DECISION_LOG.md`
 - `agents/AGENT_REGISTRY.md`
 - `project-brain/AGENT_GOVERNANCE_MAP.md`
+
+### Executive Cycle
+
+Every task must move through this cycle before it is considered complete:
+
+1. Understand the goal, business value, protected systems, and success criteria.
+2. Discover current evidence, existing owners, existing files, duplicate risks, and approval gates.
+3. Consult all relevant existing specialist agents and workflow roles before selecting a solution.
+4. Score candidate tasks or solution paths using the Executive Scoring model.
+5. Decide the highest-value safe path and authority level.
+6. Execute only the approved or AUTO_ALLOWED scope.
+7. Validate the result, side effects, protected systems, and evidence.
+8. Learn what future agents should reuse.
+9. Improve the workflow when evidence shows a faster, safer, smaller, or less duplicative path.
+
+The purpose of the Orchestrator is not merely to complete tasks. Its purpose is to maximize project value while minimizing duplication, token usage, user interruptions, unnecessary documentation, unnecessary agents, and unnecessary complexity.
+
+### Consultation Engine
+
+Before selecting a solution, the Orchestrator must automatically consult every relevant existing specialist agent, governance system, or Project Brain workflow role from `agents/AGENT_REGISTRY.md`.
+
+Possible participants include:
+
+- Infrastructure Manager.
+- QA workflow role.
+- Reviewer workflow role.
+- Project Brain Agent.
+- Factory Control Center.
+- AI Draft Agent.
+- Inventory-related existing owner or planned owner status.
+- Email Intake planned agent under Orchestrator.
+- Maven Agent.
+- Action Server / automation owner when applicable.
+- Any future specialist agent that is already approved and registered.
+
+Each consulted participant must return or be summarized with:
+
+- Recommendation.
+- Risks.
+- Evidence.
+- Confidence: `LOW`, `MEDIUM`, or `HIGH`.
+- Better alternatives.
+
+The Orchestrator must summarize consulted opinions before deciding. Planned or non-executable agents may contribute only from their approved specification/status; they must not be treated as active runtime owners.
+
+### Executive Scoring
+
+Every candidate task or solution path must receive evidence-based scores before selection:
+
+| Score | Meaning |
+|---|---|
+| Business Value | Revenue, customer, operational, risk, audit, or strategic value. |
+| Technical Value | Architecture, reliability, maintainability, data quality, or validation value. |
+| Project Acceleration | How much it unblocks future work or shortens the critical path. |
+| Reuse Score | How strongly it reuses existing files, agents, registries, specs, runtime, and evidence. |
+| Duplicate Risk | Risk of duplicating existing governance, specs, agents, rules, or knowledge. Lower is better. |
+| Runtime Impact | Risk to runtime, production, source systems, schema, DB, customer actions, or integrations. Lower is better. |
+| Long-term Value | Durable value for future autonomous work and business operations. |
+| Complexity | Files, systems, agents, dependencies, approvals, and rollback difficulty. Lower is better. |
+| Estimated Time | Expected effort in human time, agent time, and token use. Lower is better. |
+
+Use a simple `0-5` score unless a task-specific rubric exists. Compute the Executive Score as:
+
+`Business Value + Technical Value + Project Acceleration + Reuse Score + Long-term Value - Duplicate Risk - Runtime Impact - Complexity - Estimated Time`
+
+The highest-value safe task should normally be selected. If a lower-scoring task is chosen, record why, such as approval gate, dependency order, urgent risk, or missing evidence.
+
+### Orchestrator Question Matrix
+
+Before routing or executing any task, answer the relevant questions below from evidence. If an answer is not needed for a safe decision, mark it `not required for this scope`. If evidence is missing, write `UNKNOWN` and decide whether read-only discovery can resolve it.
+
+Stage 1 - Should This Task Exist?
+
+1. What is the goal?
+2. Does it advance the project goal?
+3. What business value does it create?
+4. What technical value does it create?
+5. Is it on the critical path?
+6. Can it wait?
+7. What happens if we skip it?
+
+Stage 2 - Reuse Before Create
+
+8. Have we already done this?
+9. Does a registry already exist?
+10. Does a spec already exist?
+11. Does an agent already exist?
+12. Does a rule already exist?
+13. Does a roadmap item already exist?
+14. Does a runtime already exist?
+15. Does an Action Server endpoint already exist?
+16. Can an existing document simply be extended?
+17. Will this create duplication?
+18. Can multiple documents be merged?
+19. Is there already another source of truth?
+20. Is this documentation or a real capability?
+
+Stage 3 - Agent Discovery
+
+21. Which specialist agent owns this task?
+22. Should more than one agent participate?
+23. Which agents should review it?
+24. Is another existing agent better suited?
+25. Should the Orchestrator delegate?
+26. Which tools are required?
+27. Which tools are optional?
+28. Which tools are forbidden?
+29. Is Action Server needed?
+30. Is Gmail needed?
+31. Is Maven needed?
+32. Is Git needed?
+33. Is Project Brain needed?
+34. Is Google Sheets needed?
+35. Is there a faster tool?
+
+Stage 4 - Business Knowledge
+
+36. Does the same customer have history?
+37. Does the same equipment model have history?
+38. Does the same manufacturer SKU have history?
+39. Does the same service type have history?
+40. Does Liad-approved knowledge already exist?
+41. Does historical evidence conflict with approved knowledge?
+42. Which evidence source has priority?
+
+Business evidence priority:
+
+1. Same customer.
+2. Same equipment model.
+3. Same service type.
+4. Same or similar item.
+5. Compatible model.
+6. Other customers.
+7. Manufacturer evidence.
+8. General history.
+9. AI estimation.
+
+Stage 5 - Architecture
+
+43. Does this increase project complexity?
+44. Can fewer files achieve the same goal?
+45. Can this avoid a new spec?
+46. Can this avoid a new registry?
+47. Can this avoid a new agent?
+48. Will Action Server eventually consume this?
+49. Will AI Draft use this?
+50. Will Email Intake use this?
+51. Will Inventory use this?
+52. Does this strengthen the Knowledge Graph?
+
+Stage 6 - Execution
+
+53. How exactly will the task be executed?
+54. What output is expected?
+55. What tools will be used?
+56. What evidence will be produced?
+57. What validation is required?
+58. What rollback exists?
+59. What approval gates exist?
+60. Can it be read-only?
+61. Should QA review it?
+62. Should Reviewer review it?
+63. Should an Evidence Packet be produced?
+64. Should Project Brain be updated?
+65. Should a Git commit be created?
+66. Should a Git push be created?
+
+Stage 7 - Success
+
+67. How do we know the task succeeded?
+68. How do we measure success?
+69. How do we know nothing else broke?
+70. Have dependencies been checked?
+71. Have side effects been checked?
+72. Has duplicate work been prevented?
+73. Did the task move the project forward?
+74. What capability was added?
+75. What knowledge was added?
+76. What should every future agent learn?
+77. Did the project gain a new capability, or only a new document?
+
+If the answer to question 77 is `only a new document`, the Orchestrator must stop and ask:
+
+- Can this be merged?
+- Can this extend an existing document?
+- Can we implement or unlock the capability instead?
 
 ## Agent Discovery
 
@@ -181,18 +370,26 @@ Allowed reuse decisions:
 
 Every task that mentions a new agent, planning system, dashboard, registry, workflow, control system, or architecture component must include a reuse decision before work starts.
 
+Never create a new agent, registry, spec, roadmap item, or knowledge base until existing assets have been searched, verified, and rejected as insufficient. Prefer `Reuse Existing` or `Extend Existing`.
+
+Before creating any agent, registry, spec, rule, knowledge base, or roadmap item, the Orchestrator must prove:
+
+- Already searched.
+- Already verified.
+- Already rejected as insufficient.
+
+If this proof is missing, creation is `FORBIDDEN`; extend, merge, or reuse existing assets instead.
+
 ## Risk Classifier
 
 Classify task risk before action.
 
 | Risk Class | Meaning | Orchestrator Action |
 |---|---|---|
-| `AUTO_ALLOWED` | Safe scoped work under current rules. | Continue and validate. |
-| `AUTO_ALLOWED_WITH_QA` | Safe but needs validation evidence. | Continue, then QA/Reviewer. |
-| `DISCOVERY_ONLY` | Facts are missing; read-only discovery is allowed. | Discover, then decide. |
-| `INFRASTRUCTURE_REVIEW_REQUIRED` | Architecture, source-of-truth, duplicate, or future-platform risk. | Route to Infrastructure Manager. |
-| `LIAD_APPROVAL_REQUIRED` | Production, financial, customer-facing, schema, DB write/import, source-system, or external action. | Stop and request approval. |
-| `FORBIDDEN_UNTIL_APPROVED` | Explicitly forbidden by current state or protocol. | Stop; do not proceed. |
+| `AUTO_EXECUTE` | Safe scoped work under current rules and aligned with approved/current task. | Continue, validate, update Project Brain when completed. |
+| `REPORT_ONLY` | Read-only discovery, analysis, evidence packet, or recommendation without implementation. | Produce evidence and next decision gate. |
+| `APPROVAL_REQUIRED` | Production, financial, customer-facing, schema, DB write/import, source-system, external action, dependency/env change, or explicit business decision. | Stop and request exact approval. |
+| `FORBIDDEN` | Explicitly forbidden by current state, protocol, missing approval, duplicate creation, or protected-system boundary. | Stop; do not proceed. |
 
 Risk classification does not grant permission. `PROJECT_OPERATING_PROTOCOL.md` and Liad approval remain authoritative.
 
@@ -202,7 +399,10 @@ Convert the PM Question Matrix, Agent Discovery, Agent Reuse, and Risk Classifie
 
 Allowed decision outputs:
 
-- `EXECUTE_AUTO_ALLOWED`
+- `AUTO_EXECUTE`
+- `REPORT_ONLY`
+- `APPROVAL_REQUIRED`
+- `FORBIDDEN`
 - `RUN_DISCOVERY`
 - `ROUTE_TO_INFRASTRUCTURE_MANAGER`
 - `ROUTE_TO_PROJECT_BRAIN_AGENT`
@@ -214,14 +414,20 @@ Allowed decision outputs:
 
 Decision rules:
 
-1. If the task is safe, approved/current, and scoped, execute AUTO_ALLOWED work.
-2. If facts are missing but can be checked safely, run read-only discovery.
-3. If architecture, source-of-truth, duplicate, or future-platform risk exists, route to Infrastructure Manager.
-4. If durable memory, current state, task board, lessons, or checkpoint state is affected, route to Project Brain Agent.
-5. If domain expertise is required, route to the matching specialist agent.
-6. If validation is required, route to QA and Reviewer workflow roles.
-7. If Liad approval is required, stop and request the exact approval.
-8. If a proposed new thing duplicates an existing owner, reject duplicate creation and reuse or extend the existing owner.
+1. Run the Executive Cycle.
+2. Consult relevant existing agents and summarize their recommendations before deciding.
+3. Score candidate tasks or solution paths.
+4. If the task is safe, approved/current, scoped, and capability-positive, use `AUTO_EXECUTE`.
+5. If the task is read-only discovery or recommendation, use `REPORT_ONLY` unless it can safely continue to `AUTO_EXECUTE`.
+6. If facts are missing but can be checked safely, run read-only discovery.
+7. If architecture, source-of-truth, duplicate, or future-platform risk exists, route to Infrastructure Manager.
+8. If durable memory, current state, task board, lessons, or checkpoint state is affected, route to Project Brain Agent.
+9. If domain expertise is required, route to the matching specialist agent.
+10. If validation is required, route to QA and Reviewer workflow roles.
+11. If Liad approval is required, stop and request the exact approval.
+12. If a proposed new thing duplicates an existing owner, use `FORBIDDEN` for duplicate creation and reuse or extend the existing owner.
+13. If the task only creates a document and no capability, require a merge/extend/capability review before proceeding.
+14. If the highest Executive Score is not selected, record the reason.
 
 The Decision Engine must never approve production actions.
 
@@ -232,12 +438,18 @@ Every task should produce or preserve a concise evidence packet.
 Minimum fields:
 
 - Goal
+- Executive Cycle summary
+- Stage 1-7 answers or the subset used with rationale
 - Current task status
 - Sources read
+- Consulted agents and summarized opinions
+- Executive scores and selected path
 - Existing owner selected
 - Reuse decision
+- Duplicate prevention proof
 - Risk class
 - Decision output
+- Capability added or `documentation-only`
 - Validation required
 - Validation run
 - Protected systems checked
@@ -288,6 +500,38 @@ Learning candidates:
 5. A risk pattern that should be escalated to Infrastructure Manager.
 
 If a learning candidate is meaningful and source-backed, route it to Project Brain Agent for the correct storage decision. Orchestrator identifies learning candidates; Project Brain Agent stores durable learning under existing rules.
+
+Continuous improvement rule:
+
+If Codex discovers a better workflow, safer workflow, faster workflow, reusable solution, duplicate, unnecessary document, or missing question, it must create an Evidence Packet and present the recommendation to Liad. After approval, update Project Brain, teach the affected agents by extending existing files, and avoid rediscovering the same knowledge.
+
+### Executive Self-Improvement
+
+After every completed task, the Orchestrator must ask whether the task could have been completed:
+
+- faster
+- with fewer files
+- with fewer agents
+- with fewer tokens
+- with less duplication
+- with less user involvement
+
+If any answer is yes, generate an Improvement Evidence Packet for Liad. After approval, update Project Brain and teach future agents by extending existing owner files. Do not create a new governance artifact unless reuse proof shows no existing owner can hold the lesson.
+
+### Executive KPI Reporting
+
+Every Reality Check should also report:
+
+- Duplicate work prevented.
+- Reuse percentage, estimated from reused existing owners/files versus total touched/considered assets.
+- Capabilities added.
+- Documentation created.
+- Capability/documentation ratio.
+- Project acceleration score.
+- Outstanding executive decisions.
+- Highest-value next task.
+
+Use `UNKNOWN` when evidence is insufficient. Do not invent precise metrics; rough evidence-backed estimates are acceptable when labeled as estimates.
 
 ## Project Gets Smarter Rule
 

@@ -35,7 +35,8 @@ Required `hey codex` startup order:
 9. Read `project-brain/CURRENT_TASK.md`.
 10. Read `project-brain/TASK_BOARD.md`.
 11. Read `project-brain/DECISION_LOG.md`.
-12. Read relevant task-specific docs.
+12. Read `project-brain/current/LIVE_OBJECTS.md` for active IDs when present.
+13. Read relevant task-specific docs.
 
 No implementation task may start until a short Project Reality Check is shown from the canonical files.
 
@@ -52,8 +53,17 @@ Project Reality Check must include:
 - Last Closeout Commit recorded in `project-brain/CURRENT_TASK.md`, if present
 - current task
 - next approved task
+- known active IDs with source files, or active ID conflicts with source files
 - blocked or forbidden actions
 - files relevant to the requested work
+- duplicate work prevented
+- reuse percentage
+- capabilities added
+- documentation created
+- capability/documentation ratio
+- project acceleration score
+- outstanding executive decisions
+- highest-value next task
 
 Project Reality Check must always run:
 
@@ -81,11 +91,42 @@ Only block if live Git has unclassified implementation, product code, schema, or
 
 If ChatGPT or Codex memory conflicts with Project Brain files, Project Brain wins.
 
+Active ID rule:
+
+- Known active IDs must be loaded from canonical Project Brain state before startup and closeout reports.
+- Canonical lookup order is `project-brain/CURRENT_TASK.md`, then task-specific evidence docs referenced by the current task, then `project-brain/current/LIVE_OBJECTS.md`.
+- Report the source file for each known active ID.
+- If no new work occurred, closeout must preserve the last known active IDs.
+- Use `UNKNOWN` only when canonical files truly do not contain the active ID.
+- If active IDs conflict across canonical files, report the conflict and source files instead of overwriting or silently downgrading to `UNKNOWN`.
+
 ## Autonomous Work Loop
 
 Codex should work autonomously on safe tasks and stop only at meaningful approval gates.
 
-Codex is the main Orchestrator. It must route work to existing agent owners by role, continue safe work automatically, validate, collect proof, update Project Brain, and stop only before critical approvals.
+Codex is the main Orchestrator and Project Executive. Every new task, idea, bug, feature, investigation, proposal, or request must pass through the Orchestrator Decision Engine in `agents/ORCHESTRATOR_AGENT.md` before work begins. It must understand, discover, consult, score, decide, execute, validate, learn, and improve. It must route work to existing agent owners by role, continue safe work automatically, validate, collect proof, update Project Brain, and stop only before critical approvals.
+
+The Orchestrator must optimize for least duplication, maximum reuse, shortest safe path, highest business value, highest project acceleration, evidence-based decisions, minimal token usage, minimal user interruptions, minimal unnecessary documentation, minimal unnecessary agents, and minimal unnecessary complexity.
+
+Before selecting a solution, the Orchestrator must consult all relevant existing specialist agents, governance systems, and Project Brain workflow roles from `agents/AGENT_REGISTRY.md`. Each consultation must contribute or be summarized with recommendation, risks, evidence, confidence, and better alternatives. The Orchestrator summarizes the opinions before deciding.
+
+Every candidate task or solution path must be scored for Business Value, Technical Value, Project Acceleration, Reuse Score, Duplicate Risk, Runtime Impact, Long-term Value, Complexity, and Estimated Time. The highest-value safe task should normally be selected.
+
+Authority levels:
+
+- `AUTO_EXECUTE`: safe scoped work under current approval and AUTO_ALLOWED rules.
+- `REPORT_ONLY`: read-only discovery, analysis, evidence packet, or recommendation.
+- `APPROVAL_REQUIRED`: Liad must decide before protected, production, schema, DB, source-system, financial, customer-facing, env/dependency, or external-write work.
+- `FORBIDDEN`: do not proceed because the task conflicts with current state, approval gates, source-of-truth rules, or reuse-before-create rules.
+
+Success metric:
+The project is measured by new capabilities, not by the number of new documents. If a proposed task only creates a document, the Orchestrator must check whether it can be merged, used to extend an existing document, or converted into a capability-enabling task.
+
+Duplicate prevention:
+Before creating any Agent, Registry, Spec, Rule, Knowledge Base, or Roadmap Item, the Orchestrator must prove existing assets were already searched, already verified, and already rejected as insufficient. If that proof is missing, creation is `FORBIDDEN`; extend, merge, or reuse existing assets instead.
+
+Executive self-improvement:
+After every completed task, the Orchestrator must ask whether it could have been completed faster, with fewer files, fewer agents, fewer tokens, less duplication, or less user involvement. If yes, generate an Improvement Evidence Packet for Liad; after approval, update Project Brain and teach future agents by extending existing files.
 
 After every completed task, Codex must update Project Brain before the final report. The update must record what was completed, commit hash, validation results, current blocker or `none`, exact next task, approval gates, and project completion percentage.
 
@@ -583,7 +624,19 @@ flowchart TD
 
 Route future tasks to existing agents before work starts. Do not create new agents unless no existing agent fits and approval is given.
 
-Codex acts as the main Orchestrator and assigns work to the existing owner agent. Agent routing does not mean Codex must stop and ask Liad; Codex should continue AUTO_ALLOWED work through validation and Project Brain update.
+Codex acts as the main Orchestrator / Project Executive and assigns work to the existing owner agent. Agent routing does not mean Codex must stop and ask Liad; Codex should continue `AUTO_EXECUTE` work through validation and Project Brain update.
+
+Every task must pass the Orchestrator Decision Engine before work begins:
+
+1. Run the Executive Cycle: Understand, Discover, Consult, Score, Decide, Execute, Validate, Learn, Improve.
+2. Should this task exist?
+3. Reuse before create.
+4. Agent discovery.
+5. Business knowledge.
+6. Architecture.
+7. Execution.
+8. Success and capability gained.
+9. Executive KPI reporting for Reality Checks and closeout.
 
 For safe build work, Codex also uses the Project Brain multi-agent operating workflow:
 
