@@ -1130,3 +1130,19 @@ The audit changed Project Brain documentation only. No runtime behavior changed,
 
 Status:
 Approved as documentation-only audit. Safe to start Wave 3 read-only discovery/import planning; real Maven execution remains `APPROVAL_REQUIRED`.
+
+---
+
+## 2026-06-25
+
+Decision:
+Wave 3 Maven Knowledge Layer starts as read-only discovery and payload mapping only.
+
+Reason:
+Wave 2 produced a validated internal BusinessDocument and pending `CREATE_MAVEN_DRAFT` AutomationCommand with a dry-run payload, but real Maven execution still lacks primary evidence for the actual Maven create-draft API contract. Current checked Apps Script evidence shows `createMavenDraft(data)` logging the webhook payload and updating `BusinessDocuments` / `AutomationCommands` sheet status, but it does not prove a real external Maven draft-create request. Wave 3 must therefore first map the current BusinessDocument-to-Maven payload, required Maven fields, source history tables, missing customer/document/item/tax/duplicate rules, and extraction plan for a reusable payload builder before any execution adapter is considered.
+
+Boundaries:
+Wave 2 is frozen except bug fixes. This Wave 3 start changed Project Brain documentation only. No runtime behavior changed, no DB writes occurred, no Maven/Invoice4U action occurred, no AutomationCommand execution occurred, no email/customer-facing action occurred, no inventory action occurred, no schema/env/migration/import/source-system/production action occurred, and no new standalone governance document was created.
+
+Status:
+Approved as read-only Wave 3 start. Real Maven execution remains `APPROVAL_REQUIRED`.

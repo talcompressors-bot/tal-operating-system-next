@@ -127,7 +127,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Current Task
 
-Wave 2 is complete, closed, and architecture-audited for ServiceReport `5806`. The complete internal chain is validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation. The active BusinessDocument `NEXT-AI-DRAFT-5806` now has resolved test/manual pricing evidence and positive quantities on all five lines, `BusinessDocumentLog` audit rows for each correction, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. The Wave 2 Architecture Audit changed documentation only, performed no DB writes, and found the runtime safe for its approved ServiceReport `5806` scope while identifying generalization/refactoring debt before broader rollout. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for Wave 2. Wave 3 may start only as read-only Maven data discovery/import planning unless Liad separately approves real Maven execution. Real Maven execution is still an explicit `APPROVAL_REQUIRED` gate and is not approved. Actual Maven/Invoice4U calls, command execution, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
+Wave 3 Maven Knowledge Layer has started in read-only planning/discovery mode. Wave 2 is frozen except bug fixes. The complete ServiceReport `5806` internal chain remains validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation. The active BusinessDocument `NEXT-AI-DRAFT-5806` has resolved test/manual pricing evidence and positive quantities on all five lines, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. Wave 3 Start changed documentation only, performed no DB writes, and mapped the current dry-run payload to Maven discovery requirements. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for read-only Wave 3 planning. Real Maven execution is still an explicit `APPROVAL_REQUIRED` gate and is not approved. Actual Maven/Invoice4U calls, command execution, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
 
 ## Wave 2 Closeout Summary
 
@@ -284,6 +284,105 @@ Architecture audit decision:
 - Not safe to start real Maven execution from this audit alone.
 - Project completion remains `65%`; the audit added no runtime capability percentage.
 
+## Wave 3 Start: Maven Knowledge Layer Read-Only Discovery
+
+Scope:
+
+- Wave 3 starts as read-only Maven knowledge mapping only.
+- Wave 2 runtime is frozen except bug fixes.
+- No real Maven/Invoice4U execution.
+- No AutomationCommand execution.
+- No DB writes except Project Brain documentation.
+- No email/customer-facing action.
+- No inventory action.
+- No production/source-system changes.
+
+Wave 3 plan:
+
+1. Preserve Wave 2 `5806` chain as the reference internal draft/command case.
+2. Map current `BusinessDocument` + `BusinessDocumentItems` + `Customer` + `ServiceReport` fields into the dry-run Maven payload.
+3. Compare the dry-run payload with legacy Apps Script `CreateMavenDraft` command expectations.
+4. Discover the actual Maven document-create API endpoint and required field names before implementing any real executor.
+5. Confirm Maven-origin source tabs and target models: `InvoiceMavenCustomers`, `InvoiceMavenDocuments`, `InvoiceMavenDocumentItems`, `InvoiceMavenItems`, `SyncState`, `SyncLog`, `ErrorLog`, and any other Maven-origin tab.
+6. Define a reusable Maven payload-builder extraction plan from `app/automation-commands/[id]/actions.ts`.
+7. Define validation gates for customer identity, document type, line items, pricing, totals, duplicate protection, and external-state containment.
+8. Stop before any real Maven call, command execution, source mutation, schema change, import, email, or inventory action.
+
+BusinessDocument -> Maven draft payload mapping:
+
+| Current internal field | Current dry-run key | Maven / legacy expectation | Readiness |
+|---|---|---|---|
+| `AutomationCommand.appsheetCommandId` | `commandId` | Legacy `CommandID` in Apps Script webhook | READY for idempotent command identity |
+| `AutomationCommand.idempotencyKey` | `idempotencyKey` | Internal duplicate guard, not proven Maven API field | READY internally; external mapping unknown |
+| `BusinessDocument.appsheetBusinessDocumentId` | `businessDocumentId` | Legacy `BusinessDocumentId` | READY |
+| `BusinessDocument.id` | `internalBusinessDocumentId` | Internal trace only | READY internally |
+| `BusinessDocument.documentTypeSelected` | `documentType` | Maven `doc_type` or create-draft equivalent | GAP: exact accepted Maven values unknown |
+| `BusinessDocument.draftTitle` | `title` | Human title/description; exact Maven field unknown | GAP |
+| `BusinessDocument.description` | `description` | Human description; exact Maven field unknown | GAP |
+| `BusinessDocument.currency` | `currency` | Maven item/document currency, observed as `ILS` / `currency_code` in history | READY with validation |
+| `subtotalAmount`, `vatAmount`, `totalAmount` | amount fields | Maven totals may be calculated by Maven from lines | GAP: decide whether to send totals or validate only |
+| `Customer.appsheetCustomerId` | `customer.customerId` | Internal/AppSheet customer ID | GAP: real Maven likely needs Maven customer ID or matched customer object |
+| `Customer.businessId` | `customer.businessId` | Possible customer matching key | NEEDS validation against Maven customer history |
+| `Customer.name` | `customer.name` | Customer display/name match | READY as evidence, not enough as sole key |
+| `Customer.emailPrimary`, `phonePrimary`, `address` | customer contact fields | Optional/customer metadata depending on Maven API | GAP: exact requiredness unknown |
+| `ServiceReport.appsheetReportId`, `reportCounter`, `reportNumberText` | `sourceServiceReport` | Internal trace only | READY internally; not necessarily Maven field |
+| `BusinessDocumentItem` line order | `items[].lineNumber` | Maven item sequence | READY |
+| `BusinessDocumentItem.appsheetItemId` / `id` | `items[].itemId` | Internal trace only | READY internally |
+| linked `Product.sku` | `items[].sku` | Product/Maven item matching candidate | GAP: Maven item ID/SKU requirement unknown |
+| `itemName`, `description` | `items[].name`, `items[].description` | Maven line description/name | READY pending exact API field names |
+| `quantity`, `unitPrice`, `totalPrice` | line quantity/price/total | Required commercial line values | READY after dry-run validation; totals must be reconciled |
+| `needsPriceApproval` | line blocker flag | Internal approval gate only | READY internally; must be false before execution |
+
+Required Maven fields identified so far:
+
+- Definite internal/legacy command fields: `CommandID`, `Command=CreateMavenDraft`, `BusinessDocumentId`, idempotency key, requested operator, requested timestamp.
+- Definite document fields from current dry-run: document type, title/description, currency, subtotal/VAT/total evidence, customer identity, source ServiceReport trace, and line items.
+- Definite line fields from current dry-run: line number, internal item ID, SKU when available, name, description, quantity, unit price, total price, and approval-required flag.
+- Definite Maven history fields already observed in sync code: Maven document ID, document number, document type, Maven customer ID/name, document date, total, VAT amount, status description, PDF link, raw JSON, line item description/name, quantity, price, total, and currency.
+- Unknown before real execution: actual Maven create-draft endpoint, auth payload, required customer identifier, allowed document type values, whether line item SKU/Maven item ID is required, whether Maven calculates totals, draft-vs-final status flag, PDF generation behavior, and response fields.
+
+Missing data gaps:
+
+1. Real Maven create-draft API endpoint and request/response contract are not present in the checked Apps Script source.
+2. Current legacy `createMavenDraft(data)` updates Google Sheet `BusinessDocuments` status to `DraftRequestReceived`; it does not prove an external Maven draft is created.
+3. Maven customer matching for `NEXT-AI-DRAFT-5806` must be validated against `MavenCustomer` / `InvoiceMavenCustomers` before real execution.
+4. Exact Maven document type mapping for `SERVICE_DOCUMENT` is unknown.
+5. Exact item identity rule is unknown: free-text lines may be accepted, or Maven may require Maven item IDs/SKUs.
+6. VAT/tax behavior is unknown: determine whether to send VAT, let Maven calculate VAT, or send tax-exempt/including-VAT flags.
+7. Manual/test pricing evidence is not automatically acceptable for real external draft creation.
+8. Existing Maven duplicate search criteria must be defined: by BusinessDocument ID, ServiceReport ID/counter, customer/date/amount, and idempotency key.
+
+Maven payload-builder extraction plan:
+
+- Extract `validateCommand` and `buildMavenDraftPayload` from `app/automation-commands/[id]/actions.ts` into a shared internal service before real execution work.
+- Proposed module: `lib/maven-draft-payload.ts` or `lib/maven/maven-draft-payload.ts`.
+- Service responsibilities: read/accept a fully selected command/document shape, validate command type/status/document readiness, validate customer and line items, normalize decimal fields, build a typed internal payload, return blockers/warnings/payload without persistence.
+- Server Action responsibilities after extraction: enforce phrase, load command, call the shared service, store dry-run result, revalidate routes, redirect.
+- Real executor, if later approved, must reuse the same shared validator/payload builder and add only an approved transport adapter plus approved post-execution internal updates.
+
+Readiness checklist before real Maven execution:
+
+1. Explicit Liad approval for real Maven execution remains required.
+2. Select exactly one executor owner: Next.js Server Action executor, legacy Apps Script executor, or another approved owner.
+3. Prove the real Maven create-draft endpoint, auth method, request schema, response schema, error schema, and rate limits from primary Maven/API evidence.
+4. Validate Maven customer mapping for the target BusinessDocument.
+5. Validate document type mapping from internal `SERVICE_DOCUMENT` to accepted Maven value.
+6. Validate every line item field: description/name, quantity, unit price, total, currency, SKU/Maven item ID if required, and line ordering.
+7. Decide VAT/tax handling and total reconciliation rules.
+8. Replace or explicitly accept manual/test pricing evidence before external draft creation.
+9. Re-run dry-run and require `DRY_RUN_VALIDATED`, blockers `0`, warnings reviewed, and `externalStateChanged=false`.
+10. Confirm duplicate protection: no Maven fields on the BusinessDocument, no completed Maven command for the idempotency key, and no matching Maven document already exists.
+11. Define exactly which internal fields may be updated after success: AutomationCommand status/result/processed/completed timestamps, BusinessDocument Maven document ID/number/PDF/status fields, and audit log.
+12. Define failure handling: no retry loop without approval, error recorded, command inspectable, no customer-facing action.
+13. Keep email/customer send and inventory deduction as separate gates.
+
+Wave 3 start decision:
+
+- Wave 3 read-only discovery is active.
+- The first Wave 3 implementation candidate is extracting the dry-run payload builder into a shared internal service, but only if explicitly selected; this task did not change runtime behavior.
+- Real Maven execution is not approved.
+- Project completion remains `65%`; Wave 3 has started but no Wave 3 runtime/import capability point is claimed yet.
+
 ## Known Active IDs
 
 Source:
@@ -302,16 +401,19 @@ If no new work occurred, preserve these IDs and report the source. Do not downgr
 
 ## Next Approved Task
 
-No next implementation task is approved yet.
+Wave 3 read-only Maven Knowledge Layer discovery is active.
 
 Next candidate tasks, pending explicit selection/approval:
 
-1. Working UI capability that advances Wave 2 workflow.
-2. Action Server capability, when explicitly selected and scoped safely.
-3. Email Runtime capability, when explicitly selected and approved.
-4. Inventory Runtime capability, when explicitly selected and approved.
-5. Build hygiene for the existing missing Playwright dependency/type gap, if explicitly selected.
-6. Optional Wave 2 import approval package, only if explicitly approved.
+1. Extract Maven dry-run payload builder/validator into a shared internal service without changing runtime behavior.
+2. Read-only Maven source inventory: map `InvoiceMaven*`, `SyncState`, `SyncLog`, `ErrorLog`, and any other Maven-origin tab.
+3. Read-only Maven customer/document/item matching analysis for BusinessDocument `NEXT-AI-DRAFT-5806`.
+4. Real Maven execution approval package, only after API contract evidence is available.
+5. Action Server capability, when explicitly selected and scoped safely.
+6. Email Runtime capability, when explicitly selected and approved.
+7. Inventory Runtime capability, when explicitly selected and approved.
+8. Build hygiene for the existing missing Playwright dependency/type gap, if explicitly selected.
+9. Optional Wave 2 import approval package, only if explicitly approved.
 
 Project completion should not be overstated: current evidence-based completion is 65% by the recorded capability formula. Infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells, central work screens, preview intelligence, the AI Draft Recommendation Preview runtime, the pricing-evidence preview layer, protected internal BusinessDocument draft creation, internal BusinessDocument review, the BusinessDocument Approval Workflow, the protected internal Maven draft AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, and the BusinessDocument Line Resolution Layer; production automation readiness remains gated because no Maven/Invoice4U execution, customer-facing send, inventory deduction, or production integration is approved.
 
