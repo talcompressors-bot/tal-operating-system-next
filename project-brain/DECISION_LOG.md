@@ -3,6 +3,32 @@
 ## 2026-06-25
 
 Decision:
+Maven sample PDF may be stored as a Project Brain reference artifact for preview accuracy work.
+
+Reason:
+The internal BusinessDocument HTML preview needs an evidence-backed Maven visual reference. Storing the uploaded sample in Project Brain allows future preview/PDF work to compare against a stable artifact without calling Maven or changing runtime behavior.
+
+Approved scope:
+
+1. Store the uploaded PDF at `project-brain/reference/maven-samples/document_102488.pdf`.
+2. Treat it as reference-only project evidence.
+3. Point Project Brain to the sample.
+4. Revalidate the preview route using the sample as the intended visual reference.
+
+Observed:
+The file was copied from `C:\Users\משתמש\Downloads\document_102488.pdf` and observed at `61973` bytes after import. Local direct rendering was blocked because Poppler/Ghostscript/ImageMagick are unavailable, `sharp` cannot rasterize the PDF, Python is unavailable as a working runtime, and headless Chrome did not emit screenshot files.
+
+Boundary:
+Reference asset only. No runtime behavior changed, no PDF generation occurred, no Maven/Invoice4U call occurred, no external API call occurred, no email/customer-facing action occurred, no inventory action occurred, no DB write occurred, no schema/Prisma change occurred, and no production/source-system action occurred.
+
+Status:
+Approved by user request and imported. Direct visual parity should be rerun when a working PDF renderer or sample screenshot is available.
+
+---
+
+## 2026-06-25
+
+Decision:
 BusinessDocument HTML preview accuracy pass remains HTML/CSS-only and does not create PDF or external output.
 
 Reason:

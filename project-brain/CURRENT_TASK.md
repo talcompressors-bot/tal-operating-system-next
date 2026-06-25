@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Wave 3 internal BusinessDocument HTML preview accuracy pass implemented; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Maven sample reference asset imported for preview accuracy; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`0ff5720 Refine business document HTML preview`
+PENDING: Maven sample asset import commit
 
 ## Last Closeout Commit
 
@@ -129,7 +129,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Current Task
 
-Wave 3 Maven Knowledge Layer has a read-only internal BusinessDocument HTML preview route at `/business-documents/[id]/preview`, visually structured after the Maven sample PDF and powered by the existing BusinessDocument adapter plus internal engine output. The preview accuracy pass tightened the print-document proportions, metadata strip, RTL table alignment, fixed item/totals columns, signature line, no-external-action boundary strip, and A4 print CSS. The uploaded `document_102488.pdf` sample was not present in the repository, so the comparison used the user-provided sample section list rather than direct PDF rendering; no safe Tal logo asset was found, so the placeholder remains and the gap is visible on the preview. Wave 2 is frozen except bug fixes. The complete ServiceReport `5806` internal chain remains validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation -> internal HTML preview. The active BusinessDocument `NEXT-AI-DRAFT-5806` has resolved test/manual pricing evidence and positive quantities on all five lines, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for the read-only HTML preview accuracy pass. Real Maven execution is still an explicit `APPROVAL_REQUIRED` gate and is not approved. Actual PDF generation, Maven/Invoice4U calls, command execution, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
+Wave 3 Maven Knowledge Layer has a read-only internal BusinessDocument HTML preview route at `/business-documents/[id]/preview`, visually structured after the Maven sample PDF and powered by the existing BusinessDocument adapter plus internal engine output. The Maven sample PDF is now imported as a Project Brain reference artifact at `project-brain/reference/maven-samples/document_102488.pdf`. The preview accuracy pass tightened the print-document proportions, metadata strip, RTL table alignment, fixed item/totals columns, signature line, no-external-action boundary strip, and A4 print CSS. No safe Tal logo asset was found, so the placeholder remains and the gap is visible on the preview. Local Poppler/Ghostscript/ImageMagick render tools are unavailable and headless Chrome did not emit screenshot files in this environment, so direct rendered visual comparison remains limited; route/content validation still passes against the preview. Wave 2 is frozen except bug fixes. The complete ServiceReport `5806` internal chain remains validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation -> internal HTML preview. The active BusinessDocument `NEXT-AI-DRAFT-5806` has resolved test/manual pricing evidence and positive quantities on all five lines, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for the reference asset import; direct screenshot comparison needs a working local PDF/browser renderer. Real Maven execution is still an explicit `APPROVAL_REQUIRED` gate and is not approved. Actual PDF generation, Maven/Invoice4U calls, command execution, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
 
 ## Wave 2 Closeout Summary
 
@@ -719,6 +719,36 @@ Current blocker:
 Project completion:
 
 - Remains `67%`; this is an accuracy/refinement pass on an existing Wave 3 preview capability, not a new capability point.
+
+## Maven Sample Asset Import
+
+Imported reference:
+
+- `project-brain/reference/maven-samples/document_102488.pdf`
+- Size observed locally: `61973` bytes.
+- Purpose: reference artifact only for BusinessDocument preview accuracy work.
+
+Comparison rerun:
+
+- The preview route `/business-documents/NEXT-AI-DRAFT-5806/preview` was revalidated after import and returned HTTP 200.
+- Content checks confirmed `Internal HTML preview only - not a tax document`, `Document type`, `Source`, `Subtotal`, `VAT`, `Digital signature area`, and `No Maven/Invoice4U action`.
+- Local renderer limitation: `pdfinfo` and `pdftoppm` are not installed, `sharp` cannot rasterize the PDF, Python is unavailable as a working runtime, and headless Chrome did not emit screenshot files. Direct visual screenshot comparison could not be completed in this environment.
+
+Boundaries:
+
+- Reference asset only.
+- No runtime behavior change.
+- No PDF generation.
+- No Maven/Invoice4U call.
+- No external API call.
+- No email/customer-facing action.
+- No inventory deduction.
+- No DB write.
+- No schema/Prisma change.
+
+Project completion:
+
+- Remains `67%`; this imported evidence for an existing preview capability and did not add a new runtime capability point.
 
 ## Known Active IDs
 
