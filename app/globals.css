@@ -354,6 +354,12 @@ tr:last-child td {
   padding: 10px 12px;
 }
 
+.warning-list.neutral li {
+  background: #f8fafc;
+  border-color: var(--border);
+  color: var(--foreground);
+}
+
 .warning-pill {
   background: #fff7ed;
   border: 1px solid #fed7aa;

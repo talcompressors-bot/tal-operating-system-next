@@ -25,8 +25,9 @@ export default async function AutomationCommandDetailPage({
           <p className="eyebrow">Automation Command</p>
           <h1>{command.title}</h1>
           <p className="lede">
-            Read-only command detail with lifecycle, source-object, external
-            target, and retry/error placeholders.
+            Read-only command detail for queue review before execution. This
+            page does not run commands, call Maven/Invoice4U, send email, or
+            affect inventory.
           </p>
         </div>
         <div className="actions">
@@ -45,6 +46,28 @@ export default async function AutomationCommandDetailPage({
       </div>
 
       <div className="detail-grid">
+        <article className="info-panel wide">
+          <h2>Execution boundary</h2>
+          <div className="review-status-grid">
+            <div className="review-status-item strong">
+              <span>Execution</span>
+              <strong>{command.safetyBoundary.execution}</strong>
+            </div>
+            <div className="review-status-item">
+              <span>Maven / Invoice4U</span>
+              <strong>{command.safetyBoundary.maven}</strong>
+            </div>
+            <div className="review-status-item">
+              <span>Email / customer</span>
+              <strong>{command.safetyBoundary.email}</strong>
+            </div>
+            <div className="review-status-item">
+              <span>Inventory</span>
+              <strong>{command.safetyBoundary.inventory}</strong>
+            </div>
+          </div>
+        </article>
+
         <article className="info-panel">
           <h2>Command status</h2>
           <dl>
@@ -90,10 +113,10 @@ export default async function AutomationCommandDetailPage({
         </article>
 
         <article className="info-panel wide">
-          <h2>Source and external targets</h2>
+          <h2>Source documents</h2>
           <dl>
             <div>
-              <dt>Source object</dt>
+              <dt>BusinessDocument</dt>
               <dd>
                 {command.sourceObjectId ? (
                   <Link href={`/business-documents/${command.sourceObjectId}`}>
@@ -105,16 +128,20 @@ export default async function AutomationCommandDetailPage({
               </dd>
             </div>
             <div>
-              <dt>Maven</dt>
-              <dd>{command.externalTarget.includes("Maven") ? command.externalTarget : "Maven placeholder"}</dd>
+              <dt>ServiceReport</dt>
+              <dd>
+                {command.sourceServiceReportId ? (
+                  <Link href={`/service-reports/${command.sourceServiceReportId}`}>
+                    {command.sourceServiceReportLabel}
+                  </Link>
+                ) : (
+                  command.sourceServiceReportLabel
+                )}
+              </dd>
             </div>
             <div>
-              <dt>Invoice4U</dt>
-              <dd>{command.externalTarget.includes("Invoice4U") ? command.externalTarget : "Invoice4U placeholder"}</dd>
-            </div>
-            <div>
-              <dt>Email</dt>
-              <dd>{command.externalTarget.includes("Email") ? command.externalTarget : "Email placeholder"}</dd>
+              <dt>External target</dt>
+              <dd>{command.externalTarget}</dd>
             </div>
           </dl>
         </article>
@@ -145,10 +172,40 @@ export default async function AutomationCommandDetailPage({
               <dd>{command.idempotencyKey}</dd>
             </div>
             <div>
+              <dt>Duplicate protection</dt>
+              <dd>{command.duplicateProtection}</dd>
+            </div>
+            <div>
               <dt>Notes</dt>
               <dd>{command.notes}</dd>
             </div>
           </dl>
+        </article>
+
+        <article className="info-panel wide">
+          <h2>Payload summary</h2>
+          {command.payloadSummary.length ? (
+            <ul className="warning-list neutral">
+              {command.payloadSummary.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>No payload summary available.</p>
+          )}
+        </article>
+
+        <article className="info-panel wide">
+          <h2>Raw source summary</h2>
+          {command.rawSourceSummary.length ? (
+            <ul className="warning-list neutral">
+              {command.rawSourceSummary.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>No raw source summary available.</p>
+          )}
         </article>
       </div>
     </section>
