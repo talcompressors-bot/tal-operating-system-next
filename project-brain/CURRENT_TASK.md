@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Manufacturer Registry Alias and Conflict Validation completed; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; EPM/APM Excel Parser Strategy completed; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -144,6 +144,20 @@ Completed as documentation/validation only:
 - Updated `SKU_MATCHING_RULES.md` and `MANUFACTURER_SERVICE_KITS.md` so alias/model normalization conflicts must be marked needs-review and shared SKU overlap must not create shared service kits.
 
 No runtime behavior changed. Customer PDF behavior was not changed. No DB write, schema change, package install, Maven/Invoice4U call, email/customer action, inventory action, source-system action, or production action occurred.
+
+## EPM/APM Excel Parser Strategy
+
+Completed as planning/strategy only:
+
+- Verified the source files remain local: PM workbook is OOXML-in-`.xls`; EPM workbook is legacy binary `.xls`.
+- Verified current local tooling: `soffice`/LibreOffice is not installed; Node is available; `python` is only the Windows Store shim and `py` is unavailable.
+- Recommended path: after explicit approval, use LibreOffice conversion from legacy `.xls` to `.xlsx`, then reuse the existing read-only OOXML extraction path to produce generated fixtures. This avoids adding a runtime parser dependency and keeps Excel parsing out of the app runtime.
+- Rejected `openpyxl` for this source because it does not parse binary `.xls`.
+- Kept Node parser packages as a fallback only after explicit package-by-package approval.
+- Kept manual Excel export as a fallback if tool install is not approved, with row-preservation and operator/date/hash audit requirements.
+- Defined 20APM validation checks: exact source sheet/row, oil separator SKU, comparison against `20PM2` SKU `25350030-021` from PM sheet `20PM2` row 8, conflict handling, and no shared-kit inference from overlap.
+
+No package install, DB write, schema change, runtime behavior change, Maven/Invoice4U call, email/customer action, inventory action, source-system action, or production action occurred.
 
 ## Wave 3 PDF Export Smoke Test and Governance Lock
 

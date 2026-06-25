@@ -3,6 +3,37 @@
 ## 2026-06-25
 
 Decision:
+Use LibreOffice conversion as the preferred strategy for legacy EPM/APM `.xls` extraction, but only after explicit approval.
+
+Reason:
+The EPM source workbook is a legacy binary `.xls`, while the current PM extraction succeeded because that file is actually OOXML content stored with a `.xls` extension. Current local tooling does not include LibreOffice, no parser package is installed, Python is not a usable local runtime for this task, and `openpyxl` does not parse binary `.xls`. Converting to `.xlsx` with LibreOffice keeps parsing out of the Next.js runtime and lets the existing read-only OOXML extraction path be reused.
+
+Recommended order:
+
+1. LibreOffice conversion to `.xlsx` after explicit approval.
+2. Node parser package only as a fallback after explicit package-by-package approval.
+3. Do not use Python/openpyxl for binary `.xls`.
+4. Manual Excel export fallback only when tool install is not approved, with operator/date/hash/row-preservation audit evidence.
+
+20APM validation gates:
+
+- Confirm exact source sheet or exact source row for `20APM`; if missing, remain blocked and do not infer.
+- Extract exact oil separator SKU with source file, sheet, row, and raw description.
+- Compare against `20PM2` oil separator SKU `25350030-021` from PM sheet `20PM2`, row 8.
+- Preserve the existing rule that alias/model normalization conflicts become needs-review.
+- Confirm shared SKU overlap does not create shared service-kit membership.
+
+Boundary:
+Planning/strategy only. No package install, conversion artifact, DB write, schema change, runtime behavior change, Maven/Invoice4U call, email/customer action, inventory action, source-system action, or production action occurred.
+
+Status:
+Completed. Next step requires explicit approval before installing LibreOffice or any parser package.
+
+---
+
+## 2026-06-25
+
+Decision:
 PM/APM aliases must not merge SKU compatibility when a part-specific conflict exists.
 
 Reason:

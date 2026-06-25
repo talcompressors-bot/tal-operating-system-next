@@ -153,6 +153,36 @@ Known non-compatibility:
 - Oil/coolant rows prove manufacturer compatibility, but service action and exact oil quantity still require service-rule review.
 - Tal sales SKU mapping remains separate and is not inferred from manufacturer SKU.
 
+## EPM/APM Legacy `.xls` Parser Strategy
+
+Current tooling evidence:
+
+| Option | Current availability | Assessment |
+|---|---|---|
+| LibreOffice conversion to `.xlsx` | Not installed in current environment | Recommended after explicit approval; converts legacy binary `.xls` to OOXML `.xlsx` and lets the existing XML extractor preserve workbook sheets and source row numbers |
+| Node parser package | Not installed; package install requires explicit approval per package | Possible fallback, but adds repo/tooling dependency risk and should be package-reviewed before approval |
+| Python/openpyxl | Not suitable for legacy `.xls`; current `python` is only the Windows Store shim in this environment | Not recommended for `.xls`; `openpyxl` reads `.xlsx`, not binary `.xls` |
+| Manual Excel export | Available only if a human opens and saves/export the workbook | Safe fallback when tool install is not approved; must record operator, date, source file hash, and row-preservation checks |
+
+Recommended path:
+
+1. Stop before installing anything.
+2. Request explicit approval for a local LibreOffice conversion tool if exact EPM/APM extraction is selected.
+3. Convert `data-sources/vendor-spare-parts/Spare Parts Service List(EPM Series) rev2 (1).xls` to a generated `.xlsx` artifact under an ignored/generated source-processing area.
+4. Parse the converted `.xlsx` with the same read-only OOXML extraction approach used for PM.
+5. Produce generated JSON fixtures only; do not import into the database without separate approval.
+
+Validation checks after conversion:
+
+| Check | Required evidence |
+|---|---|
+| Workbook integrity | Sheet names, used range counts, and row counts match the known EPM discovery baseline where available |
+| Exact source sheet | `20APM` must have an exact sheet or approved source row; if no exact sheet exists, remain blocked and do not infer |
+| Oil separator SKU | Extract exact `20APM` oil separator SKU with source file, sheet, row, raw description, and model evidence |
+| Compare to `20PM2` | Compare extracted `20APM` oil separator against PM fixture `20PM2` oil separator `25350030-021`, sheet `20PM2`, row 8 |
+| Conflict behavior | If `20APM` extraction conflicts with PM/APM alias normalization, mark needs-review and preserve the explicit exception rule |
+| Shared SKU handling | Confirm shared overlap does not create shared service-kit membership |
+
 ## Evidence Fields For Future Registry Rows
 
 | Field | Meaning |
