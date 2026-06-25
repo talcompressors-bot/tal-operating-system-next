@@ -431,6 +431,7 @@ Scope:
 Artifact:
 
 - Canonical inventory file: `project-brain/migration/MAVEN_SOURCE_INVENTORY.md`.
+- Inventory commit: `5b6c44b Document Maven source inventory`.
 
 Objects inventoried:
 
@@ -470,7 +471,7 @@ Current blocker:
 Validation:
 
 - Evidence source reads were local/repository-only.
-- `git diff --check` is required before closeout.
+- `git diff --check` passed with CRLF warnings only.
 - TypeScript and route validation are not required for this docs-only Project Brain inventory because no runtime files changed.
 
 Project completion:
