@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; Maven execution readiness gate prepared; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Maven execution readiness gate prepared; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -127,7 +127,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Current Task
 
-Wave 2 is complete and closed for ServiceReport `5806`. The complete internal chain is validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation. The active BusinessDocument `NEXT-AI-DRAFT-5806` now has resolved test/manual pricing evidence and positive quantities on all five lines, `BusinessDocumentLog` audit rows for each correction, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for Wave 2. Real Maven execution is now the next explicit `APPROVAL_REQUIRED` gate and is not approved. Actual Maven/Invoice4U calls, command execution, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
+Wave 2 is complete, closed, and architecture-audited for ServiceReport `5806`. The complete internal chain is validated: AI Draft Preview -> trusted pricing evidence display -> protected internal BusinessDocument creation -> BusinessDocument review/approval -> protected Maven AutomationCommand creation -> AutomationCommand queue/detail review -> Maven dry-run -> protected line resolution -> final Maven dry-run validation. The active BusinessDocument `NEXT-AI-DRAFT-5806` now has resolved test/manual pricing evidence and positive quantities on all five lines, `BusinessDocumentLog` audit rows for each correction, recalculated blocker count `0`, and the active command `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` has dry-run result `DRY_RUN_VALIDATED` while remaining `PENDING` with no processed/completed timestamps. The Wave 2 Architecture Audit changed documentation only, performed no DB writes, and found the runtime safe for its approved ServiceReport `5806` scope while identifying generalization/refactoring debt before broader rollout. Project mode remains `CAPABILITY_BUILDING`. Governance status is `FROZEN`. Current blocker: none for Wave 2. Wave 3 may start only as read-only Maven data discovery/import planning unless Liad separately approves real Maven execution. Real Maven execution is still an explicit `APPROVAL_REQUIRED` gate and is not approved. Actual Maven/Invoice4U calls, command execution, DB writes outside explicitly approved protected flows, email/customer-facing action, inventory action, production workflow work, schema changes, imports, and source-system actions remain gated and require separate explicit approval.
 
 ## Wave 2 Closeout Summary
 
@@ -187,6 +187,102 @@ Real Maven execution is `APPROVAL_REQUIRED` and may not proceed until all items 
 13. Confirm inventory deduction remains separately gated and is not part of Maven execution.
 14. Confirm rollback/containment plan: if a Maven draft is created incorrectly, handle it through Maven’s allowed manual correction/cancellation path and preserve internal audit history.
 15. Record the final approval phrase and operator identity before implementation or execution. No phrase is active in runtime yet for real execution.
+
+## Wave 2 Architecture Audit
+
+Audit scope:
+
+- Documentation-only architecture review before Wave 3.
+- No runtime behavior changed.
+- No DB writes performed.
+- No Maven/Invoice4U, email/customer-facing, inventory, source-system, schema, migration, import, or production action performed.
+
+Original migration-plan comparison:
+
+- The original `WAVE_2_SERVICE_WORKFLOW` migration plan was import-oriented: ProductsCatalog, PartsUsed, AIDraftSuggestions, BusinessDocuments, BusinessDocumentItems, BusinessDocumentLog, ApprovalsLog, and EmailLog were to be prepared for staging import after blocker resolution and approval.
+- The completed Wave 2 runtime work deliberately did not perform that import. It instead delivered a protected internal workflow chain for ServiceReport `5806`.
+- Runtime Wave 2 satisfies the approved workflow-continuity objective for one audited report, but it does not satisfy the original Wave 2 import success criteria. Wave 2 import remains unapproved/deferred.
+- Original forbidden boundaries held: no production import, no Maven write, no business-document automation execution, no email sending, and no AppSheet/Google Sheets mutation.
+
+Runtime review:
+
+| Runtime | Owner / route | Audit result | Debt |
+|---|---|---|---|
+| AI Draft Preview | `app/ai-drafts/ai-draft-adapter.ts`, `/ai-drafts/preview/[reportCounter]` | PASS for ServiceReport `5806`; safe empty state for unsupported reports | Report `5806` / SCR Small Service logic is hard-coded and must be generalized before broader use |
+| Pricing Evidence Layer | AI draft adapter plus ProductCatalog, BusinessDocumentItem, and Maven item reads | PASS; prices are selected only from trusted evidence and missing evidence stays approval-required | Evidence gathering, confidence, and price selection are embedded in the preview adapter instead of a reusable pricing-evidence service |
+| AI Draft approval to BusinessDocument | `app/ai-drafts/preview/[reportCounter]/actions.ts` | PASS; Server Action creates only internal BusinessDocument, items, and log after exact phrase and override gate | Draft IDs, operator default, phrase, and line mapping are inline |
+| BusinessDocument review and approval | `app/business-documents/[id]/page.tsx`, `app/business-documents/[id]/actions.ts` | PASS; read-first page, exact approval phrase, return-to-review, audit logs, no external side effects | Approval blockers are duplicated between adapter display mapping and action validation |
+| BusinessDocument line resolution | `app/business-documents/[id]/actions.ts` | PASS; protected Server Action edits only approved internal line fields and logs every change | `rawSource.pricingEvidence` shape is implicit JSON and should become a typed internal contract |
+| Maven AutomationCommand gate | `app/business-documents/[id]/actions.ts` | PASS; creates only one internal `CREATE_MAVEN_DRAFT` command after approved/ready status and exact phrase | Command payload/idempotency contract is inline with the page action |
+| AutomationCommand review and dry-run | `app/automation-commands/[id]`, `app/automation-commands/[id]/actions.ts` | PASS; queue/detail review is read-only before dry-run, and dry-run stores would-send payload without external completion | Dry-run validator and Maven payload builder are inline and should be extracted before real execution |
+
+Duplicated logic found:
+
+- UUID lookup helpers are repeated across AI Draft, BusinessDocument, AutomationCommand, and PartsUsed adapters/actions.
+- JSON record readers are repeated as `readObject`, `readRecord`, and `readJsonObject`.
+- Decimal parsing/formatting and positive-quantity validation are repeated across BusinessDocument and AutomationCommand flows.
+- BusinessDocument approval blockers and Maven dry-run line blockers overlap.
+- Redirect builders, approval phrase constants, and no-external-action boundary copy are split across pages/actions/adapters.
+
+Temporary or hard-coded debt:
+
+- ServiceReport `5806` and SCR40PM Small Service rule are currently special-cased.
+- `NEXT-AI-DRAFT-*` and `NEXT-MAVEN-CMD-*` generated IDs are acceptable for staging but should be centralized before broad use.
+- Default operator value `Liad` is hard-coded in protected forms/actions.
+- Approval phrases are hard-coded per action.
+- Manual/test pricing evidence from the smoke test is valid for staging validation but must be reviewed or replaced before real Maven execution.
+- Fixed service/travel/labor values such as `300` and `275` are in runtime logic and need evidence-backed configuration before broad use.
+
+Server Actions and adapter boundary audit:
+
+- PASS: internal writes are implemented through Server Actions in `app/ai-drafts/preview/[reportCounter]/actions.ts`, `app/business-documents/[id]/actions.ts`, and `app/automation-commands/[id]/actions.ts`.
+- PASS: no API route was added for internal write flows.
+- PASS: adapters are mostly read/display mapping layers.
+- Debt: AI Draft adapter mixes recommendation assembly, pricing evidence, report-specific service rules, and existing BusinessDocument lookup.
+- Debt: BusinessDocument adapter mixes display mapping, readiness/blocker calculation, command-gate copy, and lifecycle labels.
+- Debt: AutomationCommand dry-run action mixes validation, Maven payload construction, and persistence.
+
+Responsibility audit:
+
+- AI Draft is responsible for recommendation preview and pricing evidence. Current implementation is safe but too report-specific.
+- BusinessDocument is responsible for internal draft review, approval state, line resolution, and audit history. This boundary is mostly clean.
+- AutomationCommand is responsible for queue/detail review and dry-run validation. It does not execute Maven, but the dry-run service should be extracted before real execution work.
+
+Wave 2 Technical Debt Report:
+
+- HIGH: Generalize report `5806` AI Draft logic into a service-pattern/recommendation registry before using the preview broadly.
+- HIGH: Extract Maven command validation and would-send payload building before any real Maven execution adapter is implemented.
+- MEDIUM: Centralize UUID, JSON, decimal, redirect, phrase, and boundary-copy helpers.
+- MEDIUM: Define a typed internal shape for `pricingEvidence`, line resolution metadata, and `mavenDryRun`.
+- MEDIUM: Move approval/readiness blockers into one shared BusinessDocument readiness module.
+- MEDIUM: Replace hard-coded staging/default operator and fixed price values with approved evidence/config paths.
+- LOW: Review feature-specific CSS organization after runtime scope stabilizes.
+
+Refactoring candidates:
+
+1. Add shared `isUuid` and canonical ID lookup utilities.
+2. Add shared JSON record readers for Prisma JSON values.
+3. Add shared decimal parse/format/positive validation utilities.
+4. Extract BusinessDocument approval/readiness/blocker calculation.
+5. Extract Maven draft command validation and dry-run payload construction.
+6. Extract pricing evidence gathering and trusted price selection from the AI Draft adapter.
+7. Centralize approval phrases and no-external-action boundary labels.
+8. Generalize ServiceReport `5806` line-definition logic into an approved service-pattern rule source.
+
+Safe to start Wave 3 checklist:
+
+- PASS for read-only Maven data discovery and import planning only.
+- PASS if Wave 3 starts by mapping Maven-origin tabs, Maven item history, document links, customer links, product links, and duplicate/idempotency requirements.
+- PASS if existing Wave 2 runtime behavior remains frozen while Wave 3 reads/discovers.
+- REQUIRED: no real Maven execution, no AutomationCommand execution, no external document creation, no email/customer-facing action, no inventory action, no source-system mutation, no schema/env/migration/import, and no production action without separate explicit approval.
+- REQUIRED before broad runtime use: address or accept the high-priority generalization/refactoring debt above.
+- REQUIRED before real Maven execution: satisfy the Maven Execution Readiness Checklist and receive explicit Liad approval.
+
+Architecture audit decision:
+
+- Safe to start Wave 3 only as read-only Maven Knowledge Layer discovery/import planning.
+- Not safe to start real Maven execution from this audit alone.
+- Project completion remains `65%`; the audit added no runtime capability percentage.
 
 ## Known Active IDs
 

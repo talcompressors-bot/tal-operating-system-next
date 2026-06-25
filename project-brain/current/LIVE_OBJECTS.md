@@ -3,7 +3,7 @@
 Status: Current object tracking file
 
 Current phase:
-Wave 2 Service Workflow Layer complete; real Maven execution gate pending explicit approval
+Wave 2 Service Workflow Layer complete; Wave 2 Architecture Audit complete; real Maven execution gate pending explicit approval
 
 Verification note:
 Values below are preserved from the last known project state unless marked `UNKNOWN`. Do not invent missing IDs.
@@ -72,6 +72,15 @@ RequiredBeforeExecution:
 - Define allowed post-execution internal updates and failure handling
 - Keep email/customer-facing action and inventory deduction separately gated
 
+## Architecture Audit
+
+Wave2ArchitectureAuditStatus: COMPLETE
+RuntimeBehaviorChangedDuringAudit: false
+DBWritesDuringAudit: false
+SafeToStartWave3ReadOnlyDiscovery: true
+RealMavenExecutionApproved: false
+BroadAiDraftRolloutRequiresRefactor: true
+
 ## Maven Draft
 
 MavenDocumentId: 102451, 102452, 102453
@@ -86,7 +95,7 @@ MavenDocumentNumber: UNKNOWN
 Use this file only for verified active IDs or explicit `UNKNOWN` values. Current project phase and task state come from `project-brain/CURRENT_TASK.md` and `project-brain/roadmap/ROADMAP.md`.
 
 Current ID source:
-`project-brain/CURRENT_TASK.md`, Wave 2 Line Resolution POST Smoke Test, Wave 2 Approval Workflow POST Smoke Test, Wave 2 end-to-end staging smoke test, `project-brain/AI_DRAFT_READINESS_RECHECK.md`, and `project-brain/AI_DRAFT_RECOMMENDATION_READINESS_DECISION_PACKET.md`.
+`project-brain/CURRENT_TASK.md`, Wave 2 Architecture Audit, Wave 2 Line Resolution POST Smoke Test, Wave 2 Approval Workflow POST Smoke Test, Wave 2 end-to-end staging smoke test, `project-brain/AI_DRAFT_READINESS_RECHECK.md`, and `project-brain/AI_DRAFT_RECOMMENDATION_READINESS_DECISION_PACKET.md`.
 
 Closeout rule:
 If no new work occurred, preserve these IDs and report this source. Do not downgrade known IDs to `UNKNOWN`. If another canonical file reports different active IDs, report the conflict and source files instead of overwriting.

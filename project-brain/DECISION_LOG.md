@@ -1114,3 +1114,19 @@ Wave 2 closeout does not approve real Maven/Invoice4U execution, AutomationComma
 
 Status:
 Approved as documentation/state closeout only. Wave 2 is complete at `15% / 15%`; project completion remains `65%`.
+
+---
+
+## 2026-06-25
+
+Decision:
+Wave 2 Architecture Audit is complete, and Wave 3 may start only as read-only Maven data discovery/import planning unless Liad separately approves real Maven execution.
+
+Reason:
+The audit reviewed every completed Wave 2 runtime against the original migration plan and current approved runtime scope. The ServiceReport `5806` chain is safe for its approved staging scope: internal writes use Server Actions, adapters mostly remain read/display boundaries, routes are consistent, BusinessDocument owns internal review/approval/line resolution, and AutomationCommand owns queue/dry-run review without external execution. The audit also found technical debt that should be resolved before broad rollout or real execution: report-5806-specific AI Draft logic, inline pricing evidence selection, duplicated UUID/JSON/decimal/blocker helpers, hard-coded phrases/default operator/fixed values, implicit JSON evidence contracts, and inline Maven dry-run validation/payload building.
+
+Boundaries:
+The audit changed Project Brain documentation only. No runtime behavior changed, no DB writes occurred, no Maven/Invoice4U action occurred, no AutomationCommand execution occurred, no email/customer-facing action occurred, no inventory action occurred, no schema/env/migration/import/source-system/production action occurred, and no new governance document was created.
+
+Status:
+Approved as documentation-only audit. Safe to start Wave 3 read-only discovery/import planning; real Maven execution remains `APPROVAL_REQUIRED`.
