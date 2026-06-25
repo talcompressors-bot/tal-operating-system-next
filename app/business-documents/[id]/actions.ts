@@ -480,7 +480,7 @@ export async function createMavenDraftAutomationCommand(formData: FormData) {
       data: {
         appsheetCommandId: commandId,
         businessDocumentId: document.id,
-        commandName: "Create Maven draft from approved BusinessDocument",
+        commandName: "Create Maven document from approved BusinessDocument",
         commandType: AutomationCommandType.CREATE_MAVEN_DRAFT,
         status: AutomationCommandStatus.PENDING,
         requestedBy,
@@ -503,7 +503,7 @@ export async function createMavenDraftAutomationCommand(formData: FormData) {
         rawSource: {
           approvalPhrase: APPROVAL_PHRASE,
           userFacingBoundary:
-            "Create AutomationCommand only; downstream Maven draft execution remains separately gated.",
+            "Create AutomationCommand only; downstream Maven document generation remains separately gated.",
         } satisfies Prisma.InputJsonValue,
       },
     });

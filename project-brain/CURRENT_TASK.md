@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Wave 3 Maven API placeholders prepared; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Wave 3 internal business document/payment engine implemented; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -557,6 +557,76 @@ Project completion:
 - Remains `65%`.
 - This improves Wave 3 readiness but does not add a runtime/import capability point.
 
+## Wave 3 Internal Business Document and Payment Engine
+
+Implementation:
+
+- Added `lib/business-document-engine.ts` as the internal validation/review engine for business document and payment readiness.
+- Wired the engine into `app/business-documents/business-document-adapter.ts`.
+- Added a review panel to `app/business-documents/[id]/page.tsx` showing internal document type, VAT, totals, payment amount, balance due, payment readiness, export blockers, warnings, supported document types, and supported payment sources.
+- Added scoped layout CSS in `app/globals.css`.
+- Updated BusinessDocument Maven command wording in `app/business-documents/[id]/actions.ts` and related UI text to Maven document-generation terminology while preserving existing enum/function names for compatibility.
+
+Supported internal document types:
+
+- `QUOTE` / `הצעת מחיר`
+- `PROFORMA_INVOICE` / `חשבון עסקה`
+- `TAX_INVOICE` / `חשבונית מס`
+- `RECEIPT` / `קבלה`
+- `TAX_INVOICE_RECEIPT` / `חשבונית מס קבלה`
+- `PURCHASE_ORDER` / `הזמנת רכש`
+- `DELIVERY_NOTE` / `תעודת משלוח`
+- `CREDIT_NOTE` / `זיכוי`
+
+Supported internal payment sources:
+
+- Bank transfer
+- Check
+- Credit card
+- Cash
+- Other
+- Future uploaded check image
+- Future bank proof attachment
+
+Engine behavior:
+
+- `BusinessDocument` remains the source of truth.
+- Uses existing `BusinessDocument`, `BusinessDocumentItems`, and raw source JSON only; no schema change.
+- Calculates line subtotal, document subtotal, VAT, total, payment amount, and balance due for review.
+- Blocks external export readiness when document type is unsupported, items are missing, pricing is unresolved, quantity is invalid, total is missing, or receipt-based documents lack payment amount.
+- Shows warnings when line subtotal and document subtotal differ, when payment exceeds total, or when no internal payment source is recorded.
+- Payment evidence and future attachments are planning/review signals only; they do not create receipts, upload files, contact customers, call Maven/Invoice4U, or affect inventory.
+
+Boundary:
+
+- No external API call.
+- No Maven/Invoice4U call.
+- No real export implementation.
+- No email/customer-facing action.
+- No inventory deduction.
+- No DB write during implementation or validation.
+- No schema or Prisma change.
+- No real payment attachment upload/storage implementation.
+
+Validation:
+
+- Focused TypeScript passed for `lib/business-document-engine.ts`, `app/business-documents/business-document-adapter.ts`, `app/business-documents/[id]/page.tsx`, and `app/business-documents/[id]/actions.ts`.
+- Repo-wide TypeScript still fails on pre-existing unrelated AI Draft pricing evidence typing and missing Playwright dependency/type issues.
+- `git diff --check` passed with CRLF warnings only.
+- Route validation on the existing local Next server returned HTTP 200 for `/business-documents` and `/business-documents/NEXT-AI-DRAFT-5806`.
+- Content validation confirmed the BusinessDocument route renders `Internal document and payment engine`, supported document/payment types, `QUOTE / הצעת מחיר`, `TAX_INVOICE_RECEIPT / חשבונית מס קבלה`, `Bank transfer`, `Future bank proof attachment`, `Balance due`, and `Blocked until explicit approval`.
+
+Current blocker:
+
+- None for the internal read/review engine.
+- External export remains blocked until explicit approval, Maven/Invoice4U API contract evidence, target environment, secret placement, post-success write rules, and rollback/failure handling are approved.
+- Payment attachments remain planning-only until storage, privacy, evidence review, and retention rules are approved.
+
+Project completion:
+
+- Moves to `66%` by adding one Wave 3 internal review/validation capability point.
+- This does not approve external execution.
+
 ## Known Active IDs
 
 Source:
@@ -582,12 +652,13 @@ Next candidate tasks, pending explicit selection/approval:
 1. Read-only Maven customer/document/item matching analysis for BusinessDocument `NEXT-AI-DRAFT-5806`.
 2. Real Maven document-generation API contract evidence packet, only from primary Maven/API or production-current source evidence.
 3. Maven API secret placement plan, only after target environment and real values are approved; no secrets in git.
-4. Read-only Maven source row-count/schema validation from approved staging/PostgreSQL or connector reads.
-5. Action Server capability, when explicitly selected and scoped safely.
-6. Email Runtime capability, when explicitly selected and approved.
-7. Inventory Runtime capability, when explicitly selected and approved.
-8. Build hygiene for the existing missing Playwright dependency/type gap, if explicitly selected.
-9. Optional Wave 2 import approval package, only if explicitly approved.
+4. Payment attachment readiness plan for check image / bank proof evidence storage and review, if explicitly selected.
+5. Read-only Maven source row-count/schema validation from approved staging/PostgreSQL or connector reads.
+6. Action Server capability, when explicitly selected and scoped safely.
+7. Email Runtime capability, when explicitly selected and approved.
+8. Inventory Runtime capability, when explicitly selected and approved.
+9. Build hygiene for the existing missing Playwright dependency/type gap, if explicitly selected.
+10. Optional Wave 2 import approval package, only if explicitly approved.
 
 Project completion should not be overstated: current evidence-based completion is 65% by the recorded capability formula. Infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells, central work screens, preview intelligence, the AI Draft Recommendation Preview runtime, the pricing-evidence preview layer, protected internal BusinessDocument draft creation, internal BusinessDocument review, the BusinessDocument Approval Workflow, the protected internal Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, and the BusinessDocument Line Resolution Layer; production automation readiness remains gated because no Maven/Invoice4U execution, customer-facing send, inventory deduction, or production integration is approved.
 

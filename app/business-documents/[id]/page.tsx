@@ -22,11 +22,11 @@ type BusinessDocumentDetailPageProps = {
 function getCommandStatusMessage(status?: string) {
   switch (status) {
     case "created":
-      return "Maven draft AutomationCommand was created as an internal pending command only.";
+      return "Maven document-generation AutomationCommand was created as an internal pending command only.";
     case "approval-required":
-      return "Exact approval phrase is required before creating a Maven draft AutomationCommand.";
+      return "Exact approval phrase is required before creating a Maven document-generation AutomationCommand.";
     case "status-not-ready":
-      return "BusinessDocument must be Approved or Ready To Send before a Maven draft command can be queued.";
+      return "BusinessDocument must be Approved or Ready To Send before a Maven document-generation command can be queued.";
     case "maven-exists":
       return "Maven fields are already populated; duplicate command creation is blocked.";
     case "missing-items":
@@ -34,7 +34,7 @@ function getCommandStatusMessage(status?: string) {
     case "price-approval-required":
       return "All item price approval warnings must be resolved before command creation.";
     case "existing-command":
-      return "A Maven draft AutomationCommand already exists for this BusinessDocument.";
+      return "A Maven document-generation AutomationCommand already exists for this BusinessDocument.";
     case "not-found":
       return "BusinessDocument was not found for command creation.";
     case "missing-document":
@@ -131,6 +131,115 @@ export default async function BusinessDocumentDetailPage({
       </div>
 
       <div className="detail-grid">
+        <article className="info-panel wide">
+          <h2>Internal document and payment engine</h2>
+          <div className="review-status-grid">
+            <div className="review-status-item strong">
+              <span>Engine document type</span>
+              <strong>
+                {document.engineReview.documentType.code} /{" "}
+                {document.engineReview.documentType.label}
+              </strong>
+            </div>
+            <div className="review-status-item">
+              <span>Line subtotal</span>
+              <strong>{document.engineReview.totals.lineSubtotal}</strong>
+            </div>
+            <div className="review-status-item">
+              <span>VAT</span>
+              <strong>{document.engineReview.totals.vatAmount}</strong>
+            </div>
+            <div className="review-status-item">
+              <span>Total</span>
+              <strong>{document.engineReview.totals.totalAmount}</strong>
+            </div>
+            <div className="review-status-item">
+              <span>Payment amount</span>
+              <strong>{document.engineReview.totals.paymentAmount}</strong>
+            </div>
+            <div className="review-status-item">
+              <span>Balance due</span>
+              <strong>{document.engineReview.totals.balanceDue}</strong>
+            </div>
+          </div>
+
+          <div className="approval-panel">
+            <p>{document.engineReview.exportReadiness.boundary}</p>
+            <dl>
+              <div>
+                <dt>External export allowed</dt>
+                <dd>
+                  {document.engineReview.exportReadiness.externalExportAllowed
+                    ? "Allowed"
+                    : "Blocked until explicit approval"}
+                </dd>
+              </div>
+              <div>
+                <dt>Payment required</dt>
+                <dd>{document.engineReview.payment.required ? "Yes" : "No"}</dd>
+              </div>
+              <div>
+                <dt>Detected payment sources</dt>
+                <dd>
+                  {document.engineReview.payment.detectedSources.length
+                    ? document.engineReview.payment.detectedSources.join(", ")
+                    : "No internal payment evidence recorded"}
+                </dd>
+              </div>
+              <div>
+                <dt>Future attachments</dt>
+                <dd>{document.engineReview.payment.attachmentReadiness}</dd>
+              </div>
+            </dl>
+
+            {document.engineReview.exportReadiness.blockers.length ? (
+              <ul className="warning-list">
+                {document.engineReview.exportReadiness.blockers.map((blocker) => (
+                  <li key={blocker}>{blocker}</li>
+                ))}
+              </ul>
+            ) : (
+              <ul className="warning-list neutral">
+                <li>Internal engine has no current blockers. Export still requires explicit approval.</li>
+              </ul>
+            )}
+
+            {document.engineReview.exportReadiness.warnings.length ? (
+              <ul className="warning-list neutral">
+                {document.engineReview.exportReadiness.warnings.map((warning) => (
+                  <li key={warning}>{warning}</li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        </article>
+
+        <article className="info-panel wide">
+          <h2>Supported document and payment types</h2>
+          <div className="split-list-grid">
+            <div>
+              <h3>Business documents</h3>
+              <ul className="pricing-evidence-list">
+                {document.engineReview.supportedDocumentTypes.map((type) => (
+                  <li key={type}>
+                    <span>{type}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3>Payment sources</h3>
+              <ul className="pricing-evidence-list">
+                {document.engineReview.supportedPaymentSources.map((source) => (
+                  <li key={source}>
+                    <span>{source}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </article>
+
         <article className="info-panel wide">
           <h2>Review status</h2>
           <div className="review-status-grid">
@@ -243,7 +352,7 @@ export default async function BusinessDocumentDetailPage({
         </article>
 
         <article className="info-panel wide">
-          <h2>Maven draft command gate</h2>
+          <h2>Maven document-generation command gate</h2>
           <div className="approval-panel">
             <p>
               This creates one internal AutomationCommand only. It does not call
@@ -291,7 +400,7 @@ export default async function BusinessDocumentDetailPage({
                   />
                 </label>
                 <button className="button" type="submit">
-                  Create internal Maven draft command
+                  Create internal Maven document command
                 </button>
               </form>
             ) : (
@@ -336,7 +445,7 @@ export default async function BusinessDocumentDetailPage({
                 ))}
                 {!document.automationCommands.length ? (
                   <tr>
-                    <td colSpan={7}>No Maven draft AutomationCommand exists.</td>
+                    <td colSpan={7}>No Maven document-generation AutomationCommand exists.</td>
                   </tr>
                 ) : null}
               </tbody>

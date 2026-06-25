@@ -3,6 +3,31 @@
 ## 2026-06-25
 
 Decision:
+Internal BusinessDocument and Payment Engine is implemented as a review/validation layer only.
+
+Reason:
+Wave 3 needs one internal source-of-truth engine for business documents before any external Maven/Invoice4U output is approved. The engine must support quotes, proformas, tax invoices, receipts, tax-invoice receipts, purchase orders, delivery notes, and credit notes, plus internal payment evidence and future attachment readiness, while preserving `BusinessDocument` as the internal draft/source of truth.
+
+Approved implementation scope:
+
+1. `BusinessDocument` remains the source of truth.
+2. The engine validates/reviews document type support, VAT, totals, payment amount, balance due, receipt-payment requirements, export blockers, warnings, supported payment sources, and future uploaded check/bank-proof attachment readiness.
+3. Supported document types are `QUOTE`, `PROFORMA_INVOICE`, `TAX_INVOICE`, `RECEIPT`, `TAX_INVOICE_RECEIPT`, `PURCHASE_ORDER`, `DELIVERY_NOTE`, and `CREDIT_NOTE`.
+4. Supported internal payment sources are bank transfer, check, credit card, cash, other, future uploaded check image, and future bank proof attachment.
+5. Existing legacy enum/code names are not renamed in this step.
+6. External export always remains blocked until separate explicit approval.
+
+Boundary:
+No external API call, no Maven/Invoice4U call, no email/customer-facing action, no inventory deduction, no DB write during implementation/validation, no schema/Prisma change, no real export implementation, no payment attachment upload/storage implementation, no source-system change, and no production action occurred.
+
+Status:
+Approved by user request and implemented as an internal review/validation capability. Real external export and payment attachment handling remain `APPROVAL_REQUIRED`.
+
+---
+
+## 2026-06-25
+
+Decision:
 Maven API environment placeholders may be added to tracked env examples, but real Maven secrets must not be committed.
 
 Reason:

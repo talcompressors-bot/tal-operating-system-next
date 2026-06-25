@@ -10,6 +10,10 @@ import type {
   ServiceReport,
 } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
+import {
+  buildBusinessDocumentEngineReview,
+  type BusinessDocumentEngineReview,
+} from "../../lib/business-document-engine";
 
 type BusinessDocumentCustomer = Pick<Customer, "appsheetCustomerId" | "name">;
 
@@ -65,6 +69,7 @@ type BusinessDocumentRecord = Pick<
   | "sendByWhatsapp"
   | "sendStatus"
   | "notes"
+  | "rawSource"
   | "createdAt"
 > & {
   customer: BusinessDocumentCustomer | null;
@@ -126,6 +131,7 @@ export type BusinessDocumentDetail = BusinessDocumentListItem & {
     latestCommandId: string;
     latestCommandStatus: string;
   };
+  engineReview: BusinessDocumentEngineReview;
   automationCommands: Array<{
     id: string;
     commandType: string;
@@ -190,6 +196,7 @@ const businessDocumentSelect = {
   sendByWhatsapp: true,
   sendStatus: true,
   notes: true,
+  rawSource: true,
   createdAt: true,
   customer: {
     select: {
@@ -363,7 +370,7 @@ function mapReviewStatus(document: BusinessDocumentRecord) {
         : "Not sent"),
     mavenState:
       document.mavenDocumentNumber || document.mavenPdfLink
-        ? "Maven draft exists"
+        ? "Maven document exists"
         : "No Maven action",
     emailState:
       document.sendStatus || document.sendByEmail || document.sendByWhatsapp
@@ -462,7 +469,7 @@ function mapCommandReview(document: BusinessDocumentRecord) {
     return {
       canCreateMavenCommand: false,
       blockedReason:
-        "A Maven draft AutomationCommand already exists for this BusinessDocument.",
+        "A Maven document-generation AutomationCommand already exists for this BusinessDocument.",
       approvalPhrase: "CREATE MAVEN COMMAND",
       latestCommandId: latestCommand.appsheetCommandId || latestCommand.id,
       latestCommandStatus: formatEnum(latestCommand.status),
@@ -473,7 +480,7 @@ function mapCommandReview(document: BusinessDocumentRecord) {
     return {
       canCreateMavenCommand: false,
       blockedReason:
-        "BusinessDocument status must be Approved or Ready To Send before a Maven draft command can be queued.",
+        "BusinessDocument status must be Approved or Ready To Send before a Maven document-generation command can be queued.",
       approvalPhrase: "CREATE MAVEN COMMAND",
       latestCommandId: "No command",
       latestCommandStatus: "No command",
@@ -484,7 +491,7 @@ function mapCommandReview(document: BusinessDocumentRecord) {
     return {
       canCreateMavenCommand: false,
       blockedReason:
-        "Maven fields are already populated; duplicate Maven draft commands are blocked.",
+        "Maven fields are already populated; duplicate Maven document-generation commands are blocked.",
       approvalPhrase: "CREATE MAVEN COMMAND",
       latestCommandId: "No command",
       latestCommandStatus: "No command",
@@ -495,7 +502,7 @@ function mapCommandReview(document: BusinessDocumentRecord) {
     return {
       canCreateMavenCommand: false,
       blockedReason:
-        "BusinessDocumentItems are required before a Maven draft command can be queued.",
+        "BusinessDocumentItems are required before a Maven document-generation command can be queued.",
       approvalPhrase: "CREATE MAVEN COMMAND",
       latestCommandId: "No command",
       latestCommandStatus: "No command",
@@ -506,7 +513,7 @@ function mapCommandReview(document: BusinessDocumentRecord) {
     return {
       canCreateMavenCommand: false,
       blockedReason:
-        "Price approval must be resolved for every line before a Maven draft command can be queued.",
+        "Price approval must be resolved for every line before a Maven document-generation command can be queued.",
       approvalPhrase: "CREATE MAVEN COMMAND",
       latestCommandId: "No command",
       latestCommandStatus: "No command",
@@ -515,7 +522,7 @@ function mapCommandReview(document: BusinessDocumentRecord) {
 
   return {
     canCreateMavenCommand: true,
-    blockedReason: "Ready for explicit Maven draft command approval.",
+    blockedReason: "Ready for explicit Maven document-generation command approval.",
     approvalPhrase: "CREATE MAVEN COMMAND",
     latestCommandId: "No command",
     latestCommandStatus: "No command",
@@ -553,6 +560,17 @@ function mapBusinessDocumentListItem(
 function mapBusinessDocumentDetail(
   document: BusinessDocumentRecord,
 ): BusinessDocumentDetail {
+  const engineReview = buildBusinessDocumentEngineReview({
+    documentTypeSelected: document.documentTypeSelected,
+    subtotalAmount: document.subtotalAmount,
+    vatAmount: document.vatAmount,
+    totalAmount: document.totalAmount,
+    currency: document.currency,
+    approvalStatus: document.approvalStatus,
+    rawSource: document.rawSource,
+    items: document.items,
+  });
+
   return {
     ...mapBusinessDocumentListItem(document),
     internalId: document.id,
@@ -570,6 +588,7 @@ function mapBusinessDocumentDetail(
     reviewWarnings: buildReviewWarnings(document),
     approvalReview: buildApprovalReview(document),
     commandReview: mapCommandReview(document),
+    engineReview,
     automationCommands: document.automationCommands.map((command) => ({
       id: command.appsheetCommandId || command.id,
       commandType: formatEnum(command.commandType),
