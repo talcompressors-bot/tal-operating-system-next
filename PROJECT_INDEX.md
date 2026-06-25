@@ -467,9 +467,9 @@ This section is the living navigation screen. It summarizes current reality only
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Current milestone | Wave 1 Next.js read/display validation PASS after PostgreSQL read switch | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Current task | BusinessDocument Review and Approval Page is implemented and validated for internal AI Draft-created drafts; no next implementation task is approved yet | `project-brain/CURRENT_TASK.md` |
-| Next approved task | None. Next candidate tasks are Working UI capability; Action Server capability when selected; Email Runtime capability when explicitly approved; Inventory Runtime capability when explicitly approved; build hygiene for the existing missing Playwright dependency/type gap if explicitly selected; optional Wave 2 import approval package only if explicitly approved. Additional DB import/write work outside the approved internal draft Server Action remains gated and requires explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
-| Last Implementation Commit | `3d4a667 Enhance business document review page` | Git history; `project-brain/CURRENT_TASK.md` |
+| Current task | Create Maven Draft AutomationCommand gate is implemented and validated for approved/ready internal BusinessDocuments; no next implementation task is approved yet | `project-brain/CURRENT_TASK.md` |
+| Next approved task | None. Next candidate tasks are Working UI capability; Action Server capability when selected; Email Runtime capability when explicitly approved; Inventory Runtime capability when explicitly approved; build hygiene for the existing missing Playwright dependency/type gap if explicitly selected; optional Wave 2 import approval package only if explicitly approved. DB writes outside approved protected Server Actions remain gated and require explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
+| Last Implementation Commit | `5fafc36 Add Maven draft command gate` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
 | Blocked/forbidden actions | No production writes, Prisma migration, DB creation, Sheets/AppSheet/Maven actions, new planning/control files, new agents, or implementation before Reality Check | `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md` |
@@ -548,24 +548,24 @@ Current Project Tree Position:
 - Project Mode: `CAPABILITY_BUILDING`
 - Governance Status: `FROZEN`
 - Current Priority: Working runtime capabilities instead of documentation expansion
-- Current Task: BusinessDocument Review and Approval Page is complete for internal AI Draft-created drafts; no next implementation task is approved yet
-- Last Completed Task: BusinessDocument Review and Approval Page
+- Current Task: Create Maven Draft AutomationCommand gate is complete for approved/ready internal BusinessDocuments; no next implementation task is approved yet
+- Last Completed Task: Create Maven Draft AutomationCommand gate
 - Next Task: None approved. Highest-value runtime candidates are the next Working UI capability, Action Server, Email Runtime, and Inventory Runtime when explicitly selected/approved.
-- Estimated completion %: 60%
+- Estimated completion %: 61%
 - Completion basis: capability-weighted evidence, not completed-waves / total-waves.
 - Governance / Project Brain / Git workflow: 15% / 15% COMPLETE
 - Supabase + Prisma Data Layer: 15% / 15% COMPLETE
 - Import Framework + Wave 1 Import: 10% / 10% COMPLETE
 - Wave 1 Service Reports UI: 10% / 10% COMPLETE
-- Wave 2 Workflow Layer: 10% / 15% CURRENT
+- Wave 2 Workflow Layer: 11% / 15% CURRENT
 - Wave 3 Maven Knowledge Layer: 0% / 15% PENDING
 - Wave 4 Inventory Layer: 0% / 10% PENDING
 - Wave 5 Offline First: 0% / 5% PENDING
 - Wave 6 Automation Runtime: 0% / 3% PENDING
 - Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 0% / 2% PENDING
-- Completion formula: 15 + 15 + 10 + 10 + 10 + 0 + 0 + 0 + 0 + 0 = 60.
+- Completion formula: 15 + 15 + 10 + 10 + 11 + 0 + 0 + 0 + 0 + 0 = 61.
 - Critical Path: Wave 2 Service Workflow Layer -> Wave 3 Maven Knowledge Layer -> AI Draft Recommendation Readiness -> Action Server Knowledge Layer -> Email Document Intake evidence planning -> Wave 4 Inventory Layer -> Wave 5 Offline First -> Wave 6 Automation Runtime -> Wave 7 Production Shadow -> Wave 8 Production Cutover -> Wave 9 AppSheet Retirement
-- Next Approval Gate: explicitly select/approve the next candidate task before implementation; separate explicit approval is required before any additional DB import/write outside the approved internal draft Server Action, schema change, migration, env change, Maven/Invoice4U action, source-system action, or production integration.
+- Next Approval Gate: explicitly select/approve the next candidate task before implementation; separate explicit approval is required before any DB import/write outside approved protected Server Actions, schema change, migration, env change, Maven/Invoice4U execution, email/customer-facing action, inventory action, source-system action, or production integration.
 
 Rule: a task is not considered complete unless Project Tree Position is reported.
 
@@ -603,29 +603,29 @@ Current evidence-based estimate:
 - Supabase + Prisma Data Layer: 15% / 15% COMPLETE
 - Import Framework + Wave 1 Import: 10% / 10% COMPLETE
 - Wave 1 Service Reports UI: 10% / 10% COMPLETE
-- Wave 2 Workflow Layer: 10% / 15% CURRENT
+- Wave 2 Workflow Layer: 11% / 15% CURRENT
 - Wave 3 Maven Knowledge Layer: 0% / 15% PENDING
 - Wave 4 Inventory Layer: 0% / 10% PENDING
 - Wave 5 Offline First: 0% / 5% PENDING
 - Wave 6 Automation Runtime: 0% / 3% PENDING
 - Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 0% / 2% PENDING
 
-Current estimated completion: 60%.
+Current estimated completion: 61%.
 
-This estimate is valid because the first four capabilities are complete by Project Brain evidence and Wave 2 has 10% documented contribution from the read-only Equipment, PartsUsed, Service Report central work-screen, bidirectional navigation, Service Reports list context, AI Draft Suggestions shell, BusinessDocuments shell, AutomationCommands shell, SCR matching preview panel enhancements, the AI Draft Recommendation Preview runtime for Service Report `5806`, the Maven Knowledge / Pricing Evidence Layer for that preview, the protected AI Draft Approval to BusinessDocument Draft runtime, and the BusinessDocument Review and Approval Page. The previous 60% claim was corrected because the then-listed capability contributions added to 56%; since then the validated AI Draft Preview runtime added one evidence-backed Wave 2 capability point for 57%, the validated pricing-evidence preview layer added one point for 58%, the protected internal draft-creation gate added one point for 59%, and the internal draft review page adds one point for 60%. If any of those capabilities are later found partial, estimate lower and explain why. If additional Wave 2 capability credit is later justified, document the evidence and formula before raising the estimate.
+This estimate is valid because the first four capabilities are complete by Project Brain evidence and Wave 2 has 11% documented contribution from the read-only Equipment, PartsUsed, Service Report central work-screen, bidirectional navigation, Service Reports list context, AI Draft Suggestions shell, BusinessDocuments shell, AutomationCommands shell, SCR matching preview panel enhancements, the AI Draft Recommendation Preview runtime for Service Report `5806`, the Maven Knowledge / Pricing Evidence Layer for that preview, the protected AI Draft Approval to BusinessDocument Draft runtime, the BusinessDocument Review and Approval Page, and the protected Maven draft AutomationCommand gate. The previous 60% claim was corrected because the then-listed capability contributions added to 56%; since then the validated AI Draft Preview runtime added one evidence-backed Wave 2 capability point for 57%, the validated pricing-evidence preview layer added one point for 58%, the protected internal draft-creation gate added one point for 59%, the internal draft review page added one point for 60%, and the protected Maven draft AutomationCommand gate adds one point for 61%. If any of those capabilities are later found partial, estimate lower and explain why. If additional Wave 2 capability credit is later justified, document the evidence and formula before raising the estimate.
 
 Readiness split:
 
 - Infrastructure readiness: high for staging, Prisma, Wave 1 import, and read-only Supabase validation evidence.
-- Workflow UI coverage: progressing through Service Reports, Customers, Equipment, PartsUsed, AI Drafts, BusinessDocuments, AutomationCommands, inventory-stock route alias coverage, SCR matching preview intelligence, AI Draft Preview runtime, pricing-evidence preview intelligence, protected internal BusinessDocument draft creation, and internal BusinessDocument review.
-- Production automation readiness: not started/gated; additional DB writes/imports outside the approved internal draft Server Action, Maven/Invoice4U actions, production integrations, schema changes, and migrations require explicit human approval.
+- Workflow UI coverage: progressing through Service Reports, Customers, Equipment, PartsUsed, AI Drafts, BusinessDocuments, AutomationCommands, inventory-stock route alias coverage, SCR matching preview intelligence, AI Draft Preview runtime, pricing-evidence preview intelligence, protected internal BusinessDocument draft creation, internal BusinessDocument review, and protected internal Maven draft AutomationCommand gate.
+- Production automation readiness: gated; protected internal command creation exists, but Maven/Invoice4U execution, email/customer-facing actions, inventory actions, DB imports, production integrations, schema changes, and migrations require separate explicit human approval.
 
 | Area | Current Status | Canonical Owner |
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md` |
-| Current task | BusinessDocument Review and Approval Page is implemented and validated for internal AI Draft-created drafts; no next implementation task is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `APPLICATION_ROUTE_MAP.md` |
-| Next approved task | None. Next candidate tasks are Working UI capability; Action Server capability when selected; Email Runtime capability when explicitly approved; Inventory Runtime capability when explicitly approved; build hygiene for the existing missing Playwright dependency/type gap if explicitly selected; optional Wave 2 import approval package only if explicitly approved. Additional DB import/write work outside the approved internal draft Server Action remains gated and requires explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
+| Current task | Create Maven Draft AutomationCommand gate is implemented and validated for approved/ready internal BusinessDocuments; no next implementation task is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `APPLICATION_ROUTE_MAP.md` |
+| Next approved task | None. Next candidate tasks are Working UI capability; Action Server capability when selected; Email Runtime capability when explicitly approved; Inventory Runtime capability when explicitly approved; build hygiene for the existing missing Playwright dependency/type gap if explicitly selected; optional Wave 2 import approval package only if explicitly approved. DB writes outside approved protected Server Actions remain gated and require explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
 | Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; AI Draft Recommendation Readiness; Action Server Knowledge Layer; Email Document Intake evidence planning; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |
 | Dependency order | Governance and Project Brain state -> system map/source review -> PostgreSQL V1 scope -> data migration planning -> Supabase staging-first plan -> approved staging project/secrets -> Prisma reconciliation approval -> approved staging schema push -> read-only schema verification -> Wave 1 dry-run/import validation -> Waves 2-4 discovery/import approvals -> AI Draft Recommendation Readiness -> Action Server Knowledge Layer -> Email Document Intake evidence planning -> production shadow approval -> Server Actions/offline sync | `project-brain/TASK_BOARD.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md`, `project-brain/migration/DATA_MIGRATION_PLAN.md`, `project-brain/roadmap/ROADMAP.md` |

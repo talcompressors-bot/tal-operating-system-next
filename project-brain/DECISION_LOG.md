@@ -3,6 +3,22 @@
 ## 2026-06-25
 
 Decision:
+Protected Maven draft AutomationCommand creation is approved only for the internal Next.js Server Action path on `/business-documents/[id]`.
+
+Reason:
+Liad explicitly approved creating an internal AutomationCommand for Maven draft creation from an approved BusinessDocument. The approved scope requires an exact approval phrase, BusinessDocument status `APPROVED` or `READY_TO_SEND`, idempotency by BusinessDocument, command-status visibility on the review page, and no customer-facing or external-system action.
+
+Boundaries:
+This approval allows creating only one internal pending `AutomationCommand` of type `CREATE_MAVEN_DRAFT` for an eligible BusinessDocument. It does not allow Maven/Invoice4U API calls, email/customer-facing action, inventory deduction, BusinessDocument mutation, schema changes, Prisma changes, imports, source-system changes, production integration, or duplicate commands for the same BusinessDocument.
+
+Status:
+Approved and implemented in commit `5fafc36 Add Maven draft command gate`.
+
+---
+
+## 2026-06-25
+
+Decision:
 AI Draft Approval to BusinessDocument Draft runtime is approved only for the protected Next.js Server Action path on `/ai-drafts/preview/[reportCounter]`.
 
 Reason:
