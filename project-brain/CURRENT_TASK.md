@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; EPM/APM Excel Parser Strategy completed; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Legacy Excel Parser Strategy completed; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -158,6 +158,19 @@ Completed as planning/strategy only:
 - Defined 20APM validation checks: exact source sheet/row, oil separator SKU, comparison against `20PM2` SKU `25350030-021` from PM sheet `20PM2` row 8, conflict handling, and no shared-kit inference from overlap.
 
 No package install, DB write, schema change, runtime behavior change, Maven/Invoice4U call, email/customer action, inventory action, source-system action, or production action occurred.
+
+## Wave 3 Legacy Excel Parser Strategy
+
+Completed as planning only:
+
+- Evaluated LibreOffice conversion, Node legacy `.xls` parser packages, manual conversion/export, Python/openpyxl, Python legacy parser packages, and Windows Excel COM automation.
+- Recommended one preferred solution: approved LibreOffice headless conversion from legacy `.xls` to `.xlsx`, then reuse the existing read-only OOXML extractor.
+- Reasoning: best balance of source-row accuracy, automation, maintainability, performance for vendor workbook size, and future scalability across manufacturer files without adding Excel parsing to the app runtime.
+- Defined the future manufacturer Excel import workflow: intake, file classification, approved conversion, extraction, validation, fixture versioning, review, runtime fixture use, separately approved DB promotion, and update/diff workflow.
+- Reconfirmed mandatory business rules: do not guess manufacturer data; every SKU must trace to source file/sheet/row; PM/APM alias normalization cannot override source evidence; conflicts become `REVIEW_REQUIRED`.
+- Reconfirmed 20APM future validation: exact `20APM` source sheet/row is required; oil separator SKU must be extracted from source evidence; compare against `20PM2` SKU `25350030-021` from PM sheet `20PM2` row 8; if exact evidence is missing, remain blocked and do not infer.
+
+No package install, parser implementation, DB write, schema change, runtime behavior change, Maven/Invoice4U call, external API call, email/customer action, inventory action, source-system action, or production action occurred.
 
 ## Wave 3 PDF Export Smoke Test and Governance Lock
 

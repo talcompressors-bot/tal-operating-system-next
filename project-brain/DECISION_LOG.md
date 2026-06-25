@@ -3,6 +3,47 @@
 ## 2026-06-25
 
 Decision:
+Wave 3 legacy manufacturer `.xls` parsing should standardize on approved LibreOffice conversion to `.xlsx` plus the existing OOXML extractor.
+
+Reason:
+Manufacturer registry and service-kit evidence requires exact source file, sheet, and row. The PM workbook already works through OOXML extraction, while EPM/APM is blocked because the workbook is true legacy binary `.xls`. Compared with Node legacy parser packages, manual conversion, Python tooling, and Excel COM automation, LibreOffice conversion best preserves a scalable, automatable, reviewable, non-runtime parsing path without adding Excel parsing logic to the Next.js app.
+
+Strategy comparison outcome:
+
+- LibreOffice conversion: preferred for accuracy, automation, maintainability, and future scalability once explicitly approved.
+- Node parser package: fallback only after package-by-package approval; adds dependency and parser-behavior maintenance risk.
+- Manual conversion/export: safe fallback when no tool install is approved, but weak for repeatable imports and requires operator/date/hash/row-preservation audit.
+- Python/openpyxl: rejected for binary `.xls`; reads `.xlsx`, not legacy BIFF `.xls`.
+- Python legacy parser packages: backup fallback only after Python runtime and package approval.
+- Excel COM automation: avoid except emergency local inspection; brittle/headless-unfriendly and already failed in this environment.
+
+Future import workflow:
+
+1. Preserve original workbook.
+2. Classify file format before parsing.
+3. Convert legacy `.xls` only after approval.
+4. Extract generated JSON fixtures with source file/sheet/row evidence.
+5. Validate sheets, row counts, required columns, sample rows, duplicates, blanks, and model/title mismatches.
+6. Version fixtures with source hash, converter/parser version, extraction date, row counts, and warnings.
+7. Human-review conflicts before runtime or DB promotion.
+8. Runtime may read generated fixtures only; Excel files are not runtime dependencies.
+9. DB import/schema promotion remains a separate approval gate.
+10. New vendor workbook versions require diff review before replacing trusted evidence.
+
+20APM validation:
+Exact source evidence is mandatory. If parser support does not expose an exact `20APM` source sheet/row and oil separator SKU, `20APM` remains blocked. Compare any extracted `20APM` separator against `20PM2` SKU `25350030-021`; alias normalization must not override source evidence and conflicts remain `REVIEW_REQUIRED`.
+
+Boundary:
+Planning only. No package installation, parser implementation, conversion artifact, DB write, schema change, runtime behavior change, Maven/Invoice4U call, external API call, email/customer action, inventory action, source-system action, or production action occurred.
+
+Status:
+Completed. Stop before implementation; next step requires explicit approval for LibreOffice or another parser path.
+
+---
+
+## 2026-06-25
+
+Decision:
 Use LibreOffice conversion as the preferred strategy for legacy EPM/APM `.xls` extraction, but only after explicit approval.
 
 Reason:

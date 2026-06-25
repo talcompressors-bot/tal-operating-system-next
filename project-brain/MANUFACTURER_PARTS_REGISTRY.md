@@ -164,6 +164,21 @@ Current tooling evidence:
 | Python/openpyxl | Not suitable for legacy `.xls`; current `python` is only the Windows Store shim in this environment | Not recommended for `.xls`; `openpyxl` reads `.xlsx`, not binary `.xls` |
 | Manual Excel export | Available only if a human opens and saves/export the workbook | Safe fallback when tool install is not approved; must record operator, date, source file hash, and row-preservation checks |
 
+Strategy comparison:
+
+| Strategy | Accuracy | Maintenance | Automation | Performance | Future scalability | Decision |
+|---|---|---|---|---|---|---|
+| LibreOffice conversion to `.xlsx` | High if sheet names, row numbers, formulas/merged cells, and used ranges are validated after conversion | Medium; requires one approved local/system tool but avoids app runtime dependency | High once installed; can run deterministic conversion in a source-processing script | Good for vendor workbook scale | Strong; one conversion path can support many legacy vendor workbooks before the common OOXML extractor | Preferred |
+| Node legacy `.xls` parser package | Medium to high depending on package support for BIFF, encodings, dates, merged cells, and formulas | Medium/high; adds package dependency, audit surface, and parser behavior to maintain | High after implementation | Good for small/medium workbooks | Moderate; future bugs depend on package support and maintenance | Fallback only after explicit package review/approval |
+| Manual conversion/export through Excel/LibreOffice UI | High if reviewed carefully, but human process can drift | Low/medium; requires written procedure and operator discipline | Low | Acceptable for occasional one-off workbook | Weak for many vendors or recurring updates | Fallback when tool install is not approved |
+| Python/openpyxl | Not applicable for binary `.xls` | Not useful for this file type | Not useful | Not useful | Not useful | Reject for legacy `.xls` |
+| Python `xlrd` or similar legacy parser | Potentially medium/high, but package/version support must be checked | Medium/high; adds Python runtime and package governance | Medium | Good for small/medium workbooks | Moderate; Python runtime is currently unavailable here and adds another toolchain | Backup fallback only after explicit runtime/package approval |
+| Windows Excel COM automation | Potentially high on a machine with Excel installed | Low; fragile in unattended/headless automation and failed in current environment | Low/medium; desktop automation is brittle | Acceptable manually, poor in CI/agent runs | Weak | Avoid except emergency local inspection |
+
+Preferred solution:
+
+Use approved LibreOffice headless conversion to `.xlsx`, then parse the converted workbook with the existing OOXML extractor. This gives the best balance: exact sheet/row evidence can be validated, the app runtime does not depend on Excel parsing, generated fixtures remain reviewable, and the same pipeline can handle future manufacturer workbooks.
+
 Recommended path:
 
 1. Stop before installing anything.
@@ -171,6 +186,21 @@ Recommended path:
 3. Convert `data-sources/vendor-spare-parts/Spare Parts Service List(EPM Series) rev2 (1).xls` to a generated `.xlsx` artifact under an ignored/generated source-processing area.
 4. Parse the converted `.xlsx` with the same read-only OOXML extraction approach used for PM.
 5. Produce generated JSON fixtures only; do not import into the database without separate approval.
+
+Future manufacturer Excel import workflow:
+
+| Step | Required action | Output / gate |
+|---|---|---|
+| Intake | Add source workbook under `data-sources/vendor-spare-parts/` with original filename preserved | Source file remains immutable; record file size, modified time, and hash in generated summary |
+| File classification | Detect OOXML ZIP vs legacy binary `.xls` before parsing | OOXML files go directly to extractor; legacy `.xls` files require approved conversion |
+| Conversion | Convert legacy `.xls` to `.xlsx` only after explicit approval | Converted artifact goes to generated/ignored processing area; original source remains unchanged |
+| Extraction | Parse workbook sheets and rows into generated JSON fixture | Every row must include source file, source sheet, source row, raw model, normalized model, SKU, part name, unit, intervals, exchange times, remarks |
+| Validation | Compare sheet names, row counts, required columns, duplicate SKUs, blank SKUs, model/title mismatches, and expected sample rows | Rows with ambiguity get `REVIEW_REQUIRED`; no guessing |
+| Versioning | Keep generated summary with source hash, parser/converter version, extraction date, row counts, and known warnings | Fixture version can be reviewed before any runtime or DB use |
+| Review | Human review approves specific model/part categories or flags conflicts | Approval does not imply price, inventory, Maven, or customer output |
+| Runtime use | Runtime may read generated fixtures only after validation; it must not read Excel directly | Manufacturer SKU remains internal-only |
+| DB promotion | Future registry table import requires separate schema/import approval | No DB writes from parser strategy alone |
+| Update workflow | New vendor workbook versions create new generated fixture/summary; compare added/removed/changed rows before replacing trusted evidence | Conflicting SKU/model/category changes become `REVIEW_REQUIRED` |
 
 Validation checks after conversion:
 
