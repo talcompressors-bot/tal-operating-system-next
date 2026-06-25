@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`95e99d1 Plan manufacturer SKU Excel sources`
+`cac31e4 Add runtime SKU matching for report 5806`
 
 ## Last Closeout Commit
 
@@ -1153,7 +1153,7 @@ Next candidate tasks, pending explicit selection/approval:
 9. Build hygiene for the existing missing Playwright dependency/type gap, if explicitly selected.
 10. Optional Wave 2 import approval package, only if explicitly approved.
 
-Project completion should not be overstated: current evidence-based completion is 68% by the recorded capability formula. Infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells, central work screens, preview intelligence, the AI Draft Recommendation Preview runtime, the pricing-evidence preview layer, protected internal BusinessDocument draft creation, internal BusinessDocument review, the BusinessDocument Approval Workflow, the protected internal Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, BusinessDocument Line Resolution Layer, and Wave 3 internal BusinessDocument/payment/HTML/PDF review surfaces; production automation readiness remains gated because no Maven/Invoice4U execution, customer-facing send, inventory deduction, or production integration is approved.
+Project completion should not be overstated: current evidence-based completion is 69% by the recorded capability formula. Infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells, central work screens, preview intelligence, the AI Draft Recommendation Preview runtime, the pricing-evidence preview layer, protected internal BusinessDocument draft creation, internal BusinessDocument review, the BusinessDocument Approval Workflow, the protected internal Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, BusinessDocument Line Resolution Layer, and Wave 3 internal BusinessDocument/payment/HTML/PDF/SKU review surfaces; production automation readiness remains gated because no Maven/Invoice4U execution, customer-facing send, inventory deduction, or production integration is approved.
 
 Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes outside approved protected Server Actions, schema changes, migrations, env changes, Maven/Invoice4U execution, email/customer-facing sends, inventory actions, or source-system actions until Liad explicitly approves that later gate.
 
