@@ -1066,3 +1066,19 @@ No Maven/Invoice4U call, no automatic AutomationCommand creation, no email/custo
 
 Status:
 Approved and implemented in commit `b475f13 Add business document approval workflow`.
+
+---
+
+## 2026-06-25
+
+Decision:
+`CREATE_MAVEN_DRAFT` execution adapter is implemented first as a Next.js dry-run Server Action on `/automation-commands/[id]`.
+
+Reason:
+The project needs to validate the Maven payload shape and BusinessDocument readiness before any real Maven/Invoice4U execution. The dry-run reads the existing AutomationCommand payload, validates that the linked BusinessDocument is `APPROVED`, validates customer/document/line item readiness, stores what would be sent to Maven, and preserves idempotency evidence without marking the command externally completed.
+
+Boundaries:
+No real Maven/Invoice4U call, no external document creation, no email/customer-facing action, no inventory action, no command execution completion, no schema/env/migration change, no import, no source-system action, and no production action. Dry-run state is recorded only on the internal `AutomationCommand`.
+
+Status:
+Approved and implemented in commit `1ff28a3 Add Maven draft dry-run adapter`.

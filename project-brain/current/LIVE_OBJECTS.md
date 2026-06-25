@@ -34,6 +34,13 @@ BusinessDocumentLogCount: 3
 AutomationCommandId: NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806 / db12ee97-0960-4f85-bdd5-f9fa30780885
 CommandStatus: PENDING
 CreateMavenDraftCommandCountForBusinessDocument: 1
+DryRunResult: DRY_RUN_BLOCKED
+DryRunKey: dry-run:db12ee97-0960-4f85-bdd5-f9fa30780885:maven-draft:1d7f8500-1cb7-4d81-ad3a-b7d5d8b453eb
+DryRunValidatedAt: 2026-06-25T14:02:56.382Z
+DryRunBlockers: 5 missing trusted prices plus 1 zero-quantity Labor + Service line
+ExternalStateChanged: false
+ProcessedAt: null
+CompletedAt: null
 
 ## Maven Draft
 
