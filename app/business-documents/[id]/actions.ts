@@ -28,6 +28,29 @@ function buildApprovalRedirect(documentId: string, status: string) {
   return `/business-documents/${documentId}?approvalStatus=${status}`;
 }
 
+function buildLineResolutionRedirect(documentId: string, status: string) {
+  return `/business-documents/${documentId}?lineStatus=${status}`;
+}
+
+function readPositiveDecimal(value: FormDataEntryValue | null) {
+  const text = String(value || "").trim();
+  const numberValue = Number(text);
+
+  if (!text || !Number.isFinite(numberValue) || numberValue < 0) {
+    return null;
+  }
+
+  return new Prisma.Decimal(text);
+}
+
+function readJsonObject(value: Prisma.JsonValue | null) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return {};
+  }
+
+  return value as Record<string, Prisma.JsonValue>;
+}
+
 async function findBusinessDocumentForApproval(businessDocumentId: string) {
   return prisma.businessDocument.findFirst({
     where: {
@@ -216,6 +239,160 @@ export async function returnBusinessDocumentToReview(formData: FormData) {
   revalidatePath(`/business-documents/${canonicalDocumentId}`);
 
   redirect(buildApprovalRedirect(canonicalDocumentId, "returned"));
+}
+
+export async function resolveBusinessDocumentLine(formData: FormData) {
+  const businessDocumentId = String(
+    formData.get("businessDocumentId") || "",
+  ).trim();
+  const itemId = String(formData.get("itemId") || "").trim();
+  const resolvedBy = String(formData.get("resolvedBy") || "Liad").trim() || "Liad";
+  const quantity = readPositiveDecimal(formData.get("quantity"));
+  const unitPrice = readPositiveDecimal(formData.get("unitPrice"));
+  const pricingEvidenceSource = String(
+    formData.get("pricingEvidenceSource") || "",
+  ).trim();
+  const pricingEvidenceNote = String(formData.get("pricingEvidenceNote") || "").trim();
+  const needsPriceApproval = formData.get("needsPriceApproval") === "on";
+
+  if (!businessDocumentId) {
+    redirect("/business-documents?lineStatus=missing-document");
+  }
+
+  if (!itemId) {
+    redirect(buildLineResolutionRedirect(businessDocumentId, "missing-item"));
+  }
+
+  if (!quantity || quantity.lte(0)) {
+    redirect(buildLineResolutionRedirect(businessDocumentId, "invalid-quantity"));
+  }
+
+  if (!unitPrice) {
+    redirect(buildLineResolutionRedirect(businessDocumentId, "invalid-price"));
+  }
+
+  if (!pricingEvidenceSource || !pricingEvidenceNote) {
+    redirect(buildLineResolutionRedirect(businessDocumentId, "missing-evidence"));
+  }
+
+  const document = await prisma.businessDocument.findFirst({
+    where: {
+      OR: [
+        { appsheetBusinessDocumentId: businessDocumentId },
+        ...(isUuid(businessDocumentId) ? [{ id: businessDocumentId }] : []),
+      ],
+    },
+    select: {
+      id: true,
+      appsheetBusinessDocumentId: true,
+      items: {
+        where: {
+          OR: [
+            { appsheetItemId: itemId },
+            ...(isUuid(itemId) ? [{ id: itemId }] : []),
+          ],
+        },
+        select: {
+          id: true,
+          appsheetItemId: true,
+          itemName: true,
+          quantity: true,
+          unitPrice: true,
+          totalPrice: true,
+          needsPriceApproval: true,
+          rawSource: true,
+        },
+        take: 1,
+      },
+    },
+  });
+
+  if (!document) {
+    redirect("/business-documents?lineStatus=not-found");
+  }
+
+  const item = document.items[0];
+
+  if (!item) {
+    redirect(buildLineResolutionRedirect(document.appsheetBusinessDocumentId, "item-not-found"));
+  }
+
+  const previousValues = {
+    quantity: item.quantity.toString(),
+    unitPrice: item.unitPrice?.toString() || null,
+    totalPrice: item.totalPrice?.toString() || null,
+    needsPriceApproval: item.needsPriceApproval,
+  };
+  const totalPrice = quantity.mul(unitPrice);
+  const evidenceEntry = {
+    source: pricingEvidenceSource,
+    unitPrice: unitPrice.toString(),
+    note: pricingEvidenceNote,
+    resolvedBy,
+    resolvedAt: new Date().toISOString(),
+  };
+  const rawSource = readJsonObject(item.rawSource);
+  const existingEvidence = Array.isArray(rawSource.pricingEvidence)
+    ? rawSource.pricingEvidence
+    : [];
+  const nextRawSource = {
+    ...rawSource,
+    pricingEvidence: [...existingEvidence, evidenceEntry],
+    lineResolution: {
+      lastResolvedBy: resolvedBy,
+      lastResolvedAt: evidenceEntry.resolvedAt,
+      noMavenCall: true,
+      noAutomationCommandExecution: true,
+      noEmail: true,
+      noInventory: true,
+    },
+  };
+
+  await prisma.$transaction(async (tx) => {
+    await tx.businessDocumentItem.update({
+      where: { id: item.id },
+      data: {
+        quantity,
+        unitPrice,
+        totalPrice,
+        needsPriceApproval,
+        rawSource: nextRawSource satisfies Prisma.InputJsonValue,
+      },
+    });
+
+    await tx.businessDocumentLog.create({
+      data: {
+        businessDocumentId: document.id,
+        action: "BUSINESS_DOCUMENT_LINE_RESOLVED",
+        performedBy: resolvedBy,
+        result: `Updated line ${item.itemName}`,
+        notes:
+          "Internal line correction only. No Maven/Invoice4U call, no AutomationCommand execution, no email/customer-facing action, and no inventory deduction occurred.",
+        rawData: {
+          itemId: item.id,
+          appsheetItemId: item.appsheetItemId,
+          itemName: item.itemName,
+          previousValues,
+          nextValues: {
+            quantity: quantity.toString(),
+            unitPrice: unitPrice.toString(),
+            totalPrice: totalPrice.toString(),
+            needsPriceApproval,
+          },
+          pricingEvidence: evidenceEntry,
+          noMavenCall: true,
+          noAutomationCommandExecution: true,
+          noEmail: true,
+          noInventory: true,
+        } satisfies Prisma.InputJsonValue,
+      },
+    });
+  });
+
+  revalidatePath("/business-documents");
+  revalidatePath(`/business-documents/${document.appsheetBusinessDocumentId}`);
+
+  redirect(buildLineResolutionRedirect(document.appsheetBusinessDocumentId, "line-saved"));
 }
 
 export async function createMavenDraftAutomationCommand(formData: FormData) {

@@ -4,6 +4,7 @@ import { getBusinessDocumentById } from "../business-document-adapter";
 import {
   approveBusinessDocument,
   createMavenDraftAutomationCommand,
+  resolveBusinessDocumentLine,
   returnBusinessDocumentToReview,
 } from "./actions";
 
@@ -11,7 +12,11 @@ export const dynamic = "force-dynamic";
 
 type BusinessDocumentDetailPageProps = {
   params: Promise<{ id: string }>;
-  searchParams?: Promise<{ approvalStatus?: string; commandStatus?: string }>;
+  searchParams?: Promise<{
+    approvalStatus?: string;
+    commandStatus?: string;
+    lineStatus?: string;
+  }>;
 };
 
 function getCommandStatusMessage(status?: string) {
@@ -60,15 +65,39 @@ function getApprovalStatusMessage(status?: string) {
   }
 }
 
+function getLineStatusMessage(status?: string) {
+  switch (status) {
+    case "line-saved":
+      return "BusinessDocument line was updated internally and audit history was preserved. Maven dry-run was not re-run.";
+    case "invalid-quantity":
+      return "Quantity must be greater than zero before the line can be saved.";
+    case "invalid-price":
+      return "Unit price is required before the line can be saved.";
+    case "missing-evidence":
+      return "Pricing evidence source and note are required before saving a line correction.";
+    case "missing-item":
+      return "Line correction was missing an item identifier.";
+    case "item-not-found":
+      return "BusinessDocument line was not found for correction.";
+    case "not-found":
+      return "BusinessDocument was not found for line correction.";
+    case "missing-document":
+      return "Line correction was missing a BusinessDocument identifier.";
+    default:
+      return "";
+  }
+}
+
 export default async function BusinessDocumentDetailPage({
   params,
   searchParams,
 }: BusinessDocumentDetailPageProps) {
   const { id } = await params;
-  const { approvalStatus, commandStatus } = (await searchParams) || {};
+  const { approvalStatus, commandStatus, lineStatus } = (await searchParams) || {};
   const document = await getBusinessDocumentById(id);
   const approvalStatusMessage = getApprovalStatusMessage(approvalStatus);
   const commandStatusMessage = getCommandStatusMessage(commandStatus);
+  const lineStatusMessage = getLineStatusMessage(lineStatus);
 
   if (!document) {
     notFound();
@@ -475,6 +504,92 @@ export default async function BusinessDocumentDetailPage({
                 ) : null}
               </tbody>
             </table>
+          </div>
+        </article>
+
+        <article className="info-panel wide">
+          <h2>BusinessDocument line resolution</h2>
+          <div className="approval-panel">
+            <p>
+              Internal corrections only. Saving a line updates quantity, unit
+              price, pricing evidence, and approval-required state with an
+              audit log. It does not call Maven/Invoice4U, execute
+              AutomationCommands, send email, or deduct inventory. Maven
+              dry-run is not re-run after line saves unless explicitly
+              triggered from the AutomationCommand page.
+            </p>
+            {lineStatusMessage ? (
+              <p className="status-note">{lineStatusMessage}</p>
+            ) : null}
+          </div>
+          <div className="line-resolution-list">
+            {document.items.map((item) => (
+              <form
+                action={resolveBusinessDocumentLine}
+                className="line-resolution-form"
+                key={item.internalId}
+              >
+                <input name="businessDocumentId" type="hidden" value={document.id} />
+                <input name="itemId" type="hidden" value={item.internalId} />
+                <div className="line-resolution-heading">
+                  <strong>{item.name}</strong>
+                  <span>{item.needsPriceApproval}</span>
+                </div>
+                <label>
+                  Quantity
+                  <input
+                    name="quantity"
+                    type="number"
+                    min="0.001"
+                    step="0.001"
+                    defaultValue={item.editableQuantity}
+                  />
+                </label>
+                <label>
+                  Unit price
+                  <input
+                    name="unitPrice"
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    defaultValue={item.editableUnitPrice}
+                  />
+                </label>
+                <label>
+                  Evidence source
+                  <input
+                    name="pricingEvidenceSource"
+                    type="text"
+                    placeholder="ProductCatalog, BusinessDocument history, Maven history, or manual approval"
+                  />
+                </label>
+                <label>
+                  Evidence note
+                  <textarea
+                    name="pricingEvidenceNote"
+                    placeholder="Record the trusted source, approval note, or correction reason"
+                  />
+                </label>
+                <label>
+                  Resolved by
+                  <input name="resolvedBy" type="text" defaultValue="Liad" />
+                </label>
+                <label className="checkbox-row">
+                  <input
+                    name="needsPriceApproval"
+                    type="checkbox"
+                    defaultChecked={item.needsPriceApprovalChecked}
+                  />
+                  Keep approval required for this line
+                </label>
+                <button className="button secondary" type="submit">
+                  Save line correction
+                </button>
+              </form>
+            ))}
+            {!document.items.length ? (
+              <p className="empty-state">No line items are available to resolve.</p>
+            ) : null}
           </div>
         </article>
 

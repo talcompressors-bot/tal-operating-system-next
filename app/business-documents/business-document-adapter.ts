@@ -145,12 +145,16 @@ export type BusinessDocumentDetail = BusinessDocumentListItem & {
   };
   items: Array<{
     id: string;
+    internalId: string;
     name: string;
     quantity: string;
+    editableQuantity: string;
     unitPrice: string;
+    editableUnitPrice: string;
     totalPrice: string;
     source: string;
     needsPriceApproval: string;
+    needsPriceApprovalChecked: boolean;
     pricingEvidence: string[];
   }>;
   logs: Array<{
@@ -578,12 +582,16 @@ function mapBusinessDocumentDetail(
     lifecycle: mapLifecycle(document),
     items: document.items.map((item) => ({
       id: readText(item.appsheetItemId) || item.id,
+      internalId: item.id,
       name: item.itemName,
       quantity: item.quantity.toFixed(3),
+      editableQuantity: item.quantity.toString(),
       unitPrice: formatMoney(item.unitPrice, document.currency),
+      editableUnitPrice: item.unitPrice ? item.unitPrice.toString() : "",
       totalPrice: formatMoney(item.totalPrice, document.currency),
       source: formatEnum(item.source),
       needsPriceApproval: item.needsPriceApproval ? "Required" : "No",
+      needsPriceApprovalChecked: item.needsPriceApproval,
       pricingEvidence: summarizePricingEvidence(item.rawSource),
     })),
     logs: document.logs.map((log) => ({
