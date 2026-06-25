@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`PENDING - Hebrew customer-facing PDF layout fix commit`
+`b93c303 Make business document PDF Hebrew customer facing`
 
 ## Last Closeout Commit
 
