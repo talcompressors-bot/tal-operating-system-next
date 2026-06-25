@@ -24,7 +24,22 @@ function parseMoney(value: string) {
 
 function parseQuantity(value: string) {
   const numericValue = Number(value);
-  return Number.isFinite(numericValue) ? numericValue : null;
+
+  if (Number.isFinite(numericValue)) {
+    return {
+      quantity: numericValue,
+      requiresApproval: false,
+    };
+  }
+
+  if (value.toLowerCase().includes("missing")) {
+    return {
+      quantity: 0,
+      requiresApproval: true,
+    };
+  }
+
+  return null;
 }
 
 function mapMatchSource(source: string) {
@@ -101,9 +116,9 @@ export async function approveAiDraftPreviewToBusinessDocument(
   }
 
   const itemDrafts = preview.lines.map((line) => {
-    const quantity = parseQuantity(line.quantity);
+    const parsedQuantity = parseQuantity(line.quantity);
 
-    if (quantity === null) {
+    if (parsedQuantity === null) {
       return null;
     }
 
@@ -112,10 +127,11 @@ export async function approveAiDraftPreviewToBusinessDocument(
 
     return {
       line,
-      quantity,
+      quantity: parsedQuantity.quantity,
       unitPrice,
       totalPrice,
       needsPriceApproval:
+        parsedQuantity.requiresApproval ||
         line.needsApproval === "Required" ||
         unitPrice === null ||
         totalPrice === null,
