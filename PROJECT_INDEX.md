@@ -466,8 +466,8 @@ This section is the living navigation screen. It summarizes current reality only
 | Field | Current Reality | Canonical Evidence |
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
-| Current milestone | Wave 2 BusinessDocument Line Resolution Layer completed | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Current task | BusinessDocument Line Resolution Layer is complete; no next implementation task is approved yet | `project-brain/CURRENT_TASK.md` |
+| Current milestone | Wave 2 Line Resolution POST Smoke Test completed | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
+| Current task | Wave 2 Line Resolution POST Smoke Test is complete; no next implementation task is approved yet | `project-brain/CURRENT_TASK.md` |
 | Next approved task | None. Next candidate tasks are Working UI capability; Action Server capability when selected; Email Runtime capability when explicitly approved; Inventory Runtime capability when explicitly approved; build hygiene for the existing missing Playwright dependency/type gap if explicitly selected; optional Wave 2 import approval package only if explicitly approved. DB writes outside approved protected Server Actions remain gated and require explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
 | Last Implementation Commit | `8538455 Add business document line resolution layer` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
@@ -548,8 +548,8 @@ Current Project Tree Position:
 - Project Mode: `CAPABILITY_BUILDING`
 - Governance Status: `FROZEN`
 - Current Priority: Working runtime capabilities instead of documentation expansion
-- Current Task: BusinessDocument Line Resolution Layer is complete; no next implementation task is approved yet
-- Last Completed Task: BusinessDocument Line Resolution Layer
+- Current Task: Wave 2 Line Resolution POST Smoke Test is complete; no next implementation task is approved yet
+- Last Completed Task: Wave 2 Line Resolution POST Smoke Test
 - Next Task: None approved. Highest-value runtime candidates are the next Working UI capability, Action Server, Email Runtime, and Inventory Runtime when explicitly selected/approved.
 - Estimated completion %: 65%
 - Completion basis: capability-weighted evidence, not completed-waves / total-waves.
@@ -624,7 +624,7 @@ Readiness split:
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md` |
-| Current task | BusinessDocument Line Resolution Layer is complete; no next implementation task is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `APPLICATION_ROUTE_MAP.md` |
+| Current task | Wave 2 Line Resolution POST Smoke Test is complete; no next implementation task is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `APPLICATION_ROUTE_MAP.md` |
 | Next approved task | None. Next candidate tasks are Working UI capability; Action Server capability when selected; Email Runtime capability when explicitly approved; Inventory Runtime capability when explicitly approved; build hygiene for the existing missing Playwright dependency/type gap if explicitly selected; optional Wave 2 import approval package only if explicitly approved. DB writes outside approved protected Server Actions remain gated and require explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
 | Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; AI Draft Recommendation Readiness; Action Server Knowledge Layer; Email Document Intake evidence planning; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |
