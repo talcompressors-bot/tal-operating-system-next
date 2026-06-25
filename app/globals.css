@@ -808,6 +808,10 @@ dd {
   width: 84px;
 }
 
+.item-sku-column {
+  width: 112px;
+}
+
 .item-money-column {
   width: 126px;
 }

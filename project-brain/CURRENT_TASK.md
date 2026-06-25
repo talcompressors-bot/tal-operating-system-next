@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; manufacturer SKU Excel source planning completed; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; ServiceReport 5806 SKU matching runtime MVP completed; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -1070,6 +1070,57 @@ Project completion:
 - This does not approve real Maven/Invoice4U execution, customer-facing document delivery, saved-file persistence, or audit-log writes.
 
 ## Known Active IDs
+
+## Wave 3 SKU Matching Runtime MVP for ServiceReport 5806
+
+Implemented:
+
+- Added read/runtime manufacturer SKU matching for BusinessDocument lines tied to ServiceReport `5806`.
+- Matching is limited to linked equipment model evidence supporting `40PM` / `SCR-40PM`.
+- Trusted evidence source is only `data-sources/vendor-spare-parts/Spare Parts Service List(PM Series) rev3 (1).xls`.
+- Trusted 40PM matches exposed:
+  - Air Filter -> `25100043-071`, sheet `40PM`, row `6`.
+  - Oil Filter -> `25200007-005`, sheet `40PM`, row `7`.
+  - Oil separator -> `25300045-023`, sheet `40PM`, row `8`, available when a matching line exists.
+  - Coolant / oil -> `80000175-039`, sheet `40PM`, row `9`.
+- Internal BusinessDocument review now shows SKU match status, manufacturer, confidence, part category, source Excel file/sheet/row, compatible models, reason, and needs-review flag.
+- Customer-facing preview/PDF now shows Hebrew SKU column `מק"ט` only when a trusted SKU match exists; unmatched lines stay blank and internal SKU evidence remains hidden from the customer-facing surface.
+- Prices and totals are unchanged.
+
+Validation:
+
+- Focused TypeScript check passed for `lib/manufacturer-sku-matching.ts`, `app/business-documents/business-document-adapter.ts`, `app/business-documents/[id]/page.tsx`, `app/business-documents/[id]/preview/page.tsx`, `app/business-documents/[id]/pdf/route.ts`, and `lib/business-document-engine.ts`.
+- Review route `/business-documents/NEXT-AI-DRAFT-5806` returned HTTP `200`.
+- Review content confirmed trusted SKUs `25100043-071`, `25200007-005`, and `80000175-039`, PM Series source file evidence, and SKU review-required state for unmatched lines.
+- Preview route `/business-documents/NEXT-AI-DRAFT-5806/preview` returned HTTP `200`.
+- Preview content confirmed Hebrew SKU header `מק"ט`, trusted SKUs, no `Internal`, no `Maven`, and totals still `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`.
+- PDF route `/business-documents/NEXT-AI-DRAFT-5806/pdf` returned HTTP `200`, `Content-Type: application/pdf`, `%PDF-` signature, and `59920` bytes.
+- `git diff --check` passed with CRLF warnings only.
+
+Boundaries:
+
+- No schema change.
+- No SKU import.
+- No DB write.
+- No Maven/Invoice4U call.
+- No email/customer action.
+- No inventory deduction.
+- No source-system or production action.
+- No price change.
+
+Current blocker:
+
+- None for the ServiceReport `5806` SKU Matching Runtime MVP.
+
+Project completion:
+
+- Moves to `69%` by adding one Wave 3 internal SKU evidence runtime capability point.
+- Wave 3 is now `4% / 15% STARTED INTERNAL`.
+- No real Maven execution, customer delivery, inventory action, broad SKU registry, import, or production readiness point is claimed.
+
+Next approved task:
+
+- Continue Wave 3 read-only/internal Maven Knowledge Layer work only when explicitly selected. Candidate tasks remain Maven customer/document/item matching analysis, real Maven API contract evidence packet, Maven API secret placement plan, payment attachment readiness plan, or read-only Maven source row-count/schema validation.
 
 Source:
 `project-brain/CURRENT_TASK.md`, `project-brain/AI_DRAFT_READINESS_RECHECK.md`, `project-brain/AI_DRAFT_RECOMMENDATION_READINESS_DECISION_PACKET.md`, and `project-brain/current/LIVE_OBJECTS.md`.

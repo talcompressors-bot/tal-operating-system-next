@@ -2,6 +2,13 @@
 
 Last updated: 2026-06-25
 
+Update note - ServiceReport 5806 SKU Matching Runtime MVP:
+
+- `/business-documents/[id]` now shows read/runtime manufacturer SKU match status for BusinessDocument lines when the source ServiceReport is `5806` and linked equipment model evidence supports `40PM` / `SCR-40PM`.
+- Internal review shows trusted SKU, manufacturer, confidence, source PM Series Excel file, sheet, row, compatible models, and needs-review state.
+- `/business-documents/[id]/preview` and `/business-documents/[id]/pdf` show a Hebrew trusted SKU column (`מק"ט`) only when a confident PM Series match exists; unmatched lines stay blank on the customer-facing surface.
+- This route behavior is read-only enrichment from existing BusinessDocument and ServiceReport reads. No SKU import, schema change, DB write, Maven/Invoice4U call, email/customer action, inventory action, or source-system action is part of the route update.
+
 Scope: currently implemented Next.js `app/**/page.tsx` routes plus internal route handlers that provide user-visible runtime capability.
 
 Record counts were verified with read-only Prisma count queries against the current Supabase staging database.

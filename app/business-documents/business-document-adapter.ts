@@ -7,6 +7,7 @@ import type {
   Customer,
   MavenDocument,
   Prisma,
+  ReportEquipmentItem,
   ServiceReport,
 } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
@@ -14,13 +15,28 @@ import {
   buildBusinessDocumentEngineReview,
   type BusinessDocumentEngineReview,
 } from "../../lib/business-document-engine";
+import {
+  matchManufacturerSkuForServiceReport5806,
+  type ManufacturerSkuMatch,
+} from "../../lib/manufacturer-sku-matching";
 
 type BusinessDocumentCustomer = Pick<Customer, "appsheetCustomerId" | "name">;
 
 type BusinessDocumentServiceReport = Pick<
   ServiceReport,
   "appsheetReportId" | "reportCounter" | "reportNumberText"
->;
+> & {
+  equipmentItems: Array<
+    Pick<
+      ReportEquipmentItem,
+      | "equipmentNumber"
+      | "equipmentType"
+      | "equipmentSubtype"
+      | "equipmentModel"
+      | "compressorCategory"
+    >
+  >;
+};
 
 type BusinessDocumentAiDraft = Pick<
   AiDraftSuggestion,
@@ -163,6 +179,7 @@ export type BusinessDocumentDetail = BusinessDocumentListItem & {
     needsPriceApproval: string;
     needsPriceApprovalChecked: boolean;
     pricingEvidence: string[];
+    manufacturerSkuMatch: ManufacturerSkuMatch;
   }>;
   logs: Array<{
     id: string;
@@ -210,6 +227,16 @@ const businessDocumentSelect = {
       appsheetReportId: true,
       reportCounter: true,
       reportNumberText: true,
+      equipmentItems: {
+        orderBy: [{ equipmentNumber: "asc" }, { appsheetItemId: "asc" }],
+        select: {
+          equipmentNumber: true,
+          equipmentType: true,
+          equipmentSubtype: true,
+          equipmentModel: true,
+          compressorCategory: true,
+        },
+      },
     },
   },
   aiDraftSuggestion: {
@@ -458,6 +485,20 @@ function buildApprovalReview(document: BusinessDocumentRecord) {
   };
 }
 
+function buildModelEvidence(report: BusinessDocumentServiceReport | null) {
+  if (!report) {
+    return [];
+  }
+
+  return report.equipmentItems.flatMap((item) => [
+    readText(item.equipmentNumber),
+    readText(item.equipmentType),
+    readText(item.equipmentSubtype),
+    readText(item.equipmentModel),
+    readText(item.compressorCategory),
+  ]).filter(Boolean);
+}
+
 function mapCommandReview(document: BusinessDocumentRecord) {
   const allowedStatus =
     document.status === "APPROVED" || document.status === "READY_TO_SEND";
@@ -571,6 +612,8 @@ function mapBusinessDocumentDetail(
     rawSource: document.rawSource,
     items: document.items,
   });
+  const serviceReportNumber = formatReportNumber(document.serviceReport);
+  const modelEvidence = buildModelEvidence(document.serviceReport);
 
   return {
     ...mapBusinessDocumentListItem(document),
@@ -614,6 +657,11 @@ function mapBusinessDocumentDetail(
       needsPriceApproval: item.needsPriceApproval ? "Required" : "No",
       needsPriceApprovalChecked: item.needsPriceApproval,
       pricingEvidence: summarizePricingEvidence(item.rawSource),
+      manufacturerSkuMatch: matchManufacturerSkuForServiceReport5806({
+        serviceReportNumber,
+        modelEvidence,
+        itemName: item.itemName,
+      }),
     })),
     logs: document.logs.map((log) => ({
       id: readText(log.appsheetLogId) || log.id,

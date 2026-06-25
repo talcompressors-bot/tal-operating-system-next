@@ -3,6 +3,31 @@
 ## 2026-06-25
 
 Decision:
+ServiceReport `5806` may use a read/runtime manufacturer SKU matching layer from trusted PM Series 40PM evidence without schema changes or imports.
+
+Reason:
+The PM Series workbook has already been inspected and contains exact source row evidence for the 40PM service parts needed by the `NEXT-AI-DRAFT-5806` BusinessDocument. The immediate runtime need is to display trusted SKU evidence on internal review and show customer-facing SKUs only when confidence is high, while keeping the future SKU registry/import separately gated.
+
+Implemented scope:
+
+1. Added a small internal matcher for ServiceReport `5806` only.
+2. Required linked equipment model evidence supporting `40PM` / `SCR-40PM`.
+3. Used only `data-sources/vendor-spare-parts/Spare Parts Service List(PM Series) rev3 (1).xls` evidence.
+4. Matched trusted 40PM rows for air filter `25100043-071`, oil filter `25200007-005`, oil separator `25300045-023` when a matching line exists, and coolant/oil `80000175-039`.
+5. Exposed SKU source evidence internally on `/business-documents/[id]`.
+6. Exposed a Hebrew `מק"ט` customer-facing column on preview/PDF only when a trusted SKU match exists.
+
+Boundary:
+Read/runtime enrichment only. No schema change, SKU import, DB write, price change, Maven/Invoice4U call, email/customer action, inventory action, source-system action, or production action occurred.
+
+Status:
+Approved by user request and implemented as a Wave 3 internal runtime capability. Broad SKU registry/import and inventory/purchase-order use remain separate approval gates.
+
+---
+
+## 2026-06-25
+
+Decision:
 Manufacturer Excel spare-parts files are the trusted technical SKU/model compatibility source for future SKU registry planning.
 
 Reason:

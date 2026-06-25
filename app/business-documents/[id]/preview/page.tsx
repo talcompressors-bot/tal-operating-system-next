@@ -30,6 +30,10 @@ export default async function BusinessDocumentPreviewPage({
     notFound();
   }
 
+  const showTrustedSkuColumn = document.items.some(
+    (item) => item.manufacturerSkuMatch.trusted,
+  );
+
   return (
     <section className="document-preview-shell" dir="rtl">
       <div className="preview-toolbar">
@@ -77,7 +81,7 @@ export default async function BusinessDocumentPreviewPage({
             <dl>
               <div>
                 <dt>מספר לקוח</dt>
-                <dd>{document.customerId || "Not recorded"}</dd>
+                <dd>{document.customerId || "לא נרשם"}</dd>
               </div>
               <div>
                 <dt>מספר קריאת שירות</dt>
@@ -117,6 +121,7 @@ export default async function BusinessDocumentPreviewPage({
             <colgroup>
               <col className="item-index-column" />
               <col />
+              {showTrustedSkuColumn ? <col className="item-sku-column" /> : null}
               <col className="item-quantity-column" />
               <col className="item-money-column" />
               <col className="item-money-column" />
@@ -125,6 +130,7 @@ export default async function BusinessDocumentPreviewPage({
               <tr>
                 <th>מספר</th>
                 <th>תיאור</th>
+                {showTrustedSkuColumn ? <th>מק&quot;ט</th> : null}
                 <th>כמות</th>
                 <th>מחיר</th>
                 <th>סה&quot;כ</th>
@@ -137,6 +143,13 @@ export default async function BusinessDocumentPreviewPage({
                   <td>
                     <strong>{toHebrewItemName(item.name)}</strong>
                   </td>
+                  {showTrustedSkuColumn ? (
+                    <td>
+                      {item.manufacturerSkuMatch.trusted
+                        ? item.manufacturerSkuMatch.manufacturerSku
+                        : ""}
+                    </td>
+                  ) : null}
                   <td>{item.quantity}</td>
                   <td>{item.unitPrice}</td>
                   <td>{item.totalPrice}</td>
@@ -144,7 +157,7 @@ export default async function BusinessDocumentPreviewPage({
               ))}
               {!document.items.length ? (
                 <tr>
-                  <td colSpan={5}>לא נרשמו פריטים.</td>
+                  <td colSpan={showTrustedSkuColumn ? 6 : 5}>לא נרשמו פריטים.</td>
                 </tr>
               ) : null}
             </tbody>

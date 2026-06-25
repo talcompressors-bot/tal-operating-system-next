@@ -583,6 +583,8 @@ export default async function BusinessDocumentDetailPage({
                   <th>Total</th>
                   <th>Source</th>
                   <th>Price approval</th>
+                  <th>Manufacturer SKU</th>
+                  <th>SKU evidence</th>
                   <th>Pricing evidence</th>
                 </tr>
               </thead>
@@ -604,6 +606,48 @@ export default async function BusinessDocumentDetailPage({
                       )}
                     </td>
                     <td>
+                      {item.manufacturerSkuMatch.trusted ? (
+                        <strong>{item.manufacturerSkuMatch.manufacturerSku}</strong>
+                      ) : (
+                        <span className="warning-pill">SKU review required</span>
+                      )}
+                    </td>
+                    <td>
+                      <ul className="pricing-evidence-list">
+                        <li>
+                          <span>
+                            {item.manufacturerSkuMatch.manufacturer} /{" "}
+                            {item.manufacturerSkuMatch.confidence} /{" "}
+                            {item.manufacturerSkuMatch.partCategory}
+                          </span>
+                        </li>
+                        <li>
+                          <span>{item.manufacturerSkuMatch.reason}</span>
+                        </li>
+                        <li>
+                          <span>
+                            {item.manufacturerSkuMatch.sourceFile} / sheet{" "}
+                            {item.manufacturerSkuMatch.sourceSheet}
+                            {item.manufacturerSkuMatch.sourceRow
+                              ? ` / row ${item.manufacturerSkuMatch.sourceRow}`
+                              : " / row review required"}
+                          </span>
+                        </li>
+                        <li>
+                          <span>
+                            Compatible models:{" "}
+                            {item.manufacturerSkuMatch.compatibleModels.join(", ")}
+                          </span>
+                        </li>
+                        <li>
+                          <span>
+                            Needs review:{" "}
+                            {item.manufacturerSkuMatch.needsReview ? "Yes" : "No"}
+                          </span>
+                        </li>
+                      </ul>
+                    </td>
+                    <td>
                       {item.pricingEvidence.length ? (
                         <ul className="pricing-evidence-list">
                           {item.pricingEvidence.map((evidence) => (
@@ -620,7 +664,7 @@ export default async function BusinessDocumentDetailPage({
                 ))}
                 {!document.items.length ? (
                   <tr>
-                    <td colSpan={7}>No business document items linked.</td>
+                    <td colSpan={9}>No business document items linked.</td>
                   </tr>
                 ) : null}
               </tbody>
