@@ -41,7 +41,60 @@ The confirmed real Maven API call in local source is document search/import:
 
 - `POST https://app.invoice-maven.co.il/api/documents/searchDocuments`
 
-No checked local source proves the real Maven draft-create endpoint/request/response contract. The current `createMavenDraft(data)` function logs and updates internal Google Sheets/AppSheet workflow state; it does not show a real external draft creation API call.
+No checked local source proves the real Maven document-generation endpoint/request/response contract. The current legacy `createMavenDraft(data)` function logs and updates internal Google Sheets/AppSheet workflow state; it does not show a real external document-generation API call.
+
+## Maven API Environment Placeholder Checklist
+
+Status:
+Placeholders prepared in `.env.staging.example` only. No real secrets are stored in git.
+
+Boundaries:
+
+- Do not put real Maven secrets in `.env.staging.example`.
+- Do not put real Maven secrets in any tracked file.
+- Real Maven values must live only in ignored local env files or an approved deployment secret store.
+- Adding placeholders does not approve Maven execution.
+- Adding placeholders does not approve a real executor.
+- `MAVEN_EXECUTION_ENABLED=false` must remain the safe default until Liad explicitly approves real execution.
+
+Prepared placeholder names:
+
+| Variable | Purpose | Required before real execution | Current evidence |
+|---|---|---:|---|
+| `MAVEN_API_BASE_URL` | Base URL for Maven API calls | Yes | Search/import source currently uses `https://app.invoice-maven.co.il/api` style URLs. |
+| `MAVEN_API_KEY` | Maven API credential | Yes | Existing Apps Script reads `MAVEN_API_KEY` from script properties. Real value must not be committed. |
+| `MAVEN_API_AUTH_MODE` | Documents whether the key is sent in body, header, bearer token, or another mode | Yes | Current search/import source sends `api_key` in the request body. Generation auth is unverified. |
+| `MAVEN_API_DOCUMENT_SEARCH_ENDPOINT` | Maven document search/import endpoint | Yes for history/duplicate checks | Confirmed local source uses `/documents/searchDocuments`. |
+| `MAVEN_API_DOCUMENT_GENERATION_ENDPOINT` | Maven external document generation/output endpoint | Yes before real document generation | Unknown; not proven in checked source. |
+| `MAVEN_API_CUSTOMER_LOOKUP_ENDPOINT` | Customer lookup/matching endpoint if Maven requires Maven customer IDs | Required if document generation needs Maven customer identity | Unknown. |
+| `MAVEN_API_ITEM_LOOKUP_ENDPOINT` | Item/product lookup endpoint if Maven requires item IDs/SKUs | Required if document generation needs Maven item identity | Unknown. |
+| `MAVEN_API_TARGET_ENVIRONMENT` | Human-readable target environment such as sandbox/staging/production | Yes | Unknown; must be approved before any real call. |
+| `MAVEN_API_TIMEOUT_MS` | Request timeout for future adapter | Yes before real executor implementation | Not implemented. |
+| `MAVEN_EXECUTION_ENABLED` | Safety flag for future executor wiring | Yes before implementation; default must stay `false` | Placeholder only; no code reads it yet. |
+
+Required values/evidence before real Maven execution:
+
+1. Confirm target environment: sandbox/test/staging/production.
+2. Confirm base URL and all endpoint paths from primary Maven/API evidence.
+3. Confirm authentication mode for every required endpoint.
+4. Confirm whether document generation accepts free-text line items or requires Maven item IDs.
+5. Confirm whether customer matching requires Maven customer ID, business ID, name, or another identifier.
+6. Confirm accepted document type values.
+7. Confirm VAT/tax behavior and whether Maven calculates totals.
+8. Confirm response fields: Maven document ID, document number, PDF URL, status, and error schema.
+9. Confirm idempotency/duplicate protection rules.
+10. Confirm rate limits, retry rules, and timeout policy.
+11. Confirm that document generation does not email customers automatically unless separately approved.
+12. Confirm rollback/cancellation/correction process for incorrectly generated documents.
+13. Confirm allowed internal post-success writes before implementation.
+14. Confirm `MAVEN_EXECUTION_ENABLED` can be changed only after explicit approval.
+
+Current status:
+
+- Environment placeholders are ready for future secret configuration.
+- No real secret is present in git.
+- No Maven API call was made.
+- No real Maven execution adapter was implemented.
 
 ## Maven Object Inventory
 

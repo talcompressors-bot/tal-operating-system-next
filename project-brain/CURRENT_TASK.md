@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Wave 3 Maven terminology corrected; Maven source inventory complete; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Wave 3 Maven API placeholders prepared; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -504,6 +504,59 @@ Project completion:
 - Remains `65%`.
 - Wave 3 Maven Knowledge Layer is still `0% / 15% STARTED READ-ONLY`; this inventory improves readiness but does not add a runtime/import capability point.
 
+## Wave 3 Maven API Environment Placeholders
+
+Scope:
+
+- Prepared Maven API environment placeholders for future configuration.
+- Documented the required Maven API values and pre-execution checklist.
+- No real Maven secrets were added to git.
+- No Maven API call occurred.
+- No real Maven execution adapter was implemented.
+
+Files:
+
+- `.env.staging.example`
+- `project-brain/migration/MAVEN_SOURCE_INVENTORY.md`
+
+Placeholder names added:
+
+- `MAVEN_API_BASE_URL`
+- `MAVEN_API_KEY`
+- `MAVEN_API_AUTH_MODE`
+- `MAVEN_API_DOCUMENT_SEARCH_ENDPOINT`
+- `MAVEN_API_DOCUMENT_GENERATION_ENDPOINT`
+- `MAVEN_API_CUSTOMER_LOOKUP_ENDPOINT`
+- `MAVEN_API_ITEM_LOOKUP_ENDPOINT`
+- `MAVEN_API_TARGET_ENVIRONMENT`
+- `MAVEN_API_TIMEOUT_MS`
+- `MAVEN_EXECUTION_ENABLED=false`
+
+Checklist documented:
+
+- Confirm target environment.
+- Confirm base URL, endpoints, and auth mode from primary Maven/API evidence.
+- Confirm document generation endpoint, response fields, error schema, rate limits, timeout, retry, idempotency, duplicate protection, VAT/tax behavior, customer matching, item identity, no-auto-email behavior, rollback/correction path, and allowed internal post-success writes.
+- Keep `MAVEN_EXECUTION_ENABLED=false` until explicit Liad approval.
+
+Boundary:
+
+- Documentation/placeholders only.
+- No code reads these variables yet.
+- No runtime behavior changed.
+- No real secret committed.
+- No DB write, schema change, import, Maven/Invoice4U action, Apps Script/AppSheet/Google Sheets/source-system/production change, email/customer-facing action, or inventory action.
+
+Current blocker:
+
+- None for placeholder preparation.
+- Real Maven execution remains blocked by missing primary Maven document-generation API contract evidence, target-environment approval, secret placement approval, executor implementation approval, and explicit Liad approval for any real Maven call.
+
+Project completion:
+
+- Remains `65%`.
+- This improves Wave 3 readiness but does not add a runtime/import capability point.
+
 ## Known Active IDs
 
 Source:
@@ -528,12 +581,13 @@ Next candidate tasks, pending explicit selection/approval:
 
 1. Read-only Maven customer/document/item matching analysis for BusinessDocument `NEXT-AI-DRAFT-5806`.
 2. Real Maven document-generation API contract evidence packet, only from primary Maven/API or production-current source evidence.
-3. Read-only Maven source row-count/schema validation from approved staging/PostgreSQL or connector reads.
-4. Action Server capability, when explicitly selected and scoped safely.
-5. Email Runtime capability, when explicitly selected and approved.
-6. Inventory Runtime capability, when explicitly selected and approved.
-7. Build hygiene for the existing missing Playwright dependency/type gap, if explicitly selected.
-8. Optional Wave 2 import approval package, only if explicitly approved.
+3. Maven API secret placement plan, only after target environment and real values are approved; no secrets in git.
+4. Read-only Maven source row-count/schema validation from approved staging/PostgreSQL or connector reads.
+5. Action Server capability, when explicitly selected and scoped safely.
+6. Email Runtime capability, when explicitly selected and approved.
+7. Inventory Runtime capability, when explicitly selected and approved.
+8. Build hygiene for the existing missing Playwright dependency/type gap, if explicitly selected.
+9. Optional Wave 2 import approval package, only if explicitly approved.
 
 Project completion should not be overstated: current evidence-based completion is 65% by the recorded capability formula. Infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells, central work screens, preview intelligence, the AI Draft Recommendation Preview runtime, the pricing-evidence preview layer, protected internal BusinessDocument draft creation, internal BusinessDocument review, the BusinessDocument Approval Workflow, the protected internal Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, and the BusinessDocument Line Resolution Layer; production automation readiness remains gated because no Maven/Invoice4U execution, customer-facing send, inventory deduction, or production integration is approved.
 

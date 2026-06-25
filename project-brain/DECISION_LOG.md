@@ -3,6 +3,41 @@
 ## 2026-06-25
 
 Decision:
+Maven API environment placeholders may be added to tracked env examples, but real Maven secrets must not be committed.
+
+Reason:
+Wave 3 needs a safe way to name required Maven API configuration before any real execution work. Placeholder names help define the future contract without exposing credentials or enabling external calls.
+
+Approved placeholder scope:
+
+1. `.env.staging.example` may contain blank Maven API variable names.
+2. `MAVEN_EXECUTION_ENABLED=false` is the safe default.
+3. `project-brain/migration/MAVEN_SOURCE_INVENTORY.md` documents required Maven API values and the pre-execution checklist.
+4. No code should read or require these variables until a real executor task is separately approved.
+
+Required future evidence before real execution:
+
+1. Target Maven environment.
+2. Base URL and endpoint paths.
+3. Authentication mode.
+4. Document-generation request/response/error schema.
+5. Customer matching and item identity rules.
+6. VAT/tax and total calculation behavior.
+7. Idempotency, duplicate protection, retry, timeout, and rate-limit rules.
+8. Confirmation that document generation does not email customers automatically.
+9. Approved secret placement outside git.
+
+Boundary:
+Documentation/placeholders only. No real secret was added to git, no runtime behavior changed, no code was implemented, no DB write occurred, no schema change occurred, no import occurred, no Maven/Invoice4U action occurred, no Apps Script/AppSheet/Google Sheets/source-system/production change occurred, no email/customer-facing action occurred, and no inventory action occurred.
+
+Status:
+Approved by user request and completed as placeholders/checklist only. Real Maven execution remains `APPROVAL_REQUIRED`.
+
+---
+
+## 2026-06-25
+
+Decision:
 Correct Wave 3 Maven terminology: Maven does not create internal drafts.
 
 Reason:
