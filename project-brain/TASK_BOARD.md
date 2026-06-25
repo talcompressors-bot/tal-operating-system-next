@@ -1,18 +1,23 @@
 # TASK BOARD
 
 Last updated: 2026-06-25
-Mode: Executive Orchestrator Phase 2 governance upgraded; no next implementation task approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; no next implementation task approved yet
 
 ## NOW
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
-| Await next task selection through Executive Orchestrator | Keep state accurate after read-only shell, SCR preview progress, evidence-layer documentation, AI Draft readiness approval, global document-line governance, email intake planning, active-ID protocol hardening, Project Executive governance upgrade, and Phase 2 Executive Decision Engine upgrade | No implementation task is currently approved; every future task must pass through `agents/ORCHESTRATOR_AGENT.md` for Understand/Discover/Consult/Score/Decide/Execute/Validate/Learn/Improve, specialist consultation, executive scoring, duplicate-proof review, authority-level, validation, and capability-vs-document review; completion remains 56%; DB import/write/runtime/source-system work remains gated | Yes before starting any DB import/write/schema/env/source-system/Maven/Invoice4U/email runtime work; explicit selection required before the next implementation task |
+| Await runtime capability selection through Executive Orchestrator | Keep state accurate after foundational governance matured and project mode moved to `CAPABILITY_BUILDING` | No implementation task is currently approved; every future task must identify the new capability it will add; governance is `FROZEN`; runtime, working UI, AI Draft Preview, Action Server, Email Runtime, and Inventory Runtime are prioritized over documentation expansion; completion remains 56%; DB import/write/runtime/source-system work remains gated | Yes before starting any DB import/write/schema/env/source-system/Maven/Invoice4U/email runtime work; explicit selection required before the next implementation task |
 
 ## NEXT
 
 | Task | Goal | Test / Done | Approval Needed |
 |---|---|---|---|
+| AI Draft Preview runtime capability | Create a working, read-only/no-write AI Draft Preview for Service Report `5806` before any BusinessDocument, Maven, inventory, email, or customer-facing action | Preview exists in runtime/UI, is validated visibly, uses existing evidence/rules, and does not write DB/source systems | Selection required before starting; explicit approval required before any write/action |
+| Working UI capability | Add or improve a visible Wave 2 workflow capability using existing routes, adapters, and governance | User-visible behavior exists and is validated; no new governance document is created unless safety requires it | Selection required before starting; approvals required for protected systems |
+| Action Server capability | Advance an approved Action Server runtime capability only when scoped and selected | Uses existing governance and approval gates; no source-system action without explicit approval | Explicit selection and approval required |
+| Email Runtime capability | Advance email runtime only after explicit approval and safe scope | No customer email send or Gmail runtime action without explicit approval | Explicit approval required |
+| Inventory Runtime capability | Advance inventory runtime only after explicit approval and safe scope | No inventory deduction or source-system write without explicit approval | Explicit approval required |
 | Executive Orchestrator cycle | Run every selected task through Understand, Discover, Consult, Score, Decide, Execute, Validate, Learn, and Improve | Decision output includes consulted agent opinions, Executive Scores, duplicate-prevention proof, selected path, authority level, and Reality Check KPIs | No approval for read-only/documentation AUTO_EXECUTE work; approval required for any gated system or business decision |
 | Orchestrator Decision Engine intake | Run every selected task, idea, bug, feature, investigation, proposal, or request through the existing `ORCHESTRATOR_AGENT` Project Executive matrix before work begins | Decision output identifies whether the task should exist, what can be reused, which specialist owns it, required/optional/forbidden tools, business evidence priority, architecture impact, authority level, validation, rollback, and whether the result adds a capability or only a document | No approval for read-only/documentation AUTO_EXECUTE work; approval required for any gated system or business decision |
 | AI Draft Recommendation Preview runtime/shell mission packet | Define the no-write implementation mission for a read-only approval-based AI Draft preview for Service Report `5806` | Mission packet identifies scope, files, agents, validation, rollback, approval gates, and protected systems; no runtime is implemented by the packet | Selection/approval required before implementation; explicit approval required before any BusinessDocument, Maven, DB, inventory, email, or customer-facing action |
@@ -100,6 +105,7 @@ Mode: Executive Orchestrator Phase 2 governance upgraded; no next implementation
 | AI Draft readiness rules and email intake schema documented | Commit `be89380 Document AI draft readiness rules`; AI Draft is now `READY_FOR_APPROVAL_BASED_DRAFTS` for approval-based previews; added `project-brain/AI_DRAFT_READINESS_RECHECK.md` and `project-brain/EMAIL_INTAKE_EVIDENCE_PACKET_SCHEMA.md`; validation `git diff --check` passed with CRLF warnings only; no code, DB, Prisma, imports, Maven/Invoice4U, inventory, email runtime, source-system, customer-facing, or production workflow changes occurred |
 | Orchestrator Decision Engine governance upgraded | `agents/ORCHESTRATOR_AGENT.md` now acts as the existing Project Executive for all task intake; `PROJECT_OPERATING_PROTOCOL.md` and `PROJECT_INDEX.md` require every future task to pass through the decision engine; `project-brain/DECISION_LOG.md` records the approved authority levels and reuse-before-create rule; no new PM Agent, duplicate governance, runtime implementation, DB, Prisma, Maven, Inventory, or customer-facing action occurred |
 | Executive Orchestrator Phase 2 governance upgraded | Commit `76a9ba6 Upgrade orchestrator executive decision engine`; `agents/ORCHESTRATOR_AGENT.md` now requires the full Executive Cycle, consultation summaries from relevant existing agents, Executive Scoring, duplicate-proof gates before any new Agent/Registry/Spec/Rule/Knowledge Base/Roadmap Item, self-improvement review after every completed task, and Reality Check KPI reporting. `PROJECT_OPERATING_PROTOCOL.md`, `PROJECT_INDEX.md`, `project-brain/DECISION_LOG.md`, `project-brain/CURRENT_TASK.md`, and `project-brain/TASK_BOARD.md` were extended; no new Executive Agent, runtime implementation, DB, Prisma, Maven, Inventory, or customer-facing action occurred |
+| Project Execution Mode transitioned to capability building | Project mode is now `CAPABILITY_BUILDING`; governance status is `FROZEN`; future work prioritizes runtime, working UI, AI Draft Preview, Action Server, Email Runtime, and Inventory Runtime over documentation expansion. Governance expansion is forbidden except for governance bugs, safety issues, explicit Liad approval, or capability-safety requirements |
 
 ## BLOCKED / NOT STARTED
 
@@ -124,6 +130,11 @@ Mode: Executive Orchestrator Phase 2 governance upgraded; no next implementation
 ## Rules
 
 - No production writes.
+- Project Mode is `CAPABILITY_BUILDING`.
+- Governance Status is `FROZEN`.
+- Current Priority is working runtime capabilities instead of documentation expansion.
+- New specs, registries, knowledge bases, governance documents, roadmap items, or decision systems are forbidden unless a governance bug, safety issue, explicit Liad approval, or capability-safety requirement exists.
+- Every proposed task must answer what new capability will exist after completion. If no new capability will exist, stop and recommend merge, reuse, extend, or reject.
 - Autonomous Work Loop is active for safe tasks.
 - Codex is the main Orchestrator and Project Executive; every task must pass through the Orchestrator Decision Engine before work begins.
 - Every task must run the Executive Cycle: Understand, Discover, Consult, Score, Decide, Execute, Validate, Learn, Improve.

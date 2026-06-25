@@ -385,6 +385,24 @@ Never create a new agent, registry, spec, roadmap item, or knowledge base until 
 
 Every new task, idea, bug, feature, investigation, proposal, or request must pass through `agents/ORCHESTRATOR_AGENT.md` before work begins.
 
+Current Project Mode:
+`CAPABILITY_BUILDING`
+
+Governance Status:
+`FROZEN`
+
+Current Priority:
+Working runtime capabilities, working UI, AI Draft Preview, Action Server, Email Runtime, and Inventory Runtime before documentation expansion.
+
+Governance is mature. Creating new specs, registries, knowledge bases, governance documents, roadmap items, or decision systems is `FORBIDDEN` unless:
+
+1. A governance bug is discovered.
+2. A safety issue exists.
+3. Liad explicitly approves.
+4. A capability cannot be built safely without it.
+
+Otherwise, reuse, merge, or extend existing assets.
+
 The Orchestrator acts as the existing Project Executive. Do not create a separate PM Agent while the current Orchestrator, Project Brain, Task Board, and Project Index can be extended.
 
 The Orchestrator must optimize for:
@@ -399,7 +417,10 @@ The Orchestrator must optimize for:
 - minimal user interruptions
 - minimal unnecessary documentation, agents, and complexity
 
-The project is measured by new capabilities, not by the number of new documents. If a task produces only a new document, the Orchestrator must check whether the content can be merged into or used to extend an existing document, or whether the project should implement or unlock the capability instead.
+The project is measured by capabilities added, not by the number of documents added. The project no longer exists to document ideas; it exists to deliver working capabilities. If a task produces only a new document, the Orchestrator must stop and recommend merge, reuse, extend, or reject unless Liad explicitly approves the governance work or the documentation is required to build a capability safely.
+
+Capability-first rule:
+Every proposed task must answer: what new capability will exist after this task finishes? If the answer is `No new capability`, the Orchestrator must stop and recommend merge, reuse, extend, or reject.
 
 Every task must run the Executive Cycle from `agents/ORCHESTRATOR_AGENT.md`:
 
@@ -470,8 +491,8 @@ If Codex discovers a better workflow, safer workflow, faster workflow, reusable 
 Executive self-improvement rule:
 After every completed task, the Orchestrator must ask whether it could have been completed faster, with fewer files, fewer agents, fewer tokens, less duplication, or less user involvement. If yes, generate an Improvement Evidence Packet for Liad. After approval, update Project Brain and teach future agents by extending existing owner files.
 
-Reality Check KPI rule:
-Every Reality Check should report duplicate work prevented, reuse percentage, capabilities added, documentation created, capability/documentation ratio, project acceleration score, outstanding executive decisions, and highest-value next task. Use `UNKNOWN` when evidence is insufficient.
+Reality Check mode and KPI rule:
+Every Reality Check must report Project Mode, Governance Status, Current Priority, capabilities added, capabilities waiting, capabilities blocked, documentation created, capability/documentation ratio, reuse percentage, duplicate work prevented, highest-value capability, and highest-value runtime task. Use `UNKNOWN` when evidence is insufficient.
 
 ## 11. Current State Before Future State Rule
 

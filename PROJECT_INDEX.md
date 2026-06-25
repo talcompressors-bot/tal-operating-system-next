@@ -44,6 +44,10 @@ If the Project Reality Check cannot be produced, STOP and report the missing can
 
 Project Reality Check must include:
 
+- PROJECT MODE
+- Current Mode: `CAPABILITY_BUILDING`
+- Governance Status: `FROZEN`
+- Current Priority: working runtime capabilities instead of documentation expansion
 - current phase
 - Latest Git Commit live from `git log -1 --oneline`
 - Git working state from `git status --short --branch`
@@ -59,11 +63,14 @@ Project Reality Check must include:
 - duplicate work prevented
 - reuse percentage
 - capabilities added
+- capabilities waiting
+- capabilities blocked
 - documentation created
 - capability/documentation ratio
 - project acceleration score
 - outstanding executive decisions
-- highest-value next task
+- highest-value capability
+- highest-value runtime task
 
 Project Reality Check must always run:
 
@@ -104,6 +111,15 @@ Active ID rule:
 
 Codex should work autonomously on safe tasks and stop only at meaningful approval gates.
 
+Current Project Mode:
+`CAPABILITY_BUILDING`
+
+Governance Status:
+`FROZEN`
+
+Current Priority:
+Working runtime capabilities instead of documentation expansion.
+
 Codex is the main Orchestrator and Project Executive. Every new task, idea, bug, feature, investigation, proposal, or request must pass through the Orchestrator Decision Engine in `agents/ORCHESTRATOR_AGENT.md` before work begins. It must understand, discover, consult, score, decide, execute, validate, learn, and improve. It must route work to existing agent owners by role, continue safe work automatically, validate, collect proof, update Project Brain, and stop only before critical approvals.
 
 The Orchestrator must optimize for least duplication, maximum reuse, shortest safe path, highest business value, highest project acceleration, evidence-based decisions, minimal token usage, minimal user interruptions, minimal unnecessary documentation, minimal unnecessary agents, and minimal unnecessary complexity.
@@ -120,7 +136,13 @@ Authority levels:
 - `FORBIDDEN`: do not proceed because the task conflicts with current state, approval gates, source-of-truth rules, or reuse-before-create rules.
 
 Success metric:
-The project is measured by new capabilities, not by the number of new documents. If a proposed task only creates a document, the Orchestrator must check whether it can be merged, used to extend an existing document, or converted into a capability-enabling task.
+The project is measured by capabilities added, not by the number of documents added. The project no longer exists to document ideas; it exists to deliver working capabilities. If a proposed task only creates a document, the Orchestrator must stop and recommend merge, reuse, extend, or reject unless Liad explicitly approves the governance work or the documentation is required to build a capability safely.
+
+Capability-first rule:
+Every proposed task must answer what new capability will exist after the task finishes. If the answer is `No new capability`, the Orchestrator must stop and recommend merge, reuse, extend, or reject.
+
+Governance freeze:
+Governance is mature. Creating new specs, registries, knowledge bases, governance documents, roadmap items, or decision systems is `FORBIDDEN` unless a governance bug is discovered, a safety issue exists, Liad explicitly approves, or a capability cannot be built safely without it. Otherwise, reuse, merge, or extend existing assets.
 
 Duplicate prevention:
 Before creating any Agent, Registry, Spec, Rule, Knowledge Base, or Roadmap Item, the Orchestrator must prove existing assets were already searched, already verified, and already rejected as insufficient. If that proof is missing, creation is `FORBIDDEN`; extend, merge, or reuse existing assets instead.
@@ -523,9 +545,12 @@ NEXT APPROVAL GATE
 Current Project Tree Position:
 
 - Current Wave: Wave 2 Service Workflow Layer
-- Current Task: AI Draft recommendation readiness business rules are approved and documented; no next implementation task is approved yet
+- Project Mode: `CAPABILITY_BUILDING`
+- Governance Status: `FROZEN`
+- Current Priority: Working runtime capabilities instead of documentation expansion
+- Current Task: transition from governance building to capability building; no next implementation task is approved yet
 - Last Completed Task: Executive Orchestrator Phase 2 governance upgrade
-- Next Task: None approved. Candidate tasks are AI Draft Recommendation Preview runtime/shell mission packet for Service Report `5806`; Maven/Invoice4U lifecycle tracking shell; build hygiene for the existing missing Playwright dependency/type gap if explicitly selected; optional Wave 2 import approval package only if explicitly approved.
+- Next Task: None approved. Highest-value runtime candidate is AI Draft Preview for Service Report `5806`; other runtime candidates are Action Server, Email Runtime, and Inventory Runtime when explicitly selected/approved.
 - Estimated completion %: 56%
 - Completion basis: capability-weighted evidence, not completed-waves / total-waves.
 - Governance / Project Brain / Git workflow: 15% / 15% COMPLETE
@@ -629,14 +654,16 @@ Codex acts as the main Orchestrator / Project Executive and assigns work to the 
 Every task must pass the Orchestrator Decision Engine before work begins:
 
 1. Run the Executive Cycle: Understand, Discover, Consult, Score, Decide, Execute, Validate, Learn, Improve.
-2. Should this task exist?
-3. Reuse before create.
-4. Agent discovery.
-5. Business knowledge.
-6. Architecture.
-7. Execution.
-8. Success and capability gained.
-9. Executive KPI reporting for Reality Checks and closeout.
+2. What new capability will exist after this task finishes?
+3. If no new capability will exist, stop and recommend merge, reuse, extend, or reject.
+4. Should this task exist?
+5. Reuse before create.
+6. Agent discovery.
+7. Business knowledge.
+8. Architecture.
+9. Execution.
+10. Success and capability gained.
+11. Executive KPI reporting for Reality Checks and closeout.
 
 For safe build work, Codex also uses the Project Brain multi-agent operating workflow:
 

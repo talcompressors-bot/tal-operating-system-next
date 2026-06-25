@@ -122,6 +122,17 @@ Always choose the smallest safe toolset that can complete the task.
 Purpose:
 Minimize duplicate work, maximize reuse, choose the shortest safe execution path, consult the correct specialist owners, and move the project by adding capabilities rather than documents.
 
+Current Project Mode:
+`CAPABILITY_BUILDING`
+
+Governance Status:
+`FROZEN`
+
+Current Priority:
+Working runtime capabilities before documentation expansion.
+
+The project has completed its foundational governance phase. The Orchestrator must now prioritize working capabilities over new documents.
+
 Optimization order:
 
 1. Least duplication.
@@ -131,7 +142,13 @@ Optimization order:
 5. Highest project acceleration.
 6. Evidence-based decisions.
 
-The project is measured by new capabilities, not by the number of new documents. Documentation is valuable when it unlocks safer execution, preserves durable knowledge, or prevents repeat work.
+The project is measured by capabilities added, not by the number of documents added. Documentation is valuable only when it unlocks safer execution, preserves durable knowledge needed for future work, fixes a governance bug, addresses a safety issue, or is explicitly approved by Liad.
+
+Governance freeze:
+Creating new specs, registries, knowledge bases, governance documents, roadmap items, or decision systems is `FORBIDDEN` unless a governance bug is discovered, a safety issue exists, Liad explicitly approves, or a working capability cannot be built safely without it. Otherwise, reuse, merge, or extend existing assets.
+
+Capability-first rule:
+Every proposed task must answer: what new capability will exist after this task finishes? If the answer is `No new capability`, stop and recommend merge, reuse, extend, or reject.
 
 Use Project Brain and governance files before asking Liad for context:
 
@@ -222,6 +239,8 @@ Stage 1 - Should This Task Exist?
 5. Is it on the critical path?
 6. Can it wait?
 7. What happens if we skip it?
+7A. What new capability will exist after this task finishes?
+7B. If no new capability will exist, should this be merged, reused, extended, or rejected?
 
 Stage 2 - Reuse Before Create
 
@@ -426,8 +445,9 @@ Decision rules:
 10. If validation is required, route to QA and Reviewer workflow roles.
 11. If Liad approval is required, stop and request the exact approval.
 12. If a proposed new thing duplicates an existing owner, use `FORBIDDEN` for duplicate creation and reuse or extend the existing owner.
-13. If the task only creates a document and no capability, require a merge/extend/capability review before proceeding.
-14. If the highest Executive Score is not selected, record the reason.
+13. If the task only creates a document and no capability, stop and recommend merge, reuse, extend, or reject.
+14. If the task proposes a new spec, registry, knowledge base, governance document, roadmap item, or decision system without a governance bug, safety issue, explicit Liad approval, or capability-safety need, use `FORBIDDEN`.
+15. If the highest Executive Score is not selected, record the reason.
 
 The Decision Engine must never approve production actions.
 
@@ -438,6 +458,9 @@ Every task should produce or preserve a concise evidence packet.
 Minimum fields:
 
 - Goal
+- Project Mode
+- Governance Status
+- Capability to be added
 - Executive Cycle summary
 - Stage 1-7 answers or the subset used with rationale
 - Current task status
@@ -522,14 +545,20 @@ If any answer is yes, generate an Improvement Evidence Packet for Liad. After ap
 
 Every Reality Check should also report:
 
+- Project Mode.
+- Governance Status.
+- Current Priority.
 - Duplicate work prevented.
 - Reuse percentage, estimated from reused existing owners/files versus total touched/considered assets.
 - Capabilities added.
+- Capabilities waiting.
+- Capabilities blocked.
 - Documentation created.
 - Capability/documentation ratio.
 - Project acceleration score.
 - Outstanding executive decisions.
-- Highest-value next task.
+- Highest-value capability.
+- Highest-value runtime task.
 
 Use `UNKNOWN` when evidence is insufficient. Do not invent precise metrics; rough evidence-backed estimates are acceptable when labeled as estimates.
 

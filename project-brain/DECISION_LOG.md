@@ -3,6 +3,31 @@
 ## 2026-06-25
 
 Decision:
+Transition project execution mode from governance building to `CAPABILITY_BUILDING`.
+
+Purpose:
+Move the project out of foundational governance construction and into working capability delivery.
+
+Approved rules:
+
+1. Current Project Mode is `CAPABILITY_BUILDING`.
+2. Governance Status is `FROZEN`.
+3. Current Priority is working runtime capabilities instead of documentation expansion.
+4. The project is measured by capabilities added, not documents added.
+5. Every proposed task must answer what new capability will exist after completion.
+6. If no new capability will exist, the Orchestrator must stop and recommend merge, reuse, extend, or reject.
+7. Creating new specs, registries, knowledge bases, governance documents, roadmap items, or decision systems is `FORBIDDEN` unless a governance bug is discovered, a safety issue exists, Liad explicitly approves, or a capability cannot be built safely without it.
+8. Next implementation work should prioritize runtime, working UI, AI Draft Preview, Action Server, Email Runtime, and Inventory Runtime.
+
+Boundary:
+Existing governance extended only. No new governance files, runtime implementation, DB, Prisma, Maven, Inventory, Google Sheets, AppSheet, Apps Script, Drive, email, customer-facing action, or production action occurred.
+
+Status:
+Approved by user request; implemented by updating existing governance files only.
+
+---
+
+Decision:
 Upgrade `ORCHESTRATOR_AGENT` Phase 2 into the Executive Decision Engine.
 
 Purpose:
