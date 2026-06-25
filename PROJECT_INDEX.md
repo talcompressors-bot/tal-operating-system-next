@@ -467,9 +467,9 @@ This section is the living navigation screen. It summarizes current reality only
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Current milestone | Wave 1 Next.js read/display validation PASS after PostgreSQL read switch | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
-| Current task | SCR matching preview panel is implemented and validated; no next implementation task is approved yet | `project-brain/CURRENT_TASK.md` |
-| Next approved task | None. Next candidate tasks are Maven/Invoice4U lifecycle tracking shell; build hygiene for the existing missing Playwright dependency/type gap if explicitly selected; optional Wave 2 import approval package only if explicitly approved. DB import/write work remains gated and requires explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
-| Last Implementation Commit | `c205dfb Transition project to capability building` | Git history; `project-brain/CURRENT_TASK.md` |
+| Current task | AI Draft Recommendation Preview runtime for Service Report `5806` is implemented and validated; no next implementation task is approved yet | `project-brain/CURRENT_TASK.md` |
+| Next approved task | None. Next candidate tasks are Working UI capability; Action Server capability when selected; Email Runtime capability when explicitly approved; Inventory Runtime capability when explicitly approved; build hygiene for the existing missing Playwright dependency/type gap if explicitly selected; optional Wave 2 import approval package only if explicitly approved. DB import/write work remains gated and requires explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
+| Last Implementation Commit | `3a488e6 Add AI draft preview runtime` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |
 | Blocked/forbidden actions | No production writes, Prisma migration, DB creation, Sheets/AppSheet/Maven actions, new planning/control files, new agents, or implementation before Reality Check | `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md` |
@@ -548,22 +548,22 @@ Current Project Tree Position:
 - Project Mode: `CAPABILITY_BUILDING`
 - Governance Status: `FROZEN`
 - Current Priority: Working runtime capabilities instead of documentation expansion
-- Current Task: transition from governance building to capability building; no next implementation task is approved yet
-- Last Completed Task: Project Execution Mode transition to `CAPABILITY_BUILDING`
-- Next Task: None approved. Highest-value runtime candidate is AI Draft Preview for Service Report `5806`; other runtime candidates are Action Server, Email Runtime, and Inventory Runtime when explicitly selected/approved.
-- Estimated completion %: 56%
+- Current Task: AI Draft Recommendation Preview runtime for Service Report `5806` is complete; no next implementation task is approved yet
+- Last Completed Task: AI Draft Recommendation Preview runtime for Service Report `5806`
+- Next Task: None approved. Highest-value runtime candidates are the next Working UI capability, Action Server, Email Runtime, and Inventory Runtime when explicitly selected/approved.
+- Estimated completion %: 57%
 - Completion basis: capability-weighted evidence, not completed-waves / total-waves.
 - Governance / Project Brain / Git workflow: 15% / 15% COMPLETE
 - Supabase + Prisma Data Layer: 15% / 15% COMPLETE
 - Import Framework + Wave 1 Import: 10% / 10% COMPLETE
 - Wave 1 Service Reports UI: 10% / 10% COMPLETE
-- Wave 2 Workflow Layer: 6% / 15% CURRENT
+- Wave 2 Workflow Layer: 7% / 15% CURRENT
 - Wave 3 Maven Knowledge Layer: 0% / 15% PENDING
 - Wave 4 Inventory Layer: 0% / 10% PENDING
 - Wave 5 Offline First: 0% / 5% PENDING
 - Wave 6 Automation Runtime: 0% / 3% PENDING
 - Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 0% / 2% PENDING
-- Completion formula: 15 + 15 + 10 + 10 + 6 + 0 + 0 + 0 + 0 + 0 = 56.
+- Completion formula: 15 + 15 + 10 + 10 + 7 + 0 + 0 + 0 + 0 + 0 = 57.
 - Critical Path: Wave 2 Service Workflow Layer -> Wave 3 Maven Knowledge Layer -> AI Draft Recommendation Readiness -> Action Server Knowledge Layer -> Email Document Intake evidence planning -> Wave 4 Inventory Layer -> Wave 5 Offline First -> Wave 6 Automation Runtime -> Wave 7 Production Shadow -> Wave 8 Production Cutover -> Wave 9 AppSheet Retirement
 - Next Approval Gate: explicitly select/approve the next candidate task before implementation; separate explicit approval is required before any DB import/write, schema change, migration, env change, Maven/Invoice4U action, source-system action, or production integration.
 
@@ -603,16 +603,16 @@ Current evidence-based estimate:
 - Supabase + Prisma Data Layer: 15% / 15% COMPLETE
 - Import Framework + Wave 1 Import: 10% / 10% COMPLETE
 - Wave 1 Service Reports UI: 10% / 10% COMPLETE
-- Wave 2 Workflow Layer: 6% / 15% CURRENT
+- Wave 2 Workflow Layer: 7% / 15% CURRENT
 - Wave 3 Maven Knowledge Layer: 0% / 15% PENDING
 - Wave 4 Inventory Layer: 0% / 10% PENDING
 - Wave 5 Offline First: 0% / 5% PENDING
 - Wave 6 Automation Runtime: 0% / 3% PENDING
 - Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 0% / 2% PENDING
 
-Current estimated completion: 56%.
+Current estimated completion: 57%.
 
-This estimate is valid because the first four capabilities are complete by Project Brain evidence and Wave 2 has 6% documented contribution from the read-only Equipment, PartsUsed, Service Report central work-screen, bidirectional navigation, Service Reports list context, AI Draft Suggestions shell, BusinessDocuments shell, AutomationCommands shell, and SCR matching preview panel enhancements. The previous 60% claim was corrected because the listed capability contributions add to 56%, and no additional evidence-based Wave 2 contribution formula currently justifies 60%. If any of those capabilities are later found partial, estimate lower and explain why. If additional Wave 2 capability credit is later justified, document the evidence and formula before raising the estimate.
+This estimate is valid because the first four capabilities are complete by Project Brain evidence and Wave 2 has 7% documented contribution from the read-only Equipment, PartsUsed, Service Report central work-screen, bidirectional navigation, Service Reports list context, AI Draft Suggestions shell, BusinessDocuments shell, AutomationCommands shell, SCR matching preview panel enhancements, and the AI Draft Recommendation Preview runtime for Service Report `5806`. The previous 60% claim was corrected because the then-listed capability contributions added to 56%; the validated AI Draft Preview runtime now adds one evidence-backed Wave 2 capability point for a current total of 57%. If any of those capabilities are later found partial, estimate lower and explain why. If additional Wave 2 capability credit is later justified, document the evidence and formula before raising the estimate.
 
 Readiness split:
 
@@ -624,8 +624,8 @@ Readiness split:
 |---|---|---|
 | Current phase | Project Brain Consolidation Phase 1-3 completed; Supabase staging schema is applied, verified, Wave 1 staging import passed, and Wave 1 read/display mapping fixes are validated | `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md` |
-| Current task | AI Draft recommendation readiness business rules are approved and documented; AI Draft is `READY_FOR_APPROVAL_BASED_DRAFTS`; no next implementation task is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `project-brain/AI_DRAFT_READINESS_RECHECK.md` |
-| Next approved task | None. Next candidate tasks are AI Draft Recommendation Preview runtime/shell mission packet for Service Report `5806`; Maven/Invoice4U lifecycle tracking shell; build hygiene for the existing missing Playwright dependency/type gap if explicitly selected; optional Wave 2 import approval package only if explicitly approved. DB import/write work remains gated and requires explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
+| Current task | AI Draft Recommendation Preview runtime for Service Report `5806` is implemented and validated; no next implementation task is approved yet | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `APPLICATION_ROUTE_MAP.md` |
+| Next approved task | None. Next candidate tasks are Working UI capability; Action Server capability when selected; Email Runtime capability when explicitly approved; Inventory Runtime capability when explicitly approved; build hygiene for the existing missing Playwright dependency/type gap if explicitly selected; optional Wave 2 import approval package only if explicitly approved. DB import/write work remains gated and requires explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
 | Future phases | Supabase staging validation; Supabase production shadow setup; import mapping/validation; AI Draft Recommendation Readiness; Action Server Knowledge Layer; Email Document Intake evidence planning; Server Actions architecture; offline queue/PWA sync; VPS/remote development planning | `project-brain/TASK_BOARD.md`, `project-brain/roadmap/ROADMAP.md` |
 | Blocked phases | PostgreSQL environment implementation; database migration; import execution; production integration; Maven write flow | `project-brain/TASK_BOARD.md` |
 | Dependency order | Governance and Project Brain state -> system map/source review -> PostgreSQL V1 scope -> data migration planning -> Supabase staging-first plan -> approved staging project/secrets -> Prisma reconciliation approval -> approved staging schema push -> read-only schema verification -> Wave 1 dry-run/import validation -> Waves 2-4 discovery/import approvals -> AI Draft Recommendation Readiness -> Action Server Knowledge Layer -> Email Document Intake evidence planning -> production shadow approval -> Server Actions/offline sync | `project-brain/TASK_BOARD.md`, `project-brain/migration/POSTGRESQL_V1_SCOPE.md`, `project-brain/migration/DATA_MIGRATION_PLAN.md`, `project-brain/roadmap/ROADMAP.md` |
