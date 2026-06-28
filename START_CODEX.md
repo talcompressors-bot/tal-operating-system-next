@@ -337,13 +337,13 @@ Capability weights:
 - Governance / Project Brain / Git workflow: 15%
 - Supabase + Prisma Data Layer: 15%
 - Import Framework + Wave 1 Import: 10%
-- Wave 1 Service Reports UI: 10%
-- Wave 2 Workflow Layer: 15%
-- Wave 3 Maven Knowledge Layer: 15%
-- Wave 4 Inventory Layer: 10%
-- Wave 5 Offline First: 5%
-- Wave 6 Automation Runtime: 3%
-- Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 2%
+- Wave 1 Party, Asset, and Service Operations Core: 10%
+- Wave 2 BusinessCase and Service Workflow Layer: 15%
+- Wave 3 Commercial Runtime and Document Engine: 15%
+- Wave 4 Financial Runtime and Settlement: 10%
+- Wave 5 Inventory and Procurement: 5%
+- Wave 6 Automation and Integration Adapters: 3%
+- Wave 7-9 Offline Field Runtime / Production Shadow / Cutover / AppSheet Retirement: 2%
 
 A task is not considered complete unless Project Tree Position is reported.
 

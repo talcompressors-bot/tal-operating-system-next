@@ -953,6 +953,8 @@ TDOS means Tal Development Operating System. It is not a separate constitution, 
 
 `hey codex` remains the mandatory bootstrap command. `by codex` remains the mandatory closeout command.
 
+TDOS is frozen in Maintenance Mode. Do not evolve TDOS unless ERP work is blocked by a missing TDOS capability, real Project Brain/runtime drift is detected, or Knowledge Release / Project Sources Publishing Pipeline becomes required for an active ChatGPT Project Sources workflow. Project Sources Publishing Pipeline is a future conditional publish/export stage only; it is not a source of truth, synchronization framework, runtime, script, or manifest until separately approved.
+
 No required control for the task's risk class may be skipped.
 
 Read canonical startup sources and all sources relevant to the task's affected business objects, workflows, agents, routes, schema, and approval gates. Do not read every repository file by default when a smaller evidence set fully covers the task.
@@ -971,6 +973,29 @@ Before any new feature, runtime change, workflow change, or architecture change,
 6. What validation proves the boundary is preserved?
 
 If these answers are missing or unclear, implementation must stop and request clarification.
+
+### Capability Review Gate
+
+Every ERP implementation must start from a Business Capability, not from a table, route, page, API, component, database model, document, or isolated feature request.
+
+After `hey codex`, Project Reality Check, and Domain Ownership Gate, and before Architecture Review or implementation, the agent must answer:
+
+1. Which Business Capability is being improved?
+2. Which Domain owns this capability?
+3. Which runtime already exists?
+4. Which runtime is missing?
+5. Which Business Objects participate?
+6. Which existing implementation can be reused?
+7. Which boundaries are affected?
+8. What is the minimum implementation required?
+9. What should not be built yet?
+10. Does this capability require schema, runtime, UI, adapter, AI, approval, financial, inventory, or only part of them?
+
+Implementation must improve the named Business Capability. Do not build isolated technical pieces unless they are the minimum necessary increment for that capability.
+
+Capability Review must reuse current runtime, current boundaries, current Business Objects, and current Project Brain before proposing new implementation. If the review cannot identify the Business Capability, Domain owner, reusable runtime, affected boundaries, and minimum implementation, implementation must stop and request clarification.
+
+Closeout validation must confirm the Business Capability improved. Reporting files changed, routes added, components created, or tests passed is not enough unless the capability improvement is identified and evidenced.
 
 ### TDOS Risk Classes
 
@@ -1050,11 +1075,11 @@ Every Reality Check, Approval Gate, Autonomous Completion Report, and `by codex`
 
 Required content:
 
-- PROJECT TREE must show Waves 1-9 and their current statuses.
+- PROJECT TREE must show the current domain-driven project tree and statuses from `PROJECT_INDEX.md`.
 - CURRENT POSITION must show Current Wave, Current Task, Last Completed Task, and Next Task.
 - PROJECT COMPLETION MODEL must show each capability, its weight, current status, and progress contribution.
 - Progress percentage must be evidence-based and capability-weighted, not completed waves divided by total waves.
-- CRITICAL PATH must show remaining waves required for project completion.
+- CRITICAL PATH must show the remaining domain capability sequence required for project completion.
 - NEXT APPROVAL GATE must show the exact gate, why approval is required, and what happens after approval.
 
 Capability weights:
@@ -1062,13 +1087,13 @@ Capability weights:
 - Governance / Project Brain / Git workflow: 15%
 - Supabase + Prisma Data Layer: 15%
 - Import Framework + Wave 1 Import: 10%
-- Wave 1 Service Reports UI: 10%
-- Wave 2 Workflow Layer: 15%
-- Wave 3 Maven Knowledge Layer: 15%
-- Wave 4 Inventory Layer: 10%
-- Wave 5 Offline First: 5%
-- Wave 6 Automation Runtime: 3%
-- Wave 7-9 Production Shadow / Cutover / AppSheet Retirement: 2%
+- Wave 1 Party, Asset, and Service Operations Core: 10%
+- Wave 2 BusinessCase and Service Workflow Layer: 15%
+- Wave 3 Commercial Runtime and Document Engine: 15%
+- Wave 4 Financial Runtime and Settlement: 10%
+- Wave 5 Inventory and Procurement: 5%
+- Wave 6 Automation and Integration Adapters: 3%
+- Wave 7-9 Offline Field Runtime / Production Shadow / Cutover / AppSheet Retirement: 2%
 
 If all first four capabilities are complete, current estimated completion may be around 50%. If any are partial, estimate lower and explain why.
 

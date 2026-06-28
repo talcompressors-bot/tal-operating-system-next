@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-28
-Mode: CAPABILITY_BUILDING; governance frozen; Financial Intake Engine design documented; Universal Business Document Engine foundation implemented; TDOS risk-based operating model integrated; Wave 2 complete; architecture audit complete; Legacy Excel Parser Strategy completed; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; TDOS frozen in Maintenance Mode; domain-driven roadmap realigned; Financial Intake Engine design documented; Universal Business Document Engine foundation implemented; TDOS risk-based operating model integrated; Wave 2 complete; architecture audit complete; Commercial Runtime and Document Engine started internal; Maven remains an External Adapter gate only; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -1161,9 +1161,9 @@ Project completion:
 - Wave 3 is now `5% / 15% STARTED INTERNAL`.
 - No real Maven execution, customer delivery, inventory action, broad SKU registry, import, or production readiness point is claimed.
 
-Next approved task:
+Historical next-task note at that closeout:
 
-- Continue Wave 3 read-only/internal Maven Knowledge Layer work only when explicitly selected. Candidate tasks remain Maven customer/document/item matching analysis, real Maven API contract evidence packet, Maven API secret placement plan, payment attachment readiness plan, or read-only Maven source row-count/schema validation.
+- At the time of this closeout, continued Wave 3 read-only/internal Maven Knowledge Layer work was listed as the next candidate path. Current navigation has since been realigned: Maven is an External Adapter readiness task only when explicitly selected, and active next-task selection is domain-driven from BusinessCase, Commercial, Financial, Inventory and Procurement, then Automation and Integration.
 
 Source:
 `project-brain/CURRENT_TASK.md`, `project-brain/AI_DRAFT_READINESS_RECHECK.md`, `project-brain/AI_DRAFT_RECOMMENDATION_READINESS_DECISION_PACKET.md`, and `project-brain/current/LIVE_OBJECTS.md`.
@@ -1242,24 +1242,23 @@ Boundary:
 
 ## Next Approved Task
 
-Wave 3 read-only Maven Knowledge Layer discovery is active.
+Domain-driven next task selection is active.
+
+TDOS work is frozen for now. Future TDOS changes are allowed only if ERP implementation is blocked by a missing TDOS capability, real Project Brain/runtime drift is detected, or a Knowledge Release / Project Sources Publishing Pipeline becomes required for an active ChatGPT Project Sources workflow. The Project Sources Publishing Pipeline remains a future conditional improvement only: do not create publisher runtime, scripts, manifests, new files, or a synchronization framework now.
 
 Next candidate tasks, pending explicit selection/approval:
 
-1. Read-only Maven customer/document/item matching analysis for BusinessDocument `NEXT-AI-DRAFT-5806`.
-2. Real Maven document-generation API contract evidence packet, only from primary Maven/API or production-current source evidence.
-3. Maven API secret placement plan, only after target environment and real values are approved; no secrets in git.
-4. Payment attachment readiness plan for check image / bank proof evidence storage and review, if explicitly selected.
-5. Read-only Maven source row-count/schema validation from approved staging/PostgreSQL or connector reads.
-6. Action Server capability, when explicitly selected and scoped safely.
-7. Email Runtime capability, when explicitly selected and approved.
-8. Inventory Runtime capability, when explicitly selected and approved.
-9. Build hygiene for the existing missing Playwright dependency/type gap, if explicitly selected.
-10. Optional Wave 2 import approval package, only if explicitly approved.
+1. BusinessCase ownership/context discovery: define how Service Operations events, Commercial documents, Financial evidence, Inventory impact, and External Adapter actions attach to a durable business context without adding schema yet.
+2. Commercial document lifecycle hardening: continue the Universal BusinessDocument runtime and lifecycle boundary work without external execution.
+3. Financial Intake and Settlement readiness: advance FinancialEvidence intake, matching, duplicate prevention, approval, and receipt/tax-invoice-receipt readiness as design or safe local capability only when selected.
+4. Inventory and Procurement boundary planning: define how parts, procurement, supplier, stock, and future delivery-note work interact with Service Operations and Commercial documents without inventory mutation.
+5. Automation and Integration adapter readiness: prepare adapter evidence packets and command boundaries for Maven/Invoice4U, email, bank, OCR, and other external systems. Maven customer/document/item matching, Maven API contract evidence, Maven secret placement, and Maven source validation belong here and are valid only when explicitly selected.
+6. Build hygiene for the existing missing Playwright dependency/type gap, if explicitly selected.
+7. Optional Wave 2 import approval package, only if explicitly approved.
 
-Project completion should not be overstated: current evidence-based completion is 70% by the recorded capability formula. Infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells, central work screens, preview intelligence, the AI Draft Recommendation Preview runtime, the pricing-evidence preview layer, protected internal BusinessDocument draft creation, internal BusinessDocument review, the BusinessDocument Approval Workflow, the protected internal Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, BusinessDocument Line Resolution Layer, and Wave 3 internal BusinessDocument/payment/HTML/PDF/SKU/registry/service-kit review surfaces; production automation readiness remains gated because no Maven/Invoice4U execution, customer-facing send, inventory deduction, DB import, inventory action, or production integration is approved.
+Project completion should not be overstated: current evidence-based completion remains 70% by the transitional capability formula. Infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells, central work screens, preview intelligence, the AI Draft Recommendation Preview runtime, the pricing-evidence preview layer, protected internal BusinessDocument draft creation, internal BusinessDocument review, the BusinessDocument Approval Workflow, the protected internal Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, BusinessDocument Line Resolution Layer, and Wave 3 Commercial Runtime / Document Engine surfaces. Maven is an External Adapter readiness concern under Automation and Integration, not the architectural center. Production automation readiness remains gated because no Maven/Invoice4U execution, customer-facing send, inventory deduction, DB import, inventory action, or production integration is approved.
 
-Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes outside approved protected Server Actions, schema changes, migrations, env changes, Maven/Invoice4U execution, email/customer-facing sends, inventory actions, or source-system actions until Liad explicitly approves that later gate.
+Do not continue to Wave 2 import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes outside approved protected Server Actions, schema changes, migrations, env changes, Maven/Invoice4U execution, email/customer-facing sends, inventory actions, or source-system actions until Liad explicitly approves that later gate.
 
 ## Approved Architecture Decisions In Force
 

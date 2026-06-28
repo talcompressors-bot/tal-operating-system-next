@@ -3,6 +3,38 @@
 ## 2026-06-28
 
 Decision:
+Freeze TDOS in Maintenance Mode and return project focus to ERP capability implementation.
+
+Reason:
+TDOS now has the required operating foundations: `hey codex` / `by codex`, Project Brain, risk classes, Domain Ownership Gate, Capability Review Gate, existing-first rules, approval gates, and domain-driven roadmap alignment. Continuing to evolve TDOS would delay ERP implementation unless a real ERP blocker proves another operating capability is missing.
+
+Boundary:
+This is documentation/state closeout only. No runtime code, schema, DB write, migration, package install, Maven/Invoice4U call, email/customer action, inventory action, cloud/source-system action, production action, new governance layer, new file, publisher runtime, script, manifest, or synchronization framework is approved.
+
+Status:
+Approved. Reopen TDOS only if ERP work is blocked by a missing TDOS capability, real Project Brain/runtime drift is detected, or Knowledge Release becomes required for active ChatGPT Project Sources workflow. Project Sources Publishing Pipeline / Knowledge Release is recorded as a future conditional TDOS improvement only, not implemented now and not a source of truth. Next work should be ERP capability implementation.
+
+---
+
+## 2026-06-28
+
+Decision:
+Realign current Project Brain navigation to the approved domain-driven architecture without creating new documents, governance, registries, or waves.
+
+Reason:
+The previous current-state wording made Maven appear to be the project critical path because Wave 3 was still titled `Maven Knowledge Layer` and the next task list started with Maven matching/API evidence. That was correct historical sequencing after Wave 2, but the later Domain Boundary Refactoring and Domain Ownership Gate establish that Maven is an External Adapter under Automation and Integration, not the center of the business architecture. Current roadmap language must therefore start from BusinessCase context, Commercial Runtime, Financial Runtime/Settlement, Inventory and Procurement, then Automation and Integration adapters.
+
+Boundary:
+This is documentation/state realignment only. Historical decisions remain preserved. Maven execution remains gated. No runtime code, schema, DB write, migration, package install, Maven/Invoice4U call, email/customer action, inventory action, cloud/source-system action, production action, new governance file, new registry, or new wave was created.
+
+Status:
+Approved as `DOC_SYNC`. Current Project Brain and startup wording should present Maven as an explicitly selected External Adapter readiness task only. The current 70% completion estimate remains a transitional capability-weighted score; a future approved pass should replace legacy wave-weight labels with a domain capability scorecard rather than changing percentages ad hoc.
+
+---
+
+## 2026-06-28
+
+Decision:
 Add the Domain Ownership Gate to the existing TDOS risk-based operating model.
 
 Reason:
