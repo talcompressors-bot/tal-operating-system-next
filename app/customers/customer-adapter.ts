@@ -1,5 +1,9 @@
 import type { Customer, Prisma, ServiceReport } from "@prisma/client";
 import { prisma } from "../../lib/prisma";
+import {
+  getBusinessCaseList,
+  type BusinessCaseViewModel,
+} from "../business-cases/business-case-runtime";
 
 type CustomerStatus = "Active" | "Inactive";
 
@@ -38,6 +42,83 @@ export type CustomerDetail = CustomerListItem & {
     aiDrafts: number;
     mavenDocuments: number;
   };
+};
+
+type Customer360Asset = {
+  id: string;
+  label: string;
+  model: string;
+  serialNumber: string;
+  status: string;
+  href: string;
+  openCaseCount: number;
+};
+
+type Customer360BusinessCase = {
+  id: string;
+  title: string;
+  href: string;
+  serviceStatus: string;
+  commercialStatus: string;
+  financialStatus: string;
+  approvalStatus: string;
+  automationStatus: string;
+  currentBlocker: string;
+  nextAction: string;
+};
+
+type Customer360CommercialDocument = {
+  id: string;
+  title: string;
+  href: string;
+  stage: string;
+  approvalStatus: string;
+  financialStatus: string;
+  totalAmount: string;
+};
+
+type Customer360TimelineEvent = {
+  label: string;
+  status: string;
+  href: string;
+};
+
+export type Customer360Workspace = CustomerDetail & {
+  boundary: string;
+  summary: {
+    activeBusinessCases: number;
+    affectedAssets: number;
+    openCommercialDocuments: number;
+    blockerCount: number;
+  };
+  assets: Customer360Asset[];
+  openBusinessCases: Customer360BusinessCase[];
+  openCommercialDocuments: Customer360CommercialDocument[];
+  financialStatus: {
+    status: string;
+    summary: string;
+    openItems: Array<{
+      label: string;
+      amount: string;
+      href: string;
+    }>;
+  };
+  currentBlockers: Array<{
+    domain: string;
+    message: string;
+    href: string;
+  }>;
+  recommendedNextAction: {
+    label: string;
+    reason: string;
+    href: string;
+  };
+  recentTimeline: Customer360TimelineEvent[];
+  futureOpportunities: Array<{
+    label: string;
+    reason: string;
+    href: string;
+  }>;
 };
 
 type CustomerListRecord = Pick<
@@ -196,6 +277,296 @@ function mapCustomerDetail(customer: CustomerDetailRecord): CustomerDetail {
   };
 }
 
+function caseHref(businessCase: BusinessCaseViewModel) {
+  return `/business-cases/service-report/${businessCase.source.id}`;
+}
+
+function currentBlocker(businessCase: BusinessCaseViewModel) {
+  const blocker = businessCase.blockers[0];
+
+  return blocker ? `${blocker.domain}: ${blocker.message}` : "No blocker";
+}
+
+function isOpenBusinessCase(businessCase: BusinessCaseViewModel) {
+  return (
+    businessCase.service.status !== "Closed" ||
+    businessCase.blockers.length > 0 ||
+    businessCase.financial.status !== "Not started" ||
+    businessCase.commercial.status !== "No document"
+  );
+}
+
+function recommendedCaseAction(businessCase: BusinessCaseViewModel) {
+  if (businessCase.blockers.length) {
+    return `Review blocker: ${currentBlocker(businessCase)}`;
+  }
+
+  if (businessCase.approval.status === "Needs review") {
+    return "Complete internal approval review.";
+  }
+
+  if (
+    businessCase.financial.status !== "Not started" &&
+    businessCase.financial.status !== "No payment required"
+  ) {
+    return "Review financial intake and draft receipt status.";
+  }
+
+  if (businessCase.automation.status !== "No command") {
+    return "Review automation command before any external action.";
+  }
+
+  if (businessCase.commercial.status === "No document") {
+    return "Prepare the next commercial step for this customer.";
+  }
+
+  if (businessCase.closureReadiness.ready) {
+    return "Review closure readiness.";
+  }
+
+  return "Open the BusinessCase and decide the next owner.";
+}
+
+function mapCustomer360Assets(businessCases: BusinessCaseViewModel[]) {
+  const assets = new Map<string, Customer360Asset>();
+
+  businessCases.forEach((businessCase) => {
+    businessCase.assets.forEach((asset) => {
+      const existingAsset = assets.get(asset.id);
+
+      assets.set(asset.id, {
+        id: asset.id,
+        label: asset.label,
+        model: asset.model,
+        serialNumber: asset.serialNumber,
+        status: asset.status,
+        href: asset.href,
+        openCaseCount:
+          (existingAsset?.openCaseCount ?? 0) +
+          (isOpenBusinessCase(businessCase) ? 1 : 0),
+      });
+    });
+  });
+
+  return Array.from(assets.values());
+}
+
+function mapOpenBusinessCases(businessCases: BusinessCaseViewModel[]) {
+  return businessCases.filter(isOpenBusinessCase).map((businessCase) => ({
+    id: businessCase.id,
+    title: businessCase.title,
+    href: caseHref(businessCase),
+    serviceStatus: businessCase.service.status,
+    commercialStatus: businessCase.commercial.status,
+    financialStatus: businessCase.financial.status,
+    approvalStatus: businessCase.approval.status,
+    automationStatus: businessCase.automation.status,
+    currentBlocker: currentBlocker(businessCase),
+    nextAction: recommendedCaseAction(businessCase),
+  }));
+}
+
+function mapOpenCommercialDocuments(businessCases: BusinessCaseViewModel[]) {
+  const documents = new Map<string, Customer360CommercialDocument>();
+
+  businessCases.forEach((businessCase) => {
+    businessCase.commercial.documents.forEach((document) => {
+      documents.set(document.id, {
+        id: document.id,
+        title: document.title,
+        href: `/business-documents/${document.id}`,
+        stage: document.commercialLifecycle.currentStage.label,
+        approvalStatus: document.approvalStatus,
+        financialStatus: document.financialIntake.status,
+        totalAmount: document.viewModel.totals.totalAmount,
+      });
+    });
+  });
+
+  return Array.from(documents.values()).filter(
+    (document) => document.stage !== "Closed",
+  );
+}
+
+function buildFinancialStatus(
+  commercialDocuments: Customer360CommercialDocument[],
+) {
+  const openItems = commercialDocuments
+    .filter((document) => document.financialStatus !== "No payment required")
+    .map((document) => ({
+      label: document.title,
+      amount: document.totalAmount,
+      href: document.href,
+    }));
+
+  if (!commercialDocuments.length) {
+    return {
+      status: "Not started",
+      summary: "No commercial document is linked to this customer yet.",
+      openItems,
+    };
+  }
+
+  if (openItems.length) {
+    return {
+      status: "Open financial action",
+      summary: `${openItems.length} document(s) have financial intake, draft receipt, or payment-review work visible.`,
+      openItems,
+    };
+  }
+
+  return {
+    status: "No open financial action",
+    summary: "No open financial action is visible from current internal runtime.",
+    openItems,
+  };
+}
+
+function mapCurrentBlockers(businessCases: BusinessCaseViewModel[]) {
+  return businessCases.flatMap((businessCase) =>
+    businessCase.blockers.map((blocker) => ({
+      domain: blocker.domain,
+      message: blocker.message,
+      href: caseHref(businessCase),
+    })),
+  );
+}
+
+function buildRecommendedNextAction(
+  businessCases: BusinessCaseViewModel[],
+  blockers: Customer360Workspace["currentBlockers"],
+  commercialDocuments: Customer360CommercialDocument[],
+) {
+  const firstBlockedCase = businessCases.find((businessCase) =>
+    businessCase.blockers.length,
+  );
+
+  if (firstBlockedCase) {
+    return {
+      label: recommendedCaseAction(firstBlockedCase),
+      reason: "A current blocker is preventing this customer journey from moving forward.",
+      href: caseHref(firstBlockedCase),
+    };
+  }
+
+  const firstFinancialCase = businessCases.find(
+    (businessCase) =>
+      businessCase.financial.status !== "Not started" &&
+      businessCase.financial.status !== "No payment required",
+  );
+
+  if (firstFinancialCase) {
+    return {
+      label: recommendedCaseAction(firstFinancialCase),
+      reason: "Financial intake or receipt draft work is visible for this customer.",
+      href: caseHref(firstFinancialCase),
+    };
+  }
+
+  const firstCommercialDocument = commercialDocuments[0];
+
+  if (firstCommercialDocument) {
+    return {
+      label: "Open the commercial document and review the next lifecycle step.",
+      reason: "A commercial document exists and may need approval, external-adapter review, or financial follow-up.",
+      href: firstCommercialDocument.href,
+    };
+  }
+
+  const firstOpenCase = businessCases.find(isOpenBusinessCase);
+
+  if (firstOpenCase) {
+    return {
+      label: recommendedCaseAction(firstOpenCase),
+      reason: "An open BusinessCase exists for this customer.",
+      href: caseHref(firstOpenCase),
+    };
+  }
+
+  return {
+    label: "No immediate action found.",
+    reason: blockers.length
+      ? "Blocker data exists but no matching BusinessCase action was found."
+      : "Current runtime does not show an active BusinessCase, financial action, or commercial document.",
+    href: "",
+  };
+}
+
+function buildRecentTimeline(businessCases: BusinessCaseViewModel[]) {
+  return businessCases
+    .flatMap((businessCase) => businessCase.timeline)
+    .slice(0, 10);
+}
+
+function buildFutureOpportunities(businessCases: BusinessCaseViewModel[]) {
+  return businessCases.flatMap((businessCase) => {
+    const opportunities: Customer360Workspace["futureOpportunities"] = [];
+
+    if (businessCase.aiRecommendation.status === "Available") {
+      opportunities.push({
+        label: "AI recommendation available",
+        reason: businessCase.aiRecommendation.summary,
+        href: businessCase.aiRecommendation.href,
+      });
+    }
+
+    if (businessCase.inventory.status !== "Placeholder") {
+      opportunities.push({
+        label: "Parts follow-up opportunity",
+        reason: businessCase.inventory.summary,
+        href: businessCase.inventory.href,
+      });
+    }
+
+    if (businessCase.commercial.status === "No document") {
+      opportunities.push({
+        label: "Commercial follow-up opportunity",
+        reason: "This customer has a BusinessCase without a linked BusinessDocument.",
+        href: caseHref(businessCase),
+      });
+    }
+
+    return opportunities;
+  });
+}
+
+function buildCustomer360Workspace(
+  customer: CustomerDetail,
+  allBusinessCases: BusinessCaseViewModel[],
+): Customer360Workspace {
+  const businessCases = allBusinessCases.filter(
+    (businessCase) => businessCase.party.id === customer.id,
+  );
+  const assets = mapCustomer360Assets(businessCases);
+  const openBusinessCases = mapOpenBusinessCases(businessCases);
+  const openCommercialDocuments = mapOpenCommercialDocuments(businessCases);
+  const currentBlockers = mapCurrentBlockers(businessCases);
+
+  return {
+    ...customer,
+    boundary:
+      "Customer 360 is a read-only projection over existing Party, Asset, BusinessCase, Service Operations, Commercial, Financial, Approval, Automation, and Timeline runtime. It does not create a CRM engine, duplicate BusinessCase, or execute workflow actions.",
+    summary: {
+      activeBusinessCases: openBusinessCases.length,
+      affectedAssets: assets.length,
+      openCommercialDocuments: openCommercialDocuments.length,
+      blockerCount: currentBlockers.length,
+    },
+    assets,
+    openBusinessCases,
+    openCommercialDocuments,
+    financialStatus: buildFinancialStatus(openCommercialDocuments),
+    currentBlockers,
+    recommendedNextAction: buildRecommendedNextAction(
+      businessCases,
+      currentBlockers,
+      openCommercialDocuments,
+    ),
+    recentTimeline: buildRecentTimeline(businessCases),
+    futureOpportunities: buildFutureOpportunities(businessCases),
+  };
+}
+
 function buildCustomerWhere(filters: CustomerListFilters) {
   const andFilters: Prisma.CustomerWhereInput[] = [];
 
@@ -289,4 +660,17 @@ export async function getCustomerById(id: string) {
   });
 
   return customer ? mapCustomerDetail(customer) : undefined;
+}
+
+export async function getCustomer360ById(id: string) {
+  const [customer, businessCases] = await Promise.all([
+    getCustomerById(id),
+    getBusinessCaseList(),
+  ]);
+
+  if (!customer) {
+    return undefined;
+  }
+
+  return buildCustomer360Workspace(customer, businessCases);
 }

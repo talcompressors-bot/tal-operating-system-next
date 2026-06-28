@@ -601,6 +601,19 @@ dd {
   max-width: 1440px;
 }
 
+.customer-360-shell {
+  max-width: 1440px;
+}
+
+.customer-360-section {
+  display: grid;
+  gap: 18px;
+}
+
+.customer-360-list {
+  margin-top: 16px;
+}
+
 .operations-section {
   display: grid;
   gap: 18px;
