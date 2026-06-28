@@ -76,6 +76,84 @@ export default async function BusinessCasePage({
       </div>
 
       <div className="detail-grid">
+        <section className="info-panel wide">
+          <h2>End-to-End Service Flow</h2>
+          <p>{businessCase.serviceFlow.boundary}</p>
+          <div className="lifecycle-list">
+            {businessCase.serviceFlow.steps.map((step) => (
+              <div key={step.label} className="lifecycle-item">
+                <div>
+                  {step.href ? (
+                    <Link href={step.href}>{step.label}</Link>
+                  ) : (
+                    <strong>{step.label}</strong>
+                  )}
+                  <p>{step.summary}</p>
+                </div>
+                <span>{step.status}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="info-panel wide">
+          <h2>Business Intelligence Analysis</h2>
+          <div className="detail-grid compact">
+            {businessCase.serviceFlow.intelligence.map((item) => (
+              <article key={item.label} className="info-panel">
+                <h3>{item.label}</h3>
+                <p>{item.value}</p>
+                <small>{item.explanation}</small>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className="info-panel wide">
+          <h2>Business Suggestions</h2>
+          <div className="lifecycle-list">
+            {businessCase.serviceFlow.suggestions.map((suggestion) => (
+              <div
+                key={`${suggestion.ownerDomain}-${suggestion.label}`}
+                className="lifecycle-item"
+              >
+                <div>
+                  {suggestion.href ? (
+                    <Link href={suggestion.href}>{suggestion.label}</Link>
+                  ) : (
+                    <strong>{suggestion.label}</strong>
+                  )}
+                  <p>{suggestion.explanation}</p>
+                  <small>{suggestion.ownerDomain}</small>
+                </div>
+                <span>{suggestion.status}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="info-panel wide">
+          <h2>Approval Ready</h2>
+          <dl>
+            <div>
+              <dt>Status</dt>
+              <dd>{businessCase.serviceFlow.approvalReadiness.status}</dd>
+            </div>
+            <div>
+              <dt>Summary</dt>
+              <dd>{businessCase.serviceFlow.approvalReadiness.summary}</dd>
+            </div>
+          </dl>
+          {businessCase.serviceFlow.approvalReadiness.href ? (
+            <Link
+              className="button secondary"
+              href={businessCase.serviceFlow.approvalReadiness.href}
+            >
+              Open approval context
+            </Link>
+          ) : null}
+        </section>
+
         <section className="info-panel">
           <h2>Case summary</h2>
           <dl>
