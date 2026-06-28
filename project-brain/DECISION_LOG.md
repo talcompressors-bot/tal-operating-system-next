@@ -3,6 +3,22 @@
 ## 2026-06-28
 
 Decision:
+Business Intent Policy Layer Sprint 9 is implemented above the existing BusinessDocument Draft Gateway.
+
+Reason:
+Direct document-type selection was too narrow for the ERP's long-term commercial flow. The better boundary is BusinessCase -> Business Intelligence -> Business Intent -> Domain Policy -> Allowed Draft Type -> BusinessDocument Draft Gateway. This preserves the gateway as the writer while making the business outcome and owning-domain policy decide whether a requested draft is allowed.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION`. No Prisma schema change, enum extension, migration, package install, Maven/Invoice4U execution, email/customer-facing action, inventory mutation, OCR, bank API, receipt issuing, external adapter call, cloud/source-system action, or production behavior occurred. The only DB write performed in Sprint 9 was the approved internal gateway validation for `BILL_CUSTOMER -> INVOICE`, creating or reusing `NEXT-BD-DRAFT-9981b978-INVOICE`. Existing `PROPOSE_WORK -> QUOTE` idempotency reused `NEXT-BD-DRAFT-9981b978-QUOTE`.
+
+Status:
+Implemented in commit `5e8a504 Add business intent policy layer`. Initial intents are `PROPOSE_WORK`, `BILL_CUSTOMER`, `COLLECT_PAYMENT`, `CREDIT_CUSTOMER`, `PURCHASE_PARTS`, `DELIVER_GOODS`, `WARRANTY_REVIEW`, and `SCHEDULE_FOLLOW_UP`. Allowed now: `PROPOSE_WORK -> QUOTE` and `BILL_CUSTOMER -> INVOICE` as internal drafts only. Blocked now: payment requires FinancialEvidence/payment evidence; credit requires source BusinessDocument; purchase requires future Inventory/Procurement runtime; delivery requires future Delivery Note/schema support; warranty and follow-up create no document draft by default. Validation passed for non-5806 ServiceReport `5802` / `9981b978`, Customer 360, Operations, both non-5806 draft review/preview/PDF routes, and the existing 5806 regression routes. Existing 5806 totals remained `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`; manufacturer SKU `901165` was not exposed. Read-only Prisma side-effect check found exactly the two target drafts for ServiceReport `5802`, each with one item, zero AutomationCommands, and zero InventoryTransactions. Project TypeScript still fails only on the pre-existing unrelated AI Draft pricing-evidence issue. Completion moves to `79%`.
+
+---
+
+## 2026-06-28
+
+Decision:
 Generalized BusinessDocument Draft Gateway Sprint 8 is implemented.
 
 Reason:
