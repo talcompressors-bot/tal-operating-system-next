@@ -81,7 +81,10 @@ export default async function BusinessCasePage({
     false;
   const hasReviewRequiredLines =
     productionDraftRecommendation?.lines.some(
-      (line) => line.needsApproval || line.unitPrice === "Needs approval",
+      (line) =>
+        line.needsApproval ||
+        line.unitPrice === "Needs approval" ||
+        line.unitPrice === "Needs Price Review",
     ) ?? false;
   const actionPolicies = [
     buildServiceReportDraftPolicy({
@@ -183,20 +186,19 @@ export default async function BusinessCasePage({
 
         {productionDraftRecommendation ? (
           <section className="info-panel wide">
-            <h2>Production Draft Recommendation</h2>
+            <h2>המלצת טיוטה עסקית</h2>
             <p>{productionDraftRecommendation.qualitySummary}</p>
             <p>{productionDraftRecommendation.estimatedManualWorkReduction}</p>
             <div className="detail-grid compact">
               <article className="info-panel">
-                <h3>Confidence</h3>
+                <h3>ביטחון</h3>
                 <p>{productionDraftRecommendation.confidenceSummary}</p>
               </article>
               <article className="info-panel">
-                <h3>Knowledge First</h3>
+                <h3>ידע קודם לפני שאלות</h3>
                 <p>
-                  Existing customer, asset, service-kit, approved document, and
-                  correction evidence is exhausted before a field is marked
-                  unknown.
+                  המערכת מנצלת קודם היסטוריית לקוח, ציוד, ערכות שירות,
+                  מסמכים מאושרים ותיקונים מאושרים לפני סימון מידע כחסר.
                 </p>
               </article>
             </div>
@@ -204,12 +206,12 @@ export default async function BusinessCasePage({
               <table>
                 <thead>
                   <tr>
-                    <th>Line</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                    <th>Total</th>
-                    <th>Confidence</th>
-                    <th>Review</th>
+                    <th>שורה</th>
+                    <th>כמות</th>
+                    <th>מחיר יחידה</th>
+                    <th>סה"כ</th>
+                    <th>ביטחון</th>
+                    <th>בדיקה</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -224,8 +226,8 @@ export default async function BusinessCasePage({
                       <td>{line.quantity}</td>
                       <td>{line.unitPrice}</td>
                       <td>{line.totalPrice}</td>
-                      <td>{line.confidence}</td>
-                      <td>{line.needsApproval ? "Required" : "Clear"}</td>
+                      <td>{line.confidenceLabel}</td>
+                      <td>{line.needsApproval ? "נדרשת" : "תקין"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -233,18 +235,24 @@ export default async function BusinessCasePage({
             </div>
             <div className="detail-grid compact">
               <article className="info-panel">
-                <h3>Knowledge Used</h3>
+                <h3>ידע ששימש</h3>
                 <ul className="warning-list neutral">
                   {productionDraftRecommendation.knowledgeUsed.map((item) => (
                     <li key={item.source}>
-                      <strong>{item.source}:</strong> {item.status} -{" "}
+                      <strong>{item.source}:</strong>{" "}
+                      {item.status === "Used"
+                        ? "שימש"
+                        : item.status === "Missing"
+                          ? "חסר"
+                          : "חסום"}{" "}
+                      -{" "}
                       {item.explanation}
                     </li>
                   ))}
                 </ul>
               </article>
               <article className="info-panel">
-                <h3>Missing Evidence</h3>
+                <h3>עדות חסרה</h3>
                 {productionDraftRecommendation.missingEvidence.length ? (
                   <ul className="warning-list">
                     {productionDraftRecommendation.missingEvidence
@@ -254,7 +262,7 @@ export default async function BusinessCasePage({
                       ))}
                   </ul>
                 ) : (
-                  <p>No missing evidence was identified for this draft.</p>
+                  <p>לא זוהתה עדות חסרה לטיוטה זו.</p>
                 )}
               </article>
             </div>

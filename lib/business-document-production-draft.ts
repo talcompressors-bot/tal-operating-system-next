@@ -44,7 +44,9 @@ type KnowledgeEvidence = {
 };
 
 type DraftLineCandidate = {
+  canonicalItemName: string;
   itemName: string;
+  aliases: string[];
   description: string;
   quantity: number;
   itemType: string;
@@ -61,6 +63,7 @@ export type ProductionDraftLineRecommendation = {
   unitPrice: string;
   totalPrice: string;
   confidence: ConfidenceLabel;
+  confidenceLabel: string;
   needsApproval: boolean;
   itemType: string;
   source: string;
@@ -85,6 +88,22 @@ export type ProductionDraftRecommendation = {
   estimatedManualWorkReduction: string;
 };
 
+const DOCUMENT_TYPE_HEBREW_LABELS: Record<BusinessDocumentType, string> = {
+  QUOTE: "הצעת מחיר",
+  SERVICE_DOCUMENT: "מסמך שירות",
+  INVOICE: "חשבונית מס",
+  RECEIPT: "קבלה",
+  CREDIT_NOTE: "זיכוי",
+  OTHER: "מסמך עסקי",
+  UNKNOWN: "מסמך עסקי",
+};
+
+const CONFIDENCE_HEBREW_LABELS: Record<ConfidenceLabel, string> = {
+  High: "גבוהה",
+  Medium: "בינונית",
+  Low: "נמוכה",
+};
+
 function readText(value: unknown, fallback = "") {
   if (value === undefined || value === null) {
     return fallback;
@@ -95,7 +114,7 @@ function readText(value: unknown, fallback = "") {
 }
 
 function money(value: number | null) {
-  return value === null ? "Needs approval" : value.toFixed(2);
+  return value === null ? "Needs Price Review" : value.toFixed(2);
 }
 
 function normalizeText(value: string) {
@@ -107,7 +126,19 @@ function normalizeModel(value: string) {
 }
 
 function formatModelList(models: string[]) {
-  return models.length ? models.join(", ") : "No model evidence";
+  return models.length ? models.join(", ") : "אין עדות לדגם";
+}
+
+function formatServiceIntervalHebrew(serviceInterval: string) {
+  if (serviceInterval === "Large Service") {
+    return "טיפול גדול";
+  }
+
+  if (serviceInterval === "Small Service") {
+    return "טיפול קטן";
+  }
+
+  return "מרווח טיפול לא מזוהה";
 }
 
 function extractModelFamily(model: string) {
@@ -178,6 +209,7 @@ async function loadServiceReportForDraft(serviceReportId: string) {
           equipmentType: true,
           equipmentSubtype: true,
           equipmentModel: true,
+          serialNumber: true,
           compressorCategory: true,
           serviceDescription: true,
           technicianRecommendations: true,
@@ -300,38 +332,55 @@ function buildServiceKitCandidates(
   const partDefinitions = [
     {
       category: "AIR_FILTER",
-      itemName: "Air Filter",
+      canonicalItemName: "Air Filter",
+      itemName: "מסנן אוויר",
+      aliases: ["Air Filter", "מסנן אוויר"],
       itemType: "PART",
       quantity: equipmentCount,
-      reason: "Service-kit knowledge indicates an air filter for this model/service interval.",
+      reason: "ידע ערכת השירות מצביע על צורך במסנן אוויר עבור הדגם ומרווח הטיפול.",
     },
     {
       category: "OIL_FILTER",
-      itemName: "Oil Filter",
+      canonicalItemName: "Oil Filter",
+      itemName: "מסנן שמן",
+      aliases: ["Oil Filter", "מסנן שמן"],
       itemType: "PART",
       quantity: equipmentCount,
-      reason: "Service-kit knowledge indicates an oil filter for this model/service interval.",
+      reason: "ידע ערכת השירות מצביע על צורך במסנן שמן עבור הדגם ומרווח הטיפול.",
     },
     {
       category: "OIL_SEPARATOR",
-      itemName: "Oil Separator",
+      canonicalItemName: "Oil Separator",
+      itemName: "מפריד שמן",
+      aliases: ["Oil Separator", "מפריד שמן"],
       itemType: "PART",
       quantity: equipmentCount,
-      reason: "Large-service knowledge indicates an oil separator for this model/service interval.",
+      reason: "ידע טיפול גדול מצביע על צורך במפריד שמן עבור הדגם ומרווח הטיפול.",
     },
     {
       category: "OIL_COOLANT",
-      itemName:
+      canonicalItemName:
         serviceInterval === "Large Service"
           ? "SCR oil replacement / coolant"
           : "3L SKR oil top-up",
+      itemName:
+        serviceInterval === "Large Service"
+          ? "שמן / נוזל קירור למדחס SCR"
+          : "תוספת שמן SKR 3 ליטר",
+      aliases: [
+        "SCR oil replacement / coolant",
+        "3L SKR oil top-up",
+        "Oil Coolant",
+        "שמן / נוזל קירור למדחס SCR",
+        "תוספת שמן SKR 3 ליטר",
+      ],
       itemType: "PART",
       quantity:
         serviceInterval === "Large Service" ? equipmentCount : equipmentCount * 3,
       reason:
         serviceInterval === "Large Service"
-          ? "Large-service oil/coolant handling exists, but final oil action remains review-required."
-          : "Small-service rule uses 3L SKR oil top-up per compressor when SCR model/service evidence exists.",
+          ? "ידע טיפול גדול כולל טיפול בשמן או נוזל קירור; הפעולה הסופית דורשת בדיקת משתמש."
+          : "כלל טיפול קטן מציע תוספת 3 ליטר שמן SKR לכל מדחס כאשר קיימת עדות לדגם SCR.",
     },
   ];
 
@@ -346,16 +395,18 @@ function buildServiceKitCandidates(
       itemName: definition.itemName,
       description: [
         definition.reason,
-        `Internal manufacturer evidence: ${row.manufacturer} ${row.model}, ${row.partCategory}, source ${row.sourceSheet} row ${row.sourceRow}.`,
-        "Manufacturer SKU is internal evidence only and is not customer-facing unless a trusted Tal sales SKU exists.",
+        `עדות יצרן פנימית: ${row.manufacturer} ${row.model}, קטגוריה ${row.partCategory}, מקור ${row.sourceSheet} שורה ${row.sourceRow}.`,
+        "מק\"ט יצרן נשאר עדות פנימית בלבד ואינו מוצג ללקוח ללא מק\"ט מכירה מאושר של טל.",
       ].join(" "),
+      canonicalItemName: definition.canonicalItemName,
+      aliases: definition.aliases,
       quantity: definition.quantity,
       itemType: definition.itemType,
       reason: definition.reason,
       evidenceSource: `ManufacturerServiceKit:${row.model}:${row.partCategory}`,
       defaultUnitPrice: null,
       defaultPriceNote:
-        "Manufacturer evidence supports the part identity, not the customer selling price.",
+        "עדות היצרן תומכת בזיהוי הפריט, אך לא קובעת מחיר מכירה ללקוח.",
       quantityNeedsApproval: true,
     });
   });
@@ -370,42 +421,52 @@ function buildBaseServiceCandidates(
 
   return [
     {
-      itemName: "Technician Visit / Travel",
+      canonicalItemName: "Technician Visit / Travel",
+      itemName: "ביקור טכנאי ונסיעה",
+      aliases: ["Technician Visit / Travel", "Technician Visit", "Travel", "ביקור טכנאי ונסיעה"],
       description:
-        "Technician Visit and Travel are represented as one commercial line according to Service Commercial Rules.",
+        "ביקור הטכנאי והנסיעה מוצגים כשורת שירות אחת לפי כללי המסחור הקיימים לשירות שטח.",
       quantity: 1,
       itemType: "VISIT",
-      reason: "Every field service report requires travel/visit review before commercial approval.",
+      reason: "כל דוח שירות שטח דורש בדיקת ביקור ונסיעה לפני אישור מסחרי.",
       evidenceSource: "ServiceCommercialRules:TechnicianVisitTravel",
       defaultUnitPrice: 300,
       defaultPriceNote:
-        "Fixed default rule from Service Commercial Rules; still review-required when customer/service history conflicts or is missing.",
+        "כלל ברירת מחדל מכללי השירות המסחריים; עדיין נדרשת בדיקה אם חסרה היסטוריית לקוח או שיש סתירה.",
       quantityNeedsApproval: false,
     },
     {
-      itemName: "Labor + Service",
+      canonicalItemName: "Labor + Service",
+      itemName: "עבודת טכנאי ושירות",
+      aliases: ["Labor + Service", "Labor", "Service", "עבודת טכנאי ושירות"],
       description:
-        "Labor and service are one commercial line unless explicitly approved otherwise.",
+        "עבודת הטכנאי מוצגת כשורת שירות נפרדת. פירוט נוסף יתווסף רק כאשר קיימת עדות שירות מספקת.",
       quantity: Number(report.technicianWorkHours ?? 0) || equipmentCount,
       itemType: "SERVICE",
       reason:
         report.technicianWorkHours !== null
-          ? "Technician work hours are available on the ServiceReport."
-          : "Technician work hours are missing; quantity is inferred from asset count.",
+          ? "קיימות שעות עבודה בדוח השירות."
+          : "שעות העבודה חסרות; הכמות הוסקה ממספר הנכסים ולכן דורשת בדיקה.",
       evidenceSource: "ServiceCommercialRules:LaborService",
       defaultUnitPrice: 275,
       defaultPriceNote:
-        "Default labor/service rule from historical operating knowledge; final hours and price remain review-required.",
+        "כלל ברירת מחדל לעבודה ושירות מתוך ידע תפעולי היסטורי; שעות ומחיר סופיים דורשים בדיקה.",
       quantityNeedsApproval: report.technicianWorkHours === null,
     },
   ];
 }
 
-function matchesLineName(candidateName: string, historyName: string) {
-  const candidate = normalizeText(candidateName);
+function matchesLineName(candidate: DraftLineCandidate, historyName: string) {
+  const candidateNames = [
+    candidate.canonicalItemName,
+    candidate.itemName,
+    ...candidate.aliases,
+  ].map(normalizeText);
   const history = normalizeText(historyName);
 
-  return candidate === history || candidate.includes(history) || history.includes(candidate);
+  return candidateNames.some(
+    (name) => name === history || name.includes(history) || history.includes(name),
+  );
 }
 
 function scoreHistoricalLine(
@@ -414,7 +475,7 @@ function scoreHistoricalLine(
   report: ServiceReportForDraft,
   currentModels: string[],
 ) {
-  if (!matchesLineName(candidate.itemName, history.itemName)) {
+  if (!matchesLineName(candidate, history.itemName)) {
     return 0;
   }
 
@@ -489,9 +550,9 @@ function choosePriceEvidence(
           total: (best.line.unitPrice * candidate.quantity).toFixed(2),
           confidence,
           note: [
-            `Approved ${best.line.sourceDocumentType} line "${best.line.itemName}" from report ${best.line.sourceReportCounter ?? "unknown"}.`,
-            `Historical customer: ${best.line.customerName}.`,
-            `Historical compressor evidence: ${formatModelList(best.line.equipmentModels)}.`,
+            `נמצאה שורת ${best.line.sourceDocumentType} מאושרת "${best.line.itemName}" מדוח ${best.line.sourceReportCounter ?? "לא ידוע"}.`,
+            `לקוח היסטורי: ${best.line.customerName}.`,
+            `עדות מדחס היסטורית: ${formatModelList(best.line.equipmentModels)}.`,
           ].join(" "),
         },
       ],
@@ -516,7 +577,7 @@ function choosePriceEvidence(
         },
       ],
       missingEvidence: [
-        `No approved historical selling-price evidence was found for ${candidate.itemName}.`,
+        `לא נמצאה עדות מחיר מכירה היסטורית מאושרת עבור ${candidate.itemName}.`,
       ],
     };
   }
@@ -530,14 +591,14 @@ function choosePriceEvidence(
     pricingEvidence: [
       {
         source: candidate.evidenceSource,
-        unitPrice: "Needs approval",
-        total: "Needs approval",
+        unitPrice: "Needs Price Review",
+        total: "Needs Price Review",
         confidence: "Low" as ConfidenceLabel,
         note: candidate.defaultPriceNote,
       },
     ],
     missingEvidence: [
-      `No approved historical selling-price evidence was found for ${candidate.itemName}.`,
+      `לא נמצאה עדות מחיר מכירה היסטורית מאושרת עבור ${candidate.itemName}.`,
     ],
   };
 }
@@ -554,6 +615,9 @@ function buildKnowledgeEvidence(
 ) {
   const currentModels = report.equipmentItems
     .map((item) => readText(item.equipmentModel))
+    .filter(Boolean);
+  const currentSerials = report.equipmentItems
+    .map((item) => readText(item.serialNumber))
     .filter(Boolean);
   const currentFamilies = uniqueStrings(currentModels.map(extractModelFamily));
   const sameCustomerHistory = history.filter(
@@ -575,78 +639,184 @@ function buildKnowledgeEvidence(
 
   return [
     {
-      source: "Same customer history",
+      source: "היסטוריית אותו לקוח",
       status: sameCustomerHistory.length ? "Used" : "Missing",
       explanation: sameCustomerHistory.length
-        ? `${sameCustomerHistory.length} approved historical line(s) exist for this customer.`
-        : "No approved customer-specific BusinessDocumentItem pricing history exists yet.",
+        ? `נמצאו ${sameCustomerHistory.length} שורות היסטוריות מאושרות עבור לקוח זה.`
+        : "עדיין אין היסטוריית מחירי BusinessDocumentItem מאושרת עבור לקוח זה.",
     },
     {
-      source: "Same compressor model",
+      source: "אותו מספר סידורי",
+      status: currentSerials.length ? "Used" : "Missing",
+      explanation: currentSerials.length
+        ? `נמצאו מספרים סידוריים בדוח השירות: ${currentSerials.join(", ")}.`
+        : "לא נמצא מספר סידורי בדוח השירות ולכן לא ניתן לבצע התאמה לפי מדחס ספציפי.",
+    },
+    {
+      source: "אותו דגם מדחס",
       status: sameModelHistory.length ? "Used" : "Missing",
       explanation: sameModelHistory.length
-        ? `${sameModelHistory.length} approved line(s) match the same compressor model.`
-        : `No approved historical line matched ${formatModelList(currentModels)} exactly.`,
+        ? `${sameModelHistory.length} שורות מאושרות התאימו לאותו דגם מדחס.`
+        : `לא נמצאה שורה היסטורית מאושרת שתואמת בדיוק את ${formatModelList(currentModels)}.`,
     },
     {
-      source: "Same compressor family",
+      source: "אותה משפחת מדחס",
       status: sameFamilyHistory.length ? "Used" : "Missing",
       explanation: sameFamilyHistory.length
-        ? `${sameFamilyHistory.length} approved line(s) matched the same compressor family.`
-        : "No approved compressor-family pricing evidence exists yet.",
+        ? `${sameFamilyHistory.length} שורות מאושרות התאימו למשפחת המדחס.`
+        : "עדיין אין עדות מחיר מאושרת לפי משפחת מדחס.",
     },
     {
-      source: "Same manufacturer",
+      source: "אותו יצרן",
       status: currentModels.some((model) => normalizeText(model).includes("SCR"))
         ? "Used"
         : "Missing",
       explanation: currentModels.some((model) => normalizeText(model).includes("SCR"))
-        ? "SCR manufacturer/model evidence exists on the ServiceReport."
-        : "No manufacturer evidence could be safely inferred from the ServiceReport.",
+        ? "קיימת עדות יצרן/דגם SCR בדוח השירות."
+        : "לא ניתן להסיק בבטחה עדות יצרן מדוח השירות.",
     },
     {
-      source: "Same maintenance interval",
+      source: "אותו מרווח טיפול",
       status: serviceInterval === "Unknown Service Interval" ? "Missing" : "Used",
       explanation:
         serviceInterval === "Unknown Service Interval"
-          ? "No 2000/2500/4000/5000 or small/large service evidence was detected."
-          : `${serviceInterval} was detected from ServiceReport/equipment text.`,
+          ? "לא זוהתה עדות ל-2000/2500/4000/5000 שעות או לטיפול קטן/גדול."
+          : `זוהה ${formatServiceIntervalHebrew(serviceInterval)} מתוך דוח השירות או פרטי הציוד.`,
     },
     {
-      source: "Same BusinessCase type",
+      source: "אותו סוג BusinessCase",
       status: "Used",
       explanation:
-        "The source is a ServiceReport BusinessCase, so field-service commercial rules apply.",
+        "המקור הוא BusinessCase מסוג ServiceReport ולכן חלים כללי מסחור של שירות שטח.",
     },
     {
-      source: "Same service kit",
+      source: "אותה ערכת שירות",
       status: kitEvidenceCount ? "Used" : "Missing",
       explanation: kitEvidenceCount
-        ? `${kitEvidenceCount} service-kit line candidate(s) were found from reviewed manufacturer registry rows.`
-        : "No exact reviewed service-kit row matched the current model/interval.",
+        ? `נמצאו ${kitEvidenceCount} מועמדי שורות מערכת שירות מתוך שורות יצרן שעברו בדיקה.`
+        : "לא נמצאה שורת ערכת שירות מאושרת שתואמת בדיוק לדגם ולמרווח הטיפול.",
     },
     {
-      source: "Same spare parts",
+      source: "אותם חלקי חילוף",
       status: kitEvidenceCount ? "Used" : "Missing",
       explanation: kitEvidenceCount
-        ? "Spare-part candidates came from exact model + part-category registry rows."
-        : "No spare-part candidate was safe enough to include.",
+        ? "מועמדי חלקי החילוף הגיעו מהתאמה של דגם מדויק וקטגוריית חלק ברישום היצרן."
+        : "לא נמצא מועמד חלק חילוף בטוח מספיק להוספה.",
     },
     {
-      source: "Approved historical BusinessDocuments",
+      source: "BusinessDocuments היסטוריים מאושרים",
       status: history.length ? "Used" : "Missing",
       explanation: history.length
-        ? `${history.length} approved historical priced line(s) are available.`
-        : "No approved priced BusinessDocumentItem history exists.",
+        ? `זמינות ${history.length} שורות היסטוריות מאושרות עם מחיר.`
+        : "אין היסטוריית BusinessDocumentItem מאושרת עם מחיר.",
     },
     {
-      source: "Approved historical user corrections",
+      source: "תיקוני משתמש מאושרים",
       status: history.length ? "Used" : "Missing",
       explanation: history.length
-        ? "Approved BusinessDocumentItem values are treated as append-only learning evidence."
-        : "No approved user correction evidence exists yet.",
+        ? "ערכי BusinessDocumentItem מאושרים משמשים כעדות למידה מצטברת בלבד."
+        : "עדיין אין עדות תיקון משתמש מאושרת.",
+    },
+    {
+      source: "היסטוריית אחריות",
+      status: "Missing",
+      explanation:
+        "אין כרגע מקור אחריות מאושר בריצה זו, לכן לא הוסקה החלטת אחריות.",
+    },
+    {
+      source: "היסטוריה מסחרית של הלקוח",
+      status: sameCustomerHistory.length ? "Used" : "Missing",
+      explanation: sameCustomerHistory.length
+        ? "היסטוריה מסחרית של הלקוח שימשה לבדיקת מחירים קודמים."
+        : "לא נמצאה היסטוריה מסחרית מאושרת של הלקוח.",
     },
   ] satisfies KnowledgeEvidence[];
+}
+
+function buildHebrewDraftTitle(
+  report: ServiceReportForDraft,
+  documentType: BusinessDocumentType,
+  serviceInterval: string,
+) {
+  const customerName = readText(report.customer?.name);
+  const models = uniqueStrings(
+    report.equipmentItems
+      .map((item) => readText(item.equipmentModel))
+      .filter(Boolean),
+  );
+  const serials = uniqueStrings(
+    report.equipmentItems
+      .map((item) => readText(item.serialNumber))
+      .filter(Boolean),
+  );
+  const reportNumber = report.reportCounter ?? report.reportNumberText ?? report.appsheetReportId;
+  const titleParts = [
+    DOCUMENT_TYPE_HEBREW_LABELS[documentType],
+    `${formatServiceIntervalHebrew(serviceInterval)}`,
+    `דוח שירות ${reportNumber}`,
+    customerName,
+    models[0],
+    serials[0] ? `S/N ${serials[0]}` : "",
+  ].filter(Boolean);
+
+  return titleParts.join(" - ");
+}
+
+function buildHebrewBusinessSummary(
+  report: ServiceReportForDraft,
+  documentType: BusinessDocumentType,
+  serviceInterval: string,
+) {
+  const reportNumber = report.reportCounter ?? report.reportNumberText ?? report.appsheetReportId;
+  const customerName = readText(report.customer?.name, "הלקוח");
+  const workPerformed = readText(report.workPerformed);
+  const technicianSummary = readText(report.technicianSummary);
+  const recommendations = readText(report.recommendations);
+  const equipmentEvidence = report.equipmentItems
+    .map((item) =>
+      [
+        readText(item.equipmentModel),
+        readText(item.serialNumber) ? `S/N ${readText(item.serialNumber)}` : "",
+      ]
+        .filter(Boolean)
+        .join(" "),
+    )
+    .filter(Boolean)
+    .join(", ");
+
+  return [
+    `טיוטת ${DOCUMENT_TYPE_HEBREW_LABELS[documentType]} פנימית הוכנה מדוח שירות ${reportNumber} עבור ${customerName}.`,
+    `סוג טיפול מזוהה: ${formatServiceIntervalHebrew(serviceInterval)}.`,
+    equipmentEvidence ? `ציוד רלוונטי: ${equipmentEvidence}.` : "לא נמצאה עדות ציוד מלאה.",
+    workPerformed ? `עבודה שבוצעה: ${workPerformed}.` : "",
+    technicianSummary ? `סיכום טכנאי: ${technicianSummary}.` : "",
+    recommendations ? `המלצות להמשך: ${recommendations}.` : "",
+    "לא בוצעה שליחה ללקוח, הפקת חשבונית, הפקת קבלה, Maven, Invoice4U, שינוי מלאי או פעולה חיצונית.",
+  ]
+    .filter(Boolean)
+    .join(" ");
+}
+
+function decideBusinessIntentHebrew(
+  report: ServiceReportForDraft,
+  documentType: BusinessDocumentType,
+) {
+  const recommendationText = [
+    report.recommendations,
+    ...report.equipmentItems.map((item) => item.technicianRecommendations),
+  ]
+    .map((value) => readText(value).toLowerCase())
+    .join(" ");
+
+  if (documentType === BusinessDocumentType.INVOICE) {
+    return "חיוב לקוח";
+  }
+
+  if (recommendationText) {
+    return "הצעת עבודה נוספת";
+  }
+
+  return "הצעת עבודה";
 }
 
 export async function buildProductionDraftRecommendation(
@@ -679,6 +849,7 @@ export async function buildProductionDraftRecommendation(
     const price = choosePriceEvidence(candidate, history, report, currentModels);
     const unitPrice = money(price.unitPrice);
     const totalPrice = money(price.totalPrice);
+    const confidenceLabel = CONFIDENCE_HEBREW_LABELS[price.confidence];
 
     return {
       itemName: candidate.itemName,
@@ -686,6 +857,7 @@ export async function buildProductionDraftRecommendation(
       unitPrice,
       totalPrice,
       confidence: price.confidence,
+      confidenceLabel,
       needsApproval: price.needsApproval || candidate.quantityNeedsApproval,
       itemType: candidate.itemType,
       source: price.source,
@@ -697,36 +869,37 @@ export async function buildProductionDraftRecommendation(
         .filter(Boolean)
         .join(" "),
       pricingEvidence: price.pricingEvidence,
-      explanation: `${candidate.itemName}: ${candidate.reason} Price confidence is ${price.confidence}.`,
+      explanation: `${candidate.itemName}: ${candidate.reason} רמת ביטחון: ${confidenceLabel}.`,
       missingEvidence: price.missingEvidence,
     };
   });
 
   if (!lines.length) {
     lines.push({
-      itemName: `Service Report ${report.reportCounter ?? report.appsheetReportId}`,
+      itemName: `בדיקת דוח שירות ${report.reportCounter ?? report.appsheetReportId}`,
       quantity: "1",
-      unitPrice: "Needs approval",
-      totalPrice: "Needs approval",
+      unitPrice: "Needs Price Review",
+      totalPrice: "Needs Price Review",
       confidence: "Low",
+      confidenceLabel: CONFIDENCE_HEBREW_LABELS.Low,
       needsApproval: true,
       itemType: "SERVICE",
       source: "BusinessCase",
       description:
-        "The generator exhausted current customer, equipment, service-kit, and approved document knowledge but could not safely derive specific commercial lines.",
+        "המערכת מיצתה את ידע הלקוח, הציוד, ערכות השירות והמסמכים המאושרים, אך לא הצליחה לגזור שורות מסחריות ספציפיות בבטחה.",
       pricingEvidence: [
         {
           source: "BusinessCase",
-          unitPrice: "Needs approval",
-          total: "Needs approval",
+          unitPrice: "Needs Price Review",
+          total: "Needs Price Review",
           confidence: "Low",
-          note: "Fallback review line after exhausting existing knowledge.",
+          note: "שורת בדיקה לאחר מיצוי ידע קיים.",
         },
       ],
       explanation:
-        "Fallback review line created because existing knowledge was insufficient for specific line generation.",
+        "נוצרה שורת בדיקה משום שהידע הקיים אינו מספיק ליצירת שורות ספציפיות.",
       missingEvidence: [
-        "No safe service-kit, spare-part, product-catalog, or approved BusinessDocumentItem evidence produced a specific line.",
+        "לא נמצאה עדות בטוחה מערכת שירות, חלקי חילוף, קטלוג מוצרים או BusinessDocumentItem מאושר ליצירת שורה ספציפית.",
       ],
     });
   }
@@ -738,20 +911,23 @@ export async function buildProductionDraftRecommendation(
     ...lines.flatMap((line) => line.missingEvidence),
     ...lines
       .filter((line) => line.needsApproval)
-      .map((line) => `${line.itemName} remains review-required before approval or external action.`),
+      .map((line) => `${line.itemName} דורש בדיקה לפני אישור או פעולה חיצונית.`),
   ]);
   const high = lines.filter((line) => line.confidence === "High").length;
   const medium = lines.filter((line) => line.confidence === "Medium").length;
   const low = lines.filter((line) => line.confidence === "Low").length;
-  const priced = lines.filter((line) => line.unitPrice !== "Needs approval").length;
+  const priced = lines.filter((line) => line.unitPrice !== "Needs Price Review").length;
+  const businessIntent = decideBusinessIntentHebrew(report, documentType);
 
   return {
     serviceReportId: report.appsheetReportId,
     documentType,
-    title: `${documentType} Draft - Service Report ${
-      report.reportCounter ?? report.appsheetReportId
-    }`,
-    description: `Internal ${documentType} draft generated from existing ServiceReport, service-kit, customer history, and approved BusinessDocument evidence. No external action was executed.`,
+    title: buildHebrewDraftTitle(report, documentType, serviceInterval),
+    description: `${buildHebrewBusinessSummary(
+      report,
+      documentType,
+      serviceInterval,
+    )} כוונה עסקית מומלצת: ${businessIntent}.`,
     lines,
     gatewayLines: lines.map((line) => ({
       itemName: line.itemName,
@@ -768,6 +944,7 @@ export async function buildProductionDraftRecommendation(
         source: "PRODUCTION_DRAFT_GENERATION",
         explanation: line.explanation,
         missingEvidence: line.missingEvidence,
+        confidenceLabel: line.confidenceLabel,
         noMavenAction: true,
         noInvoice4UAction: true,
         noEmailAction: true,
@@ -776,9 +953,9 @@ export async function buildProductionDraftRecommendation(
     })),
     knowledgeUsed,
     missingEvidence,
-    confidenceSummary: `${lines.length} generated line(s): ${high} high confidence, ${medium} medium confidence, ${low} low confidence; ${priced} line(s) include a proposed price.`,
+    confidenceSummary: `${lines.length} שורות נוצרו: ${high} בביטחון גבוה, ${medium} בביטחון בינוני, ${low} בביטחון נמוך; ${priced} שורות כוללות מחיר מוצע.`,
     explainabilitySummary: lines.map((line) => line.explanation).join(" "),
-    qualitySummary: `Generated ${lines.length} reviewable line(s) from existing knowledge. ${priced} line(s) have proposed prices; ${lines.length - priced} line(s) need pricing review.`,
-    estimatedManualWorkReduction: `The user starts from ${lines.length} generated line(s) instead of a blank draft; ${priced} line(s) avoid manual first-pass pricing lookup.`,
+    qualitySummary: `נוצרו ${lines.length} שורות ניתנות לבדיקה מתוך ידע קיים. ${priced} שורות כוללות מחיר מוצע; ${lines.length - priced} שורות דורשות בדיקת מחיר.`,
+    estimatedManualWorkReduction: `המשתמש מתחיל מ-${lines.length} שורות מוכנות במקום מטיוטה ריקה; ${priced} שורות חוסכות בדיקת מחיר ראשונית ידנית.`,
   };
 }

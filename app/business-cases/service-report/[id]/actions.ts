@@ -101,7 +101,10 @@ export async function createBusinessDocumentDraftFromBusinessCase(
       (line) => line.confidence === "Low",
     );
     const hasReviewRequiredLines = productionDraftRecommendation.lines.some(
-      (line) => line.needsApproval || line.unitPrice === "Needs approval",
+      (line) =>
+        line.needsApproval ||
+        line.unitPrice === "Needs approval" ||
+        line.unitPrice === "Needs Price Review",
     );
     const draftPolicy = buildServiceReportDraftPolicy({
       hasServiceReport: Boolean(businessCase.source.id),
@@ -139,7 +142,7 @@ export async function createBusinessDocumentDraftFromBusinessCase(
       overrideMissingPricing:
         overrideMissingPricing || draftPolicy.state === "REVIEW_REQUIRED",
       title: productionDraftRecommendation.title,
-      description: `${productionDraftRecommendation.description} Business intent: ${intentDecision.label}.`,
+      description: `${productionDraftRecommendation.description} כוונת משתמש שנבחרה: ${intentDecision.label}.`,
       aiReasoning: businessCase.serviceFlow.intelligence
         .map((item) => `${item.label}: ${item.value}`)
         .concat([
