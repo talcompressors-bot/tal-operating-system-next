@@ -5,6 +5,7 @@ import {
   SUPPORTED_DRAFT_DOCUMENT_TYPES,
 } from "../../../../lib/business-document-draft-gateway";
 import { BUSINESS_INTENT_POLICIES } from "../../../../lib/business-intent-policy";
+import { buildProductionDraftRecommendation } from "../../../../lib/business-document-production-draft";
 import { getBusinessCaseByServiceReportId } from "../../business-case-runtime";
 import { createBusinessDocumentDraftFromBusinessCase } from "./actions";
 
@@ -59,6 +60,8 @@ export default async function BusinessCasePage({
   const { id } = await params;
   const status = (await searchParams)?.draftGatewayStatus;
   const businessCase = await getBusinessCaseByServiceReportId(id);
+  const productionDraftRecommendation =
+    await buildProductionDraftRecommendation(id);
 
   if (!businessCase) {
     notFound();
@@ -142,6 +145,86 @@ export default async function BusinessCasePage({
             ))}
           </div>
         </section>
+
+        {productionDraftRecommendation ? (
+          <section className="info-panel wide">
+            <h2>Production Draft Recommendation</h2>
+            <p>{productionDraftRecommendation.qualitySummary}</p>
+            <p>{productionDraftRecommendation.estimatedManualWorkReduction}</p>
+            <div className="detail-grid compact">
+              <article className="info-panel">
+                <h3>Confidence</h3>
+                <p>{productionDraftRecommendation.confidenceSummary}</p>
+              </article>
+              <article className="info-panel">
+                <h3>Knowledge First</h3>
+                <p>
+                  Existing customer, asset, service-kit, approved document, and
+                  correction evidence is exhausted before a field is marked
+                  unknown.
+                </p>
+              </article>
+            </div>
+            <div className="table-card preview-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Line</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                    <th>Confidence</th>
+                    <th>Review</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {productionDraftRecommendation.lines.map((line) => (
+                    <tr key={`${line.itemName}-${line.quantity}`}>
+                      <td>
+                        <strong>{line.itemName}</strong>
+                        <span className="table-note">
+                          {line.explanation}
+                        </span>
+                      </td>
+                      <td>{line.quantity}</td>
+                      <td>{line.unitPrice}</td>
+                      <td>{line.totalPrice}</td>
+                      <td>{line.confidence}</td>
+                      <td>{line.needsApproval ? "Required" : "Clear"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="detail-grid compact">
+              <article className="info-panel">
+                <h3>Knowledge Used</h3>
+                <ul className="warning-list neutral">
+                  {productionDraftRecommendation.knowledgeUsed.map((item) => (
+                    <li key={item.source}>
+                      <strong>{item.source}:</strong> {item.status} -{" "}
+                      {item.explanation}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+              <article className="info-panel">
+                <h3>Missing Evidence</h3>
+                {productionDraftRecommendation.missingEvidence.length ? (
+                  <ul className="warning-list">
+                    {productionDraftRecommendation.missingEvidence
+                      .slice(0, 8)
+                      .map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                  </ul>
+                ) : (
+                  <p>No missing evidence was identified for this draft.</p>
+                )}
+              </article>
+            </div>
+          </section>
+        ) : null}
 
         <section className="info-panel wide">
           <h2>Approval Ready</h2>

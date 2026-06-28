@@ -125,8 +125,16 @@ function mapMatchSource(source: string) {
     return MatchSource.PRODUCTS_CATALOG;
   }
 
-  if (source.startsWith("BusinessDocumentItems")) {
+  if (source.startsWith("BusinessDocumentItems:SameCustomer")) {
     return MatchSource.SAME_CUSTOMER_HISTORY;
+  }
+
+  if (source.startsWith("BusinessDocumentItems:SameEquipment")) {
+    return MatchSource.SAME_EQUIPMENT_HISTORY;
+  }
+
+  if (source.startsWith("BusinessDocumentItems")) {
+    return MatchSource.SIMILAR_SERVICE_HISTORY;
   }
 
   if (source.startsWith("Maven")) {

@@ -11,6 +11,7 @@ import {
   BusinessIntentPolicyError,
   assertBusinessIntentPolicyAllowsDraft,
 } from "../../../../lib/business-intent-policy";
+import { buildProductionDraftRecommendation } from "../../../../lib/business-document-production-draft";
 import { getBusinessCaseByServiceReportId } from "../../business-case-runtime";
 
 function gatewayRedirect(serviceReportId: string, status: string): never {
@@ -60,10 +61,6 @@ export async function createBusinessDocumentDraftFromBusinessCase(
   const confidenceSummary = businessCase.serviceFlow.suggestions
     .map((suggestion) => `${suggestion.label}: ${suggestion.status}`)
     .join("; ");
-  const firstAsset = businessCase.assets[0];
-  const lineName = firstAsset
-    ? `${businessCase.source.label} - ${firstAsset.label}`
-    : businessCase.source.label;
 
   try {
     const intentDecision = assertBusinessIntentPolicyAllowsDraft({
@@ -80,6 +77,16 @@ export async function createBusinessDocumentDraftFromBusinessCase(
       billableWorkConfirmed,
       internalOverrideConfirmed,
     });
+    const productionDraftRecommendation =
+      await buildProductionDraftRecommendation(
+        businessCase.source.id,
+        intentDecision.selectedDocumentType ?? undefined,
+      );
+
+    if (!productionDraftRecommendation) {
+      gatewayRedirect(serviceReportId, "not-found");
+    }
+
     const result = await createBusinessDocumentDraftFromGateway({
       serviceReportId: businessCase.source.id,
       documentType,
@@ -90,49 +97,27 @@ export async function createBusinessDocumentDraftFromBusinessCase(
       confidenceReviewed,
       missingEvidenceReviewed,
       overrideMissingPricing,
-      title: `${documentType} Draft - ${businessCase.source.label}`,
-      description: `Internal ${documentType} BusinessDocument draft created for ${intentDecision.label} from BusinessCase Business Intelligence and Business Suggestions. No external action was executed.`,
+      title: productionDraftRecommendation.title,
+      description: `${productionDraftRecommendation.description} Business intent: ${intentDecision.label}.`,
       aiReasoning: businessCase.serviceFlow.intelligence
         .map((item) => `${item.label}: ${item.value}`)
+        .concat([
+          `Production draft: ${productionDraftRecommendation.explainabilitySummary}`,
+          `Knowledge quality: ${productionDraftRecommendation.qualitySummary}`,
+        ])
         .join("\n"),
-      lines: [
-        {
-          itemName: lineName,
-          description: [
-            businessCase.service.summary,
-            getIntelligenceValue(businessCase, "Business action recommended"),
-            `Missing evidence: ${missingEvidence}`,
-          ]
-            .filter(Boolean)
-            .join("\n"),
-          quantity: "1",
-          unitPrice: "Needs approval",
-          totalPrice: "Needs approval",
-          source: "BusinessCase",
-          itemType: "SERVICE",
-          confidence: "Low",
-          needsApproval: true,
-          pricingEvidence: [
-            {
-              source: "BusinessCase Business Intelligence",
-              unitPrice: "Needs approval",
-              total: "Needs approval",
-              confidence: "Low",
-              note: "Generic gateway draft uses visible Business Intelligence only. Pricing must be reviewed before approval or external action.",
-            },
-          ],
-          rawSource: {
-            businessCaseId: businessCase.id,
-            source: businessCase.source,
-            party: businessCase.party,
-            assets: businessCase.assets,
-            suggestions: businessCase.serviceFlow.suggestions,
-          },
-        },
+      lines: productionDraftRecommendation.gatewayLines,
+      missingEvidence: [
+        ...(missingEvidence ? [missingEvidence] : []),
+        ...productionDraftRecommendation.missingEvidence,
       ],
-      missingEvidence: missingEvidence ? [missingEvidence] : [],
-      confidenceSummary,
-      source: "BUSINESS_CASE_DRAFT_GATEWAY",
+      confidenceSummary: [
+        confidenceSummary,
+        productionDraftRecommendation.confidenceSummary,
+      ]
+        .filter(Boolean)
+        .join("; "),
+      source: "PRODUCTION_DRAFT_GENERATION",
       rawSource: {
         businessIntent,
         intentDecision,
@@ -140,6 +125,14 @@ export async function createBusinessDocumentDraftFromBusinessCase(
         serviceFlowBoundary: businessCase.serviceFlow.boundary,
         intelligence: businessCase.serviceFlow.intelligence,
         suggestions: businessCase.serviceFlow.suggestions,
+        productionDraftRecommendation: {
+          knowledgeUsed: productionDraftRecommendation.knowledgeUsed,
+          qualitySummary: productionDraftRecommendation.qualitySummary,
+          estimatedManualWorkReduction:
+            productionDraftRecommendation.estimatedManualWorkReduction,
+        },
+        learningPolicy:
+          "Learning uses approved user decisions only. Rejected drafts must not update trusted knowledge. Historical evidence is append-only.",
       },
     });
 
