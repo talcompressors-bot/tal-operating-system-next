@@ -627,11 +627,25 @@ dd {
 }
 
 .operations-table table {
-  min-width: 1320px;
+  min-width: 1420px;
 }
 
 .operations-table td {
   vertical-align: top;
+}
+
+.table-action-link {
+  background: var(--primary);
+  border-radius: 6px;
+  color: #ffffff !important;
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 7px 10px;
+}
+
+.table-action-link:hover {
+  background: var(--primary-hover);
 }
 
 .priority-pill {

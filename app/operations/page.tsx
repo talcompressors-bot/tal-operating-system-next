@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 function OperationsTable({
   rows,
 }: {
-  rows: Awaited<ReturnType<typeof getOperationsCenter>>["buckets"][number]["rows"];
+  rows: Awaited<ReturnType<typeof getOperationsCenter>>["queues"][number]["rows"];
 }) {
   if (!rows.length) {
     return (
@@ -32,6 +32,7 @@ function OperationsTable({
             <th>Last Activity</th>
             <th>Financial Status</th>
             <th>Commercial Status</th>
+            <th>Open Action</th>
           </tr>
         </thead>
         <tbody>
@@ -66,6 +67,11 @@ function OperationsTable({
               <td>{row.lastActivity}</td>
               <td>{row.financialStatus}</td>
               <td>{row.commercialStatus}</td>
+              <td>
+                <Link className="table-action-link" href={row.businessCase.href}>
+                  Open
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -81,12 +87,12 @@ export default async function OperationsCenterPage() {
     <section className="page-shell operations-shell">
       <div className="detail-header">
         <div>
-          <p className="eyebrow">TAL Operations Center</p>
-          <h1>Daily operational workspace</h1>
+          <p className="eyebrow">TAL Operations Command Center</p>
+          <h1>Morning work queue</h1>
           <p className="lede">
-            One morning view for open BusinessCases, blockers, readiness,
-            ownership, and the next recommended action. Recommendations are
-            advisory only and do not execute workflow steps.
+            One action-driven workspace for open BusinessCases, blockers,
+            ownership, waiting states, and the next recommended action.
+            Recommendations are advisory only and do not execute workflow steps.
           </p>
         </div>
         <div className="actions">
@@ -106,16 +112,21 @@ export default async function OperationsCenterPage() {
 
       <div className="review-status-grid">
         <div className="review-status-item strong">
-          <span>Total cases</span>
-          <strong>{operationsCenter.summary.totalCases}</strong>
+          <span>My work today</span>
+          <strong>
+            {
+              operationsCenter.queues.find((queue) => queue.key === "myWorkToday")
+                ?.rows.length
+            }
+          </strong>
         </div>
         <div className="review-status-item">
           <span>Immediate action</span>
           <strong>{operationsCenter.summary.immediateAction}</strong>
         </div>
         <div className="review-status-item">
-          <span>Blocked</span>
-          <strong>{operationsCenter.summary.blocked}</strong>
+          <span>High priority</span>
+          <strong>{operationsCenter.summary.highPriority}</strong>
         </div>
         <div className="review-status-item">
           <span>Ready to close</span>
@@ -123,16 +134,16 @@ export default async function OperationsCenterPage() {
         </div>
       </div>
 
-      {operationsCenter.buckets.map((bucket) => (
-        <section key={bucket.key} className="info-panel wide operations-section">
+      {operationsCenter.queues.map((queue) => (
+        <section key={queue.key} className="info-panel wide operations-section">
           <div className="operations-section-heading">
             <div>
-              <h2>{bucket.title}</h2>
-              <p>{bucket.description}</p>
+              <h2>{queue.title}</h2>
+              <p>{queue.description}</p>
             </div>
-            <strong>{bucket.rows.length}</strong>
+            <strong>{queue.rows.length}</strong>
           </div>
-          <OperationsTable rows={bucket.rows} />
+          <OperationsTable rows={queue.rows} />
         </section>
       ))}
     </section>

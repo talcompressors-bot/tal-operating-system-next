@@ -2,8 +2,8 @@ import Link from "next/link";
 
 const modules = [
   {
-    title: "Operations Center",
-    description: "Daily workspace for blockers, ownership, readiness, and next actions.",
+    title: "Operations Command Center",
+    description: "Morning work queue for blockers, owners, priority, waiting states, and next actions.",
     href: "/operations",
     active: true,
   },

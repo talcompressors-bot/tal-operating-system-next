@@ -20,7 +20,7 @@ export default function RootLayout({
             TAL Compressors
           </Link>
           <nav aria-label="Main navigation">
-            <Link href="/operations">Operations</Link>
+            <Link href="/operations">Command Center</Link>
             <Link href="/service-reports">Service Reports</Link>
           </nav>
         </header>
