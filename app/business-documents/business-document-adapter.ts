@@ -20,6 +20,13 @@ import {
   buildBusinessDocumentViewModel,
   type BusinessDocumentViewModel,
 } from "../../lib/business-document-view-model";
+import { buildBusinessDocumentApprovalReview } from "../../lib/business-document-approval-boundary";
+import { buildMavenDraftCommandReview } from "../../lib/business-document-automation-boundary";
+import {
+  buildBusinessDocumentReviewWarnings,
+  mapBusinessDocumentReviewLifecycle,
+  mapBusinessDocumentReviewStatus,
+} from "../../lib/business-document-review-boundary";
 import {
   matchManufacturerSku,
   type ManufacturerSkuMatch,
@@ -376,132 +383,6 @@ function isUuid(value: string) {
   );
 }
 
-function mapLifecycle(document: BusinessDocumentRecord) {
-  const status = readText(document.status).toUpperCase();
-  const sendStatus = readText(document.sendStatus).toLowerCase();
-
-  return {
-    draft:
-      status === "DRAFT_RECOMMENDED" || status === "WAITING_USER_APPROVAL"
-        ? "Draft"
-        : "Draft placeholder",
-    approved: document.approvedAt ? "Approved" : "Approved placeholder",
-    sentToMaven:
-      status === "MAVEN_DRAFT_REQUESTED" || Boolean(document.mavenDocumentNumber)
-        ? "Sent to Maven"
-        : "Sent to Maven placeholder",
-    mavenCreated: document.mavenDocumentNumber
-      ? "Maven Created"
-      : "Maven Created placeholder",
-    emailSent:
-      sendStatus.includes("sent") || Boolean(document.mavenPdfLink)
-        ? "Email Sent"
-        : "Email Sent placeholder",
-    customerViewed: "Customer Viewed placeholder",
-  };
-}
-
-function mapReviewStatus(document: BusinessDocumentRecord) {
-  return {
-    internalDraft:
-      document.status === "DRAFT_RECOMMENDED" ||
-      document.status === "WAITING_USER_APPROVAL"
-        ? "Internal Draft"
-        : formatEnum(document.status, "Internal Draft"),
-    sentState:
-      readText(document.sendStatus) ||
-      (document.sendByEmail || document.sendByWhatsapp
-        ? "Send pending review"
-        : "Not sent"),
-    mavenState:
-      document.mavenDocumentNumber || document.mavenPdfLink
-        ? "Maven document exists"
-        : "No Maven action",
-    emailState:
-      document.sendStatus || document.sendByEmail || document.sendByWhatsapp
-        ? "Delivery review required"
-        : "No email/customer-facing action",
-    inventoryState: "No inventory deduction",
-  };
-}
-
-function buildReviewWarnings(document: BusinessDocumentRecord) {
-  const warnings: string[] = [];
-  const approvalRequiredItems = document.items.filter(
-    (item) => item.needsPriceApproval,
-  );
-  const missingEvidenceItems = document.items.filter(
-    (item) => !summarizePricingEvidence(item.rawSource).length,
-  );
-
-  if (!document.items.length) {
-    warnings.push("No BusinessDocumentItems are linked to this draft.");
-  }
-
-  if (approvalRequiredItems.length) {
-    warnings.push(
-      `${approvalRequiredItems.length} line item(s) still require price approval before any Maven/Invoice4U action.`,
-    );
-  }
-
-  if (missingEvidenceItems.length) {
-    warnings.push(
-      `${missingEvidenceItems.length} line item(s) have no preserved pricing evidence.`,
-    );
-  }
-
-  if (!document.serviceReport) {
-    warnings.push("No source ServiceReport is linked to this draft.");
-  }
-
-  if (document.mavenDocumentNumber || document.mavenPdfLink) {
-    warnings.push("Maven fields are populated; verify no duplicate external action before proceeding.");
-  }
-
-  if (document.sendStatus || document.sendByEmail || document.sendByWhatsapp) {
-    warnings.push("Send fields are populated; verify customer-facing delivery status before proceeding.");
-  }
-
-  return warnings.length
-    ? warnings
-    : ["Review-ready internal draft. User approval is still required before any external action."];
-}
-
-function buildApprovalReview(document: BusinessDocumentRecord) {
-  const blockers: string[] = [];
-  const priceApprovalItems = document.items.filter(
-    (item) => item.needsPriceApproval || !item.unitPrice || !item.totalPrice,
-  );
-  const quantityIssueItems = document.items.filter((item) => {
-    const quantity = Number(item.quantity.toString());
-    return !Number.isFinite(quantity) || quantity <= 0;
-  });
-
-  if (!document.items.length) {
-    blockers.push("No BusinessDocumentItems are linked.");
-  }
-
-  if (priceApprovalItems.length) {
-    blockers.push(
-      `${priceApprovalItems.length} line item(s) still require pricing review or an explicit approval override.`,
-    );
-  }
-
-  if (quantityIssueItems.length) {
-    blockers.push(
-      `${quantityIssueItems.length} line item(s) have missing or zero quantity and require an explicit approval override.`,
-    );
-  }
-
-  return {
-    canApproveWithoutOverride: blockers.length === 0,
-    blockers,
-    approvalPhrase: "APPROVE BUSINESS DOCUMENT",
-    boundary:
-      "Approval updates only the internal BusinessDocument and audit log. It does not call Maven/Invoice4U, create AutomationCommands, send email, or deduct inventory.",
-  };
-}
-
 function buildModelEvidence(report: BusinessDocumentServiceReport | null) {
   if (!report) {
     return [];
@@ -514,78 +395,6 @@ function buildModelEvidence(report: BusinessDocumentServiceReport | null) {
     readText(item.equipmentModel),
     readText(item.compressorCategory),
   ]).filter(Boolean);
-}
-
-function mapCommandReview(document: BusinessDocumentRecord) {
-  const allowedStatus =
-    document.status === "APPROVED" || document.status === "READY_TO_SEND";
-  const latestCommand = document.automationCommands[0];
-  const approvalRequiredItems = document.items.filter(
-    (item) => item.needsPriceApproval,
-  );
-
-  if (latestCommand) {
-    return {
-      canCreateMavenCommand: false,
-      blockedReason:
-        "A Maven document-generation AutomationCommand already exists for this BusinessDocument.",
-      approvalPhrase: "CREATE MAVEN COMMAND",
-      latestCommandId: latestCommand.appsheetCommandId || latestCommand.id,
-      latestCommandStatus: formatEnum(latestCommand.status),
-    };
-  }
-
-  if (!allowedStatus) {
-    return {
-      canCreateMavenCommand: false,
-      blockedReason:
-        "BusinessDocument status must be Approved or Ready To Send before a Maven document-generation command can be queued.",
-      approvalPhrase: "CREATE MAVEN COMMAND",
-      latestCommandId: "No command",
-      latestCommandStatus: "No command",
-    };
-  }
-
-  if (document.mavenDocumentNumber || document.mavenPdfLink) {
-    return {
-      canCreateMavenCommand: false,
-      blockedReason:
-        "Maven fields are already populated; duplicate Maven document-generation commands are blocked.",
-      approvalPhrase: "CREATE MAVEN COMMAND",
-      latestCommandId: "No command",
-      latestCommandStatus: "No command",
-    };
-  }
-
-  if (!document.items.length) {
-    return {
-      canCreateMavenCommand: false,
-      blockedReason:
-        "BusinessDocumentItems are required before a Maven document-generation command can be queued.",
-      approvalPhrase: "CREATE MAVEN COMMAND",
-      latestCommandId: "No command",
-      latestCommandStatus: "No command",
-    };
-  }
-
-  if (approvalRequiredItems.length) {
-    return {
-      canCreateMavenCommand: false,
-      blockedReason:
-        "Price approval must be resolved for every line before a Maven document-generation command can be queued.",
-      approvalPhrase: "CREATE MAVEN COMMAND",
-      latestCommandId: "No command",
-      latestCommandStatus: "No command",
-    };
-  }
-
-  return {
-    canCreateMavenCommand: true,
-    blockedReason: "Ready for explicit Maven document-generation command approval.",
-    approvalPhrase: "CREATE MAVEN COMMAND",
-    latestCommandId: "No command",
-    latestCommandStatus: "No command",
-  };
 }
 
 function mapBusinessDocumentListItem(
@@ -699,10 +508,10 @@ function mapBusinessDocumentDetail(
     sendStatus: readText(document.sendStatus, "No send status"),
     notes: readText(document.notes, "No notes"),
     createdAt: formatDate(document.createdAt),
-    reviewStatus: mapReviewStatus(document),
-    reviewWarnings: buildReviewWarnings(document),
-    approvalReview: buildApprovalReview(document),
-    commandReview: mapCommandReview(document),
+    reviewStatus: mapBusinessDocumentReviewStatus(document),
+    reviewWarnings: buildBusinessDocumentReviewWarnings(document),
+    approvalReview: buildBusinessDocumentApprovalReview(document),
+    commandReview: buildMavenDraftCommandReview(document),
     engineReview,
     viewModel,
     automationCommands: document.automationCommands.map((command) => ({
@@ -714,7 +523,7 @@ function mapBusinessDocumentDetail(
       result: readText(command.result, "No result"),
       errorMessage: readText(command.errorMessage, "No error"),
     })),
-    lifecycle: mapLifecycle(document),
+    lifecycle: mapBusinessDocumentReviewLifecycle(document),
     items,
     logs: document.logs.map((log) => ({
       id: readText(log.appsheetLogId) || log.id,

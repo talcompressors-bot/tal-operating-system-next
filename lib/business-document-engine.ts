@@ -1,4 +1,9 @@
 import { Prisma } from "@prisma/client";
+import {
+  PAYMENT_SOURCES,
+  readFinancialPaymentAmount,
+  readFinancialPaymentSources,
+} from "./financial-intake-boundary";
 
 export const BUSINESS_DOCUMENT_TYPES = [
   { code: "QUOTE", label: "הצעת מחיר", requiresPayment: false },
@@ -13,16 +18,6 @@ export const BUSINESS_DOCUMENT_TYPES = [
   { code: "PURCHASE_ORDER", label: "הזמנת רכש", requiresPayment: false },
   { code: "DELIVERY_NOTE", label: "תעודת משלוח", requiresPayment: false },
   { code: "CREDIT_NOTE", label: "זיכוי", requiresPayment: false },
-] as const;
-
-export const PAYMENT_SOURCES = [
-  "Bank transfer",
-  "Check",
-  "Credit card",
-  "Cash",
-  "Other",
-  "Future uploaded check image",
-  "Future bank proof attachment",
 ] as const;
 
 type EngineLine = {
@@ -104,50 +99,6 @@ function roundMoney(value: number) {
   return Math.round((value + Number.EPSILON) * 100) / 100;
 }
 
-function readJsonObject(value: Prisma.JsonValue | null) {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    return {};
-  }
-
-  return value as Record<string, unknown>;
-}
-
-function collectPaymentEntries(rawSource: Prisma.JsonValue | null) {
-  const record = readJsonObject(rawSource);
-  const paymentPlan = record.paymentPlan;
-  const paymentEvidence = record.paymentEvidence;
-  const candidates: unknown[][] = [paymentPlan, paymentEvidence].filter(
-    (candidate): candidate is unknown[] => Array.isArray(candidate),
-  );
-
-  return candidates.flatMap((candidate) => candidate);
-}
-
-function readPaymentAmount(rawSource: Prisma.JsonValue | null) {
-  return collectPaymentEntries(rawSource).reduce<number>((sum, entry) => {
-    if (!entry || typeof entry !== "object" || Array.isArray(entry)) {
-      return sum;
-    }
-
-    const amount = Number((entry as Record<string, unknown>).amount);
-    return Number.isFinite(amount) && amount > 0 ? sum + amount : sum;
-  }, 0);
-}
-
-function readPaymentSources(rawSource: Prisma.JsonValue | null) {
-  const sources = collectPaymentEntries(rawSource)
-    .map((entry) => {
-      if (!entry || typeof entry !== "object" || Array.isArray(entry)) {
-        return "";
-      }
-
-      return String((entry as Record<string, unknown>).source || "").trim();
-    })
-    .filter(Boolean);
-
-  return Array.from(new Set(sources));
-}
-
 export function buildBusinessDocumentEngineReview(
   input: BusinessDocumentEngineInput,
 ): BusinessDocumentEngineReview {
@@ -177,9 +128,9 @@ export function buildBusinessDocumentEngineReview(
     storedTotalAmount && Math.abs(storedTotalAmount - (documentSubtotal + vatAmount)) <= 0.01
       ? storedTotalAmount
       : roundMoney(documentSubtotal + vatAmount);
-  const paymentAmount = readPaymentAmount(input.rawSource);
+  const paymentAmount = readFinancialPaymentAmount(input.rawSource);
   const balanceDue = totalAmount - paymentAmount;
-  const detectedSources = readPaymentSources(input.rawSource);
+  const detectedSources = readFinancialPaymentSources(input.rawSource);
   const blockers: string[] = [];
   const warnings: string[] = [];
 

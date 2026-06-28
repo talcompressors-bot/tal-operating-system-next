@@ -1179,6 +1179,49 @@ Source:
 Closeout rule:
 If no new work occurred, preserve these IDs and report the source. Do not downgrade them to `UNKNOWN`. If another canonical file reports different active IDs, report the conflict and source files instead of overwriting.
 
+## Wave 3 Domain Boundary Refactoring
+
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` with no schema, DB, package, source-system, external, customer-facing, inventory, Maven/Invoice4U, cloud, or production action.
+
+Scope:
+
+- Commercial runtime boundary was tightened without changing routes or visible behavior.
+- Financial payment/evidence parsing moved out of `lib/business-document-engine.ts` into `lib/financial-intake-boundary.ts`.
+- BusinessDocument approval blocker/phrase logic moved out of the Commercial adapter/action layer into `lib/business-document-approval-boundary.ts`.
+- Maven command eligibility and approval phrase logic moved out of the Commercial adapter/action layer into `lib/business-document-automation-boundary.ts`.
+- BusinessDocument cross-domain review status, lifecycle, and warning mapping moved out of the Commercial adapter into `lib/business-document-review-boundary.ts`.
+- `app/business-documents/business-document-adapter.ts` now delegates Approval/Governance and Automation/Integration decisions to those boundaries while preserving the existing detail-view contract.
+- `app/business-documents/[id]/actions.ts` now reuses the same approval and command-gate boundaries while preserving existing redirect statuses and internal-only writes.
+
+Validation:
+
+- Focused TypeScript passed for touched BusinessDocument and boundary files.
+- Repo-wide TypeScript still fails on pre-existing unrelated `app/ai-drafts/ai-draft-adapter.ts` pricing-evidence typing issues.
+- `git diff --check` passed with CRLF warnings only.
+- Local route validation required unsandboxed read-only DB access because sandboxed Prisma could not reach `aws-1-eu-central-1.pooler.supabase.com:6543`.
+- Unsandboxed read-only route validation passed:
+  - `/business-documents/NEXT-AI-DRAFT-5806` HTTP `200`.
+  - `/business-documents/NEXT-AI-DRAFT-5806/preview` HTTP `200`.
+  - `/business-documents/NEXT-AI-DRAFT-5806/pdf` HTTP `200`, `Content-Type: application/pdf`, `%PDF-`, `59807` bytes.
+- Totals remained present on review and preview: `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`.
+- Manufacturer SKU `901165` was not exposed in the checked review/preview HTML.
+
+Boundaries:
+
+- No new business capability.
+- No schema change.
+- No DB write.
+- No package install.
+- No Maven/Invoice4U call.
+- No email/customer-facing action.
+- No inventory action.
+- No source-system, cloud, or production action.
+- No route change.
+
+Project completion:
+
+- Remains `70%`; this is a domain-boundary hardening refactor, not a new capability point.
+
 ## Next Approved Task
 
 Wave 3 read-only Maven Knowledge Layer discovery is active.

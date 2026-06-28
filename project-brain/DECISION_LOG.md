@@ -1,5 +1,33 @@
 # DECISION LOG
 
+## 2026-06-28
+
+Decision:
+BusinessDocument runtime domain-boundary helpers are the approved internal separation point for the current Commercial runtime.
+
+Reason:
+The BusinessDocument adapter and Server Actions were carrying Commercial display, Financial payment/evidence parsing, Approval blocker logic, and Automation/Maven command-gate logic in the same runtime layer. The project approved domain-driven implementation without creating new registries, schema, or business capabilities. The minimum safe implementation is to keep routes and behavior unchanged while extracting cross-domain rule ownership into small internal helpers.
+
+Implemented scope:
+
+1. `lib/financial-intake-boundary.ts` owns current internal payment/evidence parsing used by the BusinessDocument engine.
+2. `lib/business-document-approval-boundary.ts` owns BusinessDocument approval phrase and blocker review logic.
+3. `lib/business-document-automation-boundary.ts` owns Maven AutomationCommand creation eligibility and phrase logic.
+4. `lib/business-document-review-boundary.ts` owns cross-domain review status, lifecycle, and warning mapping.
+5. `app/business-documents/business-document-adapter.ts` delegates financial, approval, automation, and cross-domain review decisions to those boundaries.
+6. `app/business-documents/[id]/actions.ts` reuses the same boundaries for write-side checks while preserving existing redirect statuses and internal-only behavior.
+
+Boundary:
+SAFE_LOCAL_IMPLEMENTATION only. No new business capability, route change, schema change, DB write, package install, Maven/Invoice4U call, email/customer-facing action, inventory action, source-system action, cloud action, or production action occurred. BusinessDocument `NEXT-AI-DRAFT-5806` remains the regression fixture only, not architecture.
+
+Validation:
+Focused TypeScript passed for touched files. Repo-wide TypeScript still fails on pre-existing unrelated AI Draft pricing-evidence typing issues. Unsandboxed read-only route validation passed for `/business-documents/NEXT-AI-DRAFT-5806`, `/business-documents/NEXT-AI-DRAFT-5806/preview`, and `/business-documents/NEXT-AI-DRAFT-5806/pdf`; totals remained `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`; checked review/preview HTML did not expose manufacturer SKU `901165`; PDF returned `%PDF-` and `59807` bytes.
+
+Status:
+Implemented as a domain-boundary hardening refactor. Project completion remains `70%`.
+
+---
+
 ## 2026-06-25
 
 Decision:

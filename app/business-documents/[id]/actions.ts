@@ -9,10 +9,15 @@ import {
 } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import {
+  BUSINESS_DOCUMENT_APPROVAL_PHRASE,
+  getBusinessDocumentApprovalBlockers,
+} from "../../../lib/business-document-approval-boundary";
+import {
+  CREATE_MAVEN_COMMAND_PHRASE,
+  getMavenDraftCommandCreationStatus,
+} from "../../../lib/business-document-automation-boundary";
 import { prisma } from "../../../lib/prisma";
-
-const APPROVAL_PHRASE = "CREATE MAVEN COMMAND";
-const BUSINESS_DOCUMENT_APPROVAL_PHRASE = "APPROVE BUSINESS DOCUMENT";
 
 function isUuid(value: string) {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
@@ -78,38 +83,6 @@ async function findBusinessDocumentForApproval(businessDocumentId: string) {
   });
 }
 
-function getApprovalBlockers(
-  document: NonNullable<Awaited<ReturnType<typeof findBusinessDocumentForApproval>>>,
-) {
-  const blockers: string[] = [];
-
-  if (!document.items.length) {
-    blockers.push("No BusinessDocumentItems are linked.");
-  }
-
-  const priceApprovalItems = document.items.filter(
-    (item) => item.needsPriceApproval || !item.unitPrice || !item.totalPrice,
-  );
-  const quantityIssueItems = document.items.filter((item) => {
-    const quantity = Number(item.quantity.toString());
-    return !Number.isFinite(quantity) || quantity <= 0;
-  });
-
-  if (priceApprovalItems.length) {
-    blockers.push(
-      `${priceApprovalItems.length} line item(s) still have required pricing review.`,
-    );
-  }
-
-  if (quantityIssueItems.length) {
-    blockers.push(
-      `${quantityIssueItems.length} line item(s) have missing or zero quantity.`,
-    );
-  }
-
-  return blockers;
-}
-
 export async function approveBusinessDocument(formData: FormData) {
   const businessDocumentId = String(
     formData.get("businessDocumentId") || "",
@@ -133,7 +106,7 @@ export async function approveBusinessDocument(formData: FormData) {
   }
 
   const canonicalDocumentId = document.appsheetBusinessDocumentId;
-  const blockers = getApprovalBlockers(document);
+  const blockers = getBusinessDocumentApprovalBlockers(document, "action");
 
   if (blockers.length && !overrideReviewBlockers) {
     redirect(buildApprovalRedirect(canonicalDocumentId, "override-required"));
@@ -406,7 +379,7 @@ export async function createMavenDraftAutomationCommand(formData: FormData) {
     redirect("/business-documents?commandStatus=missing-document");
   }
 
-  if (approvalText !== APPROVAL_PHRASE) {
+  if (approvalText !== CREATE_MAVEN_COMMAND_PHRASE) {
     redirect(buildRedirect(businessDocumentId, "approval-required"));
   }
 
@@ -446,28 +419,10 @@ export async function createMavenDraftAutomationCommand(formData: FormData) {
   }
 
   const canonicalDocumentId = document.appsheetBusinessDocumentId;
-  const allowedStatus =
-    document.status === BusinessDocumentStatus.APPROVED ||
-    document.status === BusinessDocumentStatus.READY_TO_SEND;
+  const commandCreationStatus = getMavenDraftCommandCreationStatus(document);
 
-  if (!allowedStatus) {
-    redirect(buildRedirect(canonicalDocumentId, "status-not-ready"));
-  }
-
-  if (document.mavenDocumentNumber || document.mavenPdfLink) {
-    redirect(buildRedirect(canonicalDocumentId, "maven-exists"));
-  }
-
-  if (!document.items.length) {
-    redirect(buildRedirect(canonicalDocumentId, "missing-items"));
-  }
-
-  if (document.items.some((item) => item.needsPriceApproval)) {
-    redirect(buildRedirect(canonicalDocumentId, "price-approval-required"));
-  }
-
-  if (document.automationCommands.length) {
-    redirect(buildRedirect(canonicalDocumentId, "existing-command"));
+  if (commandCreationStatus !== "ready") {
+    redirect(buildRedirect(canonicalDocumentId, commandCreationStatus));
   }
 
   const idempotencyKey = `maven-draft:${document.id}`;
@@ -501,7 +456,7 @@ export async function createMavenDraftAutomationCommand(formData: FormData) {
           noInventory: true,
         } satisfies Prisma.InputJsonValue,
         rawSource: {
-          approvalPhrase: APPROVAL_PHRASE,
+          approvalPhrase: CREATE_MAVEN_COMMAND_PHRASE,
           userFacingBoundary:
             "Create AutomationCommand only; downstream Maven document generation remains separately gated.",
         } satisfies Prisma.InputJsonValue,
