@@ -2,6 +2,12 @@ import Link from "next/link";
 
 const modules = [
   {
+    title: "Operations Center",
+    description: "Daily workspace for blockers, ownership, readiness, and next actions.",
+    href: "/operations",
+    active: true,
+  },
+  {
     title: "דוחות שירות",
     description: "צפייה בדוחות טכנאים, פרטי לקוח וציוד מטופל.",
     href: "/service-reports",

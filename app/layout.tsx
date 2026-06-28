@@ -3,8 +3,8 @@ import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "טל מדחסים - דוחות שירות",
-  description: "מערכת פיתוח לקריאת דוחות שירות",
+  title: "TAL Compressors ERP",
+  description: "TAL Compressors operations workspace",
 };
 
 export default function RootLayout({
@@ -17,10 +17,11 @@ export default function RootLayout({
       <body>
         <header className="site-header">
           <Link href="/" className="brand">
-            טל מדחסים
+            TAL Compressors
           </Link>
-          <nav aria-label="ניווט ראשי">
-            <Link href="/service-reports">דוחות שירות</Link>
+          <nav aria-label="Main navigation">
+            <Link href="/operations">Operations</Link>
+            <Link href="/service-reports">Service Reports</Link>
           </nav>
         </header>
         <main>{children}</main>

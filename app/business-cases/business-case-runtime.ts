@@ -8,6 +8,7 @@ import {
   type BusinessDocumentDetail,
 } from "../business-documents/business-document-adapter";
 import {
+  getServiceReportList,
   getServiceReportById,
   type ServiceReportView,
 } from "../service-reports/service-report-adapter";
@@ -305,27 +306,16 @@ function buildTimeline(
   ];
 }
 
-export async function getBusinessCaseByServiceReportId(
-  serviceReportId: string,
-): Promise<BusinessCaseViewModel | undefined> {
-  const report = await getServiceReportById(serviceReportId);
-
-  if (!report) {
-    return undefined;
-  }
-
-  const documentList = await getBusinessDocumentList();
-  const linkedDocumentSummaries = documentList.filter(
+function buildBusinessCaseViewModel(
+  report: ServiceReportView,
+  allDocuments: BusinessDocumentDetail[],
+  allCommands: AutomationCommandListItem[],
+): BusinessCaseViewModel {
+  const documents = allDocuments.filter(
     (document) => document.serviceReportId === report.id,
   );
-  const documents = (
-    await Promise.all(
-      linkedDocumentSummaries.map((document) => getBusinessDocumentById(document.id)),
-    )
-  ).filter((document): document is BusinessDocumentDetail => Boolean(document));
-  const commandList = await getAutomationCommandList();
   const documentIds = new Set(documents.map((document) => document.id));
-  const commands = commandList.filter(
+  const commands = allCommands.filter(
     (command) =>
       command.sourceServiceReportId === report.id ||
       documentIds.has(command.sourceObjectId),
@@ -373,4 +363,43 @@ export async function getBusinessCaseByServiceReportId(
     closureReadiness: buildClosureReadiness(blockers),
     timeline: buildTimeline(report, documents, commands),
   };
+}
+
+async function getDetailedBusinessDocuments() {
+  const documentList = await getBusinessDocumentList();
+
+  return (
+    await Promise.all(
+      documentList.map((document) => getBusinessDocumentById(document.id)),
+    )
+  ).filter((document): document is BusinessDocumentDetail => Boolean(document));
+}
+
+export async function getBusinessCaseList(): Promise<BusinessCaseViewModel[]> {
+  const [{ serviceReports }, documents, commandList] = await Promise.all([
+    getServiceReportList(),
+    getDetailedBusinessDocuments(),
+    getAutomationCommandList(),
+  ]);
+
+  return serviceReports.map((report) =>
+    buildBusinessCaseViewModel(report, documents, commandList),
+  );
+}
+
+export async function getBusinessCaseByServiceReportId(
+  serviceReportId: string,
+): Promise<BusinessCaseViewModel | undefined> {
+  const report = await getServiceReportById(serviceReportId);
+
+  if (!report) {
+    return undefined;
+  }
+
+  const [documents, commandList] = await Promise.all([
+    getDetailedBusinessDocuments(),
+    getAutomationCommandList(),
+  ]);
+
+  return buildBusinessCaseViewModel(report, documents, commandList);
 }
