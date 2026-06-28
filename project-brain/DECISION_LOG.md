@@ -3,6 +3,22 @@
 ## 2026-06-28
 
 Decision:
+Production Draft Generation Sprint 10 is implemented through the existing BusinessDocument Draft Gateway.
+
+Reason:
+The ERP had a generalized draft gateway and Business Intent policy, but the gateway still created a generic one-line review draft. The business requirement is Knowledge First: use existing ServiceReport, equipment, service-kit, approved BusinessDocumentItem, and approved user-correction evidence before asking the user to build a document manually.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` with approved internal draft DB writes through the existing gateway only. No Prisma schema change, enum extension, migration, package install, Maven/Invoice4U execution, email/customer-facing action, inventory mutation, OCR, bank API, receipt issuing, external adapter call, cloud/source-system action, or production behavior occurred. The generator is a recommendation layer; the gateway remains the only writer and keeps ServiceReport + DocumentType idempotency.
+
+Status:
+Implemented in commit `07a3a7b Add production draft generation`. Added `lib/business-document-production-draft.ts`, wired `/business-cases/service-report/[id]` to show a Production Draft Recommendation preview, and changed the BusinessCase draft action to create evidence-backed reviewable lines instead of one generic line. Validation created real non-5806 QUOTE drafts for ServiceReports `5864` / `acd1133d`, `5863` / `891a1dd7`, and `5861` / `e645e483`; a repeated submit for `e645e483` returned the existing draft and count stayed `1`. The corrected source mapping stores general approved historical evidence as `SIMILAR_SERVICE_HISTORY`, not same-customer history. Route validation passed for BusinessCase, Operations, Customer 360, new draft review/preview/PDF routes, and the 5806 regression routes. Existing 5806 totals remained `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`; manufacturer SKU `901165` was not exposed in checked review/preview HTML. Project TypeScript still fails only on the pre-existing unrelated AI Draft pricing-evidence issue. Completion moves to `80%`.
+
+---
+
+## 2026-06-28
+
+Decision:
 Business Intent Policy Layer Sprint 9 is implemented above the existing BusinessDocument Draft Gateway.
 
 Reason:
