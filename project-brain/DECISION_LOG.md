@@ -3,6 +3,22 @@
 ## 2026-06-28
 
 Decision:
+Operations Command Center Sprint 5 is implemented as the action-driven daily work queue.
+
+Reason:
+Operations Center Sprint 4 exposed awareness, but the next business-value challenge was whether the screen could drive the office manager and service manager's morning work. The minimum safe implementation was to keep BusinessCase as the source projection and convert the view into action queues without introducing a generic task manager, schema, persistence, or workflow execution.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` only. The Command Center reuses existing BusinessCase, Commercial, Financial, Approval, Automation, and read-only Inventory-impact runtime. Queue rows are projections of existing BusinessCases, not persisted tasks. The screen recommends and links internally only; it does not execute actions. No schema change, Prisma migration, DB write, package install, OCR, bank API, receipt issuing, tax invoice issuing, external accounting, Maven/Invoice4U call, email/customer-facing action, inventory mutation, cloud/source-system action, production behavior, or writable task manager was introduced.
+
+Status:
+Implemented in commit `be1fada Add operations command center`. Validation: project TypeScript only fails on pre-existing unrelated AI Draft pricing-evidence typing issues; `git diff --check` passed with CRLF warnings only; unsandboxed read-only route validation passed for `/operations`, `/business-cases/service-report/1e25bbb1`, `/business-documents/NEXT-AI-DRAFT-5806`, `/business-documents/NEXT-AI-DRAFT-5806/preview`, and `/business-documents/NEXT-AI-DRAFT-5806/pdf`; content checks confirmed all required queues, row fields, Open Action, Financial status, Commercial status, and queue/no-execute boundary text; review/preview totals stayed `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`; manufacturer SKU `901165` was not exposed in checked review/preview HTML. Completion moves to `75%`. Recommended Sprint 6 is Customer Workspace / Customer Timeline if staying safe/read-only; writable Command Center queue-state persistence is a valid alternative only after explicit schema/DB-write approval.
+
+---
+
+## 2026-06-28
+
+Decision:
 Operations Center Sprint 4 is implemented as the primary daily operational workspace.
 
 Reason:
