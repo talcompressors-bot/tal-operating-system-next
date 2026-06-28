@@ -125,12 +125,20 @@ Local development:
 - local tests
 - TypeScript compile checks
 - Next.js build checks
-- Next.js local dev startup
+- validation against the user-owned persistent Next.js dev server at `http://localhost:3000`
 - local HTTP validation
 - Playwright read-only validation
 - screenshot generation for proof
 - HTML render validation
 - route validation
+
+Dev server ownership:
+
+- Codex must not start or own the Next.js development server by default.
+- Assume Liad keeps one persistent local terminal running `npm run dev`.
+- Use `http://localhost:3000` for validation whenever possible.
+- Start or restart the dev server only when explicitly requested or when Liad reports it is no longer running.
+- Do not leave long-running dev processes attached to Codex sessions.
 
 Project Brain:
 

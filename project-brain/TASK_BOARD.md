@@ -213,7 +213,8 @@ Mode: CAPABILITY_BUILDING; governance frozen; TDOS frozen in Maintenance Mode; d
 - AUTO_APPROVED actions must run without asking Liad for approval:
   - Git: `git fetch`, `git pull --ff-only`, `git status`, `git log`, `git branch -vv`.
   - Read-only validation: read-only validation, read-only database queries, read-only DB query, Prisma read-only queries, staging read-only verification, count validation, relationship validation.
-  - Local development: local tests, TypeScript compile checks, Next.js build checks, Next.js local dev startup, local HTTP validation, Playwright read-only validation, screenshot generation for proof, HTML render validation, route validation.
+  - Local development: local tests, TypeScript compile checks, Next.js build checks, validation against the user-owned persistent Next.js dev server at `http://localhost:3000`, local HTTP validation, Playwright read-only validation, screenshot generation for proof, HTML render validation, route validation.
+- Dev server ownership rule: Codex must not start or own the Next.js development server by default; assume Liad keeps one persistent local terminal running `npm run dev`; use `http://localhost:3000` for validation whenever possible; start/restart only when explicitly requested or when Liad reports it is no longer running; do not leave long-running dev processes attached to Codex sessions.
   - Project Brain: update Project Brain after completed safe work, update `project-brain/CURRENT_TASK.md`, update `project-brain/TASK_BOARD.md`, update `project-brain/DECISION_LOG.md`, update `PROJECT_INDEX.md` references, update migration plans, update wave progress.
   - Safe commits: documentation-only commits, Project Brain commits, governance commits, read-only validation report commits, safe implementation commits after validation, `git push` of approved safe-scope work.
 - Do not ask Liad for approval when executing AUTO_APPROVED actions; only stop for APPROVAL_REQUIRED gates.

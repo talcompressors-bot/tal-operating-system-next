@@ -3,6 +3,22 @@
 ## 2026-06-28
 
 Decision:
+Codex does not own the Next.js development server.
+
+Reason:
+The development server is a long-running local process and should live in Liad's persistent terminal, not inside transient Codex tool sessions. Codex-owned dev processes can time out, be killed by the tool runtime, leave stale `.next` state, or confuse validation responsibility.
+
+Boundary:
+Codex should validate against the existing user-owned `http://localhost:3000` server whenever possible. Codex may start or restart the dev server only when Liad explicitly requests it or reports that the server is no longer running. Codex must not leave long-running dev processes attached to Codex sessions.
+
+Status:
+Recorded as a permanent development rule in the existing operating protocol, startup/closeout commands, and task board. This is documentation/governance only; no runtime code, schema, DB write, package install, Maven/Invoice4U action, email/customer action, inventory action, source-system action, cloud action, or production action occurred.
+
+---
+
+## 2026-06-28
+
+Decision:
 Autonomous Business Draft Generation Sprint 12 is implemented as Hebrew-first, knowledge-first internal draft generation through the existing gateway.
 
 Reason:
