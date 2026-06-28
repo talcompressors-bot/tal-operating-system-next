@@ -17,6 +17,10 @@ import {
   type BusinessDocumentEngineReview,
 } from "../../lib/business-document-engine";
 import {
+  buildBusinessDocumentViewModel,
+  type BusinessDocumentViewModel,
+} from "../../lib/business-document-view-model";
+import {
   matchManufacturerSku,
   type ManufacturerSkuMatch,
 } from "../../lib/manufacturer-sku-matching";
@@ -154,6 +158,7 @@ export type BusinessDocumentDetail = BusinessDocumentListItem & {
     latestCommandStatus: string;
   };
   engineReview: BusinessDocumentEngineReview;
+  viewModel: BusinessDocumentViewModel;
   automationCommands: Array<{
     id: string;
     commandType: string;
@@ -625,9 +630,63 @@ function mapBusinessDocumentDetail(
     items: document.items,
   });
   const modelEvidence = buildModelEvidence(document.serviceReport);
+  const items = document.items.map((item) => {
+    const manufacturerSkuMatch = matchManufacturerSku({
+      modelEvidence,
+      itemName: item.itemName,
+      salesSku: item.product?.sku,
+    });
+
+    return {
+      id: readText(item.appsheetItemId) || item.id,
+      internalId: item.id,
+      name: item.itemName,
+      quantity: item.quantity.toFixed(3),
+      editableQuantity: item.quantity.toString(),
+      unitPrice: formatMoney(item.unitPrice, document.currency),
+      editableUnitPrice: item.unitPrice ? item.unitPrice.toString() : "",
+      totalPrice: formatMoney(item.totalPrice, document.currency),
+      source: formatEnum(item.source),
+      needsPriceApproval: item.needsPriceApproval ? "Required" : "No",
+      needsPriceApprovalChecked: item.needsPriceApproval,
+      pricingEvidence: summarizePricingEvidence(item.rawSource),
+      manufacturerSkuMatch,
+    };
+  });
+  const listItem = mapBusinessDocumentListItem(document);
+  const viewModel = buildBusinessDocumentViewModel({
+    documentId: listItem.id,
+    documentTypeSelected: document.documentTypeSelected,
+    issueDate: formatDate(document.createdAt),
+    currency: document.currency,
+    primaryParty: {
+      id: listItem.customerId,
+      name: listItem.customerName,
+      role: "customer",
+    },
+    source: {
+      type: document.serviceReport ? "service_report" : "none",
+      reference: listItem.serviceReportNumber,
+      label: document.serviceReport ? "Service report" : "No linked source",
+      href: listItem.serviceReportId
+        ? `/service-reports/${listItem.serviceReportId}`
+        : "",
+    },
+    totals: engineReview.totals,
+    lines: items.map((item, index) => ({
+      id: item.id,
+      index: index + 1,
+      name: item.name,
+      displayName: item.name,
+      quantity: item.quantity,
+      unitPrice: item.unitPrice,
+      totalPrice: item.totalPrice,
+      salesSku: item.manufacturerSkuMatch.salesSku,
+    })),
+  });
 
   return {
-    ...mapBusinessDocumentListItem(document),
+    ...listItem,
     internalId: document.id,
     sourceDocumentId: readText(document.sourceDocumentId, "No source document"),
     suggestedDocumentType: formatEnum(document.documentTypeSuggested),
@@ -645,6 +704,7 @@ function mapBusinessDocumentDetail(
     approvalReview: buildApprovalReview(document),
     commandReview: mapCommandReview(document),
     engineReview,
+    viewModel,
     automationCommands: document.automationCommands.map((command) => ({
       id: command.appsheetCommandId || command.id,
       commandType: formatEnum(command.commandType),
@@ -655,25 +715,7 @@ function mapBusinessDocumentDetail(
       errorMessage: readText(command.errorMessage, "No error"),
     })),
     lifecycle: mapLifecycle(document),
-    items: document.items.map((item) => ({
-      id: readText(item.appsheetItemId) || item.id,
-      internalId: item.id,
-      name: item.itemName,
-      quantity: item.quantity.toFixed(3),
-      editableQuantity: item.quantity.toString(),
-      unitPrice: formatMoney(item.unitPrice, document.currency),
-      editableUnitPrice: item.unitPrice ? item.unitPrice.toString() : "",
-      totalPrice: formatMoney(item.totalPrice, document.currency),
-      source: formatEnum(item.source),
-      needsPriceApproval: item.needsPriceApproval ? "Required" : "No",
-      needsPriceApprovalChecked: item.needsPriceApproval,
-      pricingEvidence: summarizePricingEvidence(item.rawSource),
-      manufacturerSkuMatch: matchManufacturerSku({
-        modelEvidence,
-        itemName: item.itemName,
-        salesSku: item.product?.sku,
-      }),
-    })),
+    items,
     logs: document.logs.map((log) => ({
       id: readText(log.appsheetLogId) || log.id,
       action: log.action,

@@ -1727,3 +1727,19 @@ This decision changes documentation/governance only. `PROJECT_OPERATING_PROTOCOL
 
 Status:
 Approved by user request and implemented in commit `7dc51f9 Integrate TDOS risk operating model` as a protocol extension. TDOS task risk classes are `READ_ONLY_DISCOVERY`, `DOC_SYNC`, `SAFE_LOCAL_IMPLEMENTATION`, `SCHEMA_OR_DATA_CHANGE`, `EXTERNAL_SYSTEM_CHANGE`, `PRODUCTION_CHANGE`, and `ARCHITECTURE_CHANGE`. No required control for the task's risk class may be skipped.
+
+---
+
+## 2026-06-28
+
+Decision:
+The Universal Business Document Engine foundation is implemented as an internal configuration and view-model boundary without schema changes.
+
+Reason:
+Commercial document families should share one runtime instead of duplicating quote, invoice, receipt, purchase order, delivery note, and future custom document logic. The safe first step is to introduce `DocumentTypeConfig` and `BusinessDocumentViewModel` around the existing `BusinessDocument` source of truth, then let preview/PDF consume the view model while preserving current behavior.
+
+Boundaries:
+This implementation does not change Prisma schema, persisted data, document status, approval rules, PDF generation path, Maven/Invoice4U behavior, external APIs, customer send, inventory logic, package dependencies, source systems, or production. PDF still renders the existing preview route. BusinessDocument remains the internal source of truth. BusinessDocument `NEXT-AI-DRAFT-5806` / ServiceReport `5806` is used only as regression validation evidence and is not an architecture dependency.
+
+Status:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION`. Validation passed for focused TypeScript on touched files, `/business-documents/NEXT-AI-DRAFT-5806`, `/business-documents/NEXT-AI-DRAFT-5806/preview`, and `/business-documents/NEXT-AI-DRAFT-5806/pdf`. Totals remained `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`; preview did not expose manufacturer SKU `901165`; PDF returned valid `%PDF`.

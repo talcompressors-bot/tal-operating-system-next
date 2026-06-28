@@ -20,6 +20,18 @@ function toHebrewItemName(name: string) {
   return itemNameHebrew[name] || name;
 }
 
+function formatHebrewTaxLabel(tax: {
+  label: string;
+  rate: number;
+  amountLabel: string;
+}) {
+  if (tax.label === "VAT") {
+    return `מע"מ ${tax.amountLabel}`;
+  }
+
+  return `${tax.label} ${tax.amountLabel}`.trim();
+}
+
 export default async function BusinessDocumentPreviewPage({
   params,
 }: BusinessDocumentPreviewPageProps) {
@@ -30,9 +42,8 @@ export default async function BusinessDocumentPreviewPage({
     notFound();
   }
 
-  const showSalesSkuColumn = document.items.some(
-    (item) => item.manufacturerSkuMatch.salesSku,
-  );
+  const viewModel = document.viewModel;
+  const showSalesSkuColumn = viewModel.preview.showSalesSkuColumn;
 
   return (
     <section className="document-preview-shell" dir="rtl">
@@ -64,11 +75,11 @@ export default async function BusinessDocumentPreviewPage({
             <dl>
               <div>
                 <dt>מספר מסמך</dt>
-                <dd>{document.id}</dd>
+                <dd>{viewModel.header.documentId}</dd>
               </div>
               <div>
                 <dt>תאריך</dt>
-                <dd>{document.createdAt}</dd>
+                <dd>{viewModel.header.issueDate}</dd>
               </div>
             </dl>
           </div>
@@ -77,15 +88,15 @@ export default async function BusinessDocumentPreviewPage({
         <section className="document-preview-meta">
           <div className="preview-party-block">
             <h3>לכבוד</h3>
-            <p>{document.customerName}</p>
+            <p>{viewModel.parties.primaryParty.name}</p>
             <dl>
               <div>
                 <dt>מספר לקוח</dt>
-                <dd>{document.customerId || "לא נרשם"}</dd>
+                <dd>{viewModel.parties.primaryParty.id || "לא נרשם"}</dd>
               </div>
               <div>
                 <dt>מספר קריאת שירות</dt>
-                <dd>{document.serviceReportNumber}</dd>
+                <dd>{viewModel.source.reference}</dd>
               </div>
             </dl>
           </div>
@@ -94,7 +105,7 @@ export default async function BusinessDocumentPreviewPage({
             <dl>
               <div>
                 <dt>תאריך מסמך</dt>
-                <dd>{document.createdAt}</dd>
+                <dd>{viewModel.header.issueDate}</dd>
               </div>
               <div>
                 <dt>תאריך לתשלום</dt>
@@ -102,11 +113,11 @@ export default async function BusinessDocumentPreviewPage({
               </div>
               <div>
                 <dt>מטבע</dt>
-                <dd>ILS</dd>
+                <dd>{viewModel.header.currency}</dd>
               </div>
               <div>
                 <dt>יתרה לתשלום</dt>
-                <dd>{document.engineReview.totals.balanceDue}</dd>
+                <dd>{viewModel.totals.balanceDue}</dd>
               </div>
             </dl>
           </div>
@@ -137,21 +148,21 @@ export default async function BusinessDocumentPreviewPage({
               </tr>
             </thead>
             <tbody>
-              {document.items.map((item, index) => (
+              {viewModel.lines.map((item) => (
                 <tr key={item.id}>
-                  <td>{index + 1}</td>
+                  <td>{item.index}</td>
                   <td>
                     <strong>{toHebrewItemName(item.name)}</strong>
                   </td>
                   {showSalesSkuColumn ? (
-                    <td>{item.manufacturerSkuMatch.salesSku}</td>
+                    <td>{item.salesSku}</td>
                   ) : null}
                   <td>{item.quantity}</td>
                   <td>{item.unitPrice}</td>
                   <td>{item.totalPrice}</td>
                 </tr>
               ))}
-              {!document.items.length ? (
+              {!viewModel.lines.length ? (
                 <tr>
                   <td colSpan={showSalesSkuColumn ? 6 : 5}>לא נרשמו פריטים.</td>
                 </tr>
@@ -170,23 +181,23 @@ export default async function BusinessDocumentPreviewPage({
           <dl className="document-totals-box">
             <div>
               <dt>סה&quot;כ</dt>
-              <dd>{document.engineReview.totals.documentSubtotal}</dd>
+              <dd>{viewModel.totals.documentSubtotal}</dd>
             </div>
             <div>
-              <dt>מע&quot;מ 17%</dt>
-              <dd>{document.engineReview.totals.vatAmount}</dd>
+              <dt>{formatHebrewTaxLabel(viewModel.tax)}</dt>
+              <dd>{viewModel.totals.vatAmount}</dd>
             </div>
             <div className="strong-total">
               <dt>סה&quot;כ לתשלום</dt>
-              <dd>{document.engineReview.totals.totalAmount}</dd>
+              <dd>{viewModel.totals.totalAmount}</dd>
             </div>
             <div>
               <dt>שולם</dt>
-              <dd>{document.engineReview.totals.paymentAmount}</dd>
+              <dd>{viewModel.totals.paymentAmount}</dd>
             </div>
             <div>
               <dt>יתרה לתשלום</dt>
-              <dd>{document.engineReview.totals.balanceDue}</dd>
+              <dd>{viewModel.totals.balanceDue}</dd>
             </div>
           </dl>
         </section>
