@@ -1,7 +1,7 @@
 # CURRENT TASK
 
-Last updated: 2026-06-25
-Mode: CAPABILITY_BUILDING; governance frozen; Wave 2 complete; architecture audit complete; Legacy Excel Parser Strategy completed; no real Maven execution approved yet
+Last updated: 2026-06-28
+Mode: CAPABILITY_BUILDING; governance frozen; TDOS risk-based operating model integrated; Wave 2 complete; architecture audit complete; Legacy Excel Parser Strategy completed; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`cac31e4 Add runtime SKU matching for report 5806`
+`7dc51f9 Integrate TDOS risk operating model`
 
 ## Last Closeout Commit
 
