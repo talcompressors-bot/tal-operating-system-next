@@ -722,6 +722,124 @@ export default async function BusinessDocumentDetailPage({
         </article>
 
         <article className="info-panel wide">
+          <h2>Production draft review and learning</h2>
+          <div className="approval-panel">
+            <p>{document.learningReview.policy}</p>
+            <dl>
+              <div>
+                <dt>Production draft</dt>
+                <dd>{document.learningReview.isProductionDraft ? "Yes" : "No"}</dd>
+              </div>
+              <div>
+                <dt>Title quality</dt>
+                <dd>
+                  {document.learningReview.titleQuality.status} -{" "}
+                  {document.learningReview.titleQuality.summary}
+                </dd>
+              </div>
+              <div>
+                <dt>Price confidence</dt>
+                <dd>{document.learningReview.priceConfidence.summary}</dd>
+              </div>
+              <div>
+                <dt>Correction workflow</dt>
+                <dd>
+                  {document.learningReview.correctionWorkflow.status} -{" "}
+                  {document.learningReview.correctionWorkflow.summary}
+                </dd>
+              </div>
+              <div>
+                <dt>Learning status</dt>
+                <dd>
+                  {document.learningReview.learningEvidence.status} -{" "}
+                  {document.learningReview.learningEvidence.summary}
+                </dd>
+              </div>
+            </dl>
+          </div>
+
+          <div className="split-list-grid">
+            <div>
+              <h3>Line quality</h3>
+              {document.learningReview.lineQuality.length ? (
+                <ul className="pricing-evidence-list">
+                  {document.learningReview.lineQuality.map((line) => (
+                    <li key={line.itemName}>
+                      <span>
+                        {line.itemName}: {line.status} - {line.summary}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="empty-state">No generated lines are available to review.</p>
+              )}
+            </div>
+            <div>
+              <h3>Recommended corrections</h3>
+              {document.learningReview.recommendedCorrections.length ? (
+                <ul className="warning-list">
+                  {document.learningReview.recommendedCorrections.map((correction) => (
+                    <li key={correction}>{correction}</li>
+                  ))}
+                </ul>
+              ) : (
+                <ul className="warning-list neutral">
+                  <li>No required corrections are currently detected.</li>
+                </ul>
+              )}
+            </div>
+          </div>
+
+          <div className="split-list-grid">
+            <div>
+              <h3>Missing evidence</h3>
+              {document.learningReview.missingEvidence.length ? (
+                <ul className="warning-list neutral">
+                  {document.learningReview.missingEvidence.map((evidence) => (
+                    <li key={evidence}>{evidence}</li>
+                  ))}
+                </ul>
+              ) : (
+                <ul className="warning-list neutral">
+                  <li>No missing evidence is currently recorded.</li>
+                </ul>
+              )}
+            </div>
+            <div>
+              <h3>Approved learning evidence</h3>
+              {document.learningReview.learningEvidence.approvedEvidence.length ? (
+                <ul className="pricing-evidence-list">
+                  {document.learningReview.learningEvidence.approvedEvidence.map(
+                    (evidence) => (
+                      <li key={evidence}>
+                        <span>{evidence}</span>
+                      </li>
+                    ),
+                  )}
+                </ul>
+              ) : (
+                <ul className="warning-list neutral">
+                  {document.learningReview.learningEvidence.blockedReasons.map(
+                    (reason) => (
+                      <li key={reason}>{reason}</li>
+                    ),
+                  )}
+                </ul>
+              )}
+            </div>
+          </div>
+
+          <div className="approval-panel">
+            <ul className="warning-list neutral">
+              {document.learningReview.learningEvidence.futureReuse.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        </article>
+
+        <article className="info-panel wide">
           <h2>Review line items</h2>
           <div className="table-card">
             <table>

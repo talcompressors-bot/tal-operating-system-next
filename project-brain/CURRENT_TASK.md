@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-28
-Mode: CAPABILITY_BUILDING; governance frozen; TDOS frozen in Maintenance Mode; domain-driven roadmap realigned; Production Draft Generation Sprint 10 implemented; Business Intent Policy Layer Sprint 9 implemented; Generalized BusinessDocument Draft Gateway Sprint 8 implemented; End-to-End Service Flow MVP Sprint 7 implemented; Customer 360 Workspace Sprint 6 implemented; Operations Command Center Sprint 5 implemented; Operations Center Sprint 4 implemented; Financial Capability Sprint 3 implemented; Commercial Lifecycle Hardening Sprint 2 implemented; BusinessCase Runtime Sprint 1 implemented; Financial Intake Engine design documented; Universal Business Document Engine foundation implemented; TDOS risk-based operating model integrated; Wave 2 complete; architecture audit complete; Commercial, Financial, operational workspace, customer, service-flow integration, draft-gateway, intent-policy, and production draft generation runtime work started; Maven remains an External Adapter gate only; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; TDOS frozen in Maintenance Mode; domain-driven roadmap realigned; Production Draft Review and Learning Loop Sprint 11 implemented; Production Draft Generation Sprint 10 implemented; Business Intent Policy Layer Sprint 9 implemented; Generalized BusinessDocument Draft Gateway Sprint 8 implemented; End-to-End Service Flow MVP Sprint 7 implemented; Customer 360 Workspace Sprint 6 implemented; Operations Command Center Sprint 5 implemented; Operations Center Sprint 4 implemented; Financial Capability Sprint 3 implemented; Commercial Lifecycle Hardening Sprint 2 implemented; BusinessCase Runtime Sprint 1 implemented; Financial Intake Engine design documented; Universal Business Document Engine foundation implemented; TDOS risk-based operating model integrated; Wave 2 complete; architecture audit complete; Commercial, Financial, operational workspace, customer, service-flow integration, draft-gateway, intent-policy, production draft generation, and approved-correction learning runtime work started; Maven remains an External Adapter gate only; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`07a3a7b Add production draft generation`
+`PENDING - Add production draft learning loop`
 
 ## Last Closeout Commit
 
@@ -129,9 +129,9 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Current Task
 
-Production Draft Generation Sprint 10 is complete. BusinessCase draft creation now starts from Business Intent, applies Domain Policy, previews knowledge-first generated lines, and creates internal BusinessDocument drafts through the existing BusinessDocument Draft Gateway. The generator uses existing ServiceReport, equipment, service-kit, approved BusinessDocumentItem, and approved correction evidence before marking fields unknown. The gateway remains the only draft writer and preserves ServiceReport + DocumentType idempotency.
+Production Draft Review and Learning Loop Sprint 11 is complete. Generated drafts now expose title quality, line quality, price confidence, missing evidence, recommended corrections, correction workflow readiness, approved learning evidence, and future reuse readiness on the existing BusinessDocument review page. Approved production-generated drafts append structured learning evidence to the existing BusinessDocument approval audit log, and future production draft generation continues to consume only approved BusinessDocuments with priced BusinessDocumentItems.
 
-Current blocker: none for Sprint 10. Remaining gates: production draft review/learning loop selection before treating generated drafts as a complete closed learning cycle; schema/enum expansion before true Tax Invoice / Receipt, Purchase Order, Delivery Note, or Debit Note support; FinancialEvidence/payment evidence before receipt collection; source BusinessDocument before credit workflow; Inventory/Procurement runtime before purchase or delivery workflows; explicit real Maven/Invoice4U approval; separate customer-facing/email approval; separate inventory approval; and separate schema/DB/storage approval for any persisted queue, evidence, attachment, or follow-up state.
+Current blocker: none for Sprint 11. Remaining gates: schema/enum expansion before true Tax Invoice / Receipt, Purchase Order, Delivery Note, or Debit Note support; FinancialEvidence/payment evidence before receipt collection; source BusinessDocument before credit workflow; Inventory/Procurement runtime before purchase or delivery workflows; explicit real Maven/Invoice4U approval; separate customer-facing/email approval; separate inventory approval; and separate schema/DB/storage approval for any persisted queue, evidence, attachment, correction type, or follow-up state.
 
 ## Manufacturer Registry Alias and Conflict Validation
 
@@ -1635,6 +1635,70 @@ Next candidate tasks, pending explicit selection/approval:
 7. BusinessCase runtime generalization, if a future capability proves ServiceReport-derived cases are too narrow.
 8. Build hygiene for the existing AI Draft pricing-evidence TypeScript gap, if explicitly selected.
 9. Optional Wave 2 import approval package, only if explicitly approved.
+
+## ERP Sprint 11 - Production Draft Review and Learning Loop
+
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` in commit `PENDING - Add production draft learning loop`.
+
+Capability delivered:
+
+- Added `lib/business-document-learning-boundary.ts` as a Commercial review/learning boundary over existing BusinessDocument, BusinessDocumentItem, and BusinessDocumentLog data.
+- `/business-documents/[id]` now exposes Production Draft Review and Learning with title quality, line quality, price confidence, missing evidence, recommended corrections, correction workflow status, learning status, approved learning evidence, and future reuse readiness.
+- Existing BusinessDocument approval now records structured `learningEvidence` in the existing approval `BusinessDocumentLog.rawData` only for production-generated drafts.
+- Learning remains approved-only: pending and rejected drafts are not reusable evidence; approved corrected lines remain append-only evidence through BusinessDocumentItem rawSource and BusinessDocumentLog rawData.
+- No new table, schema object, registry, engine, route, or standalone learning source of truth was introduced.
+
+Boundary:
+
+- No Prisma schema change, enum extension, migration, package install, Maven/Invoice4U execution, email/customer-facing action, inventory mutation, OCR, bank API, receipt issuing, external adapter call, cloud/source-system action, or production behavior occurred.
+- Internal DB writes occurred only through existing protected BusinessDocument line-resolution and approval forms against Sprint 10 validation draft `NEXT-BD-DRAFT-e645e483-QUOTE`.
+- No AutomationCommand, EmailLog, InventoryTransaction, Maven/Invoice4U, receipt, customer delivery, or external state was created.
+
+Validation:
+
+- Project TypeScript still fails only on the known pre-existing unrelated `app/ai-drafts/ai-draft-adapter.ts` pricing-evidence typing issue; no new TypeScript errors from Sprint 11 code.
+- Required Sprint 10 drafts validated:
+  - `NEXT-BD-DRAFT-acd1133d-QUOTE` review page HTTP `200`; title quality, line quality, price confidence, missing evidence, and recommended corrections rendered.
+  - `NEXT-BD-DRAFT-891a1dd7-QUOTE` review page HTTP `200`; title quality, line quality, price confidence, missing evidence, and recommended corrections rendered.
+  - `NEXT-BD-DRAFT-e645e483-QUOTE` review page HTTP `200`; title quality, line quality, price confidence, missing evidence, recommended corrections, approved learning evidence, and future reuse readiness rendered.
+- Existing internal line-resolution forms corrected `NEXT-BD-DRAFT-e645e483-QUOTE` by item identity:
+  - `Technician Visit / Travel`: quantity `1`, unit `300`, total `300`, `needsPriceApproval=false`.
+  - `Labor + Service`: quantity `2`, unit `275`, total `550`, `needsPriceApproval=false`.
+  - Each line preserved three pricing evidence entries after correction.
+- Existing approval workflow approved `NEXT-BD-DRAFT-e645e483-QUOTE` internally and created approval log learning evidence with `approvedLineCount=2`, `reusableByFutureDraftGeneration=true`, and policy `Approved user corrections only; rejected drafts ignored; append-only evidence`.
+- Future draft reuse validation against ServiceReport `acd1133d` showed `NEXT-BD-DRAFT-e645e483-QUOTE` is now the top scored approved historical evidence source for `Technician Visit / Travel` and `Labor + Service`, ahead of the old `NEXT-AI-DRAFT-5806` regression fixture.
+- Route validation passed:
+  - `/operations` HTTP `200`.
+  - `/business-cases/service-report/e645e483` HTTP `200`.
+  - `/customers/18779` HTTP `200` and included `NEXT-BD-DRAFT-e645e483-QUOTE`.
+  - `/business-documents/NEXT-BD-DRAFT-acd1133d-QUOTE` HTTP `200`.
+  - `/business-documents/NEXT-BD-DRAFT-891a1dd7-QUOTE` HTTP `200`.
+  - `/business-documents/NEXT-BD-DRAFT-e645e483-QUOTE` HTTP `200`.
+  - `/business-documents/NEXT-BD-DRAFT-e645e483-QUOTE/preview` HTTP `200`.
+  - `/business-documents/NEXT-BD-DRAFT-e645e483-QUOTE/pdf` HTTP `200`, `application/pdf`.
+- Regression validation passed:
+  - `/business-documents/NEXT-AI-DRAFT-5806` HTTP `200`.
+  - `/business-documents/NEXT-AI-DRAFT-5806/preview` HTTP `200`.
+  - `/business-documents/NEXT-AI-DRAFT-5806/pdf` HTTP `200`, `application/pdf`.
+  - Existing 5806 totals remained `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`.
+  - Manufacturer SKU `901165` was not exposed in checked review/preview HTML.
+- Side-effect validation on `NEXT-BD-DRAFT-e645e483-QUOTE` found zero AutomationCommands, zero InventoryTransactions, and zero EmailLog rows.
+
+Exit review:
+
+- TAL can now process real ServiceReports into generated drafts, review quality, correct lines/prices, approve internally, and improve the next draft from approved corrections.
+- Correction types still needing future persistence if business value justifies it: structured title correction, document-type correction, line add/remove/reorder, narrative/description correction, customer-specific pricing policy, and rejection reason taxonomy.
+- Smallest next improvement if continuing learning is correction persistence type expansion; stop for schema/DB approval if the existing BusinessDocumentItem/BusinessDocumentLog storage is insufficient.
+- Recommended next safe ERP capability remains Asset Workspace / Asset Timeline because it gives high daily operational value using existing runtime without new schema.
+
+Project completion:
+
+- Current evidence-based completion remains `80%` after correcting the stale completion formula mismatch: Wave 3 Commercial Runtime and Document Engine is now `14% / 15%`, and the formula is `15 + 15 + 10 + 10 + 15 + 14 + 1 + 0 + 0 + 0 = 80`.
+- No external adapter, OCR, bank API, receipt issuing, external accounting, inventory mutation, customer action, cloud action, production readiness, CRM workflow, or real Maven/Invoice4U execution point is claimed.
+
+Next recommended task, pending explicit selection/approval:
+
+Asset Workspace / Asset Timeline. If Liad prioritizes deeper write-side learning first, run a correction persistence type expansion review and stop before schema or new DB writes.
 
 ## ERP Sprint 10 - Production Draft Generation
 

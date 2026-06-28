@@ -17,6 +17,7 @@ import {
   CREATE_MAVEN_COMMAND_PHRASE,
   getMavenDraftCommandCreationStatus,
 } from "../../../lib/business-document-automation-boundary";
+import { buildApprovedProductionDraftLearningEvidence } from "../../../lib/business-document-learning-boundary";
 import { prisma } from "../../../lib/prisma";
 
 function isUuid(value: string) {
@@ -69,6 +70,9 @@ async function findBusinessDocumentForApproval(businessDocumentId: string) {
       appsheetBusinessDocumentId: true,
       status: true,
       approvalStatus: true,
+      draftTitle: true,
+      sourceDocumentId: true,
+      rawSource: true,
       items: {
         select: {
           id: true,
@@ -76,7 +80,16 @@ async function findBusinessDocumentForApproval(businessDocumentId: string) {
           quantity: true,
           unitPrice: true,
           totalPrice: true,
+          source: true,
           needsPriceApproval: true,
+          matchConfidence: true,
+          rawSource: true,
+        },
+      },
+      logs: {
+        select: {
+          action: true,
+          rawData: true,
         },
       },
     },
@@ -113,6 +126,16 @@ export async function approveBusinessDocument(formData: FormData) {
   }
 
   const now = new Date();
+  const learningEvidence = buildApprovedProductionDraftLearningEvidence({
+    appsheetBusinessDocumentId: document.appsheetBusinessDocumentId,
+    draftTitle: document.draftTitle,
+    sourceDocumentId: document.sourceDocumentId,
+    status: BusinessDocumentStatus.APPROVED,
+    approvalStatus: ApprovalStatus.APPROVED,
+    rawSource: document.rawSource,
+    items: document.items,
+    logs: document.logs,
+  });
 
   await prisma.$transaction(async (tx) => {
     await tx.businessDocument.update({
@@ -146,6 +169,7 @@ export async function approveBusinessDocument(formData: FormData) {
           noAutomationCommandCreated: true,
           noEmail: true,
           noInventory: true,
+          learningEvidence,
         } satisfies Prisma.InputJsonValue,
       },
     });

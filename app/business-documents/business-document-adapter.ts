@@ -39,6 +39,10 @@ import {
   matchManufacturerSku,
   type ManufacturerSkuMatch,
 } from "../../lib/manufacturer-sku-matching";
+import {
+  buildBusinessDocumentLearningReview,
+  type BusinessDocumentLearningReview,
+} from "../../lib/business-document-learning-boundary";
 
 type BusinessDocumentCustomer = Pick<Customer, "appsheetCustomerId" | "name">;
 
@@ -175,6 +179,7 @@ export type BusinessDocumentDetail = BusinessDocumentListItem & {
   commercialLifecycle: CommercialLifecycleView;
   financialIntake: FinancialIntakeCapability;
   engineReview: BusinessDocumentEngineReview;
+  learningReview: BusinessDocumentLearningReview;
   viewModel: BusinessDocumentViewModel;
   automationCommands: Array<{
     id: string;
@@ -537,6 +542,28 @@ function mapBusinessDocumentDetail(
     commercialStage: commercialLifecycle.currentStage.code,
     rawSource: document.rawSource,
   });
+  const learningReview = buildBusinessDocumentLearningReview({
+    appsheetBusinessDocumentId: document.appsheetBusinessDocumentId,
+    draftTitle: document.draftTitle,
+    sourceDocumentId: document.sourceDocumentId,
+    status: document.status,
+    approvalStatus: document.approvalStatus,
+    rawSource: document.rawSource,
+    items: document.items.map((item) => ({
+      itemName: item.itemName,
+      quantity: item.quantity,
+      unitPrice: item.unitPrice,
+      totalPrice: item.totalPrice,
+      source: item.source,
+      needsPriceApproval: item.needsPriceApproval,
+      matchConfidence: item.matchConfidence,
+      rawSource: item.rawSource,
+    })),
+    logs: document.logs.map((log) => ({
+      action: log.action,
+      rawData: log.rawData,
+    })),
+  });
 
   return {
     ...listItem,
@@ -559,6 +586,7 @@ function mapBusinessDocumentDetail(
     commercialLifecycle,
     financialIntake,
     engineReview,
+    learningReview,
     viewModel,
     automationCommands: document.automationCommands.map((command) => ({
       id: command.appsheetCommandId || command.id,

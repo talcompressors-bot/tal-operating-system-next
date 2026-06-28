@@ -3,6 +3,22 @@
 ## 2026-06-28
 
 Decision:
+Production Draft Review and Learning Loop Sprint 11 is implemented through the existing BusinessDocument review, line-resolution, approval, and audit-log runtime.
+
+Reason:
+Sprint 10 could generate real ServiceReport drafts, but TAL still needed a closed review loop: review generated quality, correct lines/prices, approve internally, and allow approved corrections to improve future draft generation. The safest long-term boundary is not a new learning engine or schema object. Approved learning evidence should remain attached to the Commercial source artifacts: BusinessDocumentItems and BusinessDocumentLogs.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION`. No Prisma schema change, enum extension, migration, package install, Maven/Invoice4U execution, email/customer-facing action, inventory mutation, OCR, bank API, receipt issuing, external adapter call, cloud/source-system action, or production behavior occurred. Internal DB writes occurred only through existing protected BusinessDocument line-resolution and approval forms for `NEXT-BD-DRAFT-e645e483-QUOTE`.
+
+Status:
+Implemented in commit `PENDING - Add production draft learning loop`. Added `lib/business-document-learning-boundary.ts`, extended BusinessDocument detail with `learningReview`, rendered Production Draft Review and Learning on `/business-documents/[id]`, and enriched the existing approval log with structured `learningEvidence` only for production-generated drafts. Required Sprint 10 drafts `NEXT-BD-DRAFT-acd1133d-QUOTE`, `NEXT-BD-DRAFT-891a1dd7-QUOTE`, and `NEXT-BD-DRAFT-e645e483-QUOTE` render title quality, line quality, price confidence, missing evidence, and recommended corrections. `NEXT-BD-DRAFT-e645e483-QUOTE` was corrected and internally approved through existing forms; its approved learning evidence has `approvedLineCount=2` and `reusableByFutureDraftGeneration=true`. Future scoring for another ServiceReport ranks `NEXT-BD-DRAFT-e645e483-QUOTE` ahead of `NEXT-AI-DRAFT-5806` for the generated travel and labor/service lines. Project TypeScript still fails only on the pre-existing unrelated AI Draft pricing-evidence issue. Completion remains `80%` after correcting the stale completion formula to Wave 3 `14% / 15%`.
+
+---
+
+## 2026-06-28
+
+Decision:
 Production Draft Generation Sprint 10 is implemented through the existing BusinessDocument Draft Gateway.
 
 Reason:
