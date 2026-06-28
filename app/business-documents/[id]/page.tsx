@@ -601,6 +601,127 @@ export default async function BusinessDocumentDetailPage({
         </article>
 
         <article className="info-panel wide">
+          <h2>Financial intake and settlement</h2>
+          <div className="approval-panel">
+            <p>{document.financialIntake.boundary}</p>
+            <p>{document.financialIntake.approval.boundary}</p>
+            <dl>
+              <div>
+                <dt>Status</dt>
+                <dd>{document.financialIntake.status}</dd>
+              </div>
+              <div>
+                <dt>Summary</dt>
+                <dd>{document.financialIntake.summary}</dd>
+              </div>
+              <div>
+                <dt>Approval</dt>
+                <dd>{document.financialIntake.approval.summary}</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div className="split-list-grid">
+            <div>
+              <h3>Payment evidence</h3>
+              <ul className="pricing-evidence-list">
+                {document.financialIntake.evidence.map((evidence) => (
+                  <li key={evidence.id}>
+                    <strong>{evidence.sourceType}</strong>
+                    <span>{evidence.amount}</span>
+                    <span>{evidence.payerName}</span>
+                    <span>Reference: {evidence.reference}</span>
+                    <span>Confidence: {evidence.confidence}</span>
+                    <span>Attachment: {evidence.attachmentId}</span>
+                    <span>{evidence.note}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h3>Matching</h3>
+              <dl>
+                <div>
+                  <dt>Status</dt>
+                  <dd>{document.financialIntake.matching.status}</dd>
+                </div>
+                <div>
+                  <dt>Customer</dt>
+                  <dd>{document.financialIntake.matching.customerMatch}</dd>
+                </div>
+                <div>
+                  <dt>BusinessDocument</dt>
+                  <dd>{document.financialIntake.matching.businessDocumentMatch}</dd>
+                </div>
+                <div>
+                  <dt>Open balance</dt>
+                  <dd>{document.financialIntake.matching.openBalanceMatch}</dd>
+                </div>
+                <div>
+                  <dt>Duplicate detection</dt>
+                  <dd>{document.financialIntake.matching.duplicateDetection}</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+
+          <div className="split-list-grid">
+            <div>
+              <h3>Receipt draft</h3>
+              <dl>
+                <div>
+                  <dt>Status</dt>
+                  <dd>{document.financialIntake.drafts.receipt.status}</dd>
+                </div>
+                <div>
+                  <dt>Title</dt>
+                  <dd>{document.financialIntake.drafts.receipt.title}</dd>
+                </div>
+                <div>
+                  <dt>Amount</dt>
+                  <dd>{document.financialIntake.drafts.receipt.amount}</dd>
+                </div>
+                <div>
+                  <dt>Issue allowed</dt>
+                  <dd>
+                    {document.financialIntake.drafts.receipt.issueAllowed
+                      ? "Yes"
+                      : "No"}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+
+            <div>
+              <h3>Tax Invoice / Receipt draft</h3>
+              <dl>
+                <div>
+                  <dt>Status</dt>
+                  <dd>{document.financialIntake.drafts.taxInvoiceReceipt.status}</dd>
+                </div>
+                <div>
+                  <dt>Title</dt>
+                  <dd>{document.financialIntake.drafts.taxInvoiceReceipt.title}</dd>
+                </div>
+                <div>
+                  <dt>Amount</dt>
+                  <dd>{document.financialIntake.drafts.taxInvoiceReceipt.amount}</dd>
+                </div>
+                <div>
+                  <dt>Issue allowed</dt>
+                  <dd>
+                    {document.financialIntake.drafts.taxInvoiceReceipt.issueAllowed
+                      ? "Yes"
+                      : "No"}
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </article>
+
+        <article className="info-panel wide">
           <h2>Review line items</h2>
           <div className="table-card">
             <table>

@@ -32,6 +32,10 @@ import {
   mapBusinessDocumentReviewStatus,
 } from "../../lib/business-document-review-boundary";
 import {
+  buildFinancialIntakeCapability,
+  type FinancialIntakeCapability,
+} from "../../lib/financial-intake-boundary";
+import {
   matchManufacturerSku,
   type ManufacturerSkuMatch,
 } from "../../lib/manufacturer-sku-matching";
@@ -169,6 +173,7 @@ export type BusinessDocumentDetail = BusinessDocumentListItem & {
     latestCommandStatus: string;
   };
   commercialLifecycle: CommercialLifecycleView;
+  financialIntake: FinancialIntakeCapability;
   engineReview: BusinessDocumentEngineReview;
   viewModel: BusinessDocumentViewModel;
   automationCommands: Array<{
@@ -520,6 +525,18 @@ function mapBusinessDocumentDetail(
       detectedSources: engineReview.payment.detectedSources,
     },
   });
+  const financialIntake = buildFinancialIntakeCapability({
+    businessDocumentId: listItem.id,
+    businessDocumentTitle: listItem.title,
+    customerId: listItem.customerId,
+    customerName: listItem.customerName,
+    documentType: document.documentTypeSelected,
+    currency: document.currency,
+    totalAmount: document.totalAmount,
+    approvalStatus: document.approvalStatus,
+    commercialStage: commercialLifecycle.currentStage.code,
+    rawSource: document.rawSource,
+  });
 
   return {
     ...listItem,
@@ -540,6 +557,7 @@ function mapBusinessDocumentDetail(
     approvalReview,
     commandReview,
     commercialLifecycle,
+    financialIntake,
     engineReview,
     viewModel,
     automationCommands: document.automationCommands.map((command) => ({

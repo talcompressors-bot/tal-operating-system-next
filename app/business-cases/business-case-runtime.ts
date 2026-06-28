@@ -196,19 +196,19 @@ function buildFinancialState(
     };
   }
 
+  const latestDocument = documents[0];
   const paymentRequired = documents.some(
     (document) => document.engineReview.payment.required,
   );
-  const detectedSources = documents.flatMap(
-    (document) => document.engineReview.payment.detectedSources,
+  const evidenceCount = documents.reduce(
+    (count, document) => count + document.financialIntake.evidence.length,
+    0,
   );
 
   return {
-    status: paymentRequired ? "Payment review required" : "No payment required",
-    summary: detectedSources.length
-      ? `Detected payment source(s): ${detectedSources.join(", ")}.`
-      : "Financial Intake placeholder only. No trusted FinancialEvidence runtime exists yet.",
-    href: `/business-documents/${documents[0].id}`,
+    status: latestDocument.financialIntake.status,
+    summary: `${evidenceCount} financial evidence draft(s). ${latestDocument.financialIntake.matching.status}. ${paymentRequired ? "Payment is required for at least one linked document." : "No receipt has been issued; drafts are internal review only."}`,
+    href: `/business-documents/${latestDocument.id}`,
   };
 }
 
