@@ -1,6 +1,6 @@
 # Application Route Map
 
-Last updated: 2026-06-25
+Last updated: 2026-06-28
 
 Update note - SKU Runtime Generalization Refactor:
 
@@ -19,6 +19,7 @@ Record counts were verified with read-only Prisma count queries against the curr
 | `/` | Dashboard | Implemented | Static Next.js module registry in `app/page.tsx` | N/A | AppSheet app home / navigation |
 | `/service-reports` | Service Reports list | Implemented, read-only | Supabase PostgreSQL via Prisma `ServiceReport` | 63 | `ServiceReports` table list view |
 | `/service-reports/[id]` | Service Report detail | Implemented, read-only | Supabase PostgreSQL via Prisma `ServiceReport` with linked customer/equipment context | 63 addressable reports | `ServiceReports` detail view |
+| `/business-cases/service-report/[id]` | BusinessCase operational context | Implemented, read-only application/runtime concept derived from an existing ServiceReport; orchestrates Party, Asset, ServiceReport, AI Recommendation, BusinessDocument, Approval, AutomationCommand, Financial Intake placeholder, Inventory Impact placeholder, blockers, closure readiness, and timeline without owning or mutating any domain | Existing adapters and Supabase PostgreSQL reads through ServiceReport, BusinessDocument, and AutomationCommand runtime; no Prisma model, schema change, DB write, external action, Maven/Invoice4U call, email/customer action, inventory mutation, cloud action, or production behavior | 63 service-report-derived cases addressable by source ServiceReport ID | Operational case context above existing AppSheet service/report/document workflow |
 | `/customers` | Customers list | Implemented, read-only | Supabase PostgreSQL via Prisma `Customer` | 763 | `Customers_Final` / Customers list view |
 | `/customers/[id]` | Customer detail | Implemented, read-only | Supabase PostgreSQL via Prisma `Customer` with linked service-report counts/history | 763 addressable customers | Customer detail view |
 | `/equipment` | Equipment list | Implemented, read-only | Supabase PostgreSQL via Prisma `ReportEquipmentItem` | 75 | `ReportEquipmentItems` / equipment inline or related view |

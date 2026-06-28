@@ -29,6 +29,12 @@ export default async function ServiceReportDetailPage({
           <p className="lede">{report.customer}</p>
         </div>
         <div className="actions">
+          <Link
+            className="button"
+            href={`/business-cases/service-report/${report.id}`}
+          >
+            BusinessCase
+          </Link>
           {report.aiDraftPreviewHref ? (
             <Link className="button" href={report.aiDraftPreviewHref}>
               Preview AI Draft
