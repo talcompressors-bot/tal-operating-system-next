@@ -1743,3 +1743,22 @@ This implementation does not change Prisma schema, persisted data, document stat
 
 Status:
 Implemented as `SAFE_LOCAL_IMPLEMENTATION`. Validation passed for focused TypeScript on touched files, `/business-documents/NEXT-AI-DRAFT-5806`, `/business-documents/NEXT-AI-DRAFT-5806/preview`, and `/business-documents/NEXT-AI-DRAFT-5806/pdf`. Totals remained `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`; preview did not expose manufacturer SKU `901165`; PDF returned valid `%PDF`.
+
+---
+
+## 2026-06-28
+
+Decision:
+Payment and receipt intake architecture must be the Financial Intake Engine, not a narrow PaymentEvidence design.
+
+Reason:
+Payment workflows will receive proof from checks, bank transfers, screenshots, PDFs, CSV/Excel exports, emails, future WhatsApp attachments, future bank APIs, and manual reconciliation. Treating payment handling as manual entry or check-image intake only would lose audit evidence and increase duplicate/incorrect receipt risk. The architecture must preserve original evidence, separate untrusted extraction suggestions from approved final data, match evidence to customers/documents/open balances, and require human approval before any Receipt or Tax Invoice / Receipt is created.
+
+Design:
+The durable flow is `Financial Intake Engine -> FinancialEvidence -> Extraction Draft -> Matching Engine -> Payment Suggestion -> User Approval -> Receipt / Tax Invoice Receipt creation later`. `FinancialEvidence` is the generic future evidence object/concept. `PaymentEvidence` may remain only as a subtype or legacy wording when evidence specifically supports payment/receipt decisions. Evidence source types include `CHECK_IMAGE`, `BANK_TRANSFER_PROOF`, `BANK_EXPORT`, `BANK_SCREENSHOT`, `PDF_PROOF`, `EMAIL_PROOF`, `MANUAL_ENTRY`, and `FUTURE_BANK_API`. Extraction must cover amount, currency, date, payer name, bank, branch/account when available, check number when relevant, transfer reference / asmachta, raw extracted text, confidence, and attachment ID. Matching must cover Customer match, BusinessDocument match, open-balance match, partial-payment match, and duplicate detection. OCR/AI extraction is suggestion-only and must not become trusted payment data without user review.
+
+Boundary:
+Architecture/design documentation only in `project-brain/DOCUMENT_ENGINE.md`. No runtime code change, Prisma schema change, DB write, package install, OCR implementation, bank API, external API, Maven/Invoice4U action, customer-facing action, inventory action, cloud change, source-system action, or production action occurred.
+
+Status:
+Added to the reusable Document Engine Knowledge Base. Future implementation requires separate approval for schema, attachment storage, privacy/retention, OCR/file/email/bank import adapters, matching workflow, payment suggestion workflow, receipt creation, and any external write.

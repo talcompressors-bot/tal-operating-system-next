@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-28
-Mode: CAPABILITY_BUILDING; governance frozen; Universal Business Document Engine foundation implemented; TDOS risk-based operating model integrated; Wave 2 complete; architecture audit complete; Legacy Excel Parser Strategy completed; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; Financial Intake Engine design documented; Universal Business Document Engine foundation implemented; TDOS risk-based operating model integrated; Wave 2 complete; architecture audit complete; Legacy Excel Parser Strategy completed; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -15,11 +15,11 @@ Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is appl
 
 ## Current Milestone
 
-Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, Wave 2 connector dry-run validation, real Prisma staging connectivity validation, Customers read-only module implementation, automatic Project Brain closeout sync governance, multi-agent operating workflow docs, ReportEquipmentItems / Equipment read-only module implementation, PartsUsed read-only module implementation, data coverage audit, Service Report central work-screen enhancement, bidirectional module navigation, Service Reports list context enhancement, AI Draft Suggestions shell, BusinessDocuments shell, AutomationCommands shell, SCR matching preview panel, AI Draft Recommendation Preview runtime for Service Report `5806`, Maven Knowledge / Pricing Evidence Layer for the AI Draft Preview, AI Draft Approval to BusinessDocument Draft runtime, BusinessDocument Review and Approval Page, protected Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, BusinessDocument Approval Workflow, BusinessDocument Approval Workflow POST Smoke Test, Maven Execution Adapter Dry Run, BusinessDocument Line Resolution Layer, Wave 2 Line Resolution POST Smoke Test, Wave 2 closeout and Maven execution readiness checklist, completion model update to 65%, AI Draft/parts/pricing/equipment intelligence documentation, global business document line governance, AI Draft recommendation readiness business-rule approval, Universal Business Document Engine foundation, Action Server Knowledge Layer roadmap planning, Email Document Intake Agent planning, active-ID startup/closeout preservation rules, Orchestrator Decision Engine governance, Executive Orchestrator Phase 2 governance, and Project Execution Mode transition to `CAPABILITY_BUILDING` are complete.
+Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, Wave 2 connector dry-run validation, real Prisma staging connectivity validation, Customers read-only module implementation, automatic Project Brain closeout sync governance, multi-agent operating workflow docs, ReportEquipmentItems / Equipment read-only module implementation, PartsUsed read-only module implementation, data coverage audit, Service Report central work-screen enhancement, bidirectional module navigation, Service Reports list context enhancement, AI Draft Suggestions shell, BusinessDocuments shell, AutomationCommands shell, SCR matching preview panel, AI Draft Recommendation Preview runtime for Service Report `5806`, Maven Knowledge / Pricing Evidence Layer for the AI Draft Preview, AI Draft Approval to BusinessDocument Draft runtime, BusinessDocument Review and Approval Page, protected Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, BusinessDocument Approval Workflow, BusinessDocument Approval Workflow POST Smoke Test, Maven Execution Adapter Dry Run, BusinessDocument Line Resolution Layer, Wave 2 Line Resolution POST Smoke Test, Wave 2 closeout and Maven execution readiness checklist, completion model update to 65%, AI Draft/parts/pricing/equipment intelligence documentation, global business document line governance, AI Draft recommendation readiness business-rule approval, Universal Business Document Engine foundation, Financial Intake Engine design, Action Server Knowledge Layer roadmap planning, Email Document Intake Agent planning, active-ID startup/closeout preservation rules, Orchestrator Decision Engine governance, Executive Orchestrator Phase 2 governance, and Project Execution Mode transition to `CAPABILITY_BUILDING` are complete.
 
 ## Last Implementation Commit
 
-`7dc51f9 Integrate TDOS risk operating model`
+`8c1a36a Add universal business document view model`
 
 ## Last Closeout Commit
 
@@ -846,6 +846,7 @@ Engine behavior:
 - Blocks external export readiness when document type is unsupported, items are missing, pricing is unresolved, quantity is invalid, total is missing, or receipt-based documents lack payment amount.
 - Shows warnings when line subtotal and document subtotal differ, when payment exceeds total, or when no internal payment source is recorded.
 - Payment evidence and future attachments are planning/review signals only; they do not create receipts, upload files, contact customers, call Maven/Invoice4U, or affect inventory.
+- Financial intake design is documented in `project-brain/DOCUMENT_ENGINE.md`: future Financial Intake Engine must support `FinancialEvidence`, extraction drafts, matching engine, payment suggestions, user approval, and later Receipt or Tax Invoice / Receipt creation. `PaymentEvidence` is only a subtype/legacy wording when needed. Evidence sources include check image, bank transfer proof, bank export, bank screenshot, PDF proof, email proof, manual entry, and future bank API. Extracted data is suggestion-only and not trusted final data.
 
 Boundary:
 
@@ -857,6 +858,8 @@ Boundary:
 - No DB write during implementation or validation.
 - No schema or Prisma change.
 - No real payment attachment upload/storage implementation.
+- No OCR implementation.
+- No FinancialEvidence or PaymentEvidence Prisma model or schema change.
 
 Validation:
 
