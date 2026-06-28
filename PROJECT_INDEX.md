@@ -71,6 +71,7 @@ Project Reality Check must include:
 - outstanding executive decisions
 - highest-value capability
 - highest-value runtime task
+- TDOS risk class for the requested work, using `PROJECT_OPERATING_PROTOCOL.md` section `18B. TDOS Risk-Based Operating Model`
 
 Project Reality Check must always run:
 
@@ -119,6 +120,9 @@ Governance Status:
 
 Current Priority:
 Working runtime capabilities instead of documentation expansion.
+
+TDOS risk-based operating model:
+`PROJECT_OPERATING_PROTOCOL.md` section `18B. TDOS Risk-Based Operating Model` defines the task risk classes and required controls. No required control for the task's risk class may be skipped.
 
 Codex is the main Orchestrator and Project Executive. Every new task, idea, bug, feature, investigation, proposal, or request must pass through the Orchestrator Decision Engine in `agents/ORCHESTRATOR_AGENT.md` before work begins. It must understand, discover, consult, score, decide, execute, validate, learn, and improve. It must route work to existing agent owners by role, continue safe work automatically, validate, collect proof, update Project Brain, and stop only before critical approvals.
 
@@ -470,6 +474,7 @@ This section is the living navigation screen. It summarizes current reality only
 | Current milestone | Wave 3 Maven Knowledge Layer started read-only/internal; internal BusinessDocument/payment engine, Hebrew customer-facing BusinessDocument preview/PDF, manufacturer SKU Excel source planning, ServiceReport 5806 SKU matching runtime MVP, Manufacturer Parts Registry Import + Service Kit Intelligence MVP, Manufacturer Registry Alias and Conflict Validation, Legacy Excel Parser Strategy, Maven sample reference asset, internal PDF export planning, MVP, smoke test, governance lock, and visual polish fixes, Maven payload builder extraction, Maven terminology correction, Maven source inventory, and Maven API placeholders are complete; Wave 2 Service Workflow Layer complete, frozen except bug fixes, and architecture-audited | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md` |
 | Current task | Wave 3 Legacy Excel Parser Strategy completed as planning only: preferred path is explicit-approval LibreOffice headless conversion from legacy `.xls` to `.xlsx`, followed by the existing OOXML extractor; future manufacturer Excel import workflow and 20APM exact-source validation gates are documented. EPM exact extraction, parser implementation, package install, schema changes, DB writes/imports, real Maven/Invoice4U execution, saved PDF persistence, customer delivery/export, inventory action, and any new npm package install remain separately gated and are not approved | `project-brain/CURRENT_TASK.md` |
 | Next approved task | Wave 3 read-only/internal Maven Knowledge Layer discovery is active. Next candidate tasks are Maven customer/document/item matching analysis for `NEXT-AI-DRAFT-5806`, a real Maven document-generation API contract evidence packet, Maven API secret placement plan, payment attachment readiness plan, or read-only Maven source row-count/schema validation. Real Maven execution for `NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` requires separate explicit Liad approval and the readiness checklist in `project-brain/CURRENT_TASK.md`. DB writes outside approved protected Server Actions remain gated and require explicit human approval | `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `DATA_COVERAGE_AUDIT.md` |
+| TDOS operating model | Integrated into `PROJECT_OPERATING_PROTOCOL.md` as section `18B`; tasks now use risk classes instead of one universal ceremony | `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/DECISION_LOG.md` |
 | Last Implementation Commit | `cac31e4 Add runtime SKU matching for report 5806` | Git history; `project-brain/CURRENT_TASK.md` |
 | Last Closeout Commit | `8114210 Sync project brain commit model state` | Git history; `project-brain/CURRENT_TASK.md` |
 | Completed phases | Governance foundation; Next.js shadow app; PostgreSQL V1 scope/schema; Prisma validation tooling; Project Brain Consolidation Phase 1-3; startup/shutdown workflow enforcement; Reality Check Git sync hardening; two-commit Reality Check model; autonomous agent orchestration governance | `project-brain/TASK_BOARD.md`, `project-brain/PROJECT_BRAIN_MASTER.md` |

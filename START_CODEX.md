@@ -65,6 +65,12 @@ Active ID startup rule:
 
 If the task conflicts with `PROJECT_INDEX.md` or `PROJECT_OPERATING_PROTOCOL.md`, STOP and report the conflict.
 
+TDOS risk classification:
+
+- Before implementation, classify the task using `PROJECT_OPERATING_PROTOCOL.md` section `18B. TDOS Risk-Based Operating Model`.
+- No required control for the task's risk class may be skipped.
+- Read canonical startup sources and all sources relevant to the task's affected business objects, workflows, agents, routes, schema, and approval gates.
+
 Autonomous Work Loop:
 
 - After Reality Check, load `PROJECT_INDEX.md` and `project-brain/TASK_BOARD.md`.

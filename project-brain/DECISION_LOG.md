@@ -1711,3 +1711,19 @@ No real Maven/Invoice4U call, no external execution, no DB write during implemen
 
 Status:
 Approved and implemented as Wave 3 internal refactor. Real Maven execution remains `APPROVAL_REQUIRED`.
+
+---
+
+## 2026-06-28
+
+Decision:
+TDOS is integrated into `PROJECT_OPERATING_PROTOCOL.md` as a risk-based operating model, not as a standalone constitution or duplicate governance layer.
+
+Reason:
+The project needs a long-term Development Operating System that can coordinate future projects and multiple AI implementation engines without forcing every task through the same heavyweight ceremony. Risk-based controls preserve architecture, business logic, source of truth, synchronization, validation, safety, and maintainability while keeping safe work autonomous.
+
+Boundaries:
+This decision changes documentation/governance only. `PROJECT_OPERATING_PROTOCOL.md` remains the highest authority. `hey codex` and `by codex` remain the startup and closeout commands. No standalone TDOS constitution, new governance file, new agent, runtime code change, DB write, schema change, package install, cloud change, Maven/Invoice4U action, email/customer-facing action, inventory action, import, source-system change, or production action is approved by this decision.
+
+Status:
+Approved by user request and implemented as a protocol extension. TDOS task risk classes are `READ_ONLY_DISCOVERY`, `DOC_SYNC`, `SAFE_LOCAL_IMPLEMENTATION`, `SCHEMA_OR_DATA_CHANGE`, `EXTERNAL_SYSTEM_CHANGE`, `PRODUCTION_CHANGE`, and `ARCHITECTURE_CHANGE`. No required control for the task's risk class may be skipped.

@@ -1202,6 +1202,7 @@ Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import
 - `PROJECT_INDEX.md` is the mandatory startup entrypoint.
 - `hey codex` is the official startup command.
 - `by codex` is the official shutdown command.
+- TDOS is integrated into `PROJECT_OPERATING_PROTOCOL.md` as a risk-based operating model, not a standalone constitution or duplicate governance layer. Each task must be classified as `READ_ONLY_DISCOVERY`, `DOC_SYNC`, `SAFE_LOCAL_IMPLEMENTATION`, `SCHEMA_OR_DATA_CHANGE`, `EXTERNAL_SYSTEM_CHANGE`, `PRODUCTION_CHANGE`, or `ARCHITECTURE_CHANGE`; no required control for the task's risk class may be skipped.
 - Codex is the main Orchestrator for safe scoped work and should work, validate, collect proof, update Project Brain, and commit/push safe validated changes without routine ping-pong.
 - `hey codex` must fetch and fast-forward from `origin/main` before reading Project Brain when the working tree is clean.
 - Project Reality Check must compare live Git latest commit against Last Implementation Commit and Last Closeout Commit recorded in `PROJECT_INDEX.md` and `project-brain/CURRENT_TASK.md`.
@@ -1213,6 +1214,7 @@ Do not continue to Wave 2 import, Maven discovery/import, ProductsCatalog import
 - `project-brain/TASK_BOARD.md` is the canonical task board/progress map.
 - Project Brain files win over ChatGPT/Codex memory.
 - No new planning file, map, dashboard, control center, protocol, agent, or roadmap may be created before searching existing files and proving no existing file already serves that purpose.
+- Manual artifacts must have owner, source, and lifecycle. Generated artifacts must declare generator, trusted sources, and validation. Repeated artifacts must be deleted, generated, or reduced to pointers.
 - Import only `ReportEquipmentItems` linked to real `ServiceReports`; exclude legacy/test equipment rows; do not modify Google Sheets/AppSheet; keep the internal FK nullable.
 - Derive nullable `ReportEquipmentItem.reportCounter` during PostgreSQL import by joining through `ServiceReports.ReportCounter`; never use it as a primary relationship key.
 - Use Supabase Staging first, then Supabase Production Shadow only after staging validation passes; do not use local PostgreSQL as first target.

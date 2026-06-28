@@ -64,6 +64,11 @@ Active ID closeout rule:
 - Use `UNKNOWN` only when the canonical files truly do not contain the ID.
 - If canonical files contain conflicting active IDs, report the conflict and sources instead of overwriting either value or silently reporting `UNKNOWN`.
 
+TDOS closeout rule:
+
+- Closeout must satisfy the controls required by the task risk class in `PROJECT_OPERATING_PROTOCOL.md` section `18B. TDOS Risk-Based Operating Model`.
+- No required control for the task's risk class may be skipped.
+
 ---
 
 ## Required Output

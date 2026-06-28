@@ -947,6 +947,60 @@ Required autonomous loop:
 
 If a task mixes AUTO_ALLOWED and APPROVAL_REQUIRED work, complete the AUTO_ALLOWED discovery, validation, or planning first, then stop before the approval gate.
 
+## 18B. TDOS Risk-Based Operating Model
+
+TDOS means Tal Development Operating System. It is not a separate constitution, command system, or governance layer. TDOS is a risk-based operating model inside this protocol. `PROJECT_OPERATING_PROTOCOL.md` remains the highest operating authority.
+
+`hey codex` remains the mandatory bootstrap command. `by codex` remains the mandatory closeout command.
+
+No required control for the task's risk class may be skipped.
+
+Read canonical startup sources and all sources relevant to the task's affected business objects, workflows, agents, routes, schema, and approval gates. Do not read every repository file by default when a smaller evidence set fully covers the task.
+
+Before implementation, Codex must classify the task into one primary risk class. If a task touches multiple classes, the highest-risk class controls approval and validation. Safe discovery or planning work may still proceed first when it does not cross the higher-risk gate.
+
+### TDOS Risk Classes
+
+| Risk Class | Required startup reads | Required review level | Allowed automatic actions | Approval requirements | Required validations | Closeout requirements |
+|---|---|---|---|---|---|---|
+| `READ_ONLY_DISCOVERY` | Canonical startup files; relevant Project Brain maps/docs; relevant source files; relevant read-only data sources when needed | Map Guard source/reuse/protected-system check; brief findings review | Repo inspection, document reads, code reads, read-only DB/query checks, route/schema inspection, evidence gathering | No extra approval when read-only and within current task; approval required before external/private/protected source access not already allowed | Source citation check; no-write confirmation; affected business object/workflow list; gaps marked `UNKNOWN` | Findings report; Project Brain update only if durable state changed; next recommended task/gate |
+| `DOC_SYNC` | Canonical startup files; docs being updated; source evidence for every changed fact; relevant decision/task files | Map Guard plus Reviewer check for duplication, ownership, and stale-source risk | Documentation updates, Project Brain sync, index/status alignment, safe docs-only commit/push when validated | Allowed when requested or required by closeout; approval required for new governance architecture or new duplicate planning/control files | `git diff --check`; source evidence check; duplicate/reuse check; protected systems untouched | Update only affected canonical docs; record validation, blocker state, next task, approval gates, completion percentage when meaningful |
+| `SAFE_LOCAL_IMPLEMENTATION` | Canonical startup files; affected business object docs/specs if present; relevant routes/modules/tests; relevant schema models read-only; owner agent files | Full Map Guard -> Builder -> QA -> Reviewer loop | Local code changes inside approved scope; read-only UI/display behavior; local tests/build/typecheck; read-only validation; safe scoped commit/push after validation | No extra approval only when task is approved/AUTO_ALLOWED and no protected gate is crossed | Typecheck/build/test as appropriate; route/UI validation when user-visible; read-only DB/count validation when data-backed; protected-system untouched check; rollback note | Feature commit when appropriate; Project Brain sync; changed files, validation, risks, active IDs, next task, and approval gates |
+| `SCHEMA_OR_DATA_CHANGE` | Canonical startup files; Prisma schema; migration/import plans; affected models/tables; source-of-truth docs; relevant business object/workflow specs; DB relationship evidence | Architecture review plus Map Guard; explicit implementation plan; QA/Reviewer before and after allowed work | Read-only planning, schema diff analysis, migration/import proposal, relationship/idempotency design | Explicit approval required before schema edit, migration, `db push`, DB write/import/seed, or data repair | Primary key/foreign key analysis; idempotency/duplicate prevention; rollback/backout plan; staging/LAB validation plan; source/target count checks | Record approved action and evidence; update Project Brain and decisions; no promotion without validated LAB/staging evidence |
+| `EXTERNAL_SYSTEM_CHANGE` | Canonical startup files; integration owner agent; external API/source docs; workflow maps; approval gates; idempotency and failure-handling evidence | Architecture review, specialist owner review, Map Guard, QA, Reviewer | Read-only API/source analysis, dry-run planning, payload preview, contract packet preparation | Explicit approval required before Maven, Apps Script, AppSheet, Google Sheets, Drive, email, payment, inventory, or other external writes/actions | Dry-run or mock validation when possible; payload review; idempotency key/duplicate prevention; failure and retry behavior; systems untouched list | Decision log entry when approved; exact external action/result evidence; Project Brain sync; next gate and rollback/recovery state |
+| `PRODUCTION_CHANGE` | Canonical startup files; production runbook/approval packet; affected source, runtime, data, and integration maps; rollback plan | Highest review: architecture, owner agent, QA, Reviewer, explicit executive approval | Read-only production readiness review and evidence packet only | Explicit approval required before deployment, cutover, production config, production data, production integration, or customer-facing action | LAB/staging validation; deployment/cutover checklist; rollback plan; monitoring/health checks; data/customer impact review | Production evidence report; Project Brain and Decision Log update; post-change health state; incident/rollback notes if any |
+| `ARCHITECTURE_CHANGE` | Canonical startup files; protocol/index/agent registry; relevant maps/specs; existing governance docs; affected business objects and workflows | Architecture Authority review; duplicate/governance impact review; Map Guard/Reviewer | Audit/proposal and approved docs-only protocol updates | Explicit approval required for new governance architecture, new agents, new registries, new specs system, or source-of-truth hierarchy changes | Existing-first proof; conflict analysis; ownership/lifecycle validation; source hierarchy update check; no duplicate system check | Update only existing canonical docs unless approved otherwise; Decision Log entry; Project Brain sync; next implementation gate |
+
+### Source Ownership and Artifact Lifecycle
+
+Every manual artifact must have an owner, source, and lifecycle. If a manual artifact has no clear owner, no source of truth, or no lifecycle, it must not become canonical.
+
+Every generated artifact must declare its generator, trusted sources, and validation method. Generated artifacts must not become manually maintained truth.
+
+If an artifact repeats another artifact, it must be deleted, generated, or reduced to a pointer. Repeated prose is allowed only when it is a short command wrapper or navigation summary that points back to the canonical owner.
+
+### LAB-to-Primary Promotion Gate
+
+Experimental work must be validated in LAB before promotion to the primary project. Promotion requires evidence, not assumptions.
+
+Promotion evidence must include:
+
+- risk class
+- affected business objects and workflows
+- files, routes, tables, external systems, and agents affected
+- validations run and results
+- source-of-truth impact
+- rollback or recovery plan
+- approval gate satisfied
+
+### Generated State and Graph Policy
+
+`PROJECT_STATE` and `PROJECT_GRAPH`, if created later, must be generated from trusted sources and must not be manually maintained as duplicate governance files.
+
+Trusted graph/state sources include Git, `PROJECT_OPERATING_PROTOCOL.md`, `PROJECT_INDEX.md`, Project Brain current-state files, approved decision logs, route files, Prisma schema, existing maps/specs, agent registry, validation outputs, and read-only runtime evidence.
+
+Generated state or graph output may summarize current truth, but it must not override canonical source files. When generated output disagrees with canonical sources, report drift and fix the source or generator instead of hand-editing generated output.
+
 Codex approval-gate output must use the Executive Approval Report format and include:
 
 - what was done
