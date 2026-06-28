@@ -3,6 +3,22 @@
 ## 2026-06-28
 
 Decision:
+Operations Center Sprint 4 is implemented as the primary daily operational workspace.
+
+Reason:
+After BusinessCase, Commercial, and Financial runtime foundations, the highest business value was not another engine but one screen the company can open every morning to see attention, blockers, waiting states, readiness, ownership, and next recommended action. This turns existing runtime into daily operational value without introducing new source-of-truth objects.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` only. Operations Center is an orchestration view over existing BusinessCase, Commercial, Financial, Approval, and Automation runtime. It recommends next actions but does not execute them. No schema change, Prisma migration, DB write, package install, OCR, bank API, receipt issuing, tax invoice issuing, external accounting, Maven/Invoice4U call, email/customer-facing action, inventory mutation, cloud/source-system action, or production behavior was introduced.
+
+Status:
+Implemented in commit `c860365 Add operations center workspace`. Validation: project TypeScript only fails on pre-existing unrelated AI Draft pricing-evidence typing issues; unsandboxed read-only route validation passed for `/operations`, `/business-cases/service-report/1e25bbb1`, `/business-documents/NEXT-AI-DRAFT-5806`, `/business-documents/NEXT-AI-DRAFT-5806/preview`, and `/business-documents/NEXT-AI-DRAFT-5806/pdf`; content checks confirmed all required Operations Center buckets, next recommended action, BusinessCase link, Financial status, Commercial status, and no-execute boundary text; review/preview totals stayed `2205.45 ILS`; manufacturer SKU `901165` was not exposed in checked review/preview HTML. Completion moves to `74%`. Recommended Sprint 5 is Customer Workspace / Customer Timeline unless Liad selects Inventory because parts availability is the immediate business pain.
+
+---
+
+## 2026-06-28
+
+Decision:
 Financial Capability Sprint 3 is implemented as the first internal Financial business capability.
 
 Reason:
