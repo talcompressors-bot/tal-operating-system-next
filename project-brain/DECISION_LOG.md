@@ -12,7 +12,7 @@ Boundary:
 Implemented as `SAFE_LOCAL_IMPLEMENTATION`. Internal policy states are `AUTO_ALLOWED`, `REVIEW_REQUIRED`, `APPROVAL_REQUIRED`, and `BLOCKED`. Policy-safe ServiceReport -> BusinessDocument draft creation has no Maven/Invoice4U call, no email/customer action, no inventory mutation, no receipt issuing, no OCR/bank API, no schema change, and no package install.
 
 Status:
-Implemented in commit `PENDING - Add internal action policy automation`. `NEXT-BD-DRAFT-babbfe8a-QUOTE` was created from ServiceReport `babbfe8a` without an approval phrase or review checklist, repeated submit reused the existing draft by idempotency, and the draft recorded `policyState=REVIEW_REQUIRED` because missing evidence/review-required lines remain. Business suggestions are `AUTO_ALLOWED`, draft review is `REVIEW_REQUIRED` when generated lines need review, learning evidence is `APPROVAL_REQUIRED`, and external actions are `BLOCKED`.
+Implemented in commit `467f693 Add internal action policy automation`. `NEXT-BD-DRAFT-babbfe8a-QUOTE` was created from ServiceReport `babbfe8a` without an approval phrase or review checklist, repeated submit reused the existing draft by idempotency, and the draft recorded `policyState=REVIEW_REQUIRED` because missing evidence/review-required lines remain. Business suggestions are `AUTO_ALLOWED`, draft review is `REVIEW_REQUIRED` when generated lines need review, learning evidence is `APPROVAL_REQUIRED`, and external actions are `BLOCKED`.
 
 ---
 
