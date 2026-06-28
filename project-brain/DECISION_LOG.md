@@ -3,6 +3,22 @@
 ## 2026-06-28
 
 Decision:
+Autonomous Business Draft Generation Sprint 12 is implemented as Hebrew-first, knowledge-first internal draft generation through the existing gateway.
+
+Reason:
+The ERP must reduce manual work for TAL employees. Generated drafts should be reviewable business artifacts, not English technical placeholders. The right boundary is to improve the production recommendation layer while preserving Business Intent policy and the BusinessDocument Draft Gateway as the only writer.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION`. Internal DB writes occurred only through the existing idempotent BusinessDocument Draft Gateway for real internal QUOTE draft validation. No schema change, enum extension, migration, package install, Maven/Invoice4U execution, email/customer-facing action, inventory mutation, OCR, bank API, receipt issuing, external adapter call, cloud/source-system action, or production behavior occurred.
+
+Status:
+Implemented in commit `5313aec Improve autonomous business draft generation`. The generator now creates professional Hebrew titles, business summaries, line descriptions, explanations, confidence labels, knowledge-used evidence, and missing-evidence messages, while keeping canonical aliases so historical English approved lines remain reusable. Validation created `NEXT-BD-DRAFT-3a4a3a99-QUOTE`, `NEXT-BD-DRAFT-5bc071f5-QUOTE`, and `NEXT-BD-DRAFT-2bfc0748-QUOTE`; repeated gateway calls reused all three. Stored checks found zero related AutomationCommands, InventoryTransactions, and EmailLogs, and no manufacturer SKU `901165` exposure. Route validation was blocked by local Next child-process database connectivity to the Supabase pooler, but direct Prisma and gateway validation succeeded.
+
+---
+
+## 2026-06-28
+
+Decision:
 Sprint 11 product behavior is policy-based automation, not human approval for every internal artifact.
 
 Reason:

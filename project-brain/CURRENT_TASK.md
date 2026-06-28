@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-28
-Mode: CAPABILITY_BUILDING; governance frozen; TDOS frozen in Maintenance Mode; domain-driven roadmap realigned; Production Draft Review and Learning Loop Sprint 11 implemented; Production Draft Generation Sprint 10 implemented; Business Intent Policy Layer Sprint 9 implemented; Generalized BusinessDocument Draft Gateway Sprint 8 implemented; End-to-End Service Flow MVP Sprint 7 implemented; Customer 360 Workspace Sprint 6 implemented; Operations Command Center Sprint 5 implemented; Operations Center Sprint 4 implemented; Financial Capability Sprint 3 implemented; Commercial Lifecycle Hardening Sprint 2 implemented; BusinessCase Runtime Sprint 1 implemented; Financial Intake Engine design documented; Universal Business Document Engine foundation implemented; TDOS risk-based operating model integrated; Wave 2 complete; architecture audit complete; Commercial, Financial, operational workspace, customer, service-flow integration, draft-gateway, intent-policy, production draft generation, and approved-correction learning runtime work started; Maven remains an External Adapter gate only; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; TDOS frozen in Maintenance Mode; domain-driven roadmap realigned; Autonomous Business Draft Generation Sprint 12 implemented; Production Draft Review and Learning Loop Sprint 11 implemented; Production Draft Generation Sprint 10 implemented; Business Intent Policy Layer Sprint 9 implemented; Generalized BusinessDocument Draft Gateway Sprint 8 implemented; End-to-End Service Flow MVP Sprint 7 implemented; Customer 360 Workspace Sprint 6 implemented; Operations Command Center Sprint 5 implemented; Operations Center Sprint 4 implemented; Financial Capability Sprint 3 implemented; Commercial Lifecycle Hardening Sprint 2 implemented; BusinessCase Runtime Sprint 1 implemented; Financial Intake Engine design documented; Universal Business Document Engine foundation implemented; TDOS risk-based operating model integrated; Wave 2 complete; architecture audit complete; Commercial, Financial, operational workspace, customer, service-flow integration, draft-gateway, intent-policy, production draft generation, approved-correction learning, and autonomous Hebrew draft generation runtime work started; Maven remains an External Adapter gate only; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`467f693 Add internal action policy automation`
+`5313aec Improve autonomous business draft generation`
 
 ## Last Closeout Commit
 
@@ -129,9 +129,11 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Current Task
 
-Production Draft Review and Learning Loop Sprint 11 is complete and updated with product policy automation. Generated drafts now expose title quality, line quality, price confidence, missing evidence, recommended corrections, correction workflow readiness, approved learning evidence, and future reuse readiness on the existing BusinessDocument review page. BusinessCase draft generation now uses internal action policy states `AUTO_ALLOWED`, `REVIEW_REQUIRED`, `APPROVAL_REQUIRED`, and `BLOCKED`; policy-safe internal drafts no longer require the old approval phrase or confirmation checklist. Approved production-generated drafts append structured learning evidence to the existing BusinessDocument approval audit log, and future production draft generation continues to consume only approved BusinessDocuments with priced BusinessDocumentItems.
+Autonomous Business Draft Generation Sprint 12 is complete. Production draft generation now produces professional Hebrew business-facing titles, summaries, line names, line explanations, confidence labels, knowledge-used evidence, and missing-evidence messages while preserving English only for allowed technical identifiers such as models, serial numbers, SKUs, Maven/Invoice4U names, and internal IDs. The recommendation layer now separates Hebrew display names from canonical aliases so older approved English draft lines can still be reused as pricing evidence. It adds serial-number evidence, warranty-history gap reporting, customer commercial history reporting, Hebrew business-intent summary, and `Needs Price Review` handling while keeping the existing BusinessDocument Draft Gateway as the only writer.
 
-Current blocker: none for Sprint 11. Remaining gates: schema/enum expansion before true Tax Invoice / Receipt, Purchase Order, Delivery Note, or Debit Note support; FinancialEvidence/payment evidence before receipt collection; source BusinessDocument before credit workflow; Inventory/Procurement runtime before purchase or delivery workflows; explicit real Maven/Invoice4U approval; separate customer-facing/email approval; separate inventory approval; and separate schema/DB/storage approval for any persisted queue, evidence, attachment, correction type, or follow-up state.
+Validation created three real internal QUOTE drafts through the existing idempotent gateway: `NEXT-BD-DRAFT-3a4a3a99-QUOTE` for ServiceReport `5804`, `NEXT-BD-DRAFT-5bc071f5-QUOTE` for ServiceReport `5805`, and `NEXT-BD-DRAFT-2bfc0748-QUOTE` for ServiceReport `5807`. Re-running the same gateway calls returned `created=false` for all three. Stored draft checks confirmed Hebrew titles, Hebrew line items, review-required price policy where needed, zero related AutomationCommands, zero related InventoryTransactions, zero related EmailLogs, and no exposure of manufacturer SKU `901165`. Focused TypeScript/build checks still fail only on the known unrelated `app/ai-drafts/ai-draft-adapter.ts` pricing-evidence typing issue. Local Next route validation was blocked by the dev child process failing to reach the Supabase pooler even though direct Prisma validation and gateway writes succeeded from the same workspace.
+
+Current blocker: none for Sprint 12 implementation. Validation caveat: local Next route rendering needs a separate environment/connectivity check because the child dev server could not reach the Supabase pooler during this session. Remaining gates: schema/enum expansion before true Tax Invoice / Receipt, Purchase Order, Delivery Note, or Debit Note support; FinancialEvidence/payment evidence before receipt collection; source BusinessDocument before credit workflow; Inventory/Procurement runtime before purchase or delivery workflows; explicit real Maven/Invoice4U approval; separate customer-facing/email approval; separate inventory approval; and separate schema/DB/storage approval for any persisted queue, evidence, attachment, correction type, or follow-up state.
 
 ## Manufacturer Registry Alias and Conflict Validation
 
@@ -1700,6 +1702,47 @@ Next recommended task, pending explicit selection/approval:
 
 Asset Workspace / Asset Timeline. If Liad prioritizes deeper write-side learning first, run a correction persistence type expansion review and stop before schema or new DB writes.
 
+## ERP Sprint 12 - Autonomous Business Draft Generation
+
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` in commit `5313aec Improve autonomous business draft generation`.
+
+Capability delivered:
+
+- Production draft generation now creates professional Hebrew business-facing titles, business summaries, line names, line descriptions, recommendation explanations, confidence labels, knowledge-used evidence, and missing-evidence messages.
+- English remains only for allowed technical identifiers such as compressor models, serial numbers, SKUs, Maven/Invoice4U names, and internal IDs.
+- Draft line candidates now separate Hebrew display names from canonical item names and aliases, so older approved English draft lines remain usable as pricing evidence.
+- The generator now includes serial-number evidence, warranty-history gap reporting, customer commercial-history reporting, Hebrew business-intent summary, and `Needs Price Review` handling.
+- The existing Business Intent policy and BusinessDocument Draft Gateway remain the boundaries. The generator recommends; the gateway writes.
+
+Boundary:
+
+- Internal DB writes occurred only through the existing idempotent BusinessDocument Draft Gateway for validation.
+- No schema change, enum extension, migration, package install, Maven/Invoice4U execution, email/customer action, inventory mutation, OCR, bank API, receipt issuing, external adapter call, cloud/source-system action, or production behavior occurred.
+
+Validation:
+
+- Generated recommendations were validated on real ServiceReports `5804` / `3a4a3a99`, `5805` / `5bc071f5`, and `5807` / `2bfc0748`.
+- Created internal QUOTE drafts:
+  - `NEXT-BD-DRAFT-3a4a3a99-QUOTE`.
+  - `NEXT-BD-DRAFT-5bc071f5-QUOTE`.
+  - `NEXT-BD-DRAFT-2bfc0748-QUOTE`.
+- Re-running gateway creation returned `created=false` for all three drafts, proving ServiceReport + DocumentType idempotency.
+- Stored draft validation confirmed Hebrew titles, Hebrew line items, review-required price policy where needed, zero related AutomationCommands, zero related InventoryTransactions, zero related EmailLogs, and no exposure of manufacturer SKU `901165`.
+- Focused TypeScript/project TypeScript still fails only on pre-existing unrelated `app/ai-drafts/ai-draft-adapter.ts` pricing-evidence typing issues; no touched-file TypeScript errors appeared.
+- `git diff --check` passed with CRLF warnings only.
+- Local Next route validation was blocked by the dev child process failing to reach the Supabase pooler even though direct Prisma reads and direct gateway writes succeeded from the same workspace. This is recorded as a validation-environment caveat, not a Sprint 12 runtime blocker.
+
+Exit review:
+
+- TAL now gets Hebrew, evidence-backed, reviewable internal drafts from real completed ServiceReports instead of starting from blank documents.
+- The drafts are still intentionally review-required when evidence or confidence is incomplete; the system does not guess prices and does not execute external/customer/inventory actions.
+- Smallest next implementation capability remains Asset Workspace / Asset Timeline unless Liad selects validation hygiene for the Next child-process DB connectivity issue.
+
+Project completion:
+
+- Moves to `81%` by completing the Wave 3 Commercial Runtime and Document Engine capability weight with autonomous Hebrew business draft generation.
+- No external adapter, OCR, bank API, receipt issuing, external accounting, inventory mutation, customer action, cloud action, production readiness, CRM workflow, or real Maven/Invoice4U execution point is claimed.
+
 ## ERP Sprint 10 - Production Draft Generation
 
 Implemented as `SAFE_LOCAL_IMPLEMENTATION` in commit `07a3a7b Add production draft generation`.
@@ -1818,7 +1861,7 @@ Next candidate tasks, pending explicit selection/approval:
 6. Automation and Integration adapter readiness: prepare adapter evidence packets and command boundaries for Maven/Invoice4U, email, bank, OCR, and other external systems. Maven customer/document/item matching, Maven API contract evidence, Maven secret placement, and Maven source validation belong here and are valid only when explicitly selected.
 7. Build hygiene for the existing AI Draft pricing-evidence TypeScript gap, if explicitly selected.
 
-Project completion should not be overstated: current evidence-based completion is 80% by the transitional capability formula. Infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells, central work screens, preview intelligence, the AI Draft Recommendation Preview runtime, the pricing-evidence preview layer, protected internal BusinessDocument draft creation, internal BusinessDocument review, the BusinessDocument Approval Workflow, the protected internal Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, BusinessDocument Line Resolution Layer, BusinessCase Runtime Sprint 1, Commercial Lifecycle Hardening Sprint 2, Financial Capability Sprint 3, Operations Center Sprint 4, Operations Command Center Sprint 5, Customer 360 Workspace Sprint 6, End-to-End Service Flow MVP Sprint 7, Generalized BusinessDocument Draft Gateway Sprint 8, Business Intent Policy Layer Sprint 9, Production Draft Generation Sprint 10, and Wave 3/4 internal runtime surfaces. Maven is an External Adapter concern under Automation and Integration, not the architectural center. Production automation readiness remains gated because no Maven/Invoice4U execution, customer-facing send, inventory deduction, DB import, inventory action, receipt issuing, external accounting, or production integration is approved.
+Project completion should not be overstated: current evidence-based completion is 81% by the transitional capability formula. Infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells, central work screens, preview intelligence, the AI Draft Recommendation Preview runtime, the pricing-evidence preview layer, protected internal BusinessDocument draft creation, internal BusinessDocument review, the BusinessDocument Approval Workflow, the protected internal Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, BusinessDocument Line Resolution Layer, BusinessCase Runtime Sprint 1, Commercial Lifecycle Hardening Sprint 2, Financial Capability Sprint 3, Operations Center Sprint 4, Operations Command Center Sprint 5, Customer 360 Workspace Sprint 6, End-to-End Service Flow MVP Sprint 7, Generalized BusinessDocument Draft Gateway Sprint 8, Business Intent Policy Layer Sprint 9, Production Draft Generation Sprint 10, Production Draft Review and Learning Loop Sprint 11, Autonomous Business Draft Generation Sprint 12, and Wave 3/4 internal runtime surfaces. Maven is an External Adapter concern under Automation and Integration, not the architectural center. Production automation readiness remains gated because no Maven/Invoice4U execution, customer-facing send, inventory deduction, DB import, inventory action, receipt issuing, external accounting, or production integration is approved.
 
 Do not continue to Wave 2 import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes outside approved protected Server Actions, schema changes, migrations, env changes, Maven/Invoice4U execution, email/customer-facing sends, inventory actions, or source-system actions until Liad explicitly approves that later gate.
 
