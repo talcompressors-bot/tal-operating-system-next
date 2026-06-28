@@ -3,6 +3,22 @@
 ## 2026-06-28
 
 Decision:
+Commercial Lifecycle Hardening Sprint 2 is implemented as the internal Commercial Runtime lifecycle boundary.
+
+Reason:
+BusinessCase Runtime can now act as an ERP spine, but Commercial needed one explicit derived lifecycle before Financial Intake and Settlement work could start cleanly. Existing BusinessDocument fields, Approval review, Automation command readiness, and Financial-readiness signals already supported most of the lifecycle; the missing piece was a reusable lifecycle view that names current stage, next transition, blockers, and boundaries without creating a new document engine or changing persisted data.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` only. No schema change, Prisma migration, DB write, package install, Maven/Invoice4U call, external adapter execution, email/customer action, inventory mutation, cloud/source-system action, production behavior, FinancialEvidence runtime, settlement runtime, receipt issuing, or customer approval workflow was introduced.
+
+Status:
+Implemented in commit `c8d8c6c Harden commercial document lifecycle`. Validation: project TypeScript only fails on pre-existing unrelated AI Draft pricing-evidence typing issues; unsandboxed read-only route validation passed for `/service-reports/1e25bbb1`, `/business-cases/service-report/1e25bbb1`, `/business-documents/NEXT-AI-DRAFT-5806`, `/business-documents/NEXT-AI-DRAFT-5806/preview`, `/business-documents/NEXT-AI-DRAFT-5806/pdf`, and `/automation-commands/NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806`; PDF stayed `59807` bytes; review content showed Commercial lifecycle and `Ready For External Adapter`; approval, return-to-review, Maven command gate, automation status, and line-resolution controls remained visible; totals stayed `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`; manufacturer SKU `901165` was not exposed in checked review/preview HTML. Completion moves to `72%`. Recommended Sprint 3 is Financial Intake and Settlement readiness.
+
+---
+
+## 2026-06-28
+
+Decision:
 BusinessCase Runtime Sprint 1 is implemented as the first ERP operational spine.
 
 Reason:

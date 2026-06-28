@@ -1,7 +1,7 @@
 # CURRENT TASK
 
 Last updated: 2026-06-28
-Mode: CAPABILITY_BUILDING; governance frozen; TDOS frozen in Maintenance Mode; domain-driven roadmap realigned; BusinessCase Runtime Sprint 1 implemented; Financial Intake Engine design documented; Universal Business Document Engine foundation implemented; TDOS risk-based operating model integrated; Wave 2 complete; architecture audit complete; Commercial Runtime and Document Engine started internal; Maven remains an External Adapter gate only; no real Maven execution approved yet
+Mode: CAPABILITY_BUILDING; governance frozen; TDOS frozen in Maintenance Mode; domain-driven roadmap realigned; Commercial Lifecycle Hardening Sprint 2 implemented; BusinessCase Runtime Sprint 1 implemented; Financial Intake Engine design documented; Universal Business Document Engine foundation implemented; TDOS risk-based operating model integrated; Wave 2 complete; architecture audit complete; Commercial Runtime and Document Engine started internal; Maven remains an External Adapter gate only; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -15,11 +15,11 @@ Project Brain Consolidation Phase 1-3 completed. Supabase staging schema is appl
 
 ## Current Milestone
 
-Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, Wave 2 connector dry-run validation, real Prisma staging connectivity validation, Customers read-only module implementation, automatic Project Brain closeout sync governance, multi-agent operating workflow docs, ReportEquipmentItems / Equipment read-only module implementation, PartsUsed read-only module implementation, data coverage audit, Service Report central work-screen enhancement, bidirectional module navigation, Service Reports list context enhancement, AI Draft Suggestions shell, BusinessDocuments shell, AutomationCommands shell, SCR matching preview panel, AI Draft Recommendation Preview runtime for Service Report `5806`, Maven Knowledge / Pricing Evidence Layer for the AI Draft Preview, AI Draft Approval to BusinessDocument Draft runtime, BusinessDocument Review and Approval Page, protected Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, BusinessDocument Approval Workflow, BusinessDocument Approval Workflow POST Smoke Test, Maven Execution Adapter Dry Run, BusinessDocument Line Resolution Layer, Wave 2 Line Resolution POST Smoke Test, Wave 2 closeout and Maven execution readiness checklist, completion model update to 65%, AI Draft/parts/pricing/equipment intelligence documentation, global business document line governance, AI Draft recommendation readiness business-rule approval, Universal Business Document Engine foundation, Financial Intake Engine design, BusinessCase Runtime Sprint 1, Action Server Knowledge Layer roadmap planning, Email Document Intake Agent planning, active-ID startup/closeout preservation rules, Orchestrator Decision Engine governance, Executive Orchestrator Phase 2 governance, and Project Execution Mode transition to `CAPABILITY_BUILDING` are complete.
+Startup remote sync, shutdown path, Reality Check commit comparison, Supabase staging-first shadow plan, staging schema push, read-only schema verification, Wave 1 staging import execution, Wave 1 read/display mapping fixes, Wave 2 planning/discovery gate approval, Wave 2 connector dry-run validation, real Prisma staging connectivity validation, Customers read-only module implementation, automatic Project Brain closeout sync governance, multi-agent operating workflow docs, ReportEquipmentItems / Equipment read-only module implementation, PartsUsed read-only module implementation, data coverage audit, Service Report central work-screen enhancement, bidirectional module navigation, Service Reports list context enhancement, AI Draft Suggestions shell, BusinessDocuments shell, AutomationCommands shell, SCR matching preview panel, AI Draft Recommendation Preview runtime for Service Report `5806`, Maven Knowledge / Pricing Evidence Layer for the AI Draft Preview, AI Draft Approval to BusinessDocument Draft runtime, BusinessDocument Review and Approval Page, protected Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, BusinessDocument Approval Workflow, BusinessDocument Approval Workflow POST Smoke Test, Maven Execution Adapter Dry Run, BusinessDocument Line Resolution Layer, Wave 2 Line Resolution POST Smoke Test, Wave 2 closeout and Maven execution readiness checklist, completion model update to 65%, AI Draft/parts/pricing/equipment intelligence documentation, global business document line governance, AI Draft recommendation readiness business-rule approval, Universal Business Document Engine foundation, Financial Intake Engine design, BusinessCase Runtime Sprint 1, Commercial Lifecycle Hardening Sprint 2, Action Server Knowledge Layer roadmap planning, Email Document Intake Agent planning, active-ID startup/closeout preservation rules, Orchestrator Decision Engine governance, Executive Orchestrator Phase 2 governance, and Project Execution Mode transition to `CAPABILITY_BUILDING` are complete.
 
 ## Last Implementation Commit
 
-`f420701 Add BusinessCase runtime`
+`c8d8c6c Harden commercial document lifecycle`
 
 ## Last Closeout Commit
 
@@ -1283,21 +1283,66 @@ Project completion:
 - Moves to `71%` by adding one Wave 3 Commercial Runtime and Document Engine capability point for the first reusable BusinessCase operational spine.
 - No schema, DB, external adapter, production readiness, FinancialEvidence runtime, inventory mutation, or real Maven/Invoice4U execution point is claimed.
 
+## Commercial Lifecycle Hardening Sprint 2
+
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` in commit `c8d8c6c Harden commercial document lifecycle`.
+
+Capability:
+
+- Commercial Runtime now exposes a complete internal lifecycle for BusinessDocument without introducing a new document engine.
+- The lifecycle is derived from existing BusinessDocument, Approval, Automation, and Financial-readiness signals.
+- Stages are: Draft, Internal Review, Needs Changes, Approved, Ready For External Adapter, Externally Processed, Financial Pending, Financial Completed, and Closed.
+
+Runtime:
+
+- Added `lib/business-document-commercial-lifecycle.ts` as a small Commercial lifecycle boundary.
+- Extended `BusinessDocumentDetail` with `commercialLifecycle`.
+- Replaced the old placeholder lifecycle display on `/business-documents/[id]` with the target Commercial lifecycle stage list, current stage, next transition, blockers, and boundary text.
+- Updated BusinessCase Commercial summary to use the derived Commercial lifecycle stage instead of raw document status.
+- Existing BusinessDocument Runtime, ViewModel, preview, PDF, Approval Boundary, Automation Boundary, Financial Boundary, Review Boundary, approval forms, AutomationCommand gate, and line resolution remain in place.
+
+Validation:
+
+- Project TypeScript still fails only on pre-existing unrelated `app/ai-drafts/ai-draft-adapter.ts` pricing-evidence typing issues; no Commercial lifecycle or touched-file errors appeared under project-config TypeScript.
+- `git diff --check` passed with CRLF warnings only.
+- Unsandboxed read-only route validation passed:
+  - `/service-reports/1e25bbb1` HTTP `200`.
+  - `/business-cases/service-report/1e25bbb1` HTTP `200`.
+  - `/business-documents/NEXT-AI-DRAFT-5806` HTTP `200`.
+  - `/business-documents/NEXT-AI-DRAFT-5806/preview` HTTP `200`.
+  - `/business-documents/NEXT-AI-DRAFT-5806/pdf` HTTP `200`, `application/pdf`, `59807` bytes.
+  - `/automation-commands/NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806` HTTP `200`.
+- Review content confirmed Commercial lifecycle, `Ready For External Adapter`, and explicit external-adapter blocker are visible.
+- Existing approval workflow controls, return-to-review control, Maven command gate, automation command status, and line resolution controls remained visible.
+- Review and preview totals remained `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`.
+- Manufacturer SKU `901165` was not exposed in checked review/preview HTML.
+- Boundary stress check found no new Prisma writes, schema changes, external adapter calls, email/customer action, inventory mutation, cloud action, or production behavior.
+
+Exit review:
+
+- Commercial Runtime is internally complete enough for Financial Runtime to start without redesigning Commercial.
+- Commercial still must not own FinancialEvidence, settlement, receipts, tax invoice/receipt issuing, inventory reservation/deduction, external adapter execution, customer approval, or email/customer delivery.
+- Recommended Sprint 3: Financial Intake and Settlement readiness, starting from the Commercial lifecycle handoff states and staying read-only/safe-local unless a later approval explicitly permits schema, DB writes, attachments, OCR, bank API, receipt issuing, or external action.
+
+Project completion:
+
+- Moves to `72%` by adding one Wave 3 Commercial Runtime and Document Engine capability point for the complete derived Commercial lifecycle.
+- No schema, DB, external adapter, production readiness, FinancialEvidence runtime, inventory mutation, or real Maven/Invoice4U execution point is claimed.
+
 Domain-driven next task selection is active.
 
 TDOS work is frozen for now. Future TDOS changes are allowed only if ERP implementation is blocked by a missing TDOS capability, real Project Brain/runtime drift is detected, or a Knowledge Release / Project Sources Publishing Pipeline becomes required for an active ChatGPT Project Sources workflow. The Project Sources Publishing Pipeline remains a future conditional improvement only: do not create publisher runtime, scripts, manifests, new files, or a synchronization framework now.
 
 Next candidate tasks, pending explicit selection/approval:
 
-1. BusinessCase ownership/context discovery: define how Service Operations events, Commercial documents, Financial evidence, Inventory impact, and External Adapter actions attach to a durable business context without adding schema yet.
-2. Commercial document lifecycle hardening: continue the Universal BusinessDocument runtime and lifecycle boundary work without external execution.
-3. Financial Intake and Settlement readiness: advance FinancialEvidence intake, matching, duplicate prevention, approval, and receipt/tax-invoice-receipt readiness as design or safe local capability only when selected.
-4. Inventory and Procurement boundary planning: define how parts, procurement, supplier, stock, and future delivery-note work interact with Service Operations and Commercial documents without inventory mutation.
-5. Automation and Integration adapter readiness: prepare adapter evidence packets and command boundaries for Maven/Invoice4U, email, bank, OCR, and other external systems. Maven customer/document/item matching, Maven API contract evidence, Maven secret placement, and Maven source validation belong here and are valid only when explicitly selected.
-6. Build hygiene for the existing missing Playwright dependency/type gap, if explicitly selected.
-7. Optional Wave 2 import approval package, only if explicitly approved.
+1. Financial Intake and Settlement readiness: advance FinancialEvidence intake, matching, duplicate prevention, approval, and receipt/tax-invoice-receipt readiness as design or safe local capability only when selected.
+2. Inventory and Procurement boundary planning: define how parts, procurement, supplier, stock, and future delivery-note work interact with Service Operations and Commercial documents without inventory mutation.
+3. Automation and Integration adapter readiness: prepare adapter evidence packets and command boundaries for Maven/Invoice4U, email, bank, OCR, and other external systems. Maven customer/document/item matching, Maven API contract evidence, Maven secret placement, and Maven source validation belong here and are valid only when explicitly selected.
+4. BusinessCase runtime generalization, if a future capability proves ServiceReport-derived cases are too narrow.
+5. Build hygiene for the existing missing Playwright dependency/type gap, if explicitly selected.
+6. Optional Wave 2 import approval package, only if explicitly approved.
 
-Project completion should not be overstated: current evidence-based completion is 71% by the transitional capability formula. Infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells, central work screens, preview intelligence, the AI Draft Recommendation Preview runtime, the pricing-evidence preview layer, protected internal BusinessDocument draft creation, internal BusinessDocument review, the BusinessDocument Approval Workflow, the protected internal Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, BusinessDocument Line Resolution Layer, BusinessCase Runtime Sprint 1, and Wave 3 Commercial Runtime / Document Engine surfaces. Maven is an External Adapter readiness concern under Automation and Integration, not the architectural center. Production automation readiness remains gated because no Maven/Invoice4U execution, customer-facing send, inventory deduction, DB import, inventory action, or production integration is approved.
+Project completion should not be overstated: current evidence-based completion is 72% by the transitional capability formula. Infrastructure readiness is high for the staging/Prisma/Wave 1 path; read-only UI coverage is progressing through shells, central work screens, preview intelligence, the AI Draft Recommendation Preview runtime, the pricing-evidence preview layer, protected internal BusinessDocument draft creation, internal BusinessDocument review, the BusinessDocument Approval Workflow, the protected internal Maven document-generation AutomationCommand gate, AutomationCommand Detail and Queue Review, Maven Execution Adapter Dry Run, BusinessDocument Line Resolution Layer, BusinessCase Runtime Sprint 1, Commercial Lifecycle Hardening Sprint 2, and Wave 3 Commercial Runtime / Document Engine surfaces. Maven is an External Adapter concern under Automation and Integration, not the architectural center. Production automation readiness remains gated because no Maven/Invoice4U execution, customer-facing send, inventory deduction, DB import, inventory action, or production integration is approved.
 
 Do not continue to Wave 2 import, ProductsCatalog import, BusinessDocuments import, production shadow setup, DB writes outside approved protected Server Actions, schema changes, migrations, env changes, Maven/Invoice4U execution, email/customer-facing sends, inventory actions, or source-system actions until Liad explicitly approves that later gate.
 
