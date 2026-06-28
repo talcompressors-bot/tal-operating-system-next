@@ -95,6 +95,7 @@ export type AiDraftPreviewCreationState = {
 
 export type AiDraftRecommendationPreview = {
   id: string;
+  serviceReportInternalId: string;
   reportId: string;
   reportCounter: string;
   serviceDate: string;
@@ -876,6 +877,7 @@ export async function getAiDraftPreviewByReportCounter(reportCounter: string) {
 
   return {
     id: `preview-${reportCounter}`,
+    serviceReportInternalId: report.id,
     reportId: report.appsheetReportId,
     reportCounter: readText(report.reportCounter, reportCounter),
     serviceDate: formatOptionalDate(report.serviceDate),

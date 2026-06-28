@@ -1,10 +1,18 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import {
+  BUSINESS_DOCUMENT_DRAFT_GATEWAY_APPROVAL_PHRASE,
+  SUPPORTED_DRAFT_DOCUMENT_TYPES,
+} from "../../../../lib/business-document-draft-gateway";
 import { getBusinessCaseByServiceReportId } from "../../business-case-runtime";
+import { createBusinessDocumentDraftFromBusinessCase } from "./actions";
 
 type BusinessCasePageProps = {
   params: Promise<{
     id: string;
+  }>;
+  searchParams?: Promise<{
+    draftGatewayStatus?: string;
   }>;
 };
 
@@ -45,8 +53,10 @@ function DomainPanel({
 
 export default async function BusinessCasePage({
   params,
+  searchParams,
 }: BusinessCasePageProps) {
   const { id } = await params;
+  const status = (await searchParams)?.draftGatewayStatus;
   const businessCase = await getBusinessCaseByServiceReportId(id);
 
   if (!businessCase) {
@@ -152,6 +162,104 @@ export default async function BusinessCasePage({
               Open approval context
             </Link>
           ) : null}
+        </section>
+
+        <section className="info-panel wide">
+          <h2>BusinessDocument Draft Gateway</h2>
+          <p>
+            Creates one internal BusinessDocument draft from this BusinessCase
+            only after explicit user confirmation. The gateway uses current
+            schema-supported document types, applies ServiceReport + DocumentType
+            idempotency, and does not execute Maven, Invoice4U, email,
+            inventory, receipt issuing, OCR, bank API, or customer-facing
+            actions.
+          </p>
+          {status ? (
+            <p className="status-note">
+              {status === "approval-required"
+                ? `Type ${BUSINESS_DOCUMENT_DRAFT_GATEWAY_APPROVAL_PHRASE} before creating a draft.`
+                : null}
+              {status === "document-type-required"
+                ? "Select a document type before creating a draft."
+                : null}
+              {status === "unsupported-document-type"
+                ? "The selected document type is not supported by the current schema."
+                : null}
+              {status === "intelligence-incomplete"
+                ? "Complete Business Intelligence must be visible before creating a draft."
+                : null}
+              {status === "pricing-review-required"
+                ? "Confirm pricing review before creating a draft."
+                : null}
+              {status === "confidence-review-required"
+                ? "Confirm confidence visibility before creating a draft."
+                : null}
+              {status === "missing-evidence-review-required"
+                ? "Confirm missing evidence visibility before creating a draft."
+                : null}
+              {status === "pricing-override-required"
+                ? "Review-required or missing-price lines require the pricing override checkbox."
+                : null}
+              {status === "invalid-lines"
+                ? "Draft creation is blocked because the generated draft line is invalid."
+                : null}
+              {status === "not-found"
+                ? "The source BusinessCase was not found."
+                : null}
+            </p>
+          ) : null}
+          <form
+            action={createBusinessDocumentDraftFromBusinessCase}
+            className="approval-form"
+          >
+            <input
+              name="serviceReportId"
+              type="hidden"
+              value={businessCase.source.id}
+            />
+            <label>
+              Selected document type
+              <select name="documentType" defaultValue="QUOTE">
+                {SUPPORTED_DRAFT_DOCUMENT_TYPES.map((documentType) => (
+                  <option key={documentType} value={documentType}>
+                    {documentType}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Approved by
+              <input name="approvedBy" defaultValue="Liad" />
+            </label>
+            <label>
+              Approval phrase
+              <input
+                name="approvalText"
+                placeholder={BUSINESS_DOCUMENT_DRAFT_GATEWAY_APPROVAL_PHRASE}
+                aria-label={`Type ${BUSINESS_DOCUMENT_DRAFT_GATEWAY_APPROVAL_PHRASE}`}
+              />
+            </label>
+            <label className="checkbox-row">
+              <input name="pricingReviewed" type="checkbox" />
+              Pricing review is visible and understood.
+            </label>
+            <label className="checkbox-row">
+              <input name="confidenceReviewed" type="checkbox" />
+              Confidence is visible and understood.
+            </label>
+            <label className="checkbox-row">
+              <input name="missingEvidenceReviewed" type="checkbox" />
+              Missing evidence is visible and understood.
+            </label>
+            <label className="checkbox-row">
+              <input name="overrideMissingPricing" type="checkbox" />
+              Create the internal draft with review-required pricing; approval
+              and external actions remain blocked until pricing is resolved.
+            </label>
+            <button className="button" type="submit">
+              Create internal BusinessDocument draft
+            </button>
+          </form>
         </section>
 
         <section className="info-panel">
