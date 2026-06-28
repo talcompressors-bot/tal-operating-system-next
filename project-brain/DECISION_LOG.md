@@ -3,6 +3,22 @@
 ## 2026-06-28
 
 Decision:
+End-to-End Service Flow MVP Sprint 7 is implemented as a read-only integration projection on BusinessCase.
+
+Reason:
+BusinessCase, Commercial, Financial, Operations Command Center, and Customer 360 existed as separate runtime capabilities. The next operational gap was not another engine or workspace; it was one end-to-end internal chain from completed Service Report through Business Intelligence, suggestions, BusinessDocument draft context, operations queues, customer context, and approval readiness without manual module hunting.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` only. The flow reuses BusinessCase Runtime, ServiceReport, BusinessDocument, Commercial lifecycle, Financial Intake, Approval, Automation, Operations Command Center, Customer 360, and read-only Inventory-impact runtime. It is a projection and explanation layer only: it does not create documents, issue receipts, call Maven/Invoice4U, send email, mutate inventory, write DB rows, change schema, install packages, call OCR/external AI, or perform customer-facing/production actions.
+
+Status:
+Implemented in commit `e8cb765 Add end-to-end service flow projection`. Validation: project TypeScript still fails only on pre-existing unrelated AI Draft pricing-evidence typing issues; `git diff --check` passed with CRLF warnings only; unsandboxed read-only route validation passed for `/service-reports/1e25bbb1`, `/business-cases/service-report/1e25bbb1`, `/operations`, `/customers/18953`, `/business-documents/NEXT-AI-DRAFT-5806`, `/business-documents/NEXT-AI-DRAFT-5806/preview`, and `/business-documents/NEXT-AI-DRAFT-5806/pdf`; content checks confirmed End-to-End Service Flow, Business Intelligence Analysis, Business Suggestions, Completed Service Report, BusinessCase, BusinessDocument Draft, Operations Command Center, Customer 360, Approval Ready, all required intelligence questions, linked BusinessDocument draft explanation, Customer 360 context, Operations Command Center context, and `NEXT-AI-DRAFT-5806`; totals stayed `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`; manufacturer SKU `901165` was not exposed in checked review/preview HTML. Completion moves to `77%`. Smallest remaining gap for a fully general end-to-end process is generalized service-report-to-BusinessDocument draft creation beyond the current validated fixture and write gate. Recommended Sprint 8 is Generalized Business Suggestion to BusinessDocument Draft Gate if Liad wants end-to-end creation, or Asset Workspace / Asset Timeline if the next priority is read-only operational context.
+
+---
+
+## 2026-06-28
+
+Decision:
 Customer 360 Workspace Sprint 6 is implemented as the customer relationship workspace.
 
 Reason:
