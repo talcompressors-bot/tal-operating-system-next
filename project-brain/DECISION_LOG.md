@@ -3,6 +3,22 @@
 ## 2026-06-28
 
 Decision:
+Financial Capability Sprint 3 is implemented as the first internal Financial business capability.
+
+Reason:
+Commercial Runtime can now hand off Financial Pending / Financial Completed states, and BusinessCase Runtime needs a concrete Financial status instead of a placeholder. The minimum safe capability is not receipt issuing or external accounting; it is internal evidence intake, matching, review, and draft outputs that future check image, bank transfer, OCR, and bank API adapters can feed without redesign.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` only. No schema change, Prisma migration, DB write, package install, OCR, bank API, check parser, receipt issuing, tax invoice issuing, external accounting, Maven/Invoice4U call, email/customer-facing action, inventory mutation, cloud/source-system action, or production behavior was introduced. Financial evidence extraction remains suggestion-only and every receipt/tax-invoice-receipt draft is blocked from issuing.
+
+Status:
+Implemented in commit `069f34c Add financial intake capability`. Validation: project TypeScript only fails on pre-existing unrelated AI Draft pricing-evidence typing issues; unsandboxed read-only route validation passed for `/service-reports/1e25bbb1`, `/business-cases/service-report/1e25bbb1`, `/business-documents/NEXT-AI-DRAFT-5806`, `/business-documents/NEXT-AI-DRAFT-5806/preview`, `/business-documents/NEXT-AI-DRAFT-5806/pdf`, and `/automation-commands/NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806`; PDF stayed `59807` bytes; review content showed Payment evidence, Matching, Financial approval boundary, Receipt draft, Tax Invoice / Receipt draft, manual-entry evidence draft, draft-ready state, and issuing-blocked state; BusinessCase financial status updated; totals stayed `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`; manufacturer SKU `901165` was not exposed in checked review/preview HTML. Completion moves to `73%`. Smallest remaining Financial gap is persisted FinancialEvidence/attachment storage, duplicate registry, and approved issuing write workflow, all separately gated. Recommended Sprint 4 is Inventory and Procurement boundary/readiness unless Liad explicitly chooses Financial persistence first.
+
+---
+
+## 2026-06-28
+
+Decision:
 Commercial Lifecycle Hardening Sprint 2 is implemented as the internal Commercial Runtime lifecycle boundary.
 
 Reason:
