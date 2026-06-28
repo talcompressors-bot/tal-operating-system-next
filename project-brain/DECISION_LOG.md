@@ -3,6 +3,22 @@
 ## 2026-06-28
 
 Decision:
+BusinessCase Runtime Sprint 1 is implemented as the first ERP operational spine.
+
+Reason:
+ERP implementation now needs a reusable operational lifecycle container that connects Party, Asset, Service Operations, Commercial, Approval, Automation, Financial placeholders, and Inventory placeholders without introducing a schema object. BusinessCase must orchestrate existing domains and must not own their runtime.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` only. No Prisma model, table, migration, DB write, schema change, package install, Maven/Invoice4U call, email/customer action, inventory mutation, cloud/source-system action, production behavior, FinancialEvidence runtime, or inventory runtime was introduced.
+
+Status:
+Implemented in commit `f420701 Add BusinessCase runtime`. Validation: project TypeScript only fails on pre-existing unrelated AI Draft pricing-evidence typing issues; unsandboxed read-only route validation passed for `/service-reports/1e25bbb1`, `/business-documents/NEXT-AI-DRAFT-5806`, `/business-documents/NEXT-AI-DRAFT-5806/preview`, `/business-documents/NEXT-AI-DRAFT-5806/pdf`, `/automation-commands/NEXT-MAVEN-CMD-NEXT-AI-DRAFT-5806`, and `/business-cases/service-report/1e25bbb1`; BusinessCase content showed Party/Customer, Assets, Service Operations, Commercial, Approval, Automation, Financial Intake, Inventory Impact, and Closure readiness; PDF stayed `59807` bytes; totals stayed `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`; manufacturer SKU `901165` was not exposed in checked review/preview HTML. Completion moves to `71%`.
+
+---
+
+## 2026-06-28
+
+Decision:
 Freeze TDOS in Maintenance Mode and return project focus to ERP capability implementation.
 
 Reason:
