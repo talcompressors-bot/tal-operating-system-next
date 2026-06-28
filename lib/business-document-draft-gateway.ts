@@ -7,6 +7,7 @@ import {
   SourceSystem,
 } from "@prisma/client";
 import { prisma } from "./prisma";
+import type { InternalActionPolicyState } from "./business-action-policy";
 
 export const BUSINESS_DOCUMENT_DRAFT_GATEWAY_APPROVAL_PHRASE =
   "CREATE BUSINESS DOCUMENT DRAFT";
@@ -42,6 +43,7 @@ export type BusinessDocumentDraftGatewayInput = {
   documentType: string;
   approvedBy: string;
   approvalText: string;
+  policyState?: InternalActionPolicyState;
   intelligenceComplete: boolean;
   pricingReviewed: boolean;
   confidenceReviewed: boolean;
@@ -183,7 +185,14 @@ function isUuid(value: string) {
 function validateGatewayInput(
   input: BusinessDocumentDraftGatewayInput,
 ): SupportedDraftDocumentType {
-  if (input.approvalText !== BUSINESS_DOCUMENT_DRAFT_GATEWAY_APPROVAL_PHRASE) {
+  const policyState = input.policyState ?? "APPROVAL_REQUIRED";
+  const requiresApprovalPhrase = policyState === "APPROVAL_REQUIRED";
+  const requiresReviewConfirmation = policyState === "APPROVAL_REQUIRED";
+
+  if (
+    requiresApprovalPhrase &&
+    input.approvalText !== BUSINESS_DOCUMENT_DRAFT_GATEWAY_APPROVAL_PHRASE
+  ) {
     throw new BusinessDocumentDraftGatewayError(
       "approval-required",
       "The exact approval phrase is required before draft creation.",
@@ -213,21 +222,21 @@ function validateGatewayInput(
     );
   }
 
-  if (!input.pricingReviewed) {
+  if (requiresReviewConfirmation && !input.pricingReviewed) {
     throw new BusinessDocumentDraftGatewayError(
       "pricing-review-required",
       "Pricing review confirmation is required.",
     );
   }
 
-  if (!input.confidenceReviewed) {
+  if (requiresReviewConfirmation && !input.confidenceReviewed) {
     throw new BusinessDocumentDraftGatewayError(
       "confidence-review-required",
       "Confidence visibility confirmation is required.",
     );
   }
 
-  if (!input.missingEvidenceReviewed) {
+  if (requiresReviewConfirmation && !input.missingEvidenceReviewed) {
     throw new BusinessDocumentDraftGatewayError(
       "missing-evidence-review-required",
       "Missing evidence visibility confirmation is required.",
@@ -235,6 +244,7 @@ function validateGatewayInput(
   }
 
   if (
+    requiresReviewConfirmation &&
     input.lines.some((line) => line.needsApproval || parseMoney(line.unitPrice) === null) &&
     !input.overrideMissingPricing
   ) {
@@ -257,6 +267,7 @@ function validateGatewayInput(
 export async function createBusinessDocumentDraftFromGateway(
   input: BusinessDocumentDraftGatewayInput,
 ): Promise<BusinessDocumentDraftGatewayResult> {
+  const policyState = input.policyState ?? "APPROVAL_REQUIRED";
   const documentType = validateGatewayInput(input);
   const itemDrafts = input.lines.map((line) => {
     const parsedQuantity = parseQuantity(line.quantity);
@@ -392,6 +403,7 @@ export async function createBusinessDocumentDraftFromGateway(
           confidenceReviewed: input.confidenceReviewed,
           missingEvidenceReviewed: input.missingEvidenceReviewed,
           overrideMissingPricing: input.overrideMissingPricing,
+          policyState,
           missingEvidence: input.missingEvidence,
           confidenceSummary: input.confidenceSummary,
           noMavenAction: true,
@@ -448,6 +460,7 @@ export async function createBusinessDocumentDraftFromGateway(
           source: input.source,
           documentType,
           gatewayIdempotencyKey: draftId,
+          policyState,
           missingEvidence: input.missingEvidence,
           confidenceSummary: input.confidenceSummary,
         },

@@ -12,6 +12,13 @@ import {
   assertBusinessIntentPolicyAllowsDraft,
 } from "../../../../lib/business-intent-policy";
 import { buildProductionDraftRecommendation } from "../../../../lib/business-document-production-draft";
+import {
+  buildBusinessSuggestionPolicy,
+  buildDraftReviewPolicy,
+  buildExternalActionPolicy,
+  buildLearningEvidencePolicy,
+  buildServiceReportDraftPolicy,
+} from "../../../../lib/business-action-policy";
 import { getBusinessCaseByServiceReportId } from "../../business-case-runtime";
 
 function gatewayRedirect(serviceReportId: string, status: string): never {
@@ -34,7 +41,9 @@ export async function createBusinessDocumentDraftFromBusinessCase(
   const serviceReportId = String(formData.get("serviceReportId") || "").trim();
   const businessIntent = String(formData.get("businessIntent") || "").trim();
   const documentType = String(formData.get("documentType") || "").trim();
-  const approvedBy = String(formData.get("approvedBy") || "Liad").trim() || "Liad";
+  const approvedBy =
+    String(formData.get("approvedBy") || "Policy Automation").trim() ||
+    "Policy Automation";
   const approvalText = String(formData.get("approvalText") || "").trim();
   const overrideMissingPricing =
     formData.get("overrideMissingPricing") === "on";
@@ -87,16 +96,48 @@ export async function createBusinessDocumentDraftFromBusinessCase(
       gatewayRedirect(serviceReportId, "not-found");
     }
 
+    const hasMissingEvidence = productionDraftRecommendation.missingEvidence.length > 0;
+    const hasLowConfidence = productionDraftRecommendation.lines.some(
+      (line) => line.confidence === "Low",
+    );
+    const hasReviewRequiredLines = productionDraftRecommendation.lines.some(
+      (line) => line.needsApproval || line.unitPrice === "Needs approval",
+    );
+    const draftPolicy = buildServiceReportDraftPolicy({
+      hasServiceReport: Boolean(businessCase.source.id),
+      hasCustomer: Boolean(businessCase.party.id),
+      businessIntentAllowed: intentDecision.canCreateBusinessDocumentDraftNow,
+      selectedDocumentType: intentDecision.selectedDocumentType,
+      allowedDocumentTypes: intentDecision.allowedDocumentTypes,
+      idempotencyProtected: true,
+      externalSideEffectsBlocked: true,
+      hasMissingEvidence,
+      hasLowConfidence,
+      hasReviewRequiredLines,
+    });
+
+    if (draftPolicy.state === "BLOCKED" || draftPolicy.state === "APPROVAL_REQUIRED") {
+      gatewayRedirect(serviceReportId, "policy-blocked");
+    }
+
+    const suggestionPolicy = buildBusinessSuggestionPolicy();
+    const reviewPolicy = buildDraftReviewPolicy(hasReviewRequiredLines);
+    const learningPolicy = buildLearningEvidencePolicy();
+    const externalActionPolicy = buildExternalActionPolicy();
+
     const result = await createBusinessDocumentDraftFromGateway({
       serviceReportId: businessCase.source.id,
       documentType,
       approvedBy,
       approvalText,
+      policyState: draftPolicy.state,
       intelligenceComplete,
-      pricingReviewed,
-      confidenceReviewed,
-      missingEvidenceReviewed,
-      overrideMissingPricing,
+      pricingReviewed: pricingReviewed || draftPolicy.automatic,
+      confidenceReviewed: confidenceReviewed || draftPolicy.automatic,
+      missingEvidenceReviewed:
+        missingEvidenceReviewed || draftPolicy.automatic,
+      overrideMissingPricing:
+        overrideMissingPricing || draftPolicy.state === "REVIEW_REQUIRED",
       title: productionDraftRecommendation.title,
       description: `${productionDraftRecommendation.description} Business intent: ${intentDecision.label}.`,
       aiReasoning: businessCase.serviceFlow.intelligence
@@ -121,6 +162,13 @@ export async function createBusinessDocumentDraftFromBusinessCase(
       rawSource: {
         businessIntent,
         intentDecision,
+        actionPolicy: {
+          draftGeneration: draftPolicy,
+          businessSuggestions: suggestionPolicy,
+          draftReview: reviewPolicy,
+          learningEvidence: learningPolicy,
+          externalActions: externalActionPolicy,
+        },
         businessCaseId: businessCase.id,
         serviceFlowBoundary: businessCase.serviceFlow.boundary,
         intelligence: businessCase.serviceFlow.intelligence,

@@ -1,11 +1,18 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BusinessDocumentType } from "@prisma/client";
 import {
-  BUSINESS_DOCUMENT_DRAFT_GATEWAY_APPROVAL_PHRASE,
   SUPPORTED_DRAFT_DOCUMENT_TYPES,
 } from "../../../../lib/business-document-draft-gateway";
 import { BUSINESS_INTENT_POLICIES } from "../../../../lib/business-intent-policy";
 import { buildProductionDraftRecommendation } from "../../../../lib/business-document-production-draft";
+import {
+  buildBusinessSuggestionPolicy,
+  buildDraftReviewPolicy,
+  buildExternalActionPolicy,
+  buildLearningEvidencePolicy,
+  buildServiceReportDraftPolicy,
+} from "../../../../lib/business-action-policy";
 import { getBusinessCaseByServiceReportId } from "../../business-case-runtime";
 import { createBusinessDocumentDraftFromBusinessCase } from "./actions";
 
@@ -66,6 +73,34 @@ export default async function BusinessCasePage({
   if (!businessCase) {
     notFound();
   }
+
+  const hasMissingEvidence =
+    (productionDraftRecommendation?.missingEvidence.length ?? 0) > 0;
+  const hasLowConfidence =
+    productionDraftRecommendation?.lines.some((line) => line.confidence === "Low") ??
+    false;
+  const hasReviewRequiredLines =
+    productionDraftRecommendation?.lines.some(
+      (line) => line.needsApproval || line.unitPrice === "Needs approval",
+    ) ?? false;
+  const actionPolicies = [
+    buildServiceReportDraftPolicy({
+      hasServiceReport: Boolean(businessCase.source.id),
+      hasCustomer: Boolean(businessCase.party.id),
+      businessIntentAllowed: true,
+      selectedDocumentType: BusinessDocumentType.QUOTE,
+      allowedDocumentTypes: [BusinessDocumentType.QUOTE],
+      idempotencyProtected: true,
+      externalSideEffectsBlocked: true,
+      hasMissingEvidence,
+      hasLowConfidence,
+      hasReviewRequiredLines,
+    }),
+    buildBusinessSuggestionPolicy(),
+    buildDraftReviewPolicy(hasReviewRequiredLines),
+    buildLearningEvidencePolicy(),
+    buildExternalActionPolicy(),
+  ];
 
   return (
     <section className="page-shell">
@@ -252,16 +287,20 @@ export default async function BusinessCasePage({
           <h2>BusinessDocument Draft Gateway</h2>
           <p>
             Creates one internal BusinessDocument draft from this BusinessCase
-            only after explicit user confirmation. The gateway uses current
+            when product policy allows it. The gateway uses current
             schema-supported document types, applies ServiceReport + DocumentType
             idempotency, and does not execute Maven, Invoice4U, email,
             inventory, receipt issuing, OCR, bank API, or customer-facing
-            actions.
+            actions. Internal drafts are created automatically when safe; review
+            and approval are reserved for the actions that need them.
           </p>
           {status ? (
             <p className="status-note">
               {status === "approval-required"
-                ? `Type ${BUSINESS_DOCUMENT_DRAFT_GATEWAY_APPROVAL_PHRASE} before creating a draft.`
+                ? "Policy requires explicit approval before creating this draft."
+                : null}
+              {status === "policy-blocked"
+                ? "Product policy blocked internal draft creation. Review the policy table below."
                 : null}
               {status === "document-type-required"
                 ? "Select a document type before creating a draft."
@@ -334,28 +373,8 @@ export default async function BusinessCasePage({
               </select>
             </label>
             <label>
-              Approved by
-              <input name="approvedBy" defaultValue="Liad" />
-            </label>
-            <label>
-              Approval phrase
-              <input
-                name="approvalText"
-                placeholder={BUSINESS_DOCUMENT_DRAFT_GATEWAY_APPROVAL_PHRASE}
-                aria-label={`Type ${BUSINESS_DOCUMENT_DRAFT_GATEWAY_APPROVAL_PHRASE}`}
-              />
-            </label>
-            <label className="checkbox-row">
-              <input name="pricingReviewed" type="checkbox" />
-              Pricing review is visible and understood.
-            </label>
-            <label className="checkbox-row">
-              <input name="confidenceReviewed" type="checkbox" />
-              Confidence is visible and understood.
-            </label>
-            <label className="checkbox-row">
-              <input name="missingEvidenceReviewed" type="checkbox" />
-              Missing evidence is visible and understood.
+              Run by
+              <input name="approvedBy" defaultValue="Policy Automation" />
             </label>
             <label className="checkbox-row">
               <input name="billableWorkConfirmed" type="checkbox" />
@@ -366,15 +385,43 @@ export default async function BusinessCasePage({
               Internal override is confirmed when required by policy; external
               action remains blocked.
             </label>
-            <label className="checkbox-row">
-              <input name="overrideMissingPricing" type="checkbox" />
-              Create the internal draft with review-required pricing; approval
-              and external actions remain blocked until pricing is resolved.
-            </label>
             <button className="button" type="submit">
-              Create internal BusinessDocument draft
+              Generate policy-safe internal draft
             </button>
           </form>
+          <div className="table-card preview-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Action</th>
+                  <th>Policy</th>
+                  <th>Automatic</th>
+                  <th>Owner</th>
+                  <th>Reason</th>
+                </tr>
+              </thead>
+              <tbody>
+                {actionPolicies.map((policy) => (
+                  <tr key={policy.action}>
+                    <td>{policy.action}</td>
+                    <td>
+                      <strong>{policy.state}</strong>
+                    </td>
+                    <td>{policy.automatic ? "Yes" : "No"}</td>
+                    <td>{policy.ownerDomain}</td>
+                    <td>
+                      {[
+                        policy.summary,
+                        ...policy.blockers,
+                        ...policy.reviewReasons,
+                        ...policy.approvalReasons,
+                      ].join(" ")}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           <div className="table-card preview-table">
             <table>
               <thead>

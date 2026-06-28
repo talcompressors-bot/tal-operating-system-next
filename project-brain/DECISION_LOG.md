@@ -3,6 +3,22 @@
 ## 2026-06-28
 
 Decision:
+Sprint 11 product behavior is policy-based automation, not human approval for every internal artifact.
+
+Reason:
+Codex approvals are development controls. The ERP product must reduce internal human approvals and create generated drafts/internal review artifacts automatically when policy says the action is safe. Human approval remains for customer-facing/external/financial/inventory actions, low-confidence or missing-evidence overrides, and learning from approved corrections.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION`. Internal policy states are `AUTO_ALLOWED`, `REVIEW_REQUIRED`, `APPROVAL_REQUIRED`, and `BLOCKED`. Policy-safe ServiceReport -> BusinessDocument draft creation has no Maven/Invoice4U call, no email/customer action, no inventory mutation, no receipt issuing, no OCR/bank API, no schema change, and no package install.
+
+Status:
+Implemented in commit `PENDING - Add internal action policy automation`. `NEXT-BD-DRAFT-babbfe8a-QUOTE` was created from ServiceReport `babbfe8a` without an approval phrase or review checklist, repeated submit reused the existing draft by idempotency, and the draft recorded `policyState=REVIEW_REQUIRED` because missing evidence/review-required lines remain. Business suggestions are `AUTO_ALLOWED`, draft review is `REVIEW_REQUIRED` when generated lines need review, learning evidence is `APPROVAL_REQUIRED`, and external actions are `BLOCKED`.
+
+---
+
+## 2026-06-28
+
+Decision:
 Production Draft Review and Learning Loop Sprint 11 is implemented through the existing BusinessDocument review, line-resolution, approval, and audit-log runtime.
 
 Reason:
