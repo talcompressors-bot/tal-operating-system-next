@@ -3,6 +3,25 @@
 ## 2026-06-28
 
 Decision:
+Add the Domain Ownership Gate to the existing TDOS risk-based operating model.
+
+Reason:
+The Domain Boundary Refactoring moved BusinessDocument runtime toward domain-driven implementation. Future work must preserve that direction before code changes begin, without creating a duplicate Domain Registry, standalone constitution, or new governance file.
+
+Rule:
+Before any new feature, runtime change, workflow change, or architecture change, the agent must answer which Domain owns the work, who the owner/responsible agent is, which Domains may interact with it, which Domains must not own or mutate it, what source of truth supports the ownership, and what validation proves the boundary is preserved. If answers are missing or unclear, implementation must stop and request clarification.
+
+Boundary:
+Governance/documentation only in `PROJECT_OPERATING_PROTOCOL.md`. No new governance file, new registry, runtime behavior change, schema change, DB write, package install, Maven/Invoice4U call, email/customer-facing action, inventory action, cloud action, source-system action, or production action occurred.
+
+Status:
+Approved by user request and integrated into `PROJECT_OPERATING_PROTOCOL.md` section `18B. TDOS Risk-Based Operating Model`.
+
+---
+
+## 2026-06-28
+
+Decision:
 BusinessDocument runtime domain-boundary helpers are the approved internal separation point for the current Commercial runtime.
 
 Reason:

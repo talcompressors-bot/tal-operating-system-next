@@ -1181,7 +1181,7 @@ If no new work occurred, preserve these IDs and report the source. Do not downgr
 
 ## Wave 3 Domain Boundary Refactoring
 
-Implemented as `SAFE_LOCAL_IMPLEMENTATION` with no schema, DB, package, source-system, external, customer-facing, inventory, Maven/Invoice4U, cloud, or production action.
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` in commit `231da50 Refactor business document domain boundaries` with no schema, DB, package, source-system, external, customer-facing, inventory, Maven/Invoice4U, cloud, or production action.
 
 Scope:
 
@@ -1221,6 +1221,24 @@ Boundaries:
 Project completion:
 
 - Remains `70%`; this is a domain-boundary hardening refactor, not a new capability point.
+
+## Domain Ownership Gate
+
+Integrated into `PROJECT_OPERATING_PROTOCOL.md` section `18B. TDOS Risk-Based Operating Model` as a permanent pre-implementation rule. Before any new feature, runtime change, workflow change, or architecture change, future agents must identify the owning Domain, owner/responsible agent, allowed interacting Domains, Domains that must not own or mutate the object/workflow, supporting source of truth, and validation proving the boundary is preserved. If those answers are missing or unclear, implementation must stop and request clarification.
+
+Boundary:
+
+- Governance/documentation only.
+- No new governance file.
+- No Domain Registry.
+- No runtime behavior change.
+- No schema change.
+- No DB write.
+- No package install.
+- No Maven/Invoice4U call.
+- No email/customer action.
+- No inventory action.
+- No cloud or production action.
 
 ## Next Approved Task
 

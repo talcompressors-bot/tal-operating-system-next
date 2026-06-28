@@ -959,6 +959,19 @@ Read canonical startup sources and all sources relevant to the task's affected b
 
 Before implementation, Codex must classify the task into one primary risk class. If a task touches multiple classes, the highest-risk class controls approval and validation. Safe discovery or planning work may still proceed first when it does not cross the higher-risk gate.
 
+### Domain Ownership Gate
+
+Before any new feature, runtime change, workflow change, or architecture change, the agent must answer:
+
+1. Which Domain owns this?
+2. Who is the owner/responsible agent?
+3. Which Domain(s) are allowed to interact with it?
+4. Which Domain(s) must NOT own or mutate it?
+5. What source of truth supports this ownership?
+6. What validation proves the boundary is preserved?
+
+If these answers are missing or unclear, implementation must stop and request clarification.
+
 ### TDOS Risk Classes
 
 | Risk Class | Required startup reads | Required review level | Allowed automatic actions | Approval requirements | Required validations | Closeout requirements |
