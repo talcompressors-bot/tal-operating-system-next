@@ -3,6 +3,22 @@
 ## 2026-06-28
 
 Decision:
+Customer 360 Workspace Sprint 6 is implemented as the customer relationship workspace.
+
+Reason:
+After the Operations Command Center, the highest safe daily value was customer context. The office can see what needs attention, but resolving work requires one customer-level projection across affected assets, open BusinessCases, commercial documents, financial status, blockers, recommended next action, timeline, and opportunities. The correct boundary is a read-only workspace over existing runtime, not a CRM engine or a duplicate BusinessCase.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` only. Customer 360 reuses Customer, BusinessCase Runtime, ServiceReport, BusinessDocument, Commercial lifecycle, Financial Intake, Approval, Automation, Asset, Timeline, and read-only Inventory-impact state. It does not create a customer engine, CRM workflow, schema change, Prisma migration, DB write, package install, OCR, bank API, receipt issuing, external accounting, Maven/Invoice4U call, email/customer-facing action, inventory mutation, cloud/source-system action, production behavior, or writable follow-up workflow.
+
+Status:
+Implemented in commit `32bb35e Add Customer 360 workspace`. Validation: project TypeScript only fails on pre-existing unrelated AI Draft pricing-evidence typing issues; `git diff --check` passed with CRLF warnings only; unsandboxed read-only route validation passed for `/customers/18953`, `/customers`, `/operations`, `/business-cases/service-report/1e25bbb1`, `/business-documents/NEXT-AI-DRAFT-5806`, `/business-documents/NEXT-AI-DRAFT-5806/preview`, and `/business-documents/NEXT-AI-DRAFT-5806/pdf`; content checks confirmed all required Customer 360 sections, BusinessCase link, BusinessDocument link, Financial status, Commercial status, no-CRM/read-only boundary text, and `2205.45 ILS`; review/preview totals stayed `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`; manufacturer SKU `901165` was not exposed in checked review/preview HTML. Completion moves to `76%`. Recommended Sprint 7 is Asset Workspace / Asset Timeline if staying safe/read-only; writable customer or queue follow-up state is a valid alternative only after explicit schema/DB-write approval.
+
+---
+
+## 2026-06-28
+
+Decision:
 Operations Command Center Sprint 5 is implemented as the action-driven daily work queue.
 
 Reason:
