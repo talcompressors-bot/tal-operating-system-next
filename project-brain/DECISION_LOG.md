@@ -3,6 +3,22 @@
 ## 2026-06-28
 
 Decision:
+Generalized BusinessDocument Draft Gateway Sprint 8 is implemented.
+
+Reason:
+Sprint 7 exposed Business Intelligence and Business Suggestions, but creating a BusinessDocument draft still lived inside the report-5806 AI Draft path. The correct long-term boundary is one reusable gateway that does not decide the document type; the user selects a current-schema document type, confirms intelligence/pricing/confidence/missing-evidence review, and the gateway creates one internal BusinessDocument draft with ServiceReport + DocumentType idempotency.
+
+Boundary:
+Implemented as `SCHEMA_OR_DATA_CHANGE` with approved internal DB write validation only. No schema change, Prisma migration, enum extension, package install, Maven/Invoice4U execution, email/customer-facing action, inventory mutation, OCR, bank API, receipt issuing, external adapter call, cloud/source-system action, or production behavior occurred. The gateway writes only internal `BusinessDocument`, `BusinessDocumentItem`, and `BusinessDocumentLog` rows.
+
+Status:
+Implemented in commit `36299a8 Add business document draft gateway`. Validation created non-5806 ServiceReport `5802` / route id `9981b978` / Prisma id `8d889aeb-61ab-4b66-9316-516af5cd683c` as `QUOTE` draft `NEXT-BD-DRAFT-9981b978-QUOTE`; first submit changed count from `0` to `1`, second submit returned the same draft with `draftStatus=existing` and count stayed `1`. The draft has one review-required item, gateway audit log `BUSINESS_DOCUMENT_DRAFT_GATEWAY_CREATED`, status `WAITING_USER_APPROVAL`, approval status `PENDING`, zero AutomationCommands, and zero InventoryTransactions. Route validation passed for `/business-cases/service-report/9981b978`, `/operations`, `/customers/18779`, `/business-documents/NEXT-BD-DRAFT-9981b978-QUOTE`, `/business-documents/NEXT-BD-DRAFT-9981b978-QUOTE/preview`, and `/business-documents/NEXT-BD-DRAFT-9981b978-QUOTE/pdf`. Regression validation passed for existing 5806 routes and totals `1885.00 ILS`, `320.45 ILS`, and `2205.45 ILS`; manufacturer SKU `901165` was not exposed in checked 5806 review/preview HTML. Project TypeScript still fails only on the pre-existing unrelated AI Draft pricing-evidence typing issue. Completion moves to `78%`. The smallest remaining gap is schema/document-type expansion and domain-specific line configuration for future types not currently represented in `BusinessDocumentType`, especially Tax Invoice / Receipt, Purchase Order, Delivery Note, and Debit Note.
+
+---
+
+## 2026-06-28
+
+Decision:
 End-to-End Service Flow MVP Sprint 7 is implemented as a read-only integration projection on BusinessCase.
 
 Reason:
