@@ -4,6 +4,7 @@ import {
   BUSINESS_DOCUMENT_DRAFT_GATEWAY_APPROVAL_PHRASE,
   SUPPORTED_DRAFT_DOCUMENT_TYPES,
 } from "../../../../lib/business-document-draft-gateway";
+import { BUSINESS_INTENT_POLICIES } from "../../../../lib/business-intent-policy";
 import { getBusinessCaseByServiceReportId } from "../../business-case-runtime";
 import { createBusinessDocumentDraftFromBusinessCase } from "./actions";
 
@@ -182,6 +183,18 @@ export default async function BusinessCasePage({
               {status === "document-type-required"
                 ? "Select a document type before creating a draft."
                 : null}
+              {status === "intent-required"
+                ? "Select a Business Intent before creating a draft."
+                : null}
+              {status === "unsupported-intent"
+                ? "The selected Business Intent is not supported."
+                : null}
+              {status === "document-type-not-allowed"
+                ? "The selected document type is not allowed for this Business Intent."
+                : null}
+              {status === "intent-blocked"
+                ? "This Business Intent is blocked by its domain policy. Review the policy table below."
+                : null}
               {status === "unsupported-document-type"
                 ? "The selected document type is not supported by the current schema."
                 : null}
@@ -218,6 +231,16 @@ export default async function BusinessCasePage({
               value={businessCase.source.id}
             />
             <label>
+              Business Intent
+              <select name="businessIntent" defaultValue="PROPOSE_WORK">
+                {BUSINESS_INTENT_POLICIES.map((policy) => (
+                  <option key={policy.intent} value={policy.intent}>
+                    {policy.intent} / {policy.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
               Selected document type
               <select name="documentType" defaultValue="QUOTE">
                 {SUPPORTED_DRAFT_DOCUMENT_TYPES.map((documentType) => (
@@ -252,6 +275,15 @@ export default async function BusinessCasePage({
               Missing evidence is visible and understood.
             </label>
             <label className="checkbox-row">
+              <input name="billableWorkConfirmed" type="checkbox" />
+              Completed billable work is confirmed for invoice intent.
+            </label>
+            <label className="checkbox-row">
+              <input name="internalOverrideConfirmed" type="checkbox" />
+              Internal override is confirmed when required by policy; external
+              action remains blocked.
+            </label>
+            <label className="checkbox-row">
               <input name="overrideMissingPricing" type="checkbox" />
               Create the internal draft with review-required pricing; approval
               and external actions remain blocked until pricing is resolved.
@@ -260,6 +292,43 @@ export default async function BusinessCasePage({
               Create internal BusinessDocument draft
             </button>
           </form>
+          <div className="table-card preview-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Intent</th>
+                  <th>Owner</th>
+                  <th>Allowed Draft Types</th>
+                  <th>Can Draft Now</th>
+                  <th>Blocked Conditions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {BUSINESS_INTENT_POLICIES.map((policy) => (
+                  <tr key={policy.intent}>
+                    <td>
+                      <strong>{policy.intent}</strong>
+                      <span className="table-note">{policy.label}</span>
+                    </td>
+                    <td>{policy.ownerDomain}</td>
+                    <td>
+                      {policy.allowedDocumentTypes.length
+                        ? policy.allowedDocumentTypes.join(", ")
+                        : "No BusinessDocument draft"}
+                    </td>
+                    <td>
+                      {policy.canCreateBusinessDocumentDraftNow ? "Yes" : "No"}
+                    </td>
+                    <td>
+                      {policy.blockedConditions.length
+                        ? policy.blockedConditions.join("; ")
+                        : "Policy validations apply"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </section>
 
         <section className="info-panel">

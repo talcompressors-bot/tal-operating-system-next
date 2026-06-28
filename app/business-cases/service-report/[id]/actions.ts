@@ -7,6 +7,10 @@ import {
   BusinessDocumentDraftGatewayError,
   createBusinessDocumentDraftFromGateway,
 } from "../../../../lib/business-document-draft-gateway";
+import {
+  BusinessIntentPolicyError,
+  assertBusinessIntentPolicyAllowsDraft,
+} from "../../../../lib/business-intent-policy";
 import { getBusinessCaseByServiceReportId } from "../../business-case-runtime";
 
 function gatewayRedirect(serviceReportId: string, status: string): never {
@@ -27,6 +31,7 @@ export async function createBusinessDocumentDraftFromBusinessCase(
   formData: FormData,
 ) {
   const serviceReportId = String(formData.get("serviceReportId") || "").trim();
+  const businessIntent = String(formData.get("businessIntent") || "").trim();
   const documentType = String(formData.get("documentType") || "").trim();
   const approvedBy = String(formData.get("approvedBy") || "Liad").trim() || "Liad";
   const approvalText = String(formData.get("approvalText") || "").trim();
@@ -36,6 +41,10 @@ export async function createBusinessDocumentDraftFromBusinessCase(
   const confidenceReviewed = formData.get("confidenceReviewed") === "on";
   const missingEvidenceReviewed =
     formData.get("missingEvidenceReviewed") === "on";
+  const billableWorkConfirmed =
+    formData.get("billableWorkConfirmed") === "on";
+  const internalOverrideConfirmed =
+    formData.get("internalOverrideConfirmed") === "on";
 
   const businessCase = await getBusinessCaseByServiceReportId(serviceReportId);
 
@@ -57,6 +66,20 @@ export async function createBusinessDocumentDraftFromBusinessCase(
     : businessCase.source.label;
 
   try {
+    const intentDecision = assertBusinessIntentPolicyAllowsDraft({
+      intent: businessIntent,
+      selectedDocumentType: documentType,
+      hasBusinessIntelligence: intelligenceComplete,
+      hasCustomer: Boolean(businessCase.party.id),
+      hasServiceEvidence: Boolean(businessCase.service.summary),
+      hasPaymentEvidence: businessCase.financial.status !== "Not started",
+      hasSourceBusinessDocument: Boolean(
+        businessCase.commercial.documents.length,
+      ),
+      hasInventoryRuntime: businessCase.inventory.status !== "Placeholder",
+      billableWorkConfirmed,
+      internalOverrideConfirmed,
+    });
     const result = await createBusinessDocumentDraftFromGateway({
       serviceReportId: businessCase.source.id,
       documentType,
@@ -68,7 +91,7 @@ export async function createBusinessDocumentDraftFromBusinessCase(
       missingEvidenceReviewed,
       overrideMissingPricing,
       title: `${documentType} Draft - ${businessCase.source.label}`,
-      description: `Internal ${documentType} BusinessDocument draft created from BusinessCase Business Intelligence and Business Suggestions. No external action was executed.`,
+      description: `Internal ${documentType} BusinessDocument draft created for ${intentDecision.label} from BusinessCase Business Intelligence and Business Suggestions. No external action was executed.`,
       aiReasoning: businessCase.serviceFlow.intelligence
         .map((item) => `${item.label}: ${item.value}`)
         .join("\n"),
@@ -111,6 +134,8 @@ export async function createBusinessDocumentDraftFromBusinessCase(
       confidenceSummary,
       source: "BUSINESS_CASE_DRAFT_GATEWAY",
       rawSource: {
+        businessIntent,
+        intentDecision,
         businessCaseId: businessCase.id,
         serviceFlowBoundary: businessCase.serviceFlow.boundary,
         intelligence: businessCase.serviceFlow.intelligence,
@@ -130,6 +155,10 @@ export async function createBusinessDocumentDraftFromBusinessCase(
       }`,
     );
   } catch (error) {
+    if (error instanceof BusinessIntentPolicyError) {
+      gatewayRedirect(serviceReportId, error.code);
+    }
+
     if (error instanceof BusinessDocumentDraftGatewayError) {
       gatewayRedirect(serviceReportId, error.code);
     }
