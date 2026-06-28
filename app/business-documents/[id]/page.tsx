@@ -560,14 +560,43 @@ export default async function BusinessDocumentDetailPage({
         </article>
 
         <article className="info-panel wide">
-          <h2>Document lifecycle</h2>
+          <h2>Commercial lifecycle</h2>
+          <div className="approval-panel">
+            <p>{document.commercialLifecycle.boundary}</p>
+            <dl>
+              <div>
+                <dt>Current stage</dt>
+                <dd>{document.commercialLifecycle.currentStage.label}</dd>
+              </div>
+              <div>
+                <dt>Stage summary</dt>
+                <dd>{document.commercialLifecycle.currentStage.summary}</dd>
+              </div>
+              <div>
+                <dt>Next transition</dt>
+                <dd>{document.commercialLifecycle.nextTransition}</dd>
+              </div>
+            </dl>
+            {document.commercialLifecycle.blockers.length ? (
+              <ul className="warning-list">
+                {document.commercialLifecycle.blockers.map((blocker) => (
+                  <li key={blocker}>{blocker}</li>
+                ))}
+              </ul>
+            ) : (
+              <ul className="warning-list neutral">
+                <li>No commercial lifecycle blockers are currently detected.</li>
+              </ul>
+            )}
+          </div>
           <div className="lifecycle-list">
-            <div className="lifecycle-item">{document.lifecycle.draft}</div>
-            <div className="lifecycle-item">{document.lifecycle.approved}</div>
-            <div className="lifecycle-item">{document.lifecycle.sentToMaven}</div>
-            <div className="lifecycle-item">{document.lifecycle.mavenCreated}</div>
-            <div className="lifecycle-item">{document.lifecycle.emailSent}</div>
-            <div className="lifecycle-item">{document.lifecycle.customerViewed}</div>
+            {document.commercialLifecycle.stages.map((stage) => (
+              <div className="lifecycle-item" key={stage.code}>
+                <strong>{stage.label}</strong>
+                <span>{stage.state}</span>
+                <small>{stage.summary}</small>
+              </div>
+            ))}
           </div>
         </article>
 

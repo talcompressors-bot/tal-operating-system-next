@@ -489,8 +489,26 @@ dd {
   border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--muted);
+  display: grid;
+  gap: 6px;
   font-weight: 700;
   padding: 16px;
+}
+
+.lifecycle-item strong {
+  color: var(--foreground);
+}
+
+.lifecycle-item span {
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.lifecycle-item small {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.45;
 }
 
 .preview-summary {

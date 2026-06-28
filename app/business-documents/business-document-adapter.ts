@@ -17,6 +17,10 @@ import {
   type BusinessDocumentEngineReview,
 } from "../../lib/business-document-engine";
 import {
+  buildBusinessDocumentCommercialLifecycle,
+  type CommercialLifecycleView,
+} from "../../lib/business-document-commercial-lifecycle";
+import {
   buildBusinessDocumentViewModel,
   type BusinessDocumentViewModel,
 } from "../../lib/business-document-view-model";
@@ -164,6 +168,7 @@ export type BusinessDocumentDetail = BusinessDocumentListItem & {
     latestCommandId: string;
     latestCommandStatus: string;
   };
+  commercialLifecycle: CommercialLifecycleView;
   engineReview: BusinessDocumentEngineReview;
   viewModel: BusinessDocumentViewModel;
   automationCommands: Array<{
@@ -493,6 +498,28 @@ function mapBusinessDocumentDetail(
       salesSku: item.manufacturerSkuMatch.salesSku,
     })),
   });
+  const reviewWarnings = buildBusinessDocumentReviewWarnings(document);
+  const approvalReview = buildBusinessDocumentApprovalReview(document);
+  const commandReview = buildMavenDraftCommandReview(document);
+  const commercialLifecycle = buildBusinessDocumentCommercialLifecycle({
+    status: document.status,
+    approvalStatus: document.approvalStatus,
+    approvedAt: document.approvedAt,
+    mavenDocumentNumber: document.mavenDocumentNumber,
+    mavenPdfLink: document.mavenPdfLink,
+    sendStatus: document.sendStatus,
+    reviewWarnings,
+    approvalBlockers: approvalReview.blockers,
+    externalAdapter: {
+      canCreateCommand: commandReview.canCreateMavenCommand,
+      latestCommandId: commandReview.latestCommandId,
+      latestCommandStatus: commandReview.latestCommandStatus,
+    },
+    financial: {
+      paymentRequired: engineReview.payment.required,
+      detectedSources: engineReview.payment.detectedSources,
+    },
+  });
 
   return {
     ...listItem,
@@ -509,9 +536,10 @@ function mapBusinessDocumentDetail(
     notes: readText(document.notes, "No notes"),
     createdAt: formatDate(document.createdAt),
     reviewStatus: mapBusinessDocumentReviewStatus(document),
-    reviewWarnings: buildBusinessDocumentReviewWarnings(document),
-    approvalReview: buildBusinessDocumentApprovalReview(document),
-    commandReview: buildMavenDraftCommandReview(document),
+    reviewWarnings,
+    approvalReview,
+    commandReview,
+    commercialLifecycle,
     engineReview,
     viewModel,
     automationCommands: document.automationCommands.map((command) => ({

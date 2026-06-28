@@ -125,8 +125,8 @@ function buildCommercialState(
   const latestDocument = documents[0];
 
   return {
-    status: latestDocument.status,
-    summary: `${documents.length} linked BusinessDocument(s). Latest total: ${latestDocument.totalAmount}.`,
+    status: latestDocument.commercialLifecycle.currentStage.label,
+    summary: `${documents.length} linked BusinessDocument(s). Latest total: ${latestDocument.totalAmount}. Next: ${latestDocument.commercialLifecycle.nextTransition}`,
     href: `/business-documents/${latestDocument.id}`,
     documents,
   };
