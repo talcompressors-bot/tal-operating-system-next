@@ -36,7 +36,7 @@ Wave 3 Commercial Runtime and Document Engine, with Wave 4 Financial Runtime sta
 
 Current Task
 (the task most recently completed in this sync layer)
-Known TypeScript pricing-evidence typing issue in `app/ai-drafts/ai-draft-adapter.ts` is fixed.
+Full end-of-task sync verification is explicit in the existing sync protocol.
 
 Current Business Goal
 (what TAL gains from the active work)
@@ -52,7 +52,7 @@ Latest Committed Git Baseline
 
 Latest Local Delta
 (what changed after the pushed baseline)
-Replaced nullable pricing-evidence `.map(...).filter(...)` chains with non-null `flatMap` evidence construction in `app/ai-drafts/ai-draft-adapter.ts`; business logic is unchanged and `npx.cmd tsc --noEmit --pretty false --incremental false` now passes.
+Added the missing full sync verification rules to existing `PROJECT_SYNC_*` protocol files: Git clean/pushed, Project Brain updated when required, `PROJECT_SYNC_*` updated, Drive mirror refreshed, `01_Project_Sources` readback, runtime-folder mirror exclusion, and Final Sync Status `GREEN` / `YELLOW` / `RED`.
 
 Last Recorded Implementation Commit
 (the last meaningful implementation commit recorded in Project Brain)

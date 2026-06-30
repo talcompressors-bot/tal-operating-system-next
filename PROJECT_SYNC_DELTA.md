@@ -3,6 +3,61 @@
 Purpose
 (compact last-change summary for ChatGPT Project Sources and future closeouts)
 
+## Delta 2026-06-30 Full Sync Verification Protocol
+(latest sync-protocol hardening change)
+
+What Changed
+(what was actually changed)
+Updated existing `PROJECT_SYNC_OPERATING_GUIDE.md`, `PROJECT_SYNC_AUTHORITY.md`, `PROJECT_SYNC_TASKS.md`, `PROJECT_SYNC_STATE.md`, and this delta to make full end-of-task sync verification explicit.
+
+Why
+(why it was changed)
+The existing protocol already required commit/push, Project Brain updates, `PROJECT_SYNC_*` updates, and running the Google Drive mirror, but it did not explicitly require `01_Project_Sources` readback, runtime-folder mirror exclusion, or Final Sync Status classification.
+
+Business Value
+(what TAL gains)
+Every Codex closeout can now prove whether ChatGPT Project Sources and the Google Drive mirror are current without accidentally syncing broad runtime folders.
+
+Affected Domains
+(business areas impacted)
+Project Sources synchronization, Google Drive mirror workflow, Codex closeout protocol.
+
+Affected Runtime
+(ERP engines impacted)
+None. Documentation/sync protocol only.
+
+Affected Files
+(files changed)
+`PROJECT_SYNC_OPERATING_GUIDE.md`, `PROJECT_SYNC_AUTHORITY.md`, `PROJECT_SYNC_TASKS.md`, `PROJECT_SYNC_STATE.md`, and `PROJECT_SYNC_DELTA.md`.
+
+Validation
+(how it was proven)
+Read the existing sync protocol files, identified missing verification items, added only those items to existing sync files, and validated with `git diff --check`. Final closeout also verifies commit/push, mirror refresh, `01_Project_Sources` expected files, and runtime-folder exclusion.
+
+Risks
+(what may still break)
+Low; this changes only sync documentation. Drive mirror readback can still be `YELLOW` if local Drive access is unavailable.
+
+Open Issues
+(what is not solved yet)
+None for full sync verification protocol coverage.
+
+Next Required Action
+(what should happen next)
+Use Final Sync Status `GREEN` / `YELLOW` / `RED` in every future end-of-task report.
+
+Authority
+(who/what is allowed to define this truth)
+`PROJECT_SYNC_OPERATING_GUIDE.md` defines the closeout procedure; `PROJECT_SYNC_AUTHORITY.md` defines mirror/source-truth policy; Git and Drive readback define final proof.
+
+External Side Effects
+(whether any external system changed)
+Only the approved Google Drive mirror copy is run after commit/push. No runtime feature work, Maven/Invoice4U, email/customer action, inventory mutation, schema change, DB write, package install, or production action occurred.
+
+Current Commit State
+(whether this delta is committed)
+Committed and pushed with this closeout; Git and final report are authority for the exact hash.
+
 ## Delta 2026-06-30 TypeScript Pricing Evidence Fix
 (latest build/typing hygiene change)
 

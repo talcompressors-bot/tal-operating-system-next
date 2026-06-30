@@ -123,8 +123,16 @@ Step 4
 Run `powershell -ExecutionPolicy Bypass -File scripts/sync-project-mirror.ps1` to copy the approved sync/knowledge files to the approved local Google Drive mirror. If the mirror target or Drive write access is unavailable, report the sync as blocked and do not claim the mirror is current.
 
 Step 5
+(verify full sync)
+Verify full sync after the mirror copy: Git is clean and pushed to `origin/main`; Project Brain closeout files are updated when required; relevant `PROJECT_SYNC_*` files are updated; the Drive mirror refreshed successfully; `01_Project_Sources` contains the expected `PROJECT_SYNC*.md` files and root governance docs copied by `scripts/sync-project-mirror.ps1`; and broad runtime folders `app`, `lib`, and `prisma` are not present under the Drive mirror unless a task-specific policy explicitly approved them.
+
+Step 6
 (report final proof)
-Report commit hash, clean or non-clean `git status`, validation result, Google Drive mirror sync result, changed files, untouched protected systems, and exact next task.
+Report commit hash, clean or non-clean `git status`, validation result, Google Drive mirror sync result, changed files, untouched protected systems, exact next task, and Final Sync Status as `GREEN`, `YELLOW`, or `RED`.
+
+Full Sync Status
+(how to classify the final sync result)
+`GREEN` means Git is clean and pushed, Project Brain and relevant `PROJECT_SYNC_*` files are current, the Drive mirror script ran successfully, `01_Project_Sources` contains the expected Project Sources bundle, and broad runtime folders `app`, `lib`, and `prisma` were not mirrored. `YELLOW` means the task result is committed/pushed but a non-runtime sync verification is incomplete or could not be read back; report the exact gap. `RED` means Git is not pushed/clean, Project Brain or sync files are stale, the mirror failed, or protected/runtime folders were mirrored without explicit approval.
 
 Approved Local Drive Mirror
 (where Codex should copy the project sync mirror on this machine)
