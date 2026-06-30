@@ -34,8 +34,8 @@ Blocked
 (current blocker)
 None for docs-only sync protocol verification.
 
-## Current Runtime Review Task
-(separate uncommitted runtime quality work that must not be mixed into this docs commit)
+## Latest Runtime Quality Commit
+(separate runtime quality work that is now committed and must not be treated as local-only)
 
 Task Name
 (short name of the local runtime task)
@@ -55,7 +55,7 @@ Runtime validation proves behavior; Project Brain defines task state; Liad defin
 
 Status
 (current completion state)
-Implemented locally but recommended `fix first` before commit because internal line classification should explicitly distinguish performed, recommended, and inferred maintenance items.
+Committed in `77cf9cd Finalize service report draft runtime quality updates`; no uncommitted runtime maintenance files remain.
 
 Validation Status
 (how proven)
@@ -63,7 +63,7 @@ Code review confirmed scope and protected boundaries; project `tsc` still fails 
 
 Blocked
 (current blocker)
-Line classification gap before safe runtime commit.
+None for commit state. Future classification refinement would be a new selected quality-hardening task.
 
 ## Next Recommended Task
 (the next safe capability recommended by Project Brain)

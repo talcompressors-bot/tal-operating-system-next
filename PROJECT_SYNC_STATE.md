@@ -249,8 +249,8 @@ Current Next Task
 Asset Workspace / Asset Timeline.
 
 Immediate Local Decision
-(what is pending because the worktree is dirty)
-Decide whether to fix and commit the three local runtime maintenance-quality files separately, or leave them uncommitted until the line classification gap is fixed.
+(what is pending locally)
+None. The runtime maintenance quality fix was committed in `77cf9cd`, the Drive mirror setup was committed in `7310ddf`, the current working tree is clean, and no uncommitted runtime maintenance files remain.
 
 Next Approval Gate
 (what must stop for explicit human approval)

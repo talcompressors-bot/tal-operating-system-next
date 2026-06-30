@@ -95,7 +95,7 @@ Sync files can still become stale if future runtime or Project Brain changes are
 
 Open Issues
 (what is not solved yet)
-The separate runtime maintenance-quality fix remains local and uncommitted; it should not be mixed into sync documentation commits.
+None for the runtime maintenance-quality commit state. The maintenance-quality runtime files were committed in `77cf9cd`; no uncommitted runtime maintenance files remain.
 
 Next Required Action
 (what should happen next)
@@ -150,7 +150,7 @@ Sync files can become stale if future closeout updates Project Brain but does no
 
 Open Issues
 (what is not solved yet)
-No generator exists to automatically refresh sync files from Project Brain; the separate runtime maintenance-quality fix remains local and uncommitted pending a line-classification fix/recommendation.
+No generator exists to automatically refresh sync files from Project Brain. The previous runtime maintenance-quality fix is no longer local-only; it was committed in `77cf9cd`.
 
 Next Required Action
 (what should happen next)
@@ -168,12 +168,12 @@ Current Commit State
 (whether this delta is committed)
 Committed and pushed in the latest sync expansion commit; Git and the final report are authority for the exact hash.
 
-## Delta 2026-06-30 Runtime Quality Review
-(uncommitted runtime-quality change that future sessions must understand but not confuse with this docs commit)
+## Delta 2026-06-30 Runtime Quality Commit
+(runtime-quality change committed separately from sync documentation)
 
 What Changed
 (what was actually changed)
-Production Draft Generation maintenance-quality files remain locally modified and uncommitted after review; recommendation was `fix first`, not commit yet.
+Production Draft Generation maintenance-quality files were committed in `77cf9cd Finalize service report draft runtime quality updates`; no uncommitted runtime maintenance files remain.
 
 Why
 (why it was changed)
@@ -181,7 +181,7 @@ The change improves maintenance/service-kit line generation, but the review foun
 
 Business Value
 (what TAL gains)
-Committing only after the classification gap is fixed reduces risk that office reviewers confuse performed work with recommended/inferred maintenance items.
+The committed runtime fix preserves standard maintenance lines in draft recommendations instead of hiding them when exact part/price evidence is incomplete.
 
 Affected Domains
 (business areas impacted)
@@ -203,15 +203,15 @@ Review confirmed gateway idempotency preserves existing drafts unless explicitly
 
 Risks
 (what may still break)
-Internal line classification is not explicit enough; reviewers may not clearly see whether a line was performed, recommended, or inferred from standard maintenance rules.
+Future review may still refine how internal recommendations explain performed, recommended, and inferred maintenance evidence, but the committed runtime files are no longer pending locally.
 
 Open Issues
 (what is not solved yet)
-Add explicit internal line classification before committing the runtime quality fix.
+None for commit state. Any future classification refinement is a new scoped quality-hardening task, not an uncommitted local change.
 
 Next Required Action
 (what should happen next)
-Fix the classification gap first, then consider a separate scoped runtime-quality commit.
+Continue from the current Project Brain next task unless Liad selects another draft-quality hardening pass.
 
 Authority
 (who/what is allowed to define this truth)
@@ -223,7 +223,7 @@ None from the review. No schema/DB/external/inventory/email/Maven/package/source
 
 Current Commit State
 (whether this delta is committed)
-Runtime files are uncommitted and must remain separate from the sync expansion commit.
+Committed in `77cf9cd Finalize service report draft runtime quality updates`. Google Drive mirror setup was later committed in `7310ddf Add Google Drive project sync mirror script`.
 
 ## Delta 2026-06-30 Project Sync Layer
 (initial Project Sources synchronization files created by the prior DOC_SYNC task)
