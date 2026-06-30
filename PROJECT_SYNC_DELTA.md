@@ -3,6 +3,61 @@
 Purpose
 (compact last-change summary for ChatGPT Project Sources and future closeouts)
 
+## Delta 2026-06-30 TypeScript Pricing Evidence Fix
+(latest build/typing hygiene change)
+
+What Changed
+(what was actually changed)
+Changed `app/ai-drafts/ai-draft-adapter.ts` pricing-evidence array construction from nullable `.map(...).filter(...)` chains to `flatMap` arrays that only emit valid `PricingEvidence` objects.
+
+Why
+(why it was changed)
+TypeScript could not prove the nullable mapped arrays were narrowed to `PricingEvidence[]`, causing the known unrelated full-project typecheck blocker.
+
+Business Value
+(what TAL gains)
+Full TypeScript validation is clean again, so future runtime changes can use `tsc` as a reliable regression gate.
+
+Affected Domains
+(business areas impacted)
+AI Draft Recommendation, build hygiene, validation workflow.
+
+Affected Runtime
+(ERP engines impacted)
+None intentionally; typing-only cleanup with no pricing priority, source, confidence, or selection behavior change.
+
+Affected Files
+(files changed)
+`app/ai-drafts/ai-draft-adapter.ts`, plus sync and Project Brain closeout files.
+
+Validation
+(how it was proven)
+`npx.cmd tsc --noEmit --pretty false --incremental false` passed. `git diff --check` passed.
+
+Risks
+(what may still break)
+Low; the change preserves the previous skip-null-price behavior and only changes array construction shape.
+
+Open Issues
+(what is not solved yet)
+None for the known TypeScript pricing-evidence blocker.
+
+Next Required Action
+(what should happen next)
+Continue with the next selected ERP capability or draft-flow hardening task.
+
+Authority
+(who/what is allowed to define this truth)
+TypeScript validation defines build/typing status; Git defines committed code truth; Project Brain and sync files define closeout state.
+
+External Side Effects
+(whether any external system changed)
+None. No Maven/Invoice4U, email/customer action, inventory mutation, schema change, DB write, AppSheet/Apps Script/Google Sheets/Drive runtime action, package install, or production action occurred.
+
+Current Commit State
+(whether this delta is committed)
+Committed and pushed with this closeout; Git and final report are authority for the exact hash.
+
 ## Delta 2026-06-30 Internal Draft Refresh
 (latest runtime-flow hardening change)
 
@@ -32,7 +87,7 @@ Affected Files
 
 Validation
 (how it was proven)
-Before refresh, `NEXT-BD-DRAFT-acd1133d-QUOTE` had 2 lines. After explicit refresh it kept the same BusinessDocument ID, stayed `WAITING_USER_APPROVAL`, had 6 Hebrew lines, kept `מפריד שמן` with `unitPrice = null` and `needsPriceApproval = true`, showed Hebrew title/summary/lines through the review view model, had zero AutomationCommands for the document, and kept global side-effect counts at AutomationCommands `1`, InventoryTransactions `0`, EmailLogs `0`. Full TypeScript still fails only on the known unrelated `app/ai-drafts/ai-draft-adapter.ts` pricing-evidence typing issue; `git diff --check` passed.
+Before refresh, `NEXT-BD-DRAFT-acd1133d-QUOTE` had 2 lines. After explicit refresh it kept the same BusinessDocument ID, stayed `WAITING_USER_APPROVAL`, had 6 Hebrew lines, kept `מפריד שמן` with `unitPrice = null` and `needsPriceApproval = true`, showed Hebrew title/summary/lines through the review view model, had zero AutomationCommands for the document, and kept global side-effect counts at AutomationCommands `1`, InventoryTransactions `0`, EmailLogs `0`. At that time, full TypeScript still failed only on the known unrelated `app/ai-drafts/ai-draft-adapter.ts` pricing-evidence typing issue; that blocker is now resolved by the 2026-06-30 TypeScript Pricing Evidence Fix. `git diff --check` passed.
 
 Risks
 (what may still break)
@@ -254,7 +309,7 @@ Affected Files
 
 Validation
 (how it was proven)
-Review confirmed gateway idempotency preserves existing drafts unless explicitly regenerated, preview/PDF remains simple, evidence/confidence stays internal, and project `tsc` still fails only on the known unrelated `app/ai-drafts/ai-draft-adapter.ts` pricing-evidence typing issue.
+Review confirmed gateway idempotency preserves existing drafts unless explicitly regenerated, preview/PDF remains simple, evidence/confidence stays internal, and at review time project `tsc` still failed only on the known unrelated `app/ai-drafts/ai-draft-adapter.ts` pricing-evidence typing issue. That blocker is now resolved by the 2026-06-30 TypeScript Pricing Evidence Fix.
 
 Risks
 (what may still break)

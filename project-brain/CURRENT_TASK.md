@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`5313aec Improve autonomous business draft generation`
+`current closeout commit: Fix AI draft pricing evidence typing`
 
 ## Last Closeout Commit
 
@@ -28,6 +28,10 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 ## Latest Runtime Quality Implementation
 
 ServiceReport to BusinessDocument internal draft refresh is implemented and validated. Existing draft `NEXT-BD-DRAFT-acd1133d-QUOTE` for ServiceReport `5864` / `acd1133d` was explicitly refreshed from the current production recommendation while preserving the same BusinessDocument ID, keeping status `WAITING_USER_APPROVAL`, replacing stale 2-line content with 6 Hebrew maintenance lines, keeping `מפריד שמן` price-review required, and creating no AutomationCommand/Maven/email/inventory/schema action. Production Draft Generation maintenance quality fix was previously committed in `77cf9cd`; Drive mirror setup was committed in `7310ddf`.
+
+## Latest TypeScript Validation Fix
+
+The known unrelated TypeScript pricing-evidence typing issue in `app/ai-drafts/ai-draft-adapter.ts` is fixed. The adapter now builds `PricingEvidence[]` arrays through non-null `flatMap` evidence construction instead of nullable `.map(...).filter(...)` chains. Business logic is unchanged: the same null-price rows are skipped and the same pricing priority, source, confidence, and note values are emitted for valid evidence. Validation passed with `npx.cmd tsc --noEmit --pretty false --incremental false` and `git diff --check`. No Maven/Invoice4U, email/customer action, inventory mutation, schema change, package install, DB write, or external action occurred.
 
 ## Latest Local Documentation Sync
 
@@ -71,7 +75,7 @@ Validation:
 - ServiceReport `5807` / `2bfc0748`: detected `Small Service`; generated Air Filter, Oil Filter, 3L SKR oil top-up, Technician Visit / Travel, and Labor + Service.
 - ServiceReport `5864` / `acd1133d`: detected `Large Service`; generated Air Filter, Oil Filter, Oil Separator, oil/coolant, Technician Visit / Travel, and Labor + Service. Oil Separator had no exact price and stayed `Needs Price Review`.
 - Focused TypeScript passed for `lib/business-document-production-draft.ts`, `app/business-cases/service-report/[id]/actions.ts`, and `app/business-cases/service-report/[id]/page.tsx`.
-- Full TypeScript still fails only on the known unrelated `app/ai-drafts/ai-draft-adapter.ts` pricing-evidence typing issue.
+- Full TypeScript now passes after the known unrelated `app/ai-drafts/ai-draft-adapter.ts` pricing-evidence typing issue was fixed.
 - Read-only side-effect counts remained unchanged: BusinessDocuments `10`, BusinessDocumentItems `21`, AutomationCommands `1`, InventoryTransactions `0`, EmailLogs `0`.
 - Local dev server was not running, so live route/preview/PDF HTTP validation was not executed. Preview/PDF implementation files were not changed.
 
@@ -193,7 +197,7 @@ Approval gates:
 
 Autonomous Business Draft Generation Sprint 12 is complete. Production draft generation now produces professional Hebrew business-facing titles, summaries, line names, line explanations, confidence labels, knowledge-used evidence, and missing-evidence messages while preserving English only for allowed technical identifiers such as models, serial numbers, SKUs, Maven/Invoice4U names, and internal IDs. The recommendation layer now separates Hebrew display names from canonical aliases so older approved English draft lines can still be reused as pricing evidence. It adds serial-number evidence, warranty-history gap reporting, customer commercial history reporting, Hebrew business-intent summary, and `Needs Price Review` handling while keeping the existing BusinessDocument Draft Gateway as the only writer.
 
-Validation created three real internal QUOTE drafts through the existing idempotent gateway: `NEXT-BD-DRAFT-3a4a3a99-QUOTE` for ServiceReport `5804`, `NEXT-BD-DRAFT-5bc071f5-QUOTE` for ServiceReport `5805`, and `NEXT-BD-DRAFT-2bfc0748-QUOTE` for ServiceReport `5807`. Re-running the same gateway calls returned `created=false` for all three. Stored draft checks confirmed Hebrew titles, Hebrew line items, review-required price policy where needed, zero related AutomationCommands, zero related InventoryTransactions, zero related EmailLogs, and no exposure of manufacturer SKU `901165`. Focused TypeScript/build checks still fail only on the known unrelated `app/ai-drafts/ai-draft-adapter.ts` pricing-evidence typing issue. Local Next route validation was blocked by the dev child process failing to reach the Supabase pooler even though direct Prisma validation and gateway writes succeeded from the same workspace.
+Validation created three real internal QUOTE drafts through the existing idempotent gateway: `NEXT-BD-DRAFT-3a4a3a99-QUOTE` for ServiceReport `5804`, `NEXT-BD-DRAFT-5bc071f5-QUOTE` for ServiceReport `5805`, and `NEXT-BD-DRAFT-2bfc0748-QUOTE` for ServiceReport `5807`. Re-running the same gateway calls returned `created=false` for all three. Stored draft checks confirmed Hebrew titles, Hebrew line items, review-required price policy where needed, zero related AutomationCommands, zero related InventoryTransactions, zero EmailLogs, and no exposure of manufacturer SKU `901165`. At Sprint 12 closeout, focused TypeScript/build checks still failed only on the known unrelated `app/ai-drafts/ai-draft-adapter.ts` pricing-evidence typing issue; that blocker is now resolved by the TypeScript pricing-evidence fix. Local Next route validation was blocked by the dev child process failing to reach the Supabase pooler even though direct Prisma validation and gateway writes succeeded from the same workspace.
 
 Current blocker: none for Sprint 12 implementation. Validation caveat: local Next route rendering needs a separate environment/connectivity check because the child dev server could not reach the Supabase pooler during this session. Remaining gates: schema/enum expansion before true Tax Invoice / Receipt, Purchase Order, Delivery Note, or Debit Note support; FinancialEvidence/payment evidence before receipt collection; source BusinessDocument before credit workflow; Inventory/Procurement runtime before purchase or delivery workflows; explicit real Maven/Invoice4U approval; separate customer-facing/email approval; separate inventory approval; and separate schema/DB/storage approval for any persisted queue, evidence, attachment, correction type, or follow-up state.
 

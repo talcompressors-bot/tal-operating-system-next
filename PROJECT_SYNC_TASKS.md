@@ -8,15 +8,15 @@ Purpose
 
 Task Name
 (short name of the active local task)
-ServiceReport to BusinessDocument internal draft refresh.
+TypeScript pricing-evidence typing fix.
 
 Meaning
 (what the task means)
-Allow an existing internal BusinessDocument draft to be explicitly refreshed from the current ServiceReport recommendation without creating a duplicate draft or executing external actions.
+Fix the known TypeScript pricing-evidence typing issue in `app/ai-drafts/ai-draft-adapter.ts` without changing business logic.
 
 Owner
 (agent/tool that performs the work)
-Codex with AI_DRAFT_AGENT ownership and QA/Reviewer workflow review.
+Codex with QA/Reviewer workflow review.
 
 Authority
 (source allowed to define task truth)
@@ -24,15 +24,15 @@ Project Brain defines task state; Git defines committed/pushed truth; user reque
 
 Status
 (current completion state)
-Implemented and validated on `NEXT-BD-DRAFT-acd1133d-QUOTE`; committed/pushed state is defined by Git and final closeout report.
+Implemented and validated; committed/pushed state is defined by Git and final closeout report.
 
 Validation Status
 (how proven)
-Before refresh the draft had 2 lines. After explicit refresh the same BusinessDocument ID remained, status stayed `WAITING_USER_APPROVAL`, 6 Hebrew maintenance lines were present, oil separator stayed `NeedsPriceApproval`, no AutomationCommand existed for the document, and no Maven/email/inventory/schema action occurred. Full TypeScript still fails only on the known unrelated AI Draft adapter typing issue.
+`npx.cmd tsc --noEmit --pretty false --incremental false` passed and `git diff --check` passed.
 
 Blocked
 (current blocker)
-None for the internal refresh path.
+None for the TypeScript pricing-evidence blocker.
 
 ## Latest Runtime Quality Commit
 (separate runtime quality work that is now committed and must not be treated as local-only)
@@ -59,7 +59,7 @@ Committed in `77cf9cd Finalize service report draft runtime quality updates`; no
 
 Validation Status
 (how proven)
-Code review confirmed scope and protected boundaries; project `tsc` still fails only on the known unrelated AI Draft adapter typing issue.
+Code review confirmed scope and protected boundaries; the previously known unrelated AI Draft adapter typing issue is now fixed.
 
 Blocked
 (current blocker)
@@ -121,7 +121,7 @@ No approval for read-only UI/context work; explicit approval before schema, DB w
 | Inventory And Procurement Boundary | Define parts/procurement/supplier/stock boundaries before inventory mutation exists | Candidate only | `project-brain/INVENTORY_LEARNING_LOOP_SPEC.md`, `project-brain/PART_COMPATIBILITY_REGISTRY.md` | Inventory/schema/write approval required |
 | FinancialEvidence Persistence | Persist payment/financial evidence and attachments after storage/privacy/schema approval | Candidate only | `project-brain/TASK_BOARD.md`, financial runtime files | Schema/storage/DB approval required |
 | Automation And Integration Adapter Readiness | Prepare Maven/Invoice4U/email/bank/OCR adapter evidence and command boundaries | Candidate only | Maven/AppScript/email source files listed above | External action/secret/write approval required |
-| Build Hygiene For AI Draft Adapter Typing | Fix known unrelated TypeScript pricing-evidence typing issue | Candidate only | `app/ai-drafts/ai-draft-adapter.ts`, `project-brain/bugs/CURRENT_BUGS.md` | No protected approval if local code-only; package approval if dependencies involved |
+| Build Hygiene For AI Draft Adapter Typing | Fixed known unrelated TypeScript pricing-evidence typing issue | Completed by current task | `app/ai-drafts/ai-draft-adapter.ts`, `project-brain/bugs/CURRENT_BUGS.md` | No protected approval was needed; no package changes |
 
 ## Forbidden / Gated Tasks
 (tasks that require explicit approval or are currently not allowed)

@@ -36,7 +36,7 @@ Wave 3 Commercial Runtime and Document Engine, with Wave 4 Financial Runtime sta
 
 Current Task
 (the task most recently completed in this sync layer)
-ServiceReport to BusinessDocument internal draft refresh is implemented and validated on ServiceReport `5864` / `acd1133d`.
+Known TypeScript pricing-evidence typing issue in `app/ai-drafts/ai-draft-adapter.ts` is fixed.
 
 Current Business Goal
 (what TAL gains from the active work)
@@ -52,7 +52,7 @@ Latest Committed Git Baseline
 
 Latest Local Delta
 (what changed after the pushed baseline)
-Added an explicit internal-only refresh action on the BusinessDocument review page. Validation refreshed `NEXT-BD-DRAFT-acd1133d-QUOTE` from 2 stale lines to 6 current Hebrew maintenance lines, kept status `WAITING_USER_APPROVAL`, kept oil separator price review required, and created no AutomationCommand/Maven/email/inventory/schema action.
+Replaced nullable pricing-evidence `.map(...).filter(...)` chains with non-null `flatMap` evidence construction in `app/ai-drafts/ai-draft-adapter.ts`; business logic is unchanged and `npx.cmd tsc --noEmit --pretty false --incremental false` now passes.
 
 Last Recorded Implementation Commit
 (the last meaningful implementation commit recorded in Project Brain)

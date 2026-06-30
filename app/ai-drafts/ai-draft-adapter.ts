@@ -504,60 +504,60 @@ async function getPricingEvidenceForLine(definition: SuggestedLineDefinition) {
 
   const exactSkuSet = new Set(definition.skuCandidates);
 
-  const productEvidence: PricingEvidence[] = products
-    .map((product) => {
-      const unitPrice = parsePrice(product.sellingPrice);
+  const productEvidence: PricingEvidence[] = products.flatMap((product) => {
+    const unitPrice = parsePrice(product.sellingPrice);
 
-      if (unitPrice === null) {
-        return null;
-      }
+    if (unitPrice === null) {
+      return [];
+    }
 
-      const isDirectSku = product.sku ? exactSkuSet.has(product.sku) : false;
+    const isDirectSku = product.sku ? exactSkuSet.has(product.sku) : false;
 
-      return {
+    return [
+      {
         priority: isDirectSku ? 1 : 2,
         source: isDirectSku ? "ProductCatalog direct SKU" : "ProductCatalog alias",
         unitPrice,
         total: null,
         confidence: isDirectSku ? "High" : "Medium",
         note: `${product.sku || "No SKU"} - ${product.name} (${product.currency})`,
-      };
-    })
-    .filter((item): item is PricingEvidence => item !== null);
+      },
+    ];
+  });
 
-  const businessEvidence: PricingEvidence[] = businessDocumentItems
-    .map((item) => {
-      const unitPrice = parsePrice(item.unitPrice);
+  const businessEvidence: PricingEvidence[] = businessDocumentItems.flatMap((item) => {
+    const unitPrice = parsePrice(item.unitPrice);
 
-      if (unitPrice === null) {
-        return null;
-      }
+    if (unitPrice === null) {
+      return [];
+    }
 
-      const sourceDocument =
-        item.businessDocument.appsheetBusinessDocumentId ||
-        item.businessDocument.mavenDocumentNumber ||
-        "BusinessDocument";
+    const sourceDocument =
+      item.businessDocument.appsheetBusinessDocumentId ||
+      item.businessDocument.mavenDocumentNumber ||
+      "BusinessDocument";
 
-      return {
+    return [
+      {
         priority: 3,
         source: "BusinessDocumentItems history",
         unitPrice,
         total: parsePrice(item.totalPrice),
         confidence: item.matchConfidence ? String(item.matchConfidence) : "Medium",
         note: `${sourceDocument} - ${item.itemName} (${formatEnum(item.source)})`,
-      };
-    })
-    .filter((item): item is PricingEvidence => item !== null);
+      },
+    ];
+  });
 
-  const mavenEvidence: PricingEvidence[] = mavenItems
-    .map((item) => {
-      const unitPrice = parsePrice(item.unitPrice);
+  const mavenEvidence: PricingEvidence[] = mavenItems.flatMap((item) => {
+    const unitPrice = parsePrice(item.unitPrice);
 
-      if (unitPrice === null) {
-        return null;
-      }
+    if (unitPrice === null) {
+      return [];
+    }
 
-      return {
+    return [
+      {
         priority: 4,
         source: "Maven item history",
         unitPrice,
@@ -566,9 +566,9 @@ async function getPricingEvidenceForLine(definition: SuggestedLineDefinition) {
         note: `${item.documentNumber || "No document number"} - ${
           item.itemDescription || "No item description"
         }`,
-      };
-    })
-    .filter((item): item is PricingEvidence => item !== null);
+      },
+    ];
+  });
 
   return [...productEvidence, ...businessEvidence, ...mavenEvidence].sort(
     (left, right) => left.priority - right.priority,
