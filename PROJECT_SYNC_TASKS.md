@@ -8,15 +8,15 @@ Purpose
 
 Task Name
 (short name of the active local task)
-Architect Mediation Phase 2.
+Tal Executive Runtime Observe warning cleanup.
 
 Meaning
 (what the task means)
-Make the already-committed Architect Mediation Phase 1 workflow discoverable and enforceable from Reviewer and sync/bootstrap files without creating a new agent.
+Make Tal Executive Runtime Observe warnings accurate by ignoring generated Python cache files and refreshing stale sync current/latest task text.
 
 Owner
 (agent/tool that performs the work)
-Codex with Orchestrator, Infrastructure Manager / Architect, QA, and Reviewer workflow review.
+Codex with Chief Architect, QA, and Reviewer workflow review.
 
 Authority
 (source allowed to define task truth)
@@ -24,15 +24,15 @@ Project Brain defines task state; Git defines committed/pushed truth; user reque
 
 Status
 (current completion state)
-Implemented in existing Reviewer and `PROJECT_SYNC_*` files only; committed/pushed state is defined by Git and final closeout report.
+Completed by this cleanup; committed/pushed state is defined by Git and final closeout report.
 
 Validation Status
 (how proven)
-Validated with `git diff --check`; changed files are limited to `project-brain/agents/REVIEWER_AGENT.md`, `PROJECT_SYNC_STATE.md`, `PROJECT_SYNC_TASKS.md`, and `PROJECT_SYNC_OPERATING_GUIDE.md`; no `app/**`, `lib/**`, or `prisma/**` files changed.
+Validation must run the Tal Executive Runtime Observe command, confirm company objectives are `USED`, confirm missing evidence is `none`, confirm generated Python cache files do not make Git dirty, and confirm no `app/**`, `lib/**`, or `prisma/**` files changed.
 
 Blocked
 (current blocker)
-None for Architect Mediation Phase 2 coverage.
+None after Python cache ignore and sync current/latest text cleanup.
 
 ## Latest Runtime Quality Commit
 (separate runtime quality work that is now committed and must not be treated as local-only)

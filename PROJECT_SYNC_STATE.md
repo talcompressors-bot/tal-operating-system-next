@@ -36,11 +36,11 @@ Wave 3 Commercial Runtime and Document Engine, with Wave 4 Financial Runtime sta
 
 Current Task
 (the task most recently completed in this sync layer)
-Architect Mediation Phase 2 makes the Phase 1 workflow discoverable and enforceable from sync/bootstrap files.
+Tal Executive Runtime Observe validation and warning-accuracy cleanup is the latest sync/runtime-support task: the POC reads Git, Project Brain, PROJECT_SYNC, runtime maps, and company objectives without OpenAI/API calls or protected-system writes.
 
 Current Business Goal
 (what TAL gains from the active work)
-A new ChatGPT Project can understand current state, recent changes, source locations, agents, authorities, next tasks, and protected boundaries using only `PROJECT_SYNC_*` files, then follow pointers for deeper work.
+Tal Compressors gets a cleaner external executive evidence loop so future business-capability decisions can be based on observed Git, Project Brain, PROJECT_SYNC, runtime, and company-objective evidence before Codex implementation starts.
 
 Current Runtime Capability
 (what works now inside the shadow ERP)
@@ -87,7 +87,7 @@ Latest Committed Git Baseline
 
 Latest Local Delta
 (what changed after the pushed baseline)
-Architect Mediation Phase 1 was committed in `6c9cff8`; Phase 2 updates Reviewer and sync/bootstrap summaries so future tasks discover the mandatory Orchestrator Task Packet, Infrastructure Manager / Architect review, QA/Reviewer/Architect closeout checks, ChatGPT Review Packet, visual proof, data lineage, simplification report, and final PASS/FAIL statuses before implementation or closeout.
+Tal Executive Runtime POC Phase 1 is committed and now has an Observe phase that reads required evidence sources. The latest cleanup ignores Python cache output and refreshes stale sync current-task text so Observe warnings distinguish real sync drift from generated local files.
 
 Architect Mediation
 (mandatory workflow gate before future implementation)

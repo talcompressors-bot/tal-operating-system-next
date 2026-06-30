@@ -3,6 +3,61 @@
 Purpose
 (compact last-change summary for ChatGPT Project Sources and future closeouts)
 
+## Delta 2026-06-30 Observe Warning Accuracy
+(latest executive-runtime observe cleanup)
+
+What Changed
+(what was actually changed)
+Added Python cache ignore rules and refreshed the sync current/latest task text so Tal Executive Runtime Observe does not report false Git dirtiness or stale current-task references after normal Python execution.
+
+Why
+(why it was changed)
+The Observe phase correctly collected evidence, but generated `__pycache__` files made Git look dirty and stale sync current-task text made the compact sync layer look older than the committed executive-runtime work.
+
+Business Value
+(what TAL gains)
+Future executive decisions start from cleaner evidence and fewer false warnings, reducing Liad's need to manually interpret whether an Observe warning is real.
+
+Affected Domains
+(business areas impacted)
+Tal Executive Runtime evidence collection, PROJECT_SYNC current-state reporting, Codex closeout validation.
+
+Affected Runtime
+(ERP engines impacted)
+None. Runtime feature files are untouched.
+
+Affected Files
+(files changed)
+`.gitignore`, `PROJECT_SYNC_STATE.md`, `PROJECT_SYNC_TASKS.md`, and `PROJECT_SYNC_DELTA.md`.
+
+Validation
+(how it was proven)
+Run Tal Executive Runtime Observe after removing generated Python cache files; confirm company objectives are `USED`, missing evidence is `none`, and Git dirtiness is not caused by generated cache files. Also validate with `git diff --check`.
+
+Risks
+(what may still break)
+Low. This only changes ignore rules and compact sync state text.
+
+Open Issues
+(what is not solved yet)
+ChatGPT Project Sources still require manual refresh confirmation after push/mirror closeout.
+
+Next Required Action
+(what should happen next)
+Continue using Observe before executive decisions and refresh Project Sources manually when Liad wants ChatGPT Project Sources to match the latest Git state.
+
+Authority
+(who/what is allowed to define this truth)
+Git defines committed ignore/sync text truth; Observe output defines evidence-collection behavior; Liad defines Project Sources manual confirmation.
+
+External Side Effects
+(whether any external system changed)
+Only the approved Google Drive mirror copy is run after commit/push. No app runtime, Maven/Invoice4U, email/customer action, inventory mutation, schema change, DB write, package install, or production action occurred.
+
+Current Commit State
+(whether this delta is committed)
+Committed and pushed with this cleanup; Git and final report are authority for the exact hash.
+
 ## Delta 2026-06-30 Full Sync Verification Protocol
 (latest sync-protocol hardening change)
 
