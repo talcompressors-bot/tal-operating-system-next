@@ -204,6 +204,90 @@ Each consulted participant must return or be summarized with:
 
 The Orchestrator must summarize consulted opinions before deciding. Planned or non-executable agents may contribute only from their approved specification/status; they must not be treated as active runtime owners.
 
+### Architect Mediation Gate
+
+The Orchestrator must act as the mediation layer between Liad/ChatGPT intent, Codex execution, existing agents, QA, Reviewer, and final closeout. This is an upgrade to the existing Orchestrator plus Infrastructure Manager workflow, not a new agent.
+
+Before Builder or Codex implementation starts, the Orchestrator must convert the user intent into a Task Packet and route it to Infrastructure Manager / Architect review.
+
+Task Packet fields:
+
+- What was requested.
+- Business value.
+- Current Project Brain goal alignment.
+- Existing files, agents, components, and runtime to reuse.
+- Duplicate system risk.
+- Protected systems and approval gates.
+- Data sources to read.
+- App-generated data to create, if any.
+- Storage location for created data, if any.
+- Learning or analysis feedback path, if relevant.
+- Validation plan, including screenshot plan for UI changes.
+
+Architect approval is required before implementation. The Architect must verify:
+
+- The task matches Project Brain current goals.
+- Business value is clear.
+- Existing files, agents, and components are reused.
+- No duplicate system is created.
+- Protected systems are not touched without approval.
+- Source data and app-created data are identified.
+- Learning or analysis feedback path is identified when relevant.
+- Approval gates are clear.
+- The solution is simpler than the rejected alternatives.
+
+If Architect approval is missing, Builder/Codex implementation is `FORBIDDEN`.
+
+Before any task is closed, the Orchestrator must collect:
+
+- QA validation.
+- Reviewer scope/evidence validation.
+- Architect validation of architecture, boundaries, integration consistency, source of truth, and simplification.
+- A ChatGPT Review Packet.
+
+ChatGPT Review Packet fields:
+
+- What was requested.
+- What was built.
+- What changed in the app.
+- Screenshot path or Playwright screenshot evidence from the actual app when UI changed, or why capture was impossible.
+- Which route/page was tested.
+- What user-visible improvement exists.
+- What became simpler.
+- What duplication was prevented.
+- Which existing files/components/agents were reused.
+- Which alternatives were rejected and why.
+- What data is pulled into the app and source for each data item.
+- What data is created inside the app and where it is stored.
+- Whether created data is used for analysis/learning.
+- Whether the learning path is active, planned, or blocked.
+- What was validated.
+- What was not validated and why.
+- Protected systems confirmed untouched.
+- Regression risk.
+- Rollback path.
+- Final recommendation: `APPROVE`, `NEEDS_FIX`, or `BLOCKED`.
+
+Mandatory visual proof:
+If the task changes UI, Codex must capture at least one screenshot from the actual local app or explain why screenshot capture was impossible. HTTP 200 alone is not enough.
+
+Mandatory data lineage:
+Every task touching app data must report source data read, generated data written, DB tables/models involved, Server Actions involved, external systems touched or untouched, and whether app-generated data feeds future AI/business learning.
+
+Mandatory simplification report:
+Every Architect decision must state why the solution is better, what complexity was removed, what duplication was avoided, what future maintenance became easier, and a concrete project example when available.
+
+Final closeout must include:
+
+- Architect Mediation: `PASS` / `FAIL`
+- QA: `PASS` / `FAIL`
+- Reviewer: `PASS` / `FAIL`
+- ChatGPT Review Packet: `READY` / `NOT READY`
+- Screenshot evidence: `YES` / `NO` / `NOT APPLICABLE`
+- Data lineage: `COMPLETE` / `INCOMPLETE`
+- Regression check: `PASS` / `FAIL`
+- Sync Status: `GREEN` / `YELLOW` / `RED`
+
 ### Executive Scoring
 
 Every candidate task or solution path must receive evidence-based scores before selection:
