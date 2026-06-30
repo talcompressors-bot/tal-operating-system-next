@@ -9,6 +9,7 @@ import { prisma } from "./prisma";
 import type { BusinessDocumentDraftGatewayLineInput } from "./business-document-draft-gateway";
 
 type ConfidenceLabel = "High" | "Medium" | "Low";
+type ServiceInterval = "Small Service" | "Large Service" | "Unknown Service Interval";
 
 type ServiceReportForDraft = NonNullable<
   Awaited<ReturnType<typeof loadServiceReportForDraft>>
@@ -27,6 +28,22 @@ type HistoricalLine = {
   equipmentModels: string[];
   approvalStatus: ApprovalStatus;
   status: BusinessDocumentStatus;
+};
+
+type CatalogEvidence = {
+  itemName: string;
+  sku: string | null;
+  sellingPrice: number | null;
+  sourceProductId: string;
+  compatibleEquipment: string | null;
+};
+
+type PartsHistoryEvidence = {
+  partName: string;
+  partSku: string | null;
+  quantity: number | null;
+  reportCounter: number | null;
+  equipmentModels: string[];
 };
 
 type PriceEvidence = {
@@ -55,6 +72,7 @@ type DraftLineCandidate = {
   defaultUnitPrice: number | null;
   defaultPriceNote: string;
   quantityNeedsApproval: boolean;
+  sourceCertainty: ConfidenceLabel;
 };
 
 export type ProductionDraftLineRecommendation = {
@@ -76,6 +94,7 @@ export type ProductionDraftLineRecommendation = {
 export type ProductionDraftRecommendation = {
   serviceReportId: string;
   documentType: BusinessDocumentType;
+  detectedMaintenanceType: ServiceInterval;
   title: string;
   description: string;
   lines: ProductionDraftLineRecommendation[];
@@ -148,14 +167,18 @@ function extractModelFamily(model: string) {
   return letters || normalized;
 }
 
-function detectServiceInterval(report: ServiceReportForDraft) {
-  const text = [
+function collectReportEvidenceText(report: ServiceReportForDraft) {
+  return [
     report.serviceType,
     report.serviceDescription,
     report.workPerformed,
     report.technicianSummary,
     report.recommendations,
     ...report.equipmentItems.flatMap((item) => [
+      item.equipmentType,
+      item.equipmentSubtype,
+      item.equipmentModel,
+      item.compressorCategory,
       item.serviceDescription,
       item.technicianRecommendations,
       item.nextService,
@@ -163,6 +186,10 @@ function detectServiceInterval(report: ServiceReportForDraft) {
   ]
     .map((value) => readText(value).toLowerCase())
     .join(" ");
+}
+
+function detectServiceInterval(report: ServiceReportForDraft): ServiceInterval {
+  const text = collectReportEvidenceText(report);
 
   if (
     text.includes("4000") ||
@@ -183,6 +210,33 @@ function detectServiceInterval(report: ServiceReportForDraft) {
   }
 
   return "Unknown Service Interval";
+}
+
+function hasMaintenanceEvidence(serviceInterval: ServiceInterval) {
+  return serviceInterval !== "Unknown Service Interval";
+}
+
+function hasBeltEvidence(report: ServiceReportForDraft) {
+  const text = collectReportEvidenceText(report);
+
+  return (
+    text.includes("belt") ||
+    text.includes("belts") ||
+    text.includes("רצוע") ||
+    text.includes("רצועות")
+  );
+}
+
+function hasStrongModelOrManufacturerEvidence(report: ServiceReportForDraft) {
+  return report.equipmentItems.some((item) => {
+    const model = readText(item.equipmentModel);
+    const category = readText(item.compressorCategory);
+    const type = readText(item.equipmentType);
+    const subtype = readText(item.equipmentSubtype);
+    const combined = normalizeText([model, category, type, subtype].join(" "));
+
+    return Boolean(model) || combined.includes("SCR") || combined.includes("COMPRESSOR");
+  });
 }
 
 async function loadServiceReportForDraft(serviceReportId: string) {
@@ -290,6 +344,83 @@ async function loadHistoricalLines(report: ServiceReportForDraft) {
   );
 }
 
+async function loadCatalogEvidence() {
+  const products = await prisma.product.findMany({
+    where: {
+      sellingPrice: { not: null },
+    },
+    select: {
+      appsheetProductId: true,
+      sku: true,
+      name: true,
+      description: true,
+      compatibleEquipment: true,
+      sellingPrice: true,
+    },
+  });
+
+  return products.map((product): CatalogEvidence => ({
+    itemName: [product.name, product.description].filter(Boolean).join(" "),
+    sku: product.sku,
+    sellingPrice:
+      product.sellingPrice === null ? null : Number(product.sellingPrice),
+    sourceProductId: product.appsheetProductId,
+    compatibleEquipment: product.compatibleEquipment,
+  }));
+}
+
+async function loadPartsHistoryEvidence(report: ServiceReportForDraft) {
+  const models = report.equipmentItems
+    .map((item) => readText(item.equipmentModel))
+    .filter(Boolean);
+  const parts = await prisma.partUsed.findMany({
+    where: {
+      OR: [
+        { serviceReportId: report.id },
+        ...(models.length
+          ? [
+              {
+                serviceReport: {
+                  equipmentItems: {
+                    some: {
+                      equipmentModel: { in: models },
+                    },
+                  },
+                },
+              },
+            ]
+          : []),
+      ],
+    },
+    select: {
+      partName: true,
+      partSku: true,
+      quantity: true,
+      serviceReport: {
+        select: {
+          reportCounter: true,
+          equipmentItems: {
+            select: {
+              equipmentModel: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return parts.map((part): PartsHistoryEvidence => ({
+    partName: readText(part.partName),
+    partSku: part.partSku,
+    quantity: part.quantity === null ? null : Number(part.quantity),
+    reportCounter: part.serviceReport?.reportCounter ?? null,
+    equipmentModels:
+      part.serviceReport?.equipmentItems
+        .map((item) => readText(item.equipmentModel))
+        .filter(Boolean) ?? [],
+  }));
+}
+
 function findRegistryRowsForModel(model: string, serviceInterval: string) {
   const normalized = normalizeModel(model);
   const isLargeService = serviceInterval === "Large Service";
@@ -311,12 +442,24 @@ function findRegistryRowsForModel(model: string, serviceInterval: string) {
 
 function buildServiceKitCandidates(
   report: ServiceReportForDraft,
-  serviceInterval: string,
+  serviceInterval: ServiceInterval,
 ): DraftLineCandidate[] {
+  if (!hasMaintenanceEvidence(serviceInterval)) {
+    return [];
+  }
+
   const equipmentCount = Math.max(report.equipmentItems.length, 1);
   const models = report.equipmentItems
     .map((item) => readText(item.equipmentModel))
     .filter(Boolean);
+  const strongMaintenanceEvidence =
+    hasStrongModelOrManufacturerEvidence(report) || models.length > 0;
+  const beltRelevant = hasBeltEvidence(report);
+
+  if (!strongMaintenanceEvidence) {
+    return [];
+  }
+
   const rowsByCategory = new Map<string, ReturnType<typeof findRegistryRowsForModel>[number]>();
 
   models.forEach((model) => {
@@ -376,26 +519,49 @@ function buildServiceKitCandidates(
       ],
       itemType: "PART",
       quantity:
-        serviceInterval === "Large Service" ? equipmentCount : equipmentCount * 3,
+        serviceInterval === "Large Service"
+          ? equipmentCount
+          : models.some((model) => normalizeText(model).includes("SCR"))
+            ? equipmentCount * 3
+            : equipmentCount,
       reason:
         serviceInterval === "Large Service"
           ? "ידע טיפול גדול כולל טיפול בשמן או נוזל קירור; הפעולה הסופית דורשת בדיקת משתמש."
           : "כלל טיפול קטן מציע תוספת 3 ליטר שמן SKR לכל מדחס כאשר קיימת עדות לדגם SCR.",
     },
+    {
+      category: "BELT",
+      canonicalItemName: "Belts",
+      itemName: "רצועות",
+      aliases: ["Belts", "Belt", "רצועות", "רצועה"],
+      itemType: "PART",
+      quantity: equipmentCount,
+      reason:
+        "Service report evidence mentions belts, so a belt line is suggested for internal review.",
+    },
   ];
 
   partDefinitions.forEach((definition) => {
     const row = rowsByCategory.get(definition.category);
+    const includeWithoutRegistryRow =
+      definition.category === "AIR_FILTER" ||
+      definition.category === "OIL_FILTER" ||
+      definition.category === "OIL_COOLANT" ||
+      (definition.category === "OIL_SEPARATOR" && serviceInterval === "Large Service") ||
+      (definition.category === "BELT" && beltRelevant);
 
-    if (!row) {
+    if (!row && !includeWithoutRegistryRow) {
       return;
     }
+    const rowEvidence = row
+      ? `עדות יצרן פנימית: ${row.manufacturer} ${row.model}, קטגוריה ${row.partCategory}, מקור ${row.sourceSheet} שורה ${row.sourceRow}.`
+      : `שורת תחזוקה סטנדרטית נוספה בגלל זיהוי ${serviceInterval}; מק"ט/מחיר מדויק לא נמצאו ודורשים בדיקה.`;
 
     candidates.push({
       itemName: definition.itemName,
       description: [
         definition.reason,
-        `עדות יצרן פנימית: ${row.manufacturer} ${row.model}, קטגוריה ${row.partCategory}, מקור ${row.sourceSheet} שורה ${row.sourceRow}.`,
+        rowEvidence,
         "מק\"ט יצרן נשאר עדות פנימית בלבד ואינו מוצג ללקוח ללא מק\"ט מכירה מאושר של טל.",
       ].join(" "),
       canonicalItemName: definition.canonicalItemName,
@@ -403,11 +569,16 @@ function buildServiceKitCandidates(
       quantity: definition.quantity,
       itemType: definition.itemType,
       reason: definition.reason,
-      evidenceSource: `ManufacturerServiceKit:${row.model}:${row.partCategory}`,
+      evidenceSource: row
+        ? `ManufacturerServiceKit:${row.model}:${row.partCategory}`
+        : `StandardMaintenanceRule:${serviceInterval}:${definition.category}`,
       defaultUnitPrice: null,
       defaultPriceNote:
-        "עדות היצרן תומכת בזיהוי הפריט, אך לא קובעת מחיר מכירה ללקוח.",
+        row
+          ? "עדות היצרן תומכת בזיהוי הפריט, אך לא קובעת מחיר מכירה ללקוח."
+          : "השורה נוספה מציפיית תחזוקה סטנדרטית; מחיר מדויק חסר ודורש בדיקת מחיר.",
       quantityNeedsApproval: true,
+      sourceCertainty: row ? "Medium" : "Low",
     });
   });
 
@@ -434,6 +605,7 @@ function buildBaseServiceCandidates(
       defaultPriceNote:
         "כלל ברירת מחדל מכללי השירות המסחריים; עדיין נדרשת בדיקה אם חסרה היסטוריית לקוח או שיש סתירה.",
       quantityNeedsApproval: false,
+      sourceCertainty: "Medium",
     },
     {
       canonicalItemName: "Labor + Service",
@@ -452,6 +624,7 @@ function buildBaseServiceCandidates(
       defaultPriceNote:
         "כלל ברירת מחדל לעבודה ושירות מתוך ידע תפעולי היסטורי; שעות ומחיר סופיים דורשים בדיקה.",
       quantityNeedsApproval: report.technicianWorkHours === null,
+      sourceCertainty: "Medium",
     },
   ];
 }
@@ -511,6 +684,8 @@ function scoreHistoricalLine(
 function choosePriceEvidence(
   candidate: DraftLineCandidate,
   history: HistoricalLine[],
+  catalog: CatalogEvidence[],
+  partsHistory: PartsHistoryEvidence[],
   report: ServiceReportForDraft,
   currentModels: string[],
 ) {
@@ -560,6 +735,62 @@ function choosePriceEvidence(
     };
   }
 
+  const catalogMatch = catalog.find((product) => {
+    const productText = normalizeText(
+      [product.itemName, product.sku ?? "", product.compatibleEquipment ?? ""].join(" "),
+    );
+    const candidateNames = [
+      candidate.canonicalItemName,
+      candidate.itemName,
+      ...candidate.aliases,
+    ].map(normalizeText);
+
+    return candidateNames.some(
+      (name) => name && (productText.includes(name) || name.includes(productText)),
+    );
+  });
+
+  if (catalogMatch?.sellingPrice !== null && catalogMatch?.sellingPrice !== undefined) {
+    return {
+      unitPrice: catalogMatch.sellingPrice,
+      totalPrice: catalogMatch.sellingPrice * candidate.quantity,
+      source: "ProductCatalog",
+      confidence: "High" as ConfidenceLabel,
+      needsApproval: candidate.quantityNeedsApproval,
+      pricingEvidence: [
+        {
+          source: `ProductsCatalog:${catalogMatch.sourceProductId}`,
+          unitPrice: catalogMatch.sellingPrice.toFixed(2),
+          total: (catalogMatch.sellingPrice * candidate.quantity).toFixed(2),
+          confidence: "High" as ConfidenceLabel,
+          note: [
+            `Catalog match for ${candidate.canonicalItemName}.`,
+            catalogMatch.sku ? `SKU ${catalogMatch.sku}.` : "",
+            catalogMatch.compatibleEquipment
+              ? `Compatible equipment: ${catalogMatch.compatibleEquipment}.`
+              : "",
+          ]
+            .filter(Boolean)
+            .join(" "),
+        },
+      ],
+      missingEvidence: [] as string[],
+    };
+  }
+
+  const partsMatch = partsHistory.find((part) => {
+    const partText = normalizeText([part.partName, part.partSku ?? ""].join(" "));
+    const candidateNames = [
+      candidate.canonicalItemName,
+      candidate.itemName,
+      ...candidate.aliases,
+    ].map(normalizeText);
+
+    return candidateNames.some(
+      (name) => name && (partText.includes(name) || name.includes(partText)),
+    );
+  });
+
   if (candidate.defaultUnitPrice !== null) {
     return {
       unitPrice: candidate.defaultUnitPrice,
@@ -578,6 +809,14 @@ function choosePriceEvidence(
       ],
       missingEvidence: [
         `לא נמצאה עדות מחיר מכירה היסטורית מאושרת עבור ${candidate.itemName}.`,
+        catalogMatch
+          ? `ProductsCatalog matched ${catalogMatch.sourceProductId}, but no usable selling price was available.`
+          : "ProductsCatalog was checked but no direct priced match was available.",
+        partsMatch
+          ? `PartsUsed history matched ${partsMatch.partName || partsMatch.partSku} on report ${
+              partsMatch.reportCounter ?? "unknown"
+            }, but it does not provide a selling price.`
+          : "PartsUsed history was checked but no matching priced usage was available.",
       ],
     };
   }
@@ -596,9 +835,30 @@ function choosePriceEvidence(
         confidence: "Low" as ConfidenceLabel,
         note: candidate.defaultPriceNote,
       },
+      ...(partsMatch
+        ? [
+            {
+              source: "PartsUsed",
+              unitPrice: "Needs Price Review",
+              total: "Needs Price Review",
+              confidence: "Low" as ConfidenceLabel,
+              note: `Parts history evidence found ${
+                partsMatch.partName || partsMatch.partSku
+              } on report ${partsMatch.reportCounter ?? "unknown"}; quantity ${
+                partsMatch.quantity ?? "unknown"
+              }; selling price still missing.`,
+            },
+          ]
+        : []),
     ],
     missingEvidence: [
       `לא נמצאה עדות מחיר מכירה היסטורית מאושרת עבור ${candidate.itemName}.`,
+      catalogMatch
+        ? `ProductsCatalog matched ${catalogMatch.sourceProductId}, but no usable selling price was available.`
+        : "ProductsCatalog was checked but no direct priced match was available.",
+      partsMatch
+        ? `PartsUsed history matched ${partsMatch.partName || partsMatch.partSku}, but no selling price was available.`
+        : "PartsUsed history was checked but no matching usage was available.",
     ],
   };
 }
@@ -611,6 +871,8 @@ function buildKnowledgeEvidence(
   report: ServiceReportForDraft,
   serviceInterval: string,
   history: HistoricalLine[],
+  catalog: CatalogEvidence[],
+  partsHistory: PartsHistoryEvidence[],
   candidates: DraftLineCandidate[],
 ) {
   const currentModels = report.equipmentItems
@@ -702,6 +964,20 @@ function buildKnowledgeEvidence(
       explanation: kitEvidenceCount
         ? "מועמדי חלקי החילוף הגיעו מהתאמה של דגם מדויק וקטגוריית חלק ברישום היצרן."
         : "לא נמצא מועמד חלק חילוף בטוח מספיק להוספה.",
+    },
+    {
+      source: "ProductsCatalog",
+      status: catalog.length ? "Used" : "Missing",
+      explanation: catalog.length
+        ? `${catalog.length} שורות קטלוג עם מחיר מכירה היו זמינות לבדיקת מחיר.`
+        : "ProductsCatalog נבדק; אין כרגע שורות מוצר מתומחרות בנתוני ה-staging המיובאים.",
+    },
+    {
+      source: "PartsUsed",
+      status: partsHistory.length ? "Used" : "Missing",
+      explanation: partsHistory.length
+        ? `${partsHistory.length} שורות PartsUsed היו זמינות כעדות שימוש.`
+        : "PartsUsed נבדק; אין כרגע היסטוריית חלקים מיובאת שתואמת לריצה זו.",
     },
     {
       source: "BusinessDocuments היסטוריים מאושרים",
@@ -831,6 +1107,8 @@ export async function buildProductionDraftRecommendation(
 
   const serviceInterval = detectServiceInterval(report);
   const history = await loadHistoricalLines(report);
+  const catalog = await loadCatalogEvidence();
+  const partsHistory = await loadPartsHistoryEvidence(report);
   const currentModels = report.equipmentItems
     .map((item) => readText(item.equipmentModel))
     .filter(Boolean);
@@ -842,11 +1120,20 @@ export async function buildProductionDraftRecommendation(
     report,
     serviceInterval,
     history,
+    catalog,
+    partsHistory,
     candidates,
   );
 
   const lines = candidates.map((candidate): ProductionDraftLineRecommendation => {
-    const price = choosePriceEvidence(candidate, history, report, currentModels);
+    const price = choosePriceEvidence(
+      candidate,
+      history,
+      catalog,
+      partsHistory,
+      report,
+      currentModels,
+    );
     const unitPrice = money(price.unitPrice);
     const totalPrice = money(price.totalPrice);
     const confidenceLabel = CONFIDENCE_HEBREW_LABELS[price.confidence];
@@ -922,6 +1209,7 @@ export async function buildProductionDraftRecommendation(
   return {
     serviceReportId: report.appsheetReportId,
     documentType,
+    detectedMaintenanceType: serviceInterval,
     title: buildHebrewDraftTitle(report, documentType, serviceInterval),
     description: `${buildHebrewBusinessSummary(
       report,
@@ -942,6 +1230,8 @@ export async function buildProductionDraftRecommendation(
       pricingEvidence: line.pricingEvidence as unknown as Prisma.InputJsonValue,
       rawSource: {
         source: "PRODUCTION_DRAFT_GENERATION",
+        detectedMaintenanceType: serviceInterval,
+        evidenceSource: line.source,
         explanation: line.explanation,
         missingEvidence: line.missingEvidence,
         confidenceLabel: line.confidenceLabel,

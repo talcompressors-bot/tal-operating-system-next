@@ -177,6 +177,8 @@ export async function createBusinessDocumentDraftFromBusinessCase(
         intelligence: businessCase.serviceFlow.intelligence,
         suggestions: businessCase.serviceFlow.suggestions,
         productionDraftRecommendation: {
+          detectedMaintenanceType:
+            productionDraftRecommendation.detectedMaintenanceType,
           knowledgeUsed: productionDraftRecommendation.knowledgeUsed,
           qualitySummary: productionDraftRecommendation.qualitySummary,
           estimatedManualWorkReduction:

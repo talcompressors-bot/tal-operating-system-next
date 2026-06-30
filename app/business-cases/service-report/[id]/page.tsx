@@ -195,6 +195,10 @@ export default async function BusinessCasePage({
                 <p>{productionDraftRecommendation.confidenceSummary}</p>
               </article>
               <article className="info-panel">
+                <h3>Maintenance type</h3>
+                <p>{productionDraftRecommendation.detectedMaintenanceType}</p>
+              </article>
+              <article className="info-panel">
                 <h3>ידע קודם לפני שאלות</h3>
                 <p>
                   המערכת מנצלת קודם היסטוריית לקוח, ציוד, ערכות שירות,
