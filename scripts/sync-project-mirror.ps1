@@ -101,6 +101,22 @@ function Copy-SkillFiles {
   }
 }
 
+function Get-GitCommit {
+  $commit = (& git rev-parse HEAD).Trim()
+  if (-not $commit) {
+    throw "Could not resolve current Git HEAD."
+  }
+  return $commit
+}
+
+function New-SyncToken {
+  param([string]$GitCommit)
+
+  $shortCommit = $GitCommit.Substring(0, 7)
+  $timestamp = Get-Date -Format "yyyyMMdd-HHmm"
+  return "SYNC-$timestamp-$shortCommit"
+}
+
 $driveRoot = Resolve-GoogleDriveRoot -RequestedRoot $MirrorRoot
 $mirrorRootPath = Join-Path $driveRoot "Tal Operating System Sync"
 
@@ -165,6 +181,27 @@ foreach ($doc in $generatedDocs) {
 $referenceAsset = Join-Path $repoRoot "project-brain\reference\maven-samples\document_102488.pdf"
 Copy-FileIfExists -Source $referenceAsset -DestinationDirectory (Join-Path $generated "reference\maven-samples")
 
+$gitCommit = Get-GitCommit
+$syncToken = New-SyncToken -GitCommit $gitCommit
+$lastVerified = Get-Date -Format "yyyy-MM-ddTHH:mm:ssK"
+$projectSourcesVersion = "MANUAL_CONFIRM_REQUIRED"
+$syncStatus = "YELLOW"
+
+$fingerprintPath = Join-Path $mirrorRootPath "SYNC_FINGERPRINT.txt"
+$fingerprint = @(
+  "Sync Token: $syncToken",
+  "Git Commit: $gitCommit",
+  "Project Brain Version: $gitCommit",
+  "PROJECT_SYNC Version: $gitCommit",
+  "Drive Mirror Version: $gitCommit",
+  "Project Sources Version: $projectSourcesVersion",
+  "Last Verified: $lastVerified",
+  "Sync Status: $syncStatus",
+  "Status Reason: Project Sources Version remains MANUAL_CONFIRM_REQUIRED until Liad confirms ChatGPT Project Sources were uploaded/refreshed."
+)
+
+Set-Content -LiteralPath $fingerprintPath -Value $fingerprint -Encoding UTF8
+
 [pscustomobject]@{
   DriveRoot = $driveRoot
   MirrorRoot = $mirrorRootPath
@@ -173,4 +210,10 @@ Copy-FileIfExists -Source $referenceAsset -DestinationDirectory (Join-Path $gene
   Agents = $agents
   Evidence = $evidence
   Generated = $generated
+  SyncFingerprint = $fingerprintPath
+  SyncToken = $syncToken
+  GitCommit = $gitCommit
+  DriveMirrorVersion = $gitCommit
+  ProjectSourcesVersion = $projectSourcesVersion
+  SyncStatus = $syncStatus
 }

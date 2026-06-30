@@ -126,6 +126,10 @@ Step 5
 (verify full sync)
 Verify full sync after the mirror copy: Git is clean and pushed to `origin/main`; Project Brain closeout files are updated when required; relevant `PROJECT_SYNC_*` files are updated; the Drive mirror refreshed successfully; `01_Project_Sources` contains the expected `PROJECT_SYNC*.md` files and root governance docs copied by `scripts/sync-project-mirror.ps1`; and broad runtime folders `app`, `lib`, and `prisma` are not present under the Drive mirror unless a task-specific policy explicitly approved them.
 
+Step 5A
+(verify sync fingerprint)
+Read `SYNC_FINGERPRINT.txt` from the Drive mirror root after running `scripts/sync-project-mirror.ps1`. Compare its `Git Commit`, `Project Brain Version`, `PROJECT_SYNC Version`, and `Drive Mirror Version` to the current `git rev-parse HEAD`. Confirm the `Sync Token` format is `SYNC-YYYYMMDD-HHMM-<shortCommit>`. Keep `Project Sources Version` as `MANUAL_CONFIRM_REQUIRED` unless Liad explicitly confirms the ChatGPT Project Sources files were uploaded/refreshed.
+
 Step 6
 (report final proof)
 Report commit hash, clean or non-clean `git status`, validation result, Google Drive mirror sync result, changed files, untouched protected systems, exact next task, and Final Sync Status as `GREEN`, `YELLOW`, or `RED`.
@@ -134,6 +138,10 @@ Full Sync Status
 (how to classify the final sync result)
 `GREEN` means Git is clean and pushed, Project Brain and relevant `PROJECT_SYNC_*` files are current, the Drive mirror script ran successfully, `01_Project_Sources` contains the expected Project Sources bundle, and broad runtime folders `app`, `lib`, and `prisma` were not mirrored. `YELLOW` means the task result is committed/pushed but a non-runtime sync verification is incomplete or could not be read back; report the exact gap. `RED` means Git is not pushed/clean, Project Brain or sync files are stale, the mirror failed, or protected/runtime folders were mirrored without explicit approval.
 
+Sync Fingerprint Status
+(how the shared fingerprint affects GREEN / YELLOW / RED)
+`GREEN` requires `Git Commit`, `Project Brain Version`, `PROJECT_SYNC Version`, `Drive Mirror Version`, and confirmed `Project Sources Version` to match the same `HEAD`. `YELLOW` is allowed only when Git, Project Brain, PROJECT_SYNC, and Drive Mirror match but `Project Sources Version` is still `MANUAL_CONFIRM_REQUIRED` or Google Drive cloud completion cannot be read directly. `RED` means any Git/Project Brain/PROJECT_SYNC/Drive Mirror version disagrees, the fingerprint file is missing, or its token format is invalid.
+
 Approved Local Drive Mirror
 (where Codex should copy the project sync mirror on this machine)
 `G:\האחסון שלי\Tal Operating System Sync`
@@ -141,6 +149,10 @@ Approved Local Drive Mirror
 Mirror Command
 (the repo command to refresh the approved local Drive mirror)
 `powershell -ExecutionPolicy Bypass -File scripts/sync-project-mirror.ps1`
+
+Mirror Fingerprint
+(the marker written by the mirror command)
+The mirror command writes `SYNC_FINGERPRINT.txt` in the mirror root. The marker contains `Sync Token`, `Git Commit`, `Project Brain Version`, `PROJECT_SYNC Version`, `Drive Mirror Version`, `Project Sources Version`, `Last Verified`, and `Sync Status`. ChatGPT Project Sources still require manual upload/refresh confirmation from Liad; Codex must not mark Project Sources confirmed on its own.
 
 ## Project Brain Closeout Rule
 (what canonical state must be updated after successful work)
