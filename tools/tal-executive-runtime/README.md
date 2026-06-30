@@ -12,6 +12,12 @@ This POC prints a dry-run executive decision report without calling OpenAI, muta
 python tools/tal-executive-runtime/executive_runtime.py --dry-run
 ```
 
+Observe-only validation:
+
+```powershell
+python tools/tal-executive-runtime/executive_runtime.py --observe --dry-run
+```
+
 ## Boundaries
 
 - No OpenAI API call.
@@ -31,3 +37,13 @@ The dry run prints:
 - Evidence status
 - Decision: `APPROVE`, `NEEDS_FIX`, or `BLOCKED`
 - Minimal next slice
+
+The observe dry run prints:
+
+- Git evidence
+- Project Brain evidence
+- PROJECT_SYNC evidence
+- Runtime evidence
+- Missing evidence
+- Stale/conflict warnings
+- Overall Observe Status: `GREEN`, `YELLOW`, or `RED`

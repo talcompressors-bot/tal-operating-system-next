@@ -18,6 +18,12 @@ class EvidenceStatus(str, Enum):
     UNKNOWN = "UNKNOWN"
 
 
+class ObserveStatus(str, Enum):
+    GREEN = "GREEN"
+    YELLOW = "YELLOW"
+    RED = "RED"
+
+
 @dataclass(frozen=True)
 class EvidenceState:
     github: EvidenceStatus = EvidenceStatus.UNKNOWN
@@ -50,3 +56,29 @@ class ExecutiveDecisionReport:
     evidence: EvidenceState = field(default_factory=EvidenceState)
     decision: Decision = Decision.NEEDS_FIX
     minimal_next_slice: str = ""
+
+
+@dataclass(frozen=True)
+class GitEvidence:
+    branch: str
+    latest_commit: str
+    working_tree: str
+    is_clean: bool
+
+
+@dataclass(frozen=True)
+class SourceEvidence:
+    status: EvidenceStatus
+    summary: str
+
+
+@dataclass(frozen=True)
+class EvidenceReport:
+    git: GitEvidence
+    project_brain: SourceEvidence
+    project_sync: SourceEvidence
+    runtime: SourceEvidence
+    company_objectives: SourceEvidence
+    missing_evidence: list[str] = field(default_factory=list)
+    warnings: list[str] = field(default_factory=list)
+    overall_status: ObserveStatus = ObserveStatus.RED
