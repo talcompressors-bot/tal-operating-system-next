@@ -1,6 +1,6 @@
 # CURRENT TASK
 
-Last updated: 2026-06-28
+Last updated: 2026-06-30
 Mode: CAPABILITY_BUILDING; governance frozen; TDOS frozen in Maintenance Mode; domain-driven roadmap realigned; Autonomous Business Draft Generation Sprint 12 implemented; Production Draft Review and Learning Loop Sprint 11 implemented; Production Draft Generation Sprint 10 implemented; Business Intent Policy Layer Sprint 9 implemented; Generalized BusinessDocument Draft Gateway Sprint 8 implemented; End-to-End Service Flow MVP Sprint 7 implemented; Customer 360 Workspace Sprint 6 implemented; Operations Command Center Sprint 5 implemented; Operations Center Sprint 4 implemented; Financial Capability Sprint 3 implemented; Commercial Lifecycle Hardening Sprint 2 implemented; BusinessCase Runtime Sprint 1 implemented; Financial Intake Engine design documented; Universal Business Document Engine foundation implemented; TDOS risk-based operating model integrated; Wave 2 complete; architecture audit complete; Commercial, Financial, operational workspace, customer, service-flow integration, draft-gateway, intent-policy, production draft generation, approved-correction learning, and autonomous Hebrew draft generation runtime work started; Maven remains an External Adapter gate only; no real Maven execution approved yet
 
 ## Canonical Role
@@ -24,6 +24,68 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 ## Last Closeout Commit
 
 `b5c5418 Sync project brain after operations command center`
+
+## Latest Local Implementation
+
+Production Draft Generation maintenance quality fix is implemented locally and uncommitted.
+
+## Latest Local Documentation Sync
+
+Project Sources synchronization layer is implemented and committed in the DOC_SYNC Git commit.
+
+What changed:
+
+- Added `PROJECT_SYNC_STATE.md` for compact current project state.
+- Added `PROJECT_SYNC_DELTA.md` for latest changes, reasons, business value, affected domains/runtime/files, validation, risks, open issues, next action, and authority.
+- Added `PROJECT_SYNC_AGENTS.md` for existing agents, tools, roles, and skills with use rules.
+- Added `PROJECT_SYNC_TASKS.md` for current task, next recommended task, candidate tasks, and gated tasks.
+- Added `PROJECT_SYNC_AUTHORITY.md` to separate Agent from Authority.
+- Added `PROJECT_SYNC_OPERATING_GUIDE.md` for ChatGPT/Codex continuation rules.
+
+Validation:
+
+- Confirmed all six `PROJECT_SYNC_*.md` files exist.
+- Confirmed every `##` and `###` sync-file section heading is followed by a parenthetical explanation line.
+- Confirmed delta, agent, task, authority, and operating-guide coverage is present.
+- `git diff --check` passed with line-ending warnings only.
+
+Current blocker:
+
+- none for the sync layer.
+
+Exact next task:
+
+- Commit the remaining runtime maintenance-quality files as a separate scoped implementation commit if Liad wants that local fix preserved now, then return to Asset Workspace / Asset Timeline unless Liad selects another draft-quality hardening pass.
+
+What changed:
+
+- Maintenance type detection now treats `2000` / `2500` hour evidence as `Small Service` and `4000` / `5000` hour evidence as `Large Service`.
+- Production draft generation now adds standard maintenance parts as separate reviewable lines when maintenance/model/manufacturer evidence is strong, even if exact registry row or price is missing.
+- Standard lines include air filter, oil filter, oil/coolant, oil separator for major service, belts only when belt evidence appears, technician visit/travel, and labor/service.
+- ProductCatalog and PartsUsed are checked as read-only evidence sources before reporting missing price/usage evidence.
+- Uncertain exact part or price stays visible with `Needs Price Review` / review-required evidence instead of being hidden.
+- Internal BusinessCase recommendation shows detected maintenance type; customer-facing preview/PDF surfaces remain unchanged and simple.
+
+Validation:
+
+- ServiceReport `5807` / `2bfc0748`: detected `Small Service`; generated Air Filter, Oil Filter, 3L SKR oil top-up, Technician Visit / Travel, and Labor + Service.
+- ServiceReport `5864` / `acd1133d`: detected `Large Service`; generated Air Filter, Oil Filter, Oil Separator, oil/coolant, Technician Visit / Travel, and Labor + Service. Oil Separator had no exact price and stayed `Needs Price Review`.
+- Focused TypeScript passed for `lib/business-document-production-draft.ts`, `app/business-cases/service-report/[id]/actions.ts`, and `app/business-cases/service-report/[id]/page.tsx`.
+- Full TypeScript still fails only on the known unrelated `app/ai-drafts/ai-draft-adapter.ts` pricing-evidence typing issue.
+- Read-only side-effect counts remained unchanged: BusinessDocuments `10`, BusinessDocumentItems `21`, AutomationCommands `1`, InventoryTransactions `0`, EmailLogs `0`.
+- Local dev server was not running, so live route/preview/PDF HTTP validation was not executed. Preview/PDF implementation files were not changed.
+
+Current blocker:
+
+- none for this quality fix.
+
+Exact next task:
+
+- Return to the previously recommended Asset Workspace / Asset Timeline, unless Liad selects another draft-quality hardening pass.
+
+Approval gates:
+
+- Explicit approval remains required before schema changes, DB writes/imports outside existing protected flows, Maven/Invoice4U, email/customer action, inventory mutation, source-system/cloud/production action, package install, or deletion/move.
 
 ## Real Current State
 

@@ -1,5 +1,37 @@
 # DECISION LOG
 
+## 2026-06-30
+
+Decision:
+Create a concise Project Sources synchronization layer for ChatGPT and future autonomous agents.
+
+Reason:
+Project Brain remains the authoritative memory, but it is too large and detailed for fast ChatGPT Project Sources loading. A compact sync layer is needed so a new ChatGPT session can understand current project state, recent delta, agents/tools, tasks, authority boundaries, and operating rules without duplicating full Project Brain.
+
+Boundary:
+Implemented as `DOC_SYNC`. Six root-level `PROJECT_SYNC_*.md` files summarize and point to existing authorities. No runtime feature work, schema change, DB write/import, package install, external action, Maven/Invoice4U, email/customer action, inventory mutation, source-system action, or production action occurred.
+
+Status:
+Implemented and committed in the DOC_SYNC Git commit. Files created: `PROJECT_SYNC_STATE.md`, `PROJECT_SYNC_DELTA.md`, `PROJECT_SYNC_AGENTS.md`, `PROJECT_SYNC_TASKS.md`, `PROJECT_SYNC_AUTHORITY.md`, and `PROJECT_SYNC_OPERATING_GUIDE.md`. Validation checked required coverage and ensured every sync-file section heading has a parenthetical explanation line.
+
+---
+
+## 2026-06-30
+
+Decision:
+Production Draft Generation quality is hardened for maintenance-type ServiceReports.
+
+Reason:
+Generated production drafts were too conservative. Reports with strong 2000/2500 hour periodic maintenance or 4000/5000 hour major maintenance evidence could produce only travel and labor lines when exact manufacturer registry rows or prices were missing. TAL expects standard maintenance lines to remain visible for review instead of being hidden.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` in the internal production draft recommendation layer only. The change detects Small Service and Large Service from ServiceReport and ReportEquipmentItems evidence, adds standard maintenance lines when maintenance/model evidence is strong, checks ProductCatalog and PartsUsed as read-only evidence sources, and keeps uncertain parts/prices as review-required. No schema change, DB import, migration, Maven/Invoice4U action, email/customer action, inventory mutation, source-system action, production action, or external side effect occurred.
+
+Status:
+Implemented locally; not committed in this turn. Validation on ServiceReport `5807` / `2bfc0748` detected `Small Service` and generated separate lines for Air Filter, Oil Filter, 3L SKR oil top-up, Technician Visit / Travel, and Labor + Service. Validation on ServiceReport `5864` / `acd1133d` detected `Large Service` and generated Air Filter, Oil Filter, Oil Separator, oil/coolant, Technician Visit / Travel, and Labor + Service, with the separator marked `Needs Price Review`. Focused TypeScript passed for touched files. Full TypeScript still fails only on the known unrelated `app/ai-drafts/ai-draft-adapter.ts` pricing-evidence typing issue. Side-effect counts remained unchanged for BusinessDocuments, BusinessDocumentItems, AutomationCommands, InventoryTransactions, and EmailLogs.
+
+---
+
 ## 2026-06-28
 
 Decision:
