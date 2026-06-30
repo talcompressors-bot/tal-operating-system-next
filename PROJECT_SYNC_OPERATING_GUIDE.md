@@ -99,8 +99,31 @@ Git
 (commit discipline)
 Stage only scoped files; never include secrets, unrelated changes, temporary files, or protected-system changes.
 
-## Closeout Rule
-(what must be updated after successful work)
+## Mandatory End-Of-Task Protocol
+(required sequence at the end of every Codex task)
+
+Step 1
+(update relevant sync files)
+Update relevant `PROJECT_SYNC_*` files whenever current state, latest delta, agents/tools/skills, tasks, authority, operating rules, source indexes, or upload instructions changed.
+
+Step 2
+(validate)
+Validate the task result and the sync layer. At minimum, check scoped diff, required file coverage, protected-system boundaries, and heading/format expectations for changed `PROJECT_SYNC_*` files.
+
+Step 3
+(commit and push)
+Commit only scoped validated files, push to `origin/main`, and verify local/remote Git status.
+
+Step 4
+(copy sync files to Google Drive mirror)
+Copy the current `PROJECT_SYNC_*` files to the approved Google Drive mirror. If the mirror target or Drive write access is unavailable, report the sync as blocked and do not claim the mirror is current.
+
+Step 5
+(report final proof)
+Report commit hash, clean or non-clean `git status`, validation result, Google Drive mirror sync result, changed files, untouched protected systems, and exact next task.
+
+## Project Brain Closeout Rule
+(what canonical state must be updated after successful work)
 
 Project Brain Update
 (canonical state sync)
@@ -108,19 +131,7 @@ After completed safe work, update Project Brain with what completed, validation,
 
 Sync Files Update
 (ChatGPT Project Sources sync)
-After successful `by codex` or meaningful completed work, update relevant `PROJECT_SYNC_*` files when current state, delta, agents/tools/skills, tasks, authority, source indexes, or operating rules became stale.
-
-Commit Record
-(Git truth)
-Record latest commit in final report and Project Brain/sync files when appropriate after commit/push.
-
-Changed Files
-(scope transparency)
-Report all changed files and separate unrelated pre-existing changes.
-
-Next Action
-(handoff clarity)
-Name the exact next task and approval gate.
+After successful `by codex` or meaningful completed work, update relevant `PROJECT_SYNC_*` files when current state, delta, agents/tools/skills, tasks, authority, source indexes, operating rules, or end-of-task protocol became stale.
 
 ## Source Selection Recipes
 (which indexed sources to open for common work)

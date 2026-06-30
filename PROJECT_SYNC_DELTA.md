@@ -3,6 +3,61 @@
 Purpose
 (compact last-change summary for ChatGPT Project Sources and future closeouts)
 
+## Delta 2026-06-30 End-Of-Task Protocol
+(latest documentation-sync rule change in this commit)
+
+What Changed
+(what was actually changed)
+Updated the existing sync layer to make the end-of-task protocol mandatory: update relevant `PROJECT_SYNC_*` files, validate, commit and push, copy sync files to the approved Google Drive mirror, and report commit hash, git status, validation, and sync result.
+
+Why
+(why it was changed)
+The sync layer needed an explicit repeatable closeout rule so ChatGPT Project Sources and the Google Drive mirror stay current after every Codex task.
+
+Business Value
+(what TAL gains)
+Future work has a reliable handoff path: Project Sources stay synchronized, Git truth is visible, and missing Drive mirror sync cannot be silently ignored.
+
+Affected Domains
+(business areas impacted)
+Project governance, ChatGPT Project Sources onboarding, Codex closeout, Google Drive sync mirror.
+
+Affected Runtime
+(ERP engines impacted)
+None; documentation-only protocol update.
+
+Affected Files
+(files changed)
+`PROJECT_SYNC_STATE.md`, `PROJECT_SYNC_DELTA.md`, `PROJECT_SYNC_TASKS.md`, `PROJECT_SYNC_AUTHORITY.md`, and `PROJECT_SYNC_OPERATING_GUIDE.md`.
+
+Validation
+(how it was proven)
+Validation must confirm the mandatory five-step protocol appears in `PROJECT_SYNC_OPERATING_GUIDE.md`, closeout routing appears in `PROJECT_SYNC_TASKS.md`, Google Drive mirror authority appears in `PROJECT_SYNC_AUTHORITY.md`, current state/delta reflect the protocol update, every changed sync heading has a parenthetical explanation line, and only `PROJECT_SYNC_*` files are staged.
+
+Risks
+(what may still break)
+The Google Drive mirror copy can be blocked if the approved mirror folder or connector access is unavailable.
+
+Open Issues
+(what is not solved yet)
+`PROJECT_SYNC_RULES.md` and `PROJECT_SYNC_CHECKLIST.md` do not exist in the repository; this task did not create them because the user instructed not to create new sync files.
+
+Next Required Action
+(what should happen next)
+Use the mandatory end-of-task protocol on every future Codex task and report Google Drive mirror copy results explicitly.
+
+Authority
+(who/what is allowed to define this truth)
+Git defines committed/pushed file truth; Project Brain defines current project/task truth; approved Drive readback defines mirror truth; Liad defines priorities and protected-action approval.
+
+External Side Effects
+(whether any external system changed)
+None from this documentation update until the explicit Drive mirror copy step is executed.
+
+Current Commit State
+(whether this delta is committed)
+Committed and pushed in the latest end-of-task protocol sync commit; Git and the final report are authority for the exact hash.
+
 ## Delta 2026-06-30 Sync Verification
 (latest documentation-sync verification change in this commit)
 

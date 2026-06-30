@@ -13,7 +13,7 @@ Purpose
 | `PROJECT_SYNC_AGENTS.md` | Agent/tool/skill catalog (who does what and what each may read/update) | Before routing work or using a specialist workflow | `agents/AGENT_REGISTRY.md` and skill files | Orchestrator, specialist agents, workflow roles |
 | `PROJECT_SYNC_TASKS.md` | Current, next, candidate, and gated tasks (what each task means and where to read deeper) | Before selecting or continuing work | Project Brain task board and human owner priority | Project Brain Agent, Orchestrator |
 | `PROJECT_SYNC_AUTHORITY.md` | Source-of-truth matrix (who defines truth for each information type) | Whenever facts conflict or a source is unclear | Project operating protocol and canonical source files | Infrastructure Manager, Reviewer |
-| `PROJECT_SYNC_OPERATING_GUIDE.md` | Continuation guide (how ChatGPT/Codex should proceed safely) | Before any task and during closeout | `PROJECT_OPERATING_PROTOCOL.md`, `PROJECT_INDEX.md`, Project Brain | Codex, ChatGPT, Map Guard, QA |
+| `PROJECT_SYNC_OPERATING_GUIDE.md` | Continuation guide (how ChatGPT/Codex should proceed safely, including mandatory end-of-task protocol) | Before any task and during closeout | `PROJECT_OPERATING_PROTOCOL.md`, `PROJECT_INDEX.md`, Project Brain | Codex, ChatGPT, Map Guard, QA |
 
 ## Current Project State
 (where the project is now and what work is active)
@@ -36,7 +36,7 @@ Wave 3 Commercial Runtime and Document Engine, with Wave 4 Financial Runtime sta
 
 Current Task
 (the task most recently completed in this sync layer)
-Project Sources synchronization verification is completed in the existing `PROJECT_SYNC_*` files; the separate Production Draft Generation maintenance-quality runtime fix remains local and uncommitted.
+Project Sources end-of-task protocol verification is completed in the existing `PROJECT_SYNC_*` files.
 
 Current Business Goal
 (what TAL gains from the active work)
@@ -48,11 +48,11 @@ Internal ServiceReport -> BusinessCase -> BusinessDocument draft generation exis
 
 Latest Committed Git Baseline
 (the latest pushed sync-layer baseline before this expansion)
-`b1688f0 Expand project sync source indexes`
+`77cf9cd Finalize service report draft runtime quality updates`
 
 Latest Local Delta
 (what changed after the pushed baseline)
-The six `PROJECT_SYNC_*` files were verified for completeness, consistency, source-of-truth routing, task routing, agent/tool/skill coverage, and operating-guide clarity; no runtime feature work is included.
+The sync layer now requires every Codex task to update relevant `PROJECT_SYNC_*` files, validate, commit/push, copy sync files to the approved Google Drive mirror, and report commit hash, git status, validation, and sync result; no runtime feature work is included.
 
 Last Recorded Implementation Commit
 (the last meaningful implementation commit recorded in Project Brain)

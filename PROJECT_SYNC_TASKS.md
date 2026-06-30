@@ -8,11 +8,11 @@ Purpose
 
 Task Name
 (short name of the active local task)
-Project Sources sync verification.
+Project Sources end-of-task protocol verification.
 
 Meaning
 (what the task means)
-Verify existing `PROJECT_SYNC_*` files so a new ChatGPT Project can understand current state, recent deltas, source locations, agents/tools/skills, task routing, authorities, next actions, and protected boundaries without creating a duplicate sync system.
+Verify existing `PROJECT_SYNC_*` files and make the mandatory end-of-task protocol explicit without creating a duplicate sync system.
 
 Owner
 (agent/tool that performs the work)
@@ -28,11 +28,11 @@ Completed when the sync verification commit is validated, committed, and pushed.
 
 Validation Status
 (how proven)
-Validation requires all six sync files to exist, each file to satisfy its assigned role, no duplicate `PROJECT_SYNC_INDEX.md`, every `##`/`###` heading to have a parenthetical explanation line, `git diff --check` to pass, and only `PROJECT_SYNC_*.md` files to be staged/committed.
+Validation requires all six sync files to exist, each file to satisfy its assigned role, no duplicate `PROJECT_SYNC_INDEX.md`, every `##`/`###` heading to have a parenthetical explanation line, the end-of-task protocol to include sync update, validation, commit/push, Google Drive mirror copy, and final proof report, `git diff --check` to pass, and only `PROJECT_SYNC_*.md` files to be staged/committed.
 
 Blocked
 (current blocker)
-None for docs-only sync verification.
+None for docs-only sync protocol verification.
 
 ## Current Runtime Review Task
 (separate uncommitted runtime quality work that must not be mixed into this docs commit)
@@ -98,7 +98,7 @@ No approval for read-only UI/context work; explicit approval before schema, DB w
 | Task Type | Read These Sources | Short Explanation | Owner / Authority | Related Agent |
 |---|---|---|---|---|
 | Startup / Reality Check | `PROJECT_SYNC_STATE.md`, `PROJECT_INDEX.md`, `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `project-brain/DECISION_LOG.md` | Load current state, protocol, task board, and decisions | Project Brain / Git | project-brain-startup, Orchestrator |
-| Closeout / Handoff | `PROJECT_SYNC_DELTA.md`, `PROJECT_SYNC_TASKS.md`, `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `project-brain/DECISION_LOG.md`, `PROJECT_INDEX.md` | Record completed work, validation, blocker, next task, commit hash | Project Brain / Git | project-brain-session-close, Git Agent |
+| Closeout / Handoff | `PROJECT_SYNC_DELTA.md`, `PROJECT_SYNC_TASKS.md`, `PROJECT_SYNC_OPERATING_GUIDE.md`, `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `project-brain/DECISION_LOG.md`, `PROJECT_INDEX.md` | Record completed work, validation, blocker, next task, commit hash, Google Drive mirror result, and clean/non-clean git status | Project Brain / Git / approved Drive mirror | project-brain-session-close, Git Agent |
 | Agent Routing | `PROJECT_SYNC_AGENTS.md`, `agents/AGENT_REGISTRY.md`, `project-brain/AGENT_GOVERNANCE_MAP.md`, relevant agent source file | Pick existing owner and avoid duplicate agents | Agent registry | Orchestrator |
 | AI Draft / Production Draft | `.agents/skills/ai-draft-recommendation/SKILL.md`, `agents/AI_DRAFT_AGENT.md`, `project-brain/maps/AI_DRAFT_FIELD_MAPPING.md`, `project-brain/SERVICE_COMMERCIAL_RULES.md`, `project-brain/PRICING_EVIDENCE_ENGINE_SPEC.md`, `project-brain/MANUFACTURER_SERVICE_KITS.md`, `project-brain/SKU_MATCHING_RULES.md` | Draft recommendation, pricing evidence, service-kit rules, review flags | AI Draft Agent / Project Brain / runtime validation | AI_DRAFT_AGENT |
 | BusinessDocument Runtime | `project-brain/DOCUMENT_ENGINE.md`, `app/business-documents/`, `lib/business-document-engine.ts`, `lib/business-document-draft-gateway.ts`, `APPLICATION_ROUTE_MAP.md` | Document review, preview, PDF, gateway and document engine behavior | Runtime validation / Git | Commercial Runtime, QA |

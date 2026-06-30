@@ -37,6 +37,7 @@ Do not treat an agent as truth unless it cites the authority source.
 | Repo skill behavior | `.agents/skills/*/SKILL.md` | Skill-specific instructions and boundaries | Before using startup/closeout/AI draft skills | Codex |
 | Business priority and acceptance | Human owner (Liad) | Business value, acceptance, protected approvals | When choosing priorities or accepting recommendations | Orchestrator |
 | ChatGPT Project Sources summary | `PROJECT_SYNC_*.md` | Compact mirror/index for ChatGPT; not deeper authority than Project Brain | Start of any ChatGPT Project session | ChatGPT, Codex |
+| Google Drive mirror sync | Approved Google Drive mirror readback | Mirror truth requires a successful copy/readback to the approved Drive target | End of every Codex task after commit/push | Codex, Google Drive connector |
 
 ## File-Level Authority Index
 (who owns truth for important source categories)
@@ -44,6 +45,7 @@ Do not treat an agent as truth unless it cites the authority source.
 | Path / Pattern | Authority | Short Explanation | When To Read | Related Capability / Agent |
 |---|---|---|---|---|
 | `PROJECT_SYNC_*.md` | Mirrors Project Brain/Git/runtime truth | Compact sync layer for ChatGPT Project Sources | First-pass source loading | ChatGPT, Codex |
+| Google Drive mirror target | Human owner / approved Drive folder | Destination for mirrored `PROJECT_SYNC_*` files | End-of-task sync copy and verification | Codex, Google Drive connector |
 | `PROJECT_INDEX.md` | Project Brain / Git | Living project map and Reality Check rules | Startup, closeout, approval gates | Project Brain Agent |
 | `PROJECT_OPERATING_PROTOCOL.md` | Human-approved governance protocol | Risk classes, allowed/forbidden actions, approval reports | Before every task | Orchestrator |
 | `project-brain/CURRENT_TASK.md` | Project Brain | Current state/task/blocker/next action | Startup, task selection, closeout | Project Brain Agent |
