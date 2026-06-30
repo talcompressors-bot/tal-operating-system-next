@@ -120,11 +120,19 @@ Commit only scoped validated files, push to `origin/main`, and verify local/remo
 
 Step 4
 (copy sync files to Google Drive mirror)
-Copy the current `PROJECT_SYNC_*` files to the approved Google Drive mirror. If the mirror target or Drive write access is unavailable, report the sync as blocked and do not claim the mirror is current.
+Run `powershell -ExecutionPolicy Bypass -File scripts/sync-project-mirror.ps1` to copy the approved sync/knowledge files to the approved local Google Drive mirror. If the mirror target or Drive write access is unavailable, report the sync as blocked and do not claim the mirror is current.
 
 Step 5
 (report final proof)
 Report commit hash, clean or non-clean `git status`, validation result, Google Drive mirror sync result, changed files, untouched protected systems, and exact next task.
+
+Approved Local Drive Mirror
+(where Codex should copy the project sync mirror on this machine)
+`G:\האחסון שלי\Tal Operating System Sync`
+
+Mirror Command
+(the repo command to refresh the approved local Drive mirror)
+`powershell -ExecutionPolicy Bypass -File scripts/sync-project-mirror.ps1`
 
 ## Project Brain Closeout Rule
 (what canonical state must be updated after successful work)
