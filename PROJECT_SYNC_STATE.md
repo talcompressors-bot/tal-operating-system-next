@@ -36,7 +36,7 @@ Wave 3 Commercial Runtime and Document Engine, with Wave 4 Financial Runtime sta
 
 Current Task
 (the task most recently completed in this sync layer)
-Project Sources end-of-task protocol verification is completed in the existing `PROJECT_SYNC_*` files.
+Project Sources knowledge dependency map expansion is completed across `PROJECT_SYNC_AUTHORITY.md`, `PROJECT_SYNC_STATE.md`, and `PROJECT_SYNC_OPERATING_GUIDE.md`.
 
 Current Business Goal
 (what TAL gains from the active work)
@@ -48,11 +48,11 @@ Internal ServiceReport -> BusinessCase -> BusinessDocument draft generation exis
 
 Latest Committed Git Baseline
 (the latest pushed sync-layer baseline before this expansion)
-`77cf9cd Finalize service report draft runtime quality updates`
+`7cd40fc Add mandatory project sync closeout protocol`
 
 Latest Local Delta
 (what changed after the pushed baseline)
-The sync layer now requires every Codex task to update relevant `PROJECT_SYNC_*` files, validate, commit/push, copy sync files to the approved Google Drive mirror, and report commit hash, git status, validation, and sync result; no runtime feature work is included.
+The existing sync layer was expanded with a knowledge dependency map covering source of truth, owner/updater, readers/consumers, update trigger, sync policy, and stale-risk; no runtime feature work is included.
 
 Last Recorded Implementation Commit
 (the last meaningful implementation commit recorded in Project Brain)
@@ -90,6 +90,24 @@ Project Completion
 | `project-brain/DECISION_LOG.md` | Approved decisions and rationale (why rules changed) | Before changing behavior, governance, or business rules | Project Brain / human owner decisions | Reviewer, Infrastructure Manager |
 | `project-brain/current/LIVE_OBJECTS.md` | Active IDs and important live object references (IDs must not be invented) | Before using ServiceReport, BusinessDocument, AutomationCommand, or Maven IDs | Project Brain plus database/runtime validation | QA, AI Draft Agent, Maven Agent |
 | `PROJECT_SYNC_*.md` | Compact ChatGPT Project Sources layer (summary and routing layer, not deeper authority) | In every new ChatGPT Project session before opening deeper sources | Mirrors Project Brain/Git/runtime truth | ChatGPT, Codex |
+
+## Knowledge Dependency Map Location
+(where to find source-of-truth, owner, consumer, trigger, sync-policy, and stale-risk rules)
+
+| Path | Short Explanation | When To Read | Owner / Authority | Related Capability / Domain / Agent |
+|---|---|---|---|---|
+| `PROJECT_SYNC_AUTHORITY.md` | Full knowledge dependency map (document/category source of truth, updater, readers, update trigger, sync policy, stale-risk) | Before deciding what is authoritative, what must be uploaded, or what becomes stale after a task | Project Brain/Git/runtime/database/human approvals, summarized by Codex | ChatGPT, Codex, Reviewer, Google Drive mirror |
+| `PROJECT_SYNC_STATE.md` | Entry pointer to dependency and source indexes (where deeper knowledge lives) | Start of every new session and before source selection | Project Brain for state; sync layer for routing | ChatGPT, Codex, Orchestrator |
+| `PROJECT_SYNC_OPERATING_GUIDE.md` | Procedure for applying the dependency map (how to read, update, validate, mirror, and report sync state) | Before any task and at closeout | Operating protocol and sync authority rules | Codex, ChatGPT, Map Guard, QA |
+
+## Sync Policy Definitions
+(how document/category knowledge should be mirrored or uploaded)
+
+| Sync Policy | Meaning | Default Use | Risk If Misused |
+|---|---|---|---|
+| Drive mirror | Current `PROJECT_SYNC_*` files should be copied to the approved Google Drive mirror after completed tasks when available | Mandatory closeout mirror for compact sync files | Drive copy may lag behind Git and Project Sources |
+| ChatGPT Project Sources default | Upload the compact `PROJECT_SYNC_*` files by default for new ChatGPT Projects | Main Project Sources layer | Too much or too little context can create noise or holes |
+| Task-only upload | Open or upload the deeper source only when the task needs it | Project Brain details, runtime files, evidence, reports, source-system docs | Large historical files can confuse new sessions if treated as current truth |
 
 ## Task-Specific Source Index
 (where to go for deeper knowledge by task type)

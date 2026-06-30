@@ -24,9 +24,13 @@ Use `PROJECT_SYNC_AGENTS.md` first, then read `agents/AGENT_REGISTRY.md` and the
 
 Step 5
 (classify authority)
-Use `PROJECT_SYNC_AUTHORITY.md` to decide whether truth must come from Git, Project Brain, runtime validation, database, human owner, source files, or sync summaries.
+Use `PROJECT_SYNC_AUTHORITY.md` to decide whether truth must come from Git, Project Brain, runtime validation, database, human owner, source files, or sync summaries. Also check its Knowledge Dependency Map for owner/updater, readers/consumers, update trigger, sync policy, and stale-risk.
 
 Step 6
+(select sync policy)
+Use `Drive mirror`, `ChatGPT Project Sources default`, or `task-only upload` from `PROJECT_SYNC_STATE.md` and `PROJECT_SYNC_AUTHORITY.md` before deciding what to mirror, upload, or leave as a pointer.
+
+Step 7
 (protect boundaries)
 Stop before schema, DB writes/imports, Maven/Invoice4U, email/customer actions, inventory mutation, source-system/cloud/production actions, package installs, deletes/moves, or git remote changes.
 
@@ -43,7 +47,7 @@ Read all existing `PROJECT_SYNC_*.md` files.
 
 Step 3
 (load relevant specialized sources)
-Use the source indexes to read only task-relevant specialized files, such as AI draft rules, Maven source inventory, migration plans, route maps, or Apps Script maps.
+Use the source indexes and the Knowledge Dependency Map to read only task-relevant specialized files, such as AI draft rules, Maven source inventory, migration plans, route maps, or Apps Script maps.
 
 Step 4
 (load canonical state when needed)
@@ -104,11 +108,11 @@ Stage only scoped files; never include secrets, unrelated changes, temporary fil
 
 Step 1
 (update relevant sync files)
-Update relevant `PROJECT_SYNC_*` files whenever current state, latest delta, agents/tools/skills, tasks, authority, operating rules, source indexes, or upload instructions changed.
+Update relevant `PROJECT_SYNC_*` files whenever current state, latest delta, agents/tools/skills, tasks, authority, operating rules, source indexes, upload instructions, dependency-map fields, update triggers, sync policies, or stale-risk changed.
 
 Step 2
 (validate)
-Validate the task result and the sync layer. At minimum, check scoped diff, required file coverage, protected-system boundaries, and heading/format expectations for changed `PROJECT_SYNC_*` files.
+Validate the task result and the sync layer. At minimum, check scoped diff, required file coverage, protected-system boundaries, heading/format expectations for changed `PROJECT_SYNC_*` files, and whether every changed knowledge category has a source of truth, owner/updater, readers/consumers, update trigger, sync policy, and stale-risk.
 
 Step 3
 (commit and push)
@@ -131,7 +135,30 @@ After completed safe work, update Project Brain with what completed, validation,
 
 Sync Files Update
 (ChatGPT Project Sources sync)
-After successful `by codex` or meaningful completed work, update relevant `PROJECT_SYNC_*` files when current state, delta, agents/tools/skills, tasks, authority, source indexes, operating rules, or end-of-task protocol became stale.
+After successful `by codex` or meaningful completed work, update relevant `PROJECT_SYNC_*` files when current state, delta, agents/tools/skills, tasks, authority, source indexes, operating rules, dependency-map fields, sync policy, stale-risk, or end-of-task protocol became stale.
+
+## Knowledge Dependency Map Use
+(how to maintain the project knowledge system without duplicating Project Brain)
+
+Read The Map
+(before using or updating knowledge)
+Use the Knowledge Dependency Map in `PROJECT_SYNC_AUTHORITY.md` to identify source of truth, owner/updater, readers/consumers, update trigger, sync policy, and risk if stale for the document/category being used.
+
+Keep Details In Canonical Sources
+(noise prevention)
+Do not copy full Project Brain, runtime, evidence, or source-system files into sync files. Sync files should record the dependency, authority, and pointer needed to find the deeper source.
+
+Update The Right Layer
+(authority routing)
+If a canonical source changes, update the canonical file first when allowed, then refresh only the relevant `PROJECT_SYNC_*` summaries. If only routing/sync policy changes, update the sync files only.
+
+Use Task-Only Sources Carefully
+(large or specialized files)
+Task-only sources should be opened or uploaded only for the task that needs them. Do not make generated reports, historical audits, runtime files, or source-system snapshots default Project Sources unless Liad explicitly asks.
+
+Check Stale Risk
+(closeout review)
+Before final report, verify whether stale sync knowledge could misroute agents, hide protected gates, misstate current runtime behavior, or confuse ChatGPT Project Sources.
 
 ## Source Selection Recipes
 (which indexed sources to open for common work)
