@@ -23,14 +23,18 @@ Step 4
 Use `PROJECT_SYNC_AGENTS.md` first, then read `agents/AGENT_REGISTRY.md` and the relevant agent/skill file; do not invent a new agent.
 
 Step 5
+(run Architect Mediation Gate)
+Before implementation, Orchestrator must convert Liad/ChatGPT intent into a Task Packet and Infrastructure Manager / Architect must approve architecture, reuse, source of truth, protected boundaries, data lineage, approval gates, validation plan, and simplification. Builder/Codex implementation may start only after Architect Mediation is `PASS`.
+
+Step 6
 (classify authority)
 Use `PROJECT_SYNC_AUTHORITY.md` to decide whether truth must come from Git, Project Brain, runtime validation, database, human owner, source files, or sync summaries. Also check its Knowledge Dependency Map for owner/updater, readers/consumers, update trigger, sync policy, and stale-risk.
 
-Step 6
+Step 7
 (select sync policy)
 Use `Drive mirror`, `ChatGPT Project Sources default`, or `task-only upload` from `PROJECT_SYNC_STATE.md` and `PROJECT_SYNC_AUTHORITY.md` before deciding what to mirror, upload, or leave as a pointer.
 
-Step 7
+Step 8
 (protect boundaries)
 Stop before schema, DB writes/imports, Maven/Invoice4U, email/customer actions, inventory mutation, source-system/cloud/production actions, package installs, deletes/moves, or git remote changes.
 
@@ -72,6 +76,10 @@ Use Orchestrator
 (routing role)
 Route each task to existing agent owners before implementation.
 
+Use Architect Mediation
+(mandatory implementation gate)
+Do not start Builder/Codex implementation until Orchestrator has produced a Task Packet and Infrastructure Manager / Architect has approved reuse, boundaries, data lineage, approval gates, validation plan, and simplification. This reuses existing Orchestrator and Infrastructure Manager; do not create a new agent.
+
 Use Reuse Before Create
 (duplicate prevention rule)
 Extend existing files/agents/runtime when possible; create new artifacts only when justified or explicitly requested.
@@ -87,6 +95,10 @@ Map Guard
 (pre-change review)
 Identify source owners, affected files, protected systems, and approval gates.
 
+Architect
+(architecture mediation review)
+Infrastructure Manager / Architect validates the Task Packet before Builder starts and validates architecture, integration consistency, source of truth, simplification, and duplicate prevention before closeout.
+
 Builder
 (implementation role)
 Apply the smallest scoped change only.
@@ -97,7 +109,7 @@ Run risk-scaled validation and record known unrelated gaps separately.
 
 Reviewer
 (final review role)
-Check scope, approval gates, validation, blocker language, and Project Brain/sync readiness.
+Check scope, approval gates, validation, blocker language, Architect Mediation, ChatGPT Review Packet readiness, screenshot/data-lineage evidence, and Project Brain/sync readiness.
 
 Git
 (commit discipline)
@@ -113,6 +125,10 @@ Update relevant `PROJECT_SYNC_*` files whenever current state, latest delta, age
 Step 2
 (validate)
 Validate the task result and the sync layer. At minimum, check scoped diff, required file coverage, protected-system boundaries, heading/format expectations for changed `PROJECT_SYNC_*` files, and whether every changed knowledge category has a source of truth, owner/updater, readers/consumers, update trigger, sync policy, and stale-risk.
+
+Step 2A
+(prepare ChatGPT Review Packet)
+Before closeout, prepare the ChatGPT Review Packet required by `agents/ORCHESTRATOR_AGENT.md` and `project-brain/agents/AUTONOMOUS_BUILD_WORKFLOW.md`: request, build result, app changes, screenshot evidence for UI changes or reason unavailable, tested route/page, user-visible improvement, simplification, duplication prevented, reused assets, rejected alternatives, data read/written with sources/storage, learning path state, validation, unvalidated gaps, protected systems untouched, regression risk, rollback path, and recommendation `APPROVE` / `NEEDS_FIX` / `BLOCKED`.
 
 Step 3
 (commit and push)
@@ -133,6 +149,10 @@ Read `SYNC_FINGERPRINT.txt` from the Drive mirror root after running `scripts/sy
 Step 6
 (report final proof)
 Report commit hash, clean or non-clean `git status`, validation result, Google Drive mirror sync result, changed files, untouched protected systems, exact next task, and Final Sync Status as `GREEN`, `YELLOW`, or `RED`.
+
+Architect Closeout Status
+(required final status fields)
+Every final closeout must include Architect Mediation `PASS` / `FAIL`, QA `PASS` / `FAIL`, Reviewer `PASS` / `FAIL`, ChatGPT Review Packet `READY` / `NOT READY`, Screenshot evidence `YES` / `NO` / `NOT APPLICABLE`, Data lineage `COMPLETE` / `INCOMPLETE`, Regression check `PASS` / `FAIL`, and Sync Status `GREEN` / `YELLOW` / `RED`.
 
 Full Sync Status
 (how to classify the final sync result)

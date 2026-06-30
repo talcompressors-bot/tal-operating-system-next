@@ -36,7 +36,7 @@ Wave 3 Commercial Runtime and Document Engine, with Wave 4 Financial Runtime sta
 
 Current Task
 (the task most recently completed in this sync layer)
-Full end-of-task sync verification is explicit in the existing sync protocol.
+Architect Mediation Phase 2 makes the Phase 1 workflow discoverable and enforceable from sync/bootstrap files.
 
 Current Business Goal
 (what TAL gains from the active work)
@@ -87,7 +87,15 @@ Latest Committed Git Baseline
 
 Latest Local Delta
 (what changed after the pushed baseline)
-Added the missing full sync verification rules to existing `PROJECT_SYNC_*` protocol files: Git clean/pushed, Project Brain updated when required, `PROJECT_SYNC_*` updated, Drive mirror refreshed, `01_Project_Sources` readback, runtime-folder mirror exclusion, and Final Sync Status `GREEN` / `YELLOW` / `RED`.
+Architect Mediation Phase 1 was committed in `6c9cff8`; Phase 2 updates Reviewer and sync/bootstrap summaries so future tasks discover the mandatory Orchestrator Task Packet, Infrastructure Manager / Architect review, QA/Reviewer/Architect closeout checks, ChatGPT Review Packet, visual proof, data lineage, simplification report, and final PASS/FAIL statuses before implementation or closeout.
+
+Architect Mediation
+(mandatory workflow gate before future implementation)
+Before Builder/Codex implementation, Orchestrator converts Liad/ChatGPT intent into a Task Packet and Infrastructure Manager / Architect must approve architecture, reuse, data lineage, protected-system boundaries, approval gates, and simplification. Before closeout, QA validates behavior, Reviewer validates scope/evidence and packet readiness, and Architect validates architecture/source-of-truth/integration consistency.
+
+ChatGPT Review Packet
+(mandatory closeout evidence packet)
+Future closeouts must report what was requested, what was built, app changes, screenshot evidence for UI changes or why unavailable, tested route/page, user-visible improvement, simplification, duplication prevented, reused files/components/agents, rejected alternatives, data read/written and sources/storage, learning path state, validations, unvalidated gaps, protected systems untouched, regression risk, rollback path, and recommendation `APPROVE` / `NEEDS_FIX` / `BLOCKED`.
 
 Last Recorded Implementation Commit
 (the last meaningful implementation commit recorded in Project Brain)

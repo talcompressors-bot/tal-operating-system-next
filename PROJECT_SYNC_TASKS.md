@@ -8,15 +8,15 @@ Purpose
 
 Task Name
 (short name of the active local task)
-Full sync verification protocol update.
+Architect Mediation Phase 2.
 
 Meaning
 (what the task means)
-Verify the existing end-of-task protocol and add only the missing full sync verification checks.
+Make the already-committed Architect Mediation Phase 1 workflow discoverable and enforceable from Reviewer and sync/bootstrap files without creating a new agent.
 
 Owner
 (agent/tool that performs the work)
-Codex with Reviewer workflow review.
+Codex with Orchestrator, Infrastructure Manager / Architect, QA, and Reviewer workflow review.
 
 Authority
 (source allowed to define task truth)
@@ -24,15 +24,15 @@ Project Brain defines task state; Git defines committed/pushed truth; user reque
 
 Status
 (current completion state)
-Implemented in existing `PROJECT_SYNC_*` files only; committed/pushed state is defined by Git and final closeout report.
+Implemented in existing Reviewer and `PROJECT_SYNC_*` files only; committed/pushed state is defined by Git and final closeout report.
 
 Validation Status
 (how proven)
-Read `PROJECT_SYNC_OPERATING_GUIDE.md`, `PROJECT_SYNC_AUTHORITY.md`, and `PROJECT_SYNC_TASKS.md`; confirmed existing coverage for Git push/clean, Project Brain update, `PROJECT_SYNC_*` update, and Drive mirror command; added missing `01_Project_Sources` readback, runtime-folder exclusion, and Final Sync Status `GREEN` / `YELLOW` / `RED`.
+Validated with `git diff --check`; changed files are limited to `project-brain/agents/REVIEWER_AGENT.md`, `PROJECT_SYNC_STATE.md`, `PROJECT_SYNC_TASKS.md`, and `PROJECT_SYNC_OPERATING_GUIDE.md`; no `app/**`, `lib/**`, or `prisma/**` files changed.
 
 Blocked
 (current blocker)
-None for full sync verification protocol coverage.
+None for Architect Mediation Phase 2 coverage.
 
 ## Latest Runtime Quality Commit
 (separate runtime quality work that is now committed and must not be treated as local-only)
@@ -98,6 +98,7 @@ No approval for read-only UI/context work; explicit approval before schema, DB w
 | Task Type | Read These Sources | Short Explanation | Owner / Authority | Related Agent |
 |---|---|---|---|---|
 | Startup / Reality Check | `PROJECT_SYNC_STATE.md`, `PROJECT_INDEX.md`, `PROJECT_OPERATING_PROTOCOL.md`, `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `project-brain/DECISION_LOG.md` | Load current state, protocol, task board, and decisions | Project Brain / Git | project-brain-startup, Orchestrator |
+| Architect Mediation / Task Packet | `PROJECT_SYNC_OPERATING_GUIDE.md`, `agents/ORCHESTRATOR_AGENT.md`, `agents/INFRASTRUCTURE_MANAGER_AGENT.md`, `project-brain/agents/AUTONOMOUS_BUILD_WORKFLOW.md`, `project-brain/agents/REVIEWER_AGENT.md` | Convert intent to a Task Packet, run Architect review before implementation, and verify architecture/source-of-truth/simplification before closeout | Orchestrator / Infrastructure Manager / Project Brain workflow | Orchestrator, Infrastructure Manager / Architect, Reviewer |
 | Closeout / Handoff | `PROJECT_SYNC_DELTA.md`, `PROJECT_SYNC_TASKS.md`, `PROJECT_SYNC_OPERATING_GUIDE.md`, `project-brain/CURRENT_TASK.md`, `project-brain/TASK_BOARD.md`, `project-brain/DECISION_LOG.md`, `PROJECT_INDEX.md` | Record completed work, validation, blocker, next task, commit hash, Google Drive mirror result, `01_Project_Sources` readback, runtime-folder mirror exclusion, clean/non-clean git status, and Final Sync Status `GREEN` / `YELLOW` / `RED` | Project Brain / Git / approved Drive mirror | project-brain-session-close, Git Agent |
 | Agent Routing | `PROJECT_SYNC_AGENTS.md`, `agents/AGENT_REGISTRY.md`, `project-brain/AGENT_GOVERNANCE_MAP.md`, relevant agent source file | Pick existing owner and avoid duplicate agents | Agent registry | Orchestrator |
 | AI Draft / Production Draft | `.agents/skills/ai-draft-recommendation/SKILL.md`, `agents/AI_DRAFT_AGENT.md`, `project-brain/maps/AI_DRAFT_FIELD_MAPPING.md`, `project-brain/SERVICE_COMMERCIAL_RULES.md`, `project-brain/PRICING_EVIDENCE_ENGINE_SPEC.md`, `project-brain/MANUFACTURER_SERVICE_KITS.md`, `project-brain/SKU_MATCHING_RULES.md` | Draft recommendation, pricing evidence, service-kit rules, review flags | AI Draft Agent / Project Brain / runtime validation | AI_DRAFT_AGENT |
