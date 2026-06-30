@@ -184,6 +184,53 @@ Final Chief Architect decision must be one of:
 - `NEEDS_FIX`
 - `BLOCKED`
 
+## Mandatory Chief Architect Report
+
+Every Codex task must show this section before implementation:
+
+```text
+CHIEF ARCHITECT - BEFORE
+- Company Objective:
+- Business Decision / Capability:
+- Minimal Task Slice:
+- Sources checked:
+  - GitHub:
+  - Project Brain:
+  - PROJECT_SYNC:
+  - Codex proposal:
+  - ChatGPT/Liad intent:
+- Existing assets reused:
+- Agents consulted:
+  - Orchestrator:
+  - Map Guard:
+  - QA:
+  - Reviewer:
+- Protected systems check:
+- Questions / blockers:
+- Decision: APPROVE / NEEDS_FIX / BLOCKED
+```
+
+Every Codex task must show this section after implementation:
+
+```text
+CHIEF ARCHITECT - AFTER
+- What Codex changed:
+- What business capability improved:
+- What became simpler:
+- What duplication was avoided:
+- Validation:
+- Screenshot evidence if UI changed:
+- Data lineage if app data changed:
+- Agents validation:
+  - QA:
+  - Reviewer:
+  - Infrastructure Manager:
+- Git commit:
+- Sync fingerprint:
+- Protected systems untouched:
+- Final decision: APPROVE / NEEDS_FIX / BLOCKED
+```
+
 ## Architect Mediation Gate
 
 Before Builder/Codex implementation starts, Infrastructure Manager / Architect must review the Orchestrator Task Packet and decide whether implementation may proceed.

@@ -26,6 +26,10 @@ Step 5
 (run Architect Mediation Gate)
 Before implementation, Orchestrator must convert Liad/ChatGPT intent into a Task Packet and Infrastructure Manager / Architect must approve architecture, reuse, source of truth, protected boundaries, data lineage, approval gates, validation plan, and simplification. Builder/Codex implementation may start only after Architect Mediation is `PASS`.
 
+Step 5A
+(show Chief Architect before report)
+Before implementation, Codex must show the mandatory `CHIEF ARCHITECT - BEFORE` section from `agents/INFRASTRUCTURE_MANAGER_AGENT.md`, including company objective, business decision/capability, minimal task slice, sources checked, existing assets reused, agents consulted, protected systems check, blockers, and decision.
+
 Step 6
 (classify authority)
 Use `PROJECT_SYNC_AUTHORITY.md` to decide whether truth must come from Git, Project Brain, runtime validation, database, human owner, source files, or sync summaries. Also check its Knowledge Dependency Map for owner/updater, readers/consumers, update trigger, sync policy, and stale-risk.
@@ -129,6 +133,10 @@ Validate the task result and the sync layer. At minimum, check scoped diff, requ
 Step 2A
 (prepare ChatGPT Review Packet)
 Before closeout, prepare the ChatGPT Review Packet required by `agents/ORCHESTRATOR_AGENT.md` and `project-brain/agents/AUTONOMOUS_BUILD_WORKFLOW.md`: request, build result, app changes, screenshot evidence for UI changes or reason unavailable, tested route/page, user-visible improvement, simplification, duplication prevented, reused assets, rejected alternatives, data read/written with sources/storage, learning path state, validation, unvalidated gaps, protected systems untouched, regression risk, rollback path, and recommendation `APPROVE` / `NEEDS_FIX` / `BLOCKED`.
+
+Step 2B
+(show Chief Architect after report)
+Before final closeout, Codex must show the mandatory `CHIEF ARCHITECT - AFTER` section from `agents/INFRASTRUCTURE_MANAGER_AGENT.md`, including what changed, business capability improved, simplification, duplication avoided, validation, screenshot/data-lineage status, agents validation, git commit, sync fingerprint, protected systems, and final decision.
 
 Step 3
 (commit and push)
