@@ -4,6 +4,7 @@ import { getBusinessDocumentById } from "../business-document-adapter";
 import {
   approveBusinessDocument,
   createMavenDraftAutomationCommand,
+  refreshBusinessDocumentDraftFromRecommendation,
   resolveBusinessDocumentLine,
   returnBusinessDocumentToReview,
 } from "./actions";
@@ -16,6 +17,7 @@ type BusinessDocumentDetailPageProps = {
     approvalStatus?: string;
     commandStatus?: string;
     lineStatus?: string;
+    refreshStatus?: string;
   }>;
 };
 
@@ -88,16 +90,39 @@ function getLineStatusMessage(status?: string) {
   }
 }
 
+function getRefreshStatusMessage(status?: string) {
+  switch (status) {
+    case "refreshed":
+      return "BusinessDocument draft was refreshed internally from the current ServiceReport recommendation. No Maven/Invoice4U, AutomationCommand, email, customer-facing action, or inventory action was performed.";
+    case "confirmation-required":
+      return "Confirm the internal refresh checkbox before replacing draft lines.";
+    case "recommendation-missing":
+      return "No current ServiceReport recommendation was available for this BusinessDocument.";
+    case "missing-source-report":
+      return "This BusinessDocument has no linked source ServiceReport for refresh.";
+    case "invalid-lines":
+      return "Current recommendation contains an invalid line quantity and cannot refresh the draft.";
+    case "not-found":
+      return "BusinessDocument was not found for refresh.";
+    case "missing-document":
+      return "Refresh workflow was missing a BusinessDocument identifier.";
+    default:
+      return "";
+  }
+}
+
 export default async function BusinessDocumentDetailPage({
   params,
   searchParams,
 }: BusinessDocumentDetailPageProps) {
   const { id } = await params;
-  const { approvalStatus, commandStatus, lineStatus } = (await searchParams) || {};
+  const { approvalStatus, commandStatus, lineStatus, refreshStatus } =
+    (await searchParams) || {};
   const document = await getBusinessDocumentById(id);
   const approvalStatusMessage = getApprovalStatusMessage(approvalStatus);
   const commandStatusMessage = getCommandStatusMessage(commandStatus);
   const lineStatusMessage = getLineStatusMessage(lineStatus);
+  const refreshStatusMessage = getRefreshStatusMessage(refreshStatus);
 
   if (!document) {
     notFound();
@@ -358,6 +383,46 @@ export default async function BusinessDocumentDetailPage({
               </label>
               <button className="button secondary" type="submit">
                 Return to review
+              </button>
+            </form>
+          </div>
+        </article>
+
+        <article className="info-panel wide">
+          <h2>Internal draft refresh</h2>
+          <div className="approval-panel">
+            <p>
+              Refresh this existing internal BusinessDocument from the current
+              ServiceReport recommendation. This preserves the same
+              BusinessDocument ID, replaces draft lines, returns the draft to
+              waiting user approval, and records an audit log. It does not call
+              Maven/Invoice4U, create AutomationCommands, send email, contact
+              customers, or deduct inventory.
+            </p>
+            {refreshStatusMessage ? (
+              <p className="status-note">{refreshStatusMessage}</p>
+            ) : null}
+            <form
+              action={refreshBusinessDocumentDraftFromRecommendation}
+              className="approval-form"
+            >
+              <input
+                name="businessDocumentId"
+                type="hidden"
+                value={document.id}
+              />
+              <label>
+                Refreshed by
+                <input name="refreshedBy" type="text" defaultValue="Liad" />
+              </label>
+              <label className="checkbox-row">
+                <input name="confirmRefresh" type="checkbox" />
+                Replace the current internal draft lines with the current
+                ServiceReport recommendation and keep all review-required prices
+                flagged.
+              </label>
+              <button className="button secondary" type="submit">
+                Refresh internal draft
               </button>
             </form>
           </div>

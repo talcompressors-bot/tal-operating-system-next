@@ -3,6 +3,61 @@
 Purpose
 (compact last-change summary for ChatGPT Project Sources and future closeouts)
 
+## Delta 2026-06-30 Internal Draft Refresh
+(latest runtime-flow hardening change)
+
+What Changed
+(what was actually changed)
+Added an explicit internal BusinessDocument draft refresh action and review-page form. The refresh preserves the existing BusinessDocument ID, reruns the current ServiceReport production recommendation, replaces only that draft's items, resets the draft to `WAITING_USER_APPROVAL`, and records an audit log.
+
+Why
+(why it was changed)
+Existing draft idempotency correctly preserved old drafts, but that meant ServiceReport `5864` / `acd1133d` still had a stale two-line draft after the maintenance recommendation engine improved.
+
+Business Value
+(what TAL gains)
+Office users can refresh an internal draft to current recommendation quality without creating duplicate drafts or touching external systems.
+
+Affected Domains
+(business areas impacted)
+Service Operations, Commercial Runtime, BusinessDocument Review, AI Draft Recommendation, external adapter readiness.
+
+Affected Runtime
+(ERP engines impacted)
+BusinessDocument review Server Action and internal review page only.
+
+Affected Files
+(files changed)
+`app/business-documents/[id]/actions.ts` and `app/business-documents/[id]/page.tsx`.
+
+Validation
+(how it was proven)
+Before refresh, `NEXT-BD-DRAFT-acd1133d-QUOTE` had 2 lines. After explicit refresh it kept the same BusinessDocument ID, stayed `WAITING_USER_APPROVAL`, had 6 Hebrew lines, kept `מפריד שמן` with `unitPrice = null` and `needsPriceApproval = true`, showed Hebrew title/summary/lines through the review view model, had zero AutomationCommands for the document, and kept global side-effect counts at AutomationCommands `1`, InventoryTransactions `0`, EmailLogs `0`. Full TypeScript still fails only on the known unrelated `app/ai-drafts/ai-draft-adapter.ts` pricing-evidence typing issue; `git diff --check` passed.
+
+Risks
+(what may still break)
+Local HTTP route/preview validation was not executed because the dev server was not running. The action was invoked through a Node validation harness, so it refreshed before the expected out-of-Next revalidation warning.
+
+Open Issues
+(what is not solved yet)
+No schema, Maven, Invoice4U, email/customer, inventory, AppSheet, Apps Script, Google Sheets, or Drive runtime action was added.
+
+Next Required Action
+(what should happen next)
+Use the BusinessDocument review page refresh control when an existing internal draft must be regenerated from the current ServiceReport recommendation; otherwise continue to the next selected ERP capability.
+
+Authority
+(who/what is allowed to define this truth)
+Runtime validation and database readback define behavior; Git defines committed code truth; Project Brain defines project state; Liad defines business acceptance and protected approvals.
+
+External Side Effects
+(whether any external system changed)
+Only the approved internal BusinessDocument draft refresh DB write occurred for validation. No Maven/Invoice4U, email/customer action, inventory mutation, schema change, AppSheet/Apps Script/Google Sheets/Drive action, package install, or production action occurred.
+
+Current Commit State
+(whether this delta is committed)
+Committed and pushed with the internal draft refresh closeout; Git and the final report are authority for the exact hash.
+
 ## Delta 2026-06-30 End-Of-Task Protocol
 (latest documentation-sync rule change in this commit)
 

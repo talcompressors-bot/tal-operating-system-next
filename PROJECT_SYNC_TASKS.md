@@ -8,15 +8,15 @@ Purpose
 
 Task Name
 (short name of the active local task)
-Project Sources end-of-task protocol verification.
+ServiceReport to BusinessDocument internal draft refresh.
 
 Meaning
 (what the task means)
-Verify existing `PROJECT_SYNC_*` files and make the mandatory end-of-task protocol explicit without creating a duplicate sync system.
+Allow an existing internal BusinessDocument draft to be explicitly refreshed from the current ServiceReport recommendation without creating a duplicate draft or executing external actions.
 
 Owner
 (agent/tool that performs the work)
-Codex with Orchestrator, Map Guard, Builder, QA, Reviewer, Git Agent, and Project Brain Agent context.
+Codex with AI_DRAFT_AGENT ownership and QA/Reviewer workflow review.
 
 Authority
 (source allowed to define task truth)
@@ -24,15 +24,15 @@ Project Brain defines task state; Git defines committed/pushed truth; user reque
 
 Status
 (current completion state)
-Completed when the sync verification commit is validated, committed, and pushed.
+Implemented and validated on `NEXT-BD-DRAFT-acd1133d-QUOTE`; committed/pushed state is defined by Git and final closeout report.
 
 Validation Status
 (how proven)
-Validation requires all six sync files to exist, each file to satisfy its assigned role, no duplicate `PROJECT_SYNC_INDEX.md`, every `##`/`###` heading to have a parenthetical explanation line, the end-of-task protocol to include sync update, validation, commit/push, Google Drive mirror copy, and final proof report, `git diff --check` to pass, and only `PROJECT_SYNC_*.md` files to be staged/committed.
+Before refresh the draft had 2 lines. After explicit refresh the same BusinessDocument ID remained, status stayed `WAITING_USER_APPROVAL`, 6 Hebrew maintenance lines were present, oil separator stayed `NeedsPriceApproval`, no AutomationCommand existed for the document, and no Maven/email/inventory/schema action occurred. Full TypeScript still fails only on the known unrelated AI Draft adapter typing issue.
 
 Blocked
 (current blocker)
-None for docs-only sync protocol verification.
+None for the internal refresh path.
 
 ## Latest Runtime Quality Commit
 (separate runtime quality work that is now committed and must not be treated as local-only)

@@ -27,7 +27,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Latest Runtime Quality Implementation
 
-Production Draft Generation maintenance quality fix was committed in `77cf9cd Finalize service report draft runtime quality updates`. Drive mirror setup was committed in `7310ddf Add Google Drive project sync mirror script`. Current working tree is clean; no uncommitted runtime maintenance files remain.
+ServiceReport to BusinessDocument internal draft refresh is implemented and validated. Existing draft `NEXT-BD-DRAFT-acd1133d-QUOTE` for ServiceReport `5864` / `acd1133d` was explicitly refreshed from the current production recommendation while preserving the same BusinessDocument ID, keeping status `WAITING_USER_APPROVAL`, replacing stale 2-line content with 6 Hebrew maintenance lines, keeping `מפריד שמן` price-review required, and creating no AutomationCommand/Maven/email/inventory/schema action. Production Draft Generation maintenance quality fix was previously committed in `77cf9cd`; Drive mirror setup was committed in `7310ddf`.
 
 ## Latest Local Documentation Sync
 

@@ -36,7 +36,7 @@ Wave 3 Commercial Runtime and Document Engine, with Wave 4 Financial Runtime sta
 
 Current Task
 (the task most recently completed in this sync layer)
-Project Sources knowledge dependency map expansion is completed across `PROJECT_SYNC_AUTHORITY.md`, `PROJECT_SYNC_STATE.md`, and `PROJECT_SYNC_OPERATING_GUIDE.md`.
+ServiceReport to BusinessDocument internal draft refresh is implemented and validated on ServiceReport `5864` / `acd1133d`.
 
 Current Business Goal
 (what TAL gains from the active work)
@@ -44,15 +44,15 @@ A new ChatGPT Project can understand current state, recent changes, source locat
 
 Current Runtime Capability
 (what works now inside the shadow ERP)
-Internal ServiceReport -> BusinessCase -> BusinessDocument draft generation exists through the protected Draft Gateway; customer preview/PDF remains simple and external actions remain gated.
+Internal ServiceReport -> BusinessCase -> BusinessDocument draft generation exists through the protected Draft Gateway; existing internal drafts can now be explicitly refreshed from the current ServiceReport recommendation while preserving the same BusinessDocument ID; customer preview/PDF remains simple and external actions remain gated.
 
 Latest Committed Git Baseline
 (the latest pushed sync-layer baseline before this expansion)
-`7cd40fc Add mandatory project sync closeout protocol`
+`97264ab Reconcile sync truth after runtime quality commit`
 
 Latest Local Delta
 (what changed after the pushed baseline)
-The existing sync layer was expanded with a knowledge dependency map covering source of truth, owner/updater, readers/consumers, update trigger, sync policy, and stale-risk; no runtime feature work is included.
+Added an explicit internal-only refresh action on the BusinessDocument review page. Validation refreshed `NEXT-BD-DRAFT-acd1133d-QUOTE` from 2 stale lines to 6 current Hebrew maintenance lines, kept status `WAITING_USER_APPROVAL`, kept oil separator price review required, and created no AutomationCommand/Maven/email/inventory/schema action.
 
 Last Recorded Implementation Commit
 (the last meaningful implementation commit recorded in Project Brain)

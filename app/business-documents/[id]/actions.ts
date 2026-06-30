@@ -5,6 +5,8 @@ import {
   AutomationCommandStatus,
   AutomationCommandType,
   BusinessDocumentStatus,
+  BusinessDocumentType,
+  MatchSource,
   Prisma,
 } from "@prisma/client";
 import { revalidatePath } from "next/cache";
@@ -18,6 +20,7 @@ import {
   getMavenDraftCommandCreationStatus,
 } from "../../../lib/business-document-automation-boundary";
 import { buildApprovedProductionDraftLearningEvidence } from "../../../lib/business-document-learning-boundary";
+import { buildProductionDraftRecommendation } from "../../../lib/business-document-production-draft";
 import { prisma } from "../../../lib/prisma";
 
 function isUuid(value: string) {
@@ -38,6 +41,10 @@ function buildLineResolutionRedirect(documentId: string, status: string) {
   return `/business-documents/${documentId}?lineStatus=${status}`;
 }
 
+function buildRefreshRedirect(documentId: string, status: string) {
+  return `/business-documents/${documentId}?refreshStatus=${status}`;
+}
+
 function readPositiveDecimal(value: FormDataEntryValue | null) {
   const text = String(value || "").trim();
   const numberValue = Number(text);
@@ -55,6 +62,79 @@ function readJsonObject(value: Prisma.JsonValue | null) {
   }
 
   return value as Record<string, Prisma.JsonValue>;
+}
+
+function parseDraftMoney(value: string) {
+  const text = value.trim();
+
+  if (
+    !text ||
+    text === "Needs approval" ||
+    text === "Needs Price Review" ||
+    text === "No amount"
+  ) {
+    return null;
+  }
+
+  const numericValue = Number(text.replace(" ILS", ""));
+
+  return Number.isFinite(numericValue) ? numericValue : null;
+}
+
+function parseDraftQuantity(value: string) {
+  const numericValue = Number(value);
+
+  if (!Number.isFinite(numericValue)) {
+    return null;
+  }
+
+  return numericValue;
+}
+
+function mapDraftMatchSource(source: string) {
+  if (source.startsWith("ProductCatalog")) {
+    return MatchSource.PRODUCTS_CATALOG;
+  }
+
+  if (source.startsWith("BusinessDocumentItems:SameCustomer")) {
+    return MatchSource.SAME_CUSTOMER_HISTORY;
+  }
+
+  if (source.startsWith("BusinessDocumentItems:SameEquipment")) {
+    return MatchSource.SAME_EQUIPMENT_HISTORY;
+  }
+
+  if (source.startsWith("BusinessDocumentItems")) {
+    return MatchSource.SIMILAR_SERVICE_HISTORY;
+  }
+
+  if (source.startsWith("Maven")) {
+    return MatchSource.MAVEN_HISTORY;
+  }
+
+  if (source === "BusinessCase") {
+    return MatchSource.MANUAL;
+  }
+
+  return MatchSource.UNKNOWN;
+}
+
+function mapDraftConfidence(confidence: string) {
+  if (confidence === "High") {
+    return 90;
+  }
+
+  if (confidence === "Medium") {
+    return 60;
+  }
+
+  if (confidence === "Low") {
+    return 20;
+  }
+
+  const numericConfidence = Number(confidence);
+
+  return Number.isFinite(numericConfidence) ? numericConfidence : null;
 }
 
 async function findBusinessDocumentForApproval(businessDocumentId: string) {
@@ -390,6 +470,258 @@ export async function resolveBusinessDocumentLine(formData: FormData) {
   revalidatePath(`/business-documents/${document.appsheetBusinessDocumentId}`);
 
   redirect(buildLineResolutionRedirect(document.appsheetBusinessDocumentId, "line-saved"));
+}
+
+export async function refreshBusinessDocumentDraftFromRecommendation(
+  formData: FormData,
+) {
+  const businessDocumentId = String(
+    formData.get("businessDocumentId") || "",
+  ).trim();
+  const refreshedBy = String(formData.get("refreshedBy") || "Liad").trim() || "Liad";
+  const confirmRefresh = formData.get("confirmRefresh") === "on";
+
+  if (!businessDocumentId) {
+    redirect("/business-documents?refreshStatus=missing-document");
+  }
+
+  if (!confirmRefresh) {
+    redirect(buildRefreshRedirect(businessDocumentId, "confirmation-required"));
+  }
+
+  const document = await prisma.businessDocument.findFirst({
+    where: {
+      OR: [
+        { appsheetBusinessDocumentId: businessDocumentId },
+        ...(isUuid(businessDocumentId) ? [{ id: businessDocumentId }] : []),
+      ],
+    },
+    select: {
+      id: true,
+      appsheetBusinessDocumentId: true,
+      documentTypeSelected: true,
+      sourceDocumentId: true,
+      serviceReport: {
+        select: {
+          appsheetReportId: true,
+        },
+      },
+      items: {
+        select: {
+          appsheetItemId: true,
+          itemName: true,
+          quantity: true,
+          unitPrice: true,
+          totalPrice: true,
+          needsPriceApproval: true,
+        },
+        orderBy: [{ createdAt: "asc" }, { id: "asc" }],
+      },
+    },
+  });
+
+  if (!document) {
+    redirect("/business-documents?refreshStatus=not-found");
+  }
+
+  const canonicalDocumentId = document.appsheetBusinessDocumentId;
+  const sourceReportId =
+    document.serviceReport?.appsheetReportId || document.sourceDocumentId;
+
+  if (!sourceReportId) {
+    redirect(buildRefreshRedirect(canonicalDocumentId, "missing-source-report"));
+  }
+
+  const documentType = document.documentTypeSelected ?? BusinessDocumentType.QUOTE;
+  const recommendation = await buildProductionDraftRecommendation(
+    sourceReportId,
+    documentType,
+  );
+
+  if (!recommendation) {
+    redirect(buildRefreshRedirect(canonicalDocumentId, "recommendation-missing"));
+  }
+
+  const itemDrafts = recommendation.gatewayLines.map((line) => {
+    const quantity = parseDraftQuantity(line.quantity);
+
+    if (quantity === null) {
+      return null;
+    }
+
+    const unitPrice = parseDraftMoney(line.unitPrice);
+    const totalPrice = parseDraftMoney(line.totalPrice);
+
+    return {
+      line,
+      quantity,
+      unitPrice,
+      totalPrice,
+      needsPriceApproval:
+        quantity <= 0 ||
+        line.needsApproval ||
+        unitPrice === null ||
+        totalPrice === null,
+    };
+  });
+
+  if (itemDrafts.some((item) => item === null)) {
+    redirect(buildRefreshRedirect(canonicalDocumentId, "invalid-lines"));
+  }
+
+  const validItems = itemDrafts.filter(
+    (item): item is NonNullable<(typeof itemDrafts)[number]> => item !== null,
+  );
+  const knownSubtotal = validItems.reduce(
+    (sum, item) => sum + (item.totalPrice ?? 0),
+    0,
+  );
+  const hasApprovalRequiredLines = validItems.some(
+    (item) => item.needsPriceApproval,
+  );
+  const previousItems = document.items.map((item) => ({
+    appsheetItemId: item.appsheetItemId,
+    itemName: item.itemName,
+    quantity: item.quantity.toString(),
+    unitPrice: item.unitPrice?.toString() || null,
+    totalPrice: item.totalPrice?.toString() || null,
+    needsPriceApproval: item.needsPriceApproval,
+  }));
+  const now = new Date();
+
+  await prisma.$transaction(async (tx) => {
+    await tx.businessDocumentItem.deleteMany({
+      where: {
+        businessDocumentId: document.id,
+      },
+    });
+
+    await tx.businessDocument.update({
+      where: {
+        id: document.id,
+      },
+      data: {
+        documentTypeSuggested: documentType,
+        documentTypeSelected: documentType,
+        status: BusinessDocumentStatus.WAITING_USER_APPROVAL,
+        approvalStatus: ApprovalStatus.PENDING,
+        sourceStatusText: hasApprovalRequiredLines
+          ? "Draft refreshed with review-required pricing or evidence"
+          : "Draft refreshed from current ServiceReport recommendation",
+        draftTitle: recommendation.title,
+        description: recommendation.description,
+        aiReasoning: [
+          `Production draft refresh: ${recommendation.explainabilitySummary}`,
+          `Knowledge quality: ${recommendation.qualitySummary}`,
+          `Detected maintenance type: ${recommendation.detectedMaintenanceType}`,
+        ].join("\n"),
+        itemsJson: recommendation.gatewayLines as unknown as Prisma.InputJsonValue,
+        subtotalAmount: new Prisma.Decimal(knownSubtotal.toFixed(2)),
+        vatAmount: null,
+        totalAmount: hasApprovalRequiredLines
+          ? null
+          : new Prisma.Decimal(knownSubtotal.toFixed(2)),
+        approvedBy: refreshedBy,
+        approvedAt: now,
+        sendByEmail: false,
+        sendByWhatsapp: false,
+        notes:
+          "Internal BusinessDocument draft refreshed from the current ServiceReport recommendation. Lines must be reviewed before any external action.",
+        rawSource: {
+          source: "PRODUCTION_DRAFT_REFRESH",
+          refreshedBy,
+          refreshedAt: now.toISOString(),
+          sourceReportId,
+          documentType,
+          existingBusinessDocumentId: canonicalDocumentId,
+          missingEvidence: recommendation.missingEvidence,
+          confidenceSummary: recommendation.confidenceSummary,
+          detectedMaintenanceType: recommendation.detectedMaintenanceType,
+          noMavenAction: true,
+          noInvoice4UAction: true,
+          noEmailAction: true,
+          noInventoryAction: true,
+          noReceiptIssuing: true,
+          rawSource: {
+            productionDraftRecommendation: {
+              detectedMaintenanceType: recommendation.detectedMaintenanceType,
+              knowledgeUsed: recommendation.knowledgeUsed,
+              qualitySummary: recommendation.qualitySummary,
+              estimatedManualWorkReduction:
+                recommendation.estimatedManualWorkReduction,
+            },
+          },
+        } satisfies Prisma.InputJsonValue,
+      },
+    });
+
+    await tx.businessDocumentItem.createMany({
+      data: validItems.map((item, index) => ({
+        appsheetItemId: `${canonicalDocumentId}-ITEM-${index + 1}`,
+        businessDocumentId: document.id,
+        itemName: item.line.itemName,
+        description: item.line.description,
+        quantity: new Prisma.Decimal(item.quantity.toFixed(3)),
+        unitPrice:
+          item.unitPrice === null
+            ? null
+            : new Prisma.Decimal(item.unitPrice.toFixed(2)),
+        totalPrice:
+          item.totalPrice === null
+            ? null
+            : new Prisma.Decimal(item.totalPrice.toFixed(2)),
+        source: mapDraftMatchSource(item.line.source),
+        itemType: item.line.itemType,
+        needsPriceApproval: item.needsPriceApproval,
+        matchConfidence: mapDraftConfidence(item.line.confidence),
+        createdAt: new Date(now.getTime() + index),
+        rawSource: {
+          source: "PRODUCTION_DRAFT_REFRESH",
+          line: item.line.rawSource,
+          pricingEvidence: item.line.pricingEvidence,
+          noMavenAction: true,
+          noInvoice4UAction: true,
+          noEmailAction: true,
+          noInventoryAction: true,
+        } satisfies Prisma.InputJsonValue,
+      })),
+    });
+
+    await tx.businessDocumentLog.create({
+      data: {
+        businessDocumentId: document.id,
+        action: "BUSINESS_DOCUMENT_DRAFT_REFRESHED",
+        performedBy: refreshedBy,
+        result: `Refreshed internal draft from ${previousItems.length} line(s) to ${validItems.length} line(s)`,
+        notes:
+          "Internal draft refresh only. Existing BusinessDocument ID was preserved. No Maven/Invoice4U call, no AutomationCommand creation, no email/customer-facing action, and no inventory deduction occurred.",
+        rawData: {
+          source: "PRODUCTION_DRAFT_REFRESH",
+          sourceReportId,
+          documentType,
+          previousItems,
+          nextItems: validItems.map((item) => ({
+            itemName: item.line.itemName,
+            quantity: item.quantity.toString(),
+            unitPrice: item.unitPrice?.toString() || null,
+            totalPrice: item.totalPrice?.toString() || null,
+            needsPriceApproval: item.needsPriceApproval,
+          })),
+          missingEvidence: recommendation.missingEvidence,
+          confidenceSummary: recommendation.confidenceSummary,
+          noMavenCall: true,
+          noAutomationCommandCreated: true,
+          noEmail: true,
+          noInventory: true,
+        } satisfies Prisma.InputJsonValue,
+      },
+    });
+  });
+
+  revalidatePath("/business-documents");
+  revalidatePath(`/business-documents/${canonicalDocumentId}`);
+
+  redirect(buildRefreshRedirect(canonicalDocumentId, "refreshed"));
 }
 
 export async function createMavenDraftAutomationCommand(formData: FormData) {
