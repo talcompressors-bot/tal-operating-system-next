@@ -3,564 +3,102 @@
 Purpose
 (compact agent/tool/skill catalog for ChatGPT Project Sources; `agents/AGENT_REGISTRY.md` remains canonical)
 
+## Agent Source Rule
+(how to read this file without confusing summaries with authority)
+
+Canonical Agent Registry
+(the source of truth for active/planned agent status)
+`agents/AGENT_REGISTRY.md`
+
+Project Brain Workflow Roles
+(the source of truth for the governed Codex delivery loop)
+`project-brain/agents/*.md`
+
+Skill Definitions
+(the source of truth for repo-specific Codex skill behavior)
+`.agents/skills/*/SKILL.md`
+
+Use Rule
+(how to route work)
+Use this file to pick the likely owner quickly, then read the listed source file before acting on that agent's domain.
+
 ## Active Executors And Advisors
 (top-level tools and roles used to perform or advise work)
 
-### Codex
-(local executor and orchestrator)
-
-Purpose
-(what it does)
-Main local executor and orchestrator for safe scoped work.
-
-When To Use
-(when this role should act)
-Use for repository inspection, file edits, validation, Project Brain sync, and scoped commits.
-
-May Read
-(what it may inspect)
-Repository files, Project Brain, schema, local validation output, read-only database queries when allowed.
-
-May Update
-(what it may change)
-Approved/AUTO_ALLOWED files, docs, safe local code, Project Brain sync files, and Git commits within scoped approval.
-
-Must Not Touch
-(protected boundaries)
-No unapproved schema changes, DB writes/imports, Maven/Invoice4U, email, inventory, Apps Script/AppSheet/Sheets/Drive/production actions, deletes/moves, or git remote changes.
-
-Required Approval Level
-(what permission is needed)
-AUTO_ALLOWED for docs/read-only/safe local work; explicit Liad approval for protected systems.
-
-Example Task
-(typical use)
-Fix a safe internal draft-generation bug, run validation, update Project Brain, and report evidence.
-
-### ChatGPT
-(advisor and Project Sources consumer)
-
-Purpose
-(what it does)
-Advisor, planner, business reasoning partner, and Project Sources consumer.
-
-When To Use
-(when this role should act)
-Use for high-level reasoning, business review, roadmap discussion, and interpreting sync files.
-
-May Read
-(what it may inspect)
-Uploaded Project Sources and user-provided context.
-
-May Update
-(what it may change)
-Nothing directly in the repository unless Codex/user applies changes.
-
-Must Not Touch
-(protected boundaries)
-Must not claim authority over Git, database, runtime validation, or Project Brain without source evidence.
-
-Required Approval Level
-(what permission is needed)
-Human decides whether advice becomes work.
-
-Example Task
-(typical use)
-Review whether the next task should be Asset Workspace or another draft-quality pass.
-
-### Project Brain
-(canonical memory and project-state system)
-
-Purpose
-(what it does)
-Canonical project memory and state layer.
-
-When To Use
-(when this role should act)
-Use at startup, closeout, task selection, blocker review, and state synchronization.
-
-May Read
-(what it may inspect)
-Project governance files, task board, decision log, maps, live object IDs.
-
-May Update
-(what it may change)
-`CURRENT_TASK.md`, `TASK_BOARD.md`, `DECISION_LOG.md`, `PROJECT_INDEX.md`, live IDs, checkpoints when meaningful.
-
-Must Not Touch
-(protected boundaries)
-Must not invent approvals, runtime behavior, data values, or IDs.
-
-Required Approval Level
-(what permission is needed)
-AUTO_ALLOWED after completed safe work; explicit approval for governance architecture changes.
-
-Example Task
-(typical use)
-Record completed validation, blocker `none`, next task, approval gates, and completion percentage.
+| Agent / Tool Name | Purpose | When To Use | May Read | May Update | Must Not Touch | Required Approval Level | Example Task | Source / Authority |
+|---|---|---|---|---|---|---|---|---|
+| Codex | Local executor and orchestrator (implements safe scoped repo work) | Repository inspection, edits, validation, commits, and closeout | Repo files, Project Brain, sync files, runtime validation output, approved read-only DB queries | Approved/AUTO_ALLOWED files, scoped docs/code, Project Brain/sync files, Git commits/pushes | Unapproved schema, DB writes/imports, Maven/Invoice4U, email, inventory, Apps Script/AppSheet/Sheets/Drive/production, deletes/moves | AUTO_ALLOWED for safe scoped work; explicit approval for protected systems | Expand sync files, validate, commit, push | `PROJECT_OPERATING_PROTOCOL.md`, `PROJECT_INDEX.md` |
+| ChatGPT | Advisor and Project Sources consumer (reasons over uploaded files) | Business review, planning, source navigation, task discussion | Uploaded `PROJECT_SYNC_*` and user-provided context | Nothing directly in repo | Must not override Git, Project Brain, database, runtime validation, or human approval | Human decides if advice becomes work | Decide whether Asset Workspace is the right next task | Human owner / uploaded sources |
+| Project Brain | Canonical project memory and state system (durable state authority) | Startup, task selection, blocker review, closeout, decisions | Project Brain files, Project Index, live IDs, maps, decisions | `CURRENT_TASK.md`, `TASK_BOARD.md`, `DECISION_LOG.md`, `PROJECT_INDEX.md`, live IDs/checkpoints when meaningful | Runtime behavior, schema, DB values, approvals not backed by evidence | AUTO_ALLOWED after completed safe work; explicit approval for governance architecture changes | Record blocker `none`, validation, next task, completion % | `project-brain/PROJECT_BRAIN_MASTER.md` |
+| Git | Repository history and commit tool (commit/branch truth) | Status, diff, log, staged scope, commit, push | Git status/log/diff/tree | Git index, commits, push of approved scoped work | Destructive Git, unrelated files, secrets, remote changes without approval | Safe scoped commit/push allowed when requested/validated; destructive/remote config approval required | Commit only `PROJECT_SYNC_*.md` | Git repository |
 
 ## Active Specialist Agents
 (registered domain/governance owners from `agents/AGENT_REGISTRY.md`)
 
-### ORCHESTRATOR_AGENT
-(task routing and executive decision owner)
-
-Purpose
-(what it does)
-Routes tasks, enforces reuse, scores options, and selects the smallest safe path.
-
-When To Use
-(when this role should act)
-Use before every task, bug, feature, investigation, or proposal.
-
-May Read
-(what it may inspect)
-Project Index, Operating Protocol, Task Board, Decision Log, Agent Registry, relevant source files.
-
-May Update
-(what it may change)
-Usually nothing directly; Codex executes the selected path.
-
-Must Not Touch
-(protected boundaries)
-No production actions or approval bypass.
-
-Required Approval Level
-(what permission is needed)
-No approval for routing; protected work requires Liad approval.
-
-Example Task
-(typical use)
-Classify a request as `DOC_SYNC`, select Project Brain/Reviewer/QA participation, and proceed.
-
-### PROJECT_BRAIN_AGENT
-(project memory and closeout-state owner)
-
-Purpose
-(what it does)
-Maintains durable project state and closeout continuity.
-
-When To Use
-(when this role should act)
-Use when task state, blockers, decisions, live IDs, or closeout files change.
-
-May Read
-(what it may inspect)
-Project Brain files, checkpoints, live object IDs, decisions, task board.
-
-May Update
-(what it may change)
-Project Brain state files when meaningful and allowed.
-
-Must Not Touch
-(protected boundaries)
-No runtime code, schema, DB, or production systems.
-
-Required Approval Level
-(what permission is needed)
-AUTO_ALLOWED for sync after safe completed work; approval for new governance architecture.
-
-Example Task
-(typical use)
-Update `CURRENT_TASK.md` after a validated safe implementation.
-
-### INFRASTRUCTURE_MANAGER_AGENT
-(architecture and source-of-truth reviewer)
-
-Purpose
-(what it does)
-Reviews architecture, source-of-truth boundaries, schema risk, and protected systems.
-
-When To Use
-(when this role should act)
-Use for schema, migration, source-of-truth, new component, registry, or future-platform work.
-
-May Read
-(what it may inspect)
-Protocol, Index, Project Brain, schema, maps, Sheet registry, target architecture, agents.
-
-May Update
-(what it may change)
-Architecture review output or approved docs only.
-
-Must Not Touch
-(protected boundaries)
-No runtime execution, DB/schema writes, Apps Script deployment, Sheets/AppSheet/Maven/Drive/email/production actions.
-
-Required Approval Level
-(what permission is needed)
-Explicit approval before protected architecture or schema actions.
-
-Example Task
-(typical use)
-Review whether a new sync layer duplicates Project Brain or is justified.
-
-### GIT_AGENT
-(repository state and commit discipline owner)
-
-Purpose
-(what it does)
-Supports status, diff, commit, and push discipline.
-
-When To Use
-(when this role should act)
-Use before staging, committing, pushing, or reporting Git state.
-
-May Read
-(what it may inspect)
-Git status, log, diff, staged files.
-
-May Update
-(what it may change)
-Git index and commits only for approved/scoped files.
-
-Must Not Touch
-(protected boundaries)
-No secrets, unreviewed production changes, unrelated files, destructive Git actions, or git remote changes.
-
-Required Approval Level
-(what permission is needed)
-AUTO_ALLOWED for safe scoped docs/read-only app commits; explicit approval for destructive or remote changes.
-
-Example Task
-(typical use)
-Commit only `PROJECT_SYNC_*.md` after validation.
-
-### AI_DRAFT_AGENT
-(AI draft recommendation owner)
-
-Purpose
-(what it does)
-Owns AI draft recommendation and business-document suggestion logic.
-
-When To Use
-(when this role should act)
-Use for ServiceReport draft recommendations, pricing evidence, maintenance/service-kit rules.
-
-May Read
-(what it may inspect)
-ServiceReports, ReportEquipmentItems, PartsUsed, ProductsCatalog, BusinessDocuments, Maven history, AI Draft docs.
-
-May Update
-(what it may change)
-Recommendation code/docs only when approved/AUTO_ALLOWED; internal drafts only through protected approved gateway flows.
-
-Must Not Touch
-(protected boundaries)
-No automatic invoices, Maven documents, emails, inventory mutation, payment status, or unapproved DB writes.
-
-Required Approval Level
-(what permission is needed)
-AUTO_ALLOWED for read-only analysis and safe internal recommendation fixes; explicit approval for writes/actions.
-
-Example Task
-(typical use)
-Improve maintenance draft line generation while marking uncertain prices for review.
-
-### MAVEN_AGENT
-(Maven sync and draft workflow owner)
-
-Purpose
-(what it does)
-Owns Maven sync and Maven draft workflow analysis.
-
-When To Use
-(when this role should act)
-Use for Maven sync issues, Maven document readiness, Maven payload boundaries.
-
-May Read
-(what it may inspect)
-MavenAPI source, InvoiceMavenDocuments, InvoiceMavenDocumentItems, SyncState, SyncLog, BusinessDocuments.
-
-May Update
-(what it may change)
-Docs or approved code only; real Maven actions require explicit approval.
-
-Must Not Touch
-(protected boundaries)
-No unapproved Maven writes, draft creation, invoice action, sync rewrite, or imported data deletion.
-
-Required Approval Level
-(what permission is needed)
-Explicit Liad approval before any Maven/Invoice4U action.
-
-Example Task
-(typical use)
-Prepare a dry-run evidence packet for Maven document creation.
-
-### APPS_SCRIPT_AGENT
-(Apps Script analysis owner)
-
-Purpose
-(what it does)
-Owns Apps Script analysis and approved Apps Script changes.
-
-When To Use
-(when this role should act)
-Use for Apps Script functions, webhooks, Drive save, MavenAPI.gs, EmailSender, report rendering.
-
-May Read
-(what it may inspect)
-`apps-script/*`, system maps, lessons, bugs.
-
-May Update
-(what it may change)
-Apps Script only after explicit approval.
-
-Must Not Touch
-(protected boundaries)
-No deployment, clasp push, production workflow change, or duplicate function creation without approval.
-
-Required Approval Level
-(what permission is needed)
-Explicit approval for any Apps Script change/deploy.
-
-Example Task
-(typical use)
-Analyze why a Drive save workflow did not create a report file.
+| Agent / Tool Name | Purpose | When To Use | May Read | May Update | Must Not Touch | Required Approval Level | Example Task | Source / Authority |
+|---|---|---|---|---|---|---|---|---|
+| ORCHESTRATOR_AGENT | Task routing and executive decision owner (selects smallest safe path) | Every task, bug, feature, investigation, proposal, or approval gate | Project Index, protocol, task board, decisions, agent registry, relevant files | Usually nothing directly; Codex executes selected path | Approval bypass, protected-system changes, duplicate owner creation | No approval for routing; protected work requires Liad approval | Classify DOC_SYNC and route to Map Guard/Builder/QA/Reviewer | `agents/ORCHESTRATOR_AGENT.md` |
+| PROJECT_BRAIN_AGENT | Project memory and closeout-state owner (keeps durable continuity) | State sync, blockers, task board, decisions, closeout | Project Brain, checkpoints, live IDs, decisions, task board | Project Brain state files when allowed | Runtime code, schema, DB, production systems | AUTO_ALLOWED for safe sync; approval for governance redesign | Update current task and task board after a safe commit | `agents/PROJECT_BRAIN_AGENT.md` |
+| INFRASTRUCTURE_MANAGER_AGENT | Architecture and source-of-truth reviewer (guards schema/source boundaries) | Schema, migration, source-of-truth, new component, registry, platform work | Protocol, Project Brain, schema, maps, architecture docs, source inventories | Architecture review docs or approved docs only | DB/schema writes, Apps Script deploy, Sheets/AppSheet/Maven/Drive/email/production actions | Explicit approval before protected architecture/schema actions | Review whether a new sync artifact duplicates Project Brain | `agents/INFRASTRUCTURE_MANAGER_AGENT.md` |
+| PRE_MISSION_REVIEW_SYSTEM | Pre-work risk and approval gate (classifies mission risk) | Before high-risk or unclear work | Protocol, request, impacted systems | No direct updates | Implementation, approval bypass | No approval for review; protected action approval still required | Decide if a request is DOC_SYNC or SCHEMA_OR_DATA_CHANGE | `agents/PRE_MISSION_REVIEW_SYSTEM.md` |
+| FACTORY_CONTROL_CENTER_AGENT | Governance/control audit concept (control-center framing) | Governance coverage, monitoring/control gap analysis | Governance docs, Project Brain, audits | Audit/recommendation docs only | Runtime automation, DB writes, production integrations | Approval before implementing monitoring/control systems | Audit whether Project Sources sync has holes | `agents/FACTORY_CONTROL_CENTER_AGENT.md` |
+| GIT_AGENT | Repository state and commit discipline owner (scoped Git hygiene) | Before staging, committing, pushing, reporting Git state | Git status/log/diff/staged files | Git index and commits only for scoped approved files | Secrets, destructive Git, unrelated files, remote changes | Safe scoped commit/push when requested/validated; destructive approval required | Stage only six `PROJECT_SYNC_*` files | `agents/GIT_AGENT.md` |
+| APPS_SCRIPT_AGENT | Apps Script analysis owner (legacy automation source reviewer) | Apps Script functions, webhooks, Drive save, MavenAPI.gs, EmailSender, report rendering | `project-brain/apps-script/*`, maps, bugs, lessons | Apps Script only after explicit approval | Deployment, production workflow changes, data mutation | Explicit approval for any Apps Script change/deploy | Analyze `MavenAPI.gs` without deploying | `agents/APPS_SCRIPT_AGENT.md` |
+| MAVEN_AGENT | Maven sync and draft workflow owner (external adapter readiness) | Maven sync, Maven document readiness, Maven payload/API evidence | MavenAPI source, Maven source inventory, InvoiceMaven tables, BusinessDocuments, AutomationCommands | Docs or approved code only; real Maven actions require approval | Maven/Invoice4U writes, draft creation, invoice action, sync rewrite, imported data deletion | Explicit Liad approval before Maven/Invoice4U action | Prepare Maven execution evidence packet | `agents/MAVEN_AGENT.md` |
+| AI_DRAFT_AGENT | AI draft recommendation owner (ServiceReport to draft intelligence) | ServiceReport draft recommendations, pricing evidence, maintenance/service-kit rules | ServiceReports, ReportEquipmentItems, PartsUsed, ProductsCatalog, BusinessDocuments, Maven history, AI Draft docs | Recommendation code/docs when safe; internal drafts only through protected gateway | Auto invoices, Maven docs, emails, payment status, inventory mutation, unapproved DB writes | Read-only/safe recommendation fixes AUTO_ALLOWED; writes/external actions require approval | Improve maintenance draft line generation with review flags | `agents/AI_DRAFT_AGENT.md` |
+| EMAIL_DOCUMENT_INTAKE_AGENT | Planned email evidence-packet agent (not executable) | Future email intake planning only | Email intake spec, evidence packet schema, relevant Project Brain docs | Documentation planning only | Sending email, Gmail runtime, BusinessDocument creation, DB writes, customer action | Explicit future approval before implementation/access | Design an RFQ evidence packet, not send email | `project-brain/EMAIL_DOCUMENT_INTAKE_AGENT_SPEC.md` |
 
 ## Project Brain Workflow Roles
 (operating roles used by Codex during safe work)
 
-### MAP_GUARD_AGENT
-(source ownership and approval-gate checker)
+| Agent / Tool Name | Purpose | When To Use | May Read | May Update | Must Not Touch | Required Approval Level | Example Task | Source / Authority |
+|---|---|---|---|---|---|---|---|---|
+| MAP_GUARD_AGENT | Source ownership and approval-gate checker (prevents wrong files/systems) | Before Builder changes files | Project Brain, maps, migration docs, agent registry, relevant files | No direct updates; produces constraints | Implementation or protected-system action | No approval for review; protected follow-up approval required | Confirm `PROJECT_SYNC_STATE.md` can serve as index | `project-brain/agents/MAP_GUARD_AGENT.md` |
+| BUILDER_AGENT | Scoped implementation role (applies smallest approved change) | After Map Guard confirms scope | Task sources, relevant files, Map Guard constraints | Approved docs or safe local implementation files | Protected systems or scope expansion | AUTO_ALLOWED or explicit approval by risk class | Expand existing sync files only | `project-brain/agents/BUILDER_AGENT.md` |
+| QA_AGENT_WORKFLOW_ROLE | Validation and protected-system checker (reports pass/gaps/fail) | After Builder completes changes | Diffs, changed files, validation commands/results | No direct updates; reports validation | Production approval or mutation | No approval for local validation; protected writes forbidden | Verify sync files cover required source categories | `project-brain/agents/QA_AGENT.md` |
+| REVIEWER_AGENT | Final scope/evidence reviewer (readiness before final report) | Before commit/final report | Diff, status, validation, Project Brain/sync files | No direct updates; reports readiness | Implementation or approval bypass | No approval for review | Confirm only `PROJECT_SYNC_*` files are committed | `project-brain/agents/REVIEWER_AGENT.md` |
+| AGENT_COMMUNICATION_PROTOCOL | Workflow communication protocol (handoff packet shape) | When coordinating workflow roles | Workflow role files and task packets | No direct updates | Acting as executable agent | No approval for reading | Shape Map Guard -> Builder -> QA handoff | `project-brain/agents/AGENT_COMMUNICATION_PROTOCOL.md` |
+| AUTONOMOUS_BUILD_WORKFLOW | End-to-end governed work loop (autonomous build sequence) | Any autonomous safe task | Project Brain workflow docs | No direct updates | Bypassing approvals or specialist ownership | No approval for reading | Run Map Guard -> Builder -> QA -> Reviewer -> sync -> Git | `project-brain/agents/AUTONOMOUS_BUILD_WORKFLOW.md` |
 
-Purpose
-(what it does)
-Checks source ownership, reuse, protected systems, and approval gates before changes.
+## Repo Skills
+(repo-local Codex skills discovered under `.agents/skills`)
 
-When To Use
-(when this role should act)
-Use before Builder starts any scoped work.
+| Agent / Tool Name | Purpose | When To Use | May Read | May Update | Must Not Touch | Required Approval Level | Example Task | Source / Authority |
+|---|---|---|---|---|---|---|---|---|
+| project-brain-startup | Startup and Project Reality Check skill (official startup loading) | `hey codex`, session recovery, before code/Project Brain work | Git status/log, startup files, Project Brain, live IDs | None during startup except clean fast-forward pull | Implementation before Reality Check; pulling with dirty tree | AUTO_APPROVED status/fetch/pull when clean; stop if dirty | Produce Project Reality Check | `.agents/skills/project-brain-startup/SKILL.md` |
+| project-brain-session-close | Closeout and Project Brain handoff skill (safe session close) | `by codex`, closeout, handoff, state sync | Git status/log/diff, Project Brain, live IDs, changed files | Project Brain closeout files and safe scoped commits | Deploy, Maven, email, protected writes, unapproved files | AUTO_ALLOWED for safe closeout; protected systems require approval | Record completed work and push safe docs | `.agents/skills/project-brain-session-close/SKILL.md` |
+| ai-draft-recommendation | One-report AI draft recommendation skill (recommendation only by default) | AI Draft tests, pricing analysis, ServiceReport recommendation planning | ServiceReports, ReportEquipmentItems, PartsUsed, ProductsCatalog, Maven history, BusinessDocuments, BusinessDocumentItems | No writes by default; internal draft rows only after explicit approval | Maven documents, final invoices, email, payment status, external actions | Read-only recommendation allowed; writes/external actions require approval | Evaluate ServiceReport `5807` draft lines | `.agents/skills/ai-draft-recommendation/SKILL.md` |
 
-May Read
-(what it may inspect)
-Project Brain, maps, migration docs, agent registry, relevant files.
+## Codex Tool Surfaces
+(tool categories available in this environment; use only within approval gates)
 
-May Update
-(what it may change)
-No direct updates; outputs constraints and recommendation.
-
-Must Not Touch
-(protected boundaries)
-No implementation or protected-system action.
-
-Required Approval Level
-(what permission is needed)
-No approval for review; approval required for protected follow-up.
-
-Example Task
-(typical use)
-Decide whether sync files are justified or duplicate Project Brain.
-
-### BUILDER_AGENT
-(scoped implementation role)
-
-Purpose
-(what it does)
-Applies the smallest approved/AUTO_ALLOWED change.
-
-When To Use
-(when this role should act)
-Use after Map Guard confirms scope and approvals.
-
-May Read
-(what it may inspect)
-Task sources, relevant files, Map Guard constraints.
-
-May Update
-(what it may change)
-Approved docs or safe local implementation files.
-
-Must Not Touch
-(protected boundaries)
-No protected systems or scope expansion without approval.
-
-Required Approval Level
-(what permission is needed)
-AUTO_ALLOWED or explicit approval depending on risk class.
-
-Example Task
-(typical use)
-Create six concise `PROJECT_SYNC_*.md` files.
-
-### QA_AGENT
-(validation and protected-system checker)
-
-Purpose
-(what it does)
-Validates behavior, documentation completeness, and protected-system boundaries.
-
-When To Use
-(when this role should act)
-Use after Builder completes changes.
-
-May Read
-(what it may inspect)
-Diffs, changed files, validation commands/results.
-
-May Update
-(what it may change)
-No direct updates; reports PASS, PASS_WITH_EXISTING_GAP, or FAIL.
-
-Must Not Touch
-(protected boundaries)
-No production approval or mutation.
-
-Required Approval Level
-(what permission is needed)
-No approval for validation; protected validation requiring external writes is forbidden without approval.
-
-Example Task
-(typical use)
-Validate sync files contain state, delta, agents, tasks, authority, and operating guide.
-
-### REVIEWER_AGENT
-(final scope and evidence reviewer)
-
-Purpose
-(what it does)
-Reviews final scope, evidence, approval gates, Project Brain sync, and report readiness.
-
-When To Use
-(when this role should act)
-Use before final report and commit/push.
-
-May Read
-(what it may inspect)
-Diff, status, validation output, Project Brain sync files.
-
-May Update
-(what it may change)
-No direct updates; reports readiness.
-
-Must Not Touch
-(protected boundaries)
-No implementation or approval bypass.
-
-Required Approval Level
-(what permission is needed)
-No approval for review.
-
-Example Task
-(typical use)
-Confirm only docs were added for a `DOC_SYNC` task.
-
-## Skills
-(Codex skills available for startup, closeout, and AI draft recommendation workflows)
-
-### project-brain-startup
-(startup and Project Reality Check skill)
-
-Purpose
-(what it does)
-Loads repo state, syncs clean Git worktree, reads canonical Project Brain, and produces Reality Check.
-
-When To Use
-(when this skill should run)
-At session startup or before code/Project Brain work.
-
-May Read
-(what it may inspect)
-Git status/log, startup files, Project Brain, live IDs.
-
-May Update
-(what it may change)
-None during startup except Git fast-forward when clean.
-
-Must Not Touch
-(protected boundaries)
-No implementation before Reality Check.
-
-Required Approval Level
-(what permission is needed)
-AUTO_APPROVED for status/fetch/pull when clean; stops if dirty.
-
-Example Task
-(typical use)
-Run official `hey codex` startup.
-
-### project-brain-session-close
-(session closeout and Project Brain handoff skill)
-
-Purpose
-(what it does)
-Closes a session, preserves state, updates Project Brain, and commits/pushes safe scoped work when allowed.
-
-When To Use
-(when this skill should run)
-When user says `by codex` or asks for closeout/handoff.
-
-May Read
-(what it may inspect)
-Git status/log/diff, Project Brain, live IDs, relevant task files.
-
-May Update
-(what it may change)
-Project Brain closeout files and safe scoped commits.
-
-Must Not Touch
-(protected boundaries)
-No deploy, Maven, email, production, protected writes, or unapproved files.
-
-Required Approval Level
-(what permission is needed)
-AUTO_ALLOWED for safe closeout; explicit approval for protected systems.
-
-Example Task
-(typical use)
-Record completed work, validation, blocker `none`, exact next task, and push safe sync.
-
-### ai-draft-recommendation
-(one-report AI draft recommendation skill)
-
-Purpose
-(what it does)
-Builds or evaluates one ServiceReport-based AI draft recommendation.
-
-When To Use
-(when this skill should run)
-For AI draft tests, one-report dry runs, pricing evidence, and recommendation planning.
-
-May Read
-(what it may inspect)
-ServiceReports, ReportEquipmentItems, PartsUsed, ProductsCatalog, Maven history, BusinessDocuments, BusinessDocumentItems.
-
-May Update
-(what it may change)
-No writes by default; recommendation only unless explicitly approved for internal draft rows.
-
-Must Not Touch
-(protected boundaries)
-No Maven documents, final invoices, email, payment status, external actions.
-
-Required Approval Level
-(what permission is needed)
-Read-only recommendation is allowed; writes/external actions require explicit approval.
-
-Example Task
-(typical use)
-Run a recommendation for ServiceReport `5807` and show line evidence.
+| Agent / Tool Name | Purpose | When To Use | May Read | May Update | Must Not Touch | Required Approval Level | Example Task | Source / Authority |
+|---|---|---|---|---|---|---|---|---|
+| shell_command | Local command execution (read files, run validation, Git) | Repo inspection, validation, status, local tests | Workspace files and command output | Workspace files only through safe commands; Git when scoped | Destructive commands, protected writes, installs, external actions without approval | AUTO_ALLOWED for read/validation; approval for protected/escalated actions | Run `git status --short --branch` | Codex tool policy / repository protocol |
+| apply_patch | File edit tool (manual scoped edits) | Updating docs/code in workspace | Target files to patch | Workspace files in approved scope | Unrelated files, generated destructive rewrites | AUTO_ALLOWED for safe scoped edits | Update `PROJECT_SYNC_DELTA.md` | Codex tool policy |
+| multi_tool_use.parallel | Parallel local tool wrapper (faster independent reads/checks) | Reading independent files or running independent checks | Same as wrapped tools | Same as wrapped tools | Dependent/destructive commands in parallel | Same as wrapped tools | Read sync files and status in parallel | Codex tool policy |
+| web | Internet lookup tool (current external information) | Only when explicit/current external info is needed | Public web sources | Nothing local | Do not use for repo truth when local source exists | Browse only when required by policy/user | Verify current vendor docs if needed | System browsing policy |
+| image_gen | Image generation/editing tool (bitmap assets) | Only visual asset generation/editing tasks | Prompt/context | Generated image output | Runtime/source changes unless separately edited | Use only when task asks for image/visual asset | Generate a bitmap mockup asset | System tool policy |
+| browser/chrome/computer-use skills | UI/browser control skills (local/Chrome/browser inspection) | Visual route validation or browser tasks when selected | Localhost/browser pages | Browser state; files only through explicit tasks | External/customer actions, production changes | Read-only validation usually allowed; authenticated/external writes need approval | Inspect `localhost:3000` preview if server is running | Plugin skill files |
 
 ## Future Recommended Agents
 (planned or recommended agents that are not executable today)
 
-EMAIL_DOCUMENT_INTAKE_AGENT
-(planned, not executable)
-Future evidence-packet agent for incoming customer emails.
+| Agent / Tool Name | Purpose | When To Use | May Read | May Update | Must Not Touch | Required Approval Level | Example Task | Source / Authority |
+|---|---|---|---|---|---|---|---|---|
+| QA_AGENT_SPECIALIST | Possible future broader QA owner (not active today) | Only after documented QA workflow gap | None until created | None | Must not replace active QA workflow role | Explicit approval before creation | Future test strategy owner | `agents/AGENT_REGISTRY.md` |
+| INVOICE4U_AGENT | Future Invoice4U integration owner (not created) | Future Invoice4U integration planning after approval | None until created | None | Invoice writes, credentials, production integration | Explicit approval before creation/implementation | Plan Invoice4U adapter | `agents/AGENT_REGISTRY.md` |
+| EXPENSE_AGENT | Future supplier expense automation owner (not created) | Future expense invoice automation after approval | None until created | None | Expense automation, vendor invoice writes, payment integrations | Explicit approval before creation/implementation | Plan supplier invoice intake | `agents/AGENT_REGISTRY.md` |
+| SYSTEM_HEALTH_AGENT | Future health monitoring owner (planned only) | Read-only health planning only | `project-brain/SYSTEM_HEALTH_AGENT_PLAN.md`, `project-brain/SYSTEM_HEALTH_RULES.md` | Planning docs only after approval | Scheduled monitoring, DB writes, repair actions, production alerts | Explicit approval before active monitoring | Design read-only health dashboard | `project-brain/SYSTEM_HEALTH_AGENT_PLAN.md` |
 
-QA_AGENT_SPECIALIST
-(planned, not executable)
-Possible future broader QA owner; current QA is the workflow role.
+## Agent Support And Test Sources
+(discovered agent-adjacent files that support agents but are not separate active agents)
 
-INVOICE4U_AGENT
-(planned, not executable)
-Future Invoice4U integration owner.
-
-EXPENSE_AGENT
-(planned, not executable)
-Future supplier expense automation owner.
-
-SYSTEM_HEALTH_AGENT
-(planned, not executable)
-Future read-only health monitoring owner.
+| Agent / Tool Name | Purpose | When To Use | May Read | May Update | Must Not Touch | Required Approval Level | Example Task | Source / Authority |
+|---|---|---|---|---|---|---|---|---|
+| AGENT_FACTORY_OPERATING_SYSTEM | Agent factory governance reference (rules for creating/upgrading agents) | Only when an agent creation/upgrade is explicitly approved or a gap is proven | Agent registry, governance map, factory file | Docs only after approval | Creating duplicate agents or bypassing registry | Explicit approval for new agent architecture | Check whether a new agent is justified | `agents/AGENT_FACTORY_OPERATING_SYSTEM.md` |
+| AI_DRAFT_EXECUTION_CHECKLIST | AI Draft execution checklist (step-by-step AI draft QA/run support) | Before AI draft test/recommendation work | AI draft docs and relevant data sources | No direct updates unless checklist changes are approved | External actions or draft writes without approval | Read-only use allowed; edits require scoped docs approval | Validate a ServiceReport recommendation | `agents/AI_DRAFT_EXECUTION_CHECKLIST.md` |
+| AI_DRAFT_OUTPUT_TEMPLATE | AI Draft output template (standard recommendation report shape) | When presenting an AI draft recommendation | Source report and recommendation evidence | No direct updates unless template changes are approved | Maven/email/invoice actions | Read-only use allowed | Format AI draft recommendation output | `agents/AI_DRAFT_OUTPUT_TEMPLATE.md` |
+| AI_DRAFT_AGENT_TEST | AI Draft agent test reference (test guidance for draft agent) | AI Draft test planning or regression review | AI draft runtime/source docs | No direct updates unless test docs are being changed | Production or external actions | Read-only use allowed | Review AI draft test expectations | `agents/AI_DRAFT_AGENT_TEST.md` |
+| AI_DRAFT_SESSION_CLOSE | AI Draft session close template (AI-draft-specific closeout guidance) | Closing an AI draft test/review session | AI draft validation output | No direct updates unless closeout docs are being changed | Project Brain changes unless explicitly requested by skill/task | Read-only use allowed | Summarize one-report draft test | `agents/AI_DRAFT_SESSION_CLOSE.md` |
+| INFRASTRUCTURE_REVIEW_TEMPLATE | Infrastructure review template (architecture/source-of-truth review shape) | Architecture/schema/source boundary review | Architecture, schema, maps, source docs | No direct updates unless template changes are approved | Schema/DB/protected systems | Read-only use allowed | Write an infrastructure impact review | `agents/INFRASTRUCTURE_REVIEW_TEMPLATE.md` |
