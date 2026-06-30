@@ -115,8 +115,12 @@ def read_runtime_map() -> dict[str, str]:
 
 
 def read_company_objectives() -> dict[str, str]:
-    protocol = _read_text(REPO_ROOT / "PROJECT_OPERATING_PROTOCOL.md")
-    summary = _find_line_with_next_bullet(protocol, "Primary business goal")
+    protocol = _read_text(REPO_ROOT / "PROJECT_OPERATING_PROTOCOL.md", max_chars=20000)
+    business_goal = _find_line_with_next_bullet(protocol, "Primary business goal")
+    operational_goal = _find_line_with_next_bullet(protocol, "Primary operational goal")
+    ai_goal = _find_line_with_next_bullet(protocol, "Primary AI goal")
+    goals = [goal for goal in [business_goal, operational_goal, ai_goal] if goal != "UNKNOWN"]
+    summary = "; ".join(goals) if goals else "UNKNOWN"
     if summary == "UNKNOWN":
         return {"summary": "UNKNOWN", "source": "PROJECT_OPERATING_PROTOCOL.md"}
     return {"summary": summary, "source": "PROJECT_OPERATING_PROTOCOL.md"}
