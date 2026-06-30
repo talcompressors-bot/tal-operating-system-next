@@ -3,6 +3,61 @@
 Purpose
 (compact last-change summary for ChatGPT Project Sources and future closeouts)
 
+## Delta 2026-06-30 Sync Verification
+(latest documentation-sync verification change in this commit)
+
+What Changed
+(what was actually changed)
+Verified the six existing `PROJECT_SYNC_*` files for completeness, consistency, and ChatGPT Project Sources suitability, then updated this sync layer to record the verification as the latest sync event.
+
+Why
+(why it was changed)
+The Project Sources layer must clearly tell a new ChatGPT/Codex session what each sync file covers, where deeper knowledge lives, how to route tasks, which agents/tools/skills exist, who owns truth, and what changed most recently.
+
+Business Value
+(what TAL gains)
+Future sessions can rely on the six upload files as the practical Project Sources entrypoint without creating duplicate sync systems or loading noisy Project Brain files unnecessarily.
+
+Affected Domains
+(business areas impacted)
+Project governance, ChatGPT Project Sources onboarding, agent routing, task selection, source-of-truth discipline.
+
+Affected Runtime
+(ERP engines impacted)
+None; documentation-only verification.
+
+Affected Files
+(files changed)
+`PROJECT_SYNC_STATE.md`, `PROJECT_SYNC_DELTA.md`, and `PROJECT_SYNC_TASKS.md`.
+
+Validation
+(how it was proven)
+Verification checked that `PROJECT_SYNC_STATE.md` explains current state, `PROJECT_SYNC_DELTA.md` explains recent changes, `PROJECT_SYNC_AGENTS.md` explains agents/tools/skills, `PROJECT_SYNC_TASKS.md` explains current/next tasks, `PROJECT_SYNC_AUTHORITY.md` explains source-of-truth priority, and `PROJECT_SYNC_OPERATING_GUIDE.md` explains how ChatGPT/Codex should use the files.
+
+Risks
+(what may still break)
+Sync files can still become stale if future runtime or Project Brain changes are not reflected during closeout.
+
+Open Issues
+(what is not solved yet)
+The separate runtime maintenance-quality fix remains local and uncommitted; it should not be mixed into sync documentation commits.
+
+Next Required Action
+(what should happen next)
+Upload the six `PROJECT_SYNC_*` files to ChatGPT Project Sources and continue no feature work from this verification task.
+
+Authority
+(who/what is allowed to define this truth)
+Git defines committed/pushed file truth; Project Brain defines current project/task truth; runtime validation defines behavior; Liad defines priorities and protected-action approval.
+
+External Side Effects
+(whether any external system changed)
+None. No runtime feature work, schema change, DB write/import, package install, external action, Maven/Invoice4U, email/customer action, inventory mutation, source-system action, or production action.
+
+Current Commit State
+(whether this delta is committed)
+Committed and pushed in the latest sync verification commit; Git and the final report are authority for the exact hash.
+
 ## Delta 2026-06-30 Sync Expansion
 (latest documentation-sync change in this commit)
 

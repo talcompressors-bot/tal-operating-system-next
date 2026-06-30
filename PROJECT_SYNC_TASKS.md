@@ -8,11 +8,11 @@ Purpose
 
 Task Name
 (short name of the active local task)
-Project Sources sync expansion.
+Project Sources sync verification.
 
 Meaning
 (what the task means)
-Expand existing `PROJECT_SYNC_*` files so a new ChatGPT Project can understand current state, recent deltas, source locations, agents/tools/skills, task routing, authorities, next actions, and protected boundaries without creating a duplicate sync system.
+Verify existing `PROJECT_SYNC_*` files so a new ChatGPT Project can understand current state, recent deltas, source locations, agents/tools/skills, task routing, authorities, next actions, and protected boundaries without creating a duplicate sync system.
 
 Owner
 (agent/tool that performs the work)
@@ -24,15 +24,15 @@ Project Brain defines task state; Git defines committed/pushed truth; user reque
 
 Status
 (current completion state)
-Completed when the sync expansion commit is validated, committed, and pushed.
+Completed when the sync verification commit is validated, committed, and pushed.
 
 Validation Status
 (how proven)
-Validation requires all six sync files to exist, required coverage to be present, no duplicate `PROJECT_SYNC_INDEX.md`, every `##`/`###` heading to have a parenthetical explanation line, `git diff --check` to pass, and only `PROJECT_SYNC_*.md` files to be staged/committed.
+Validation requires all six sync files to exist, each file to satisfy its assigned role, no duplicate `PROJECT_SYNC_INDEX.md`, every `##`/`###` heading to have a parenthetical explanation line, `git diff --check` to pass, and only `PROJECT_SYNC_*.md` files to be staged/committed.
 
 Blocked
 (current blocker)
-None for docs-only sync expansion.
+None for docs-only sync verification.
 
 ## Current Runtime Review Task
 (separate uncommitted runtime quality work that must not be mixed into this docs commit)

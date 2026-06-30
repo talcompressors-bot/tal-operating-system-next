@@ -36,7 +36,7 @@ Wave 3 Commercial Runtime and Document Engine, with Wave 4 Financial Runtime sta
 
 Current Task
 (the task most recently completed in this sync layer)
-Project Sources synchronization expansion is completed in the existing `PROJECT_SYNC_*` files; the separate Production Draft Generation maintenance-quality runtime fix remains local and uncommitted.
+Project Sources synchronization verification is completed in the existing `PROJECT_SYNC_*` files; the separate Production Draft Generation maintenance-quality runtime fix remains local and uncommitted.
 
 Current Business Goal
 (what TAL gains from the active work)
@@ -48,11 +48,11 @@ Internal ServiceReport -> BusinessCase -> BusinessDocument draft generation exis
 
 Latest Committed Git Baseline
 (the latest pushed sync-layer baseline before this expansion)
-`85fc703 Add project sync source files`
+`b1688f0 Expand project sync source indexes`
 
 Latest Local Delta
 (what changed after the pushed baseline)
-Existing `PROJECT_SYNC_*` files were expanded with smart source indexes and pointers; no runtime feature work is included.
+The six `PROJECT_SYNC_*` files were verified for completeness, consistency, source-of-truth routing, task routing, agent/tool/skill coverage, and operating-guide clarity; no runtime feature work is included.
 
 Last Recorded Implementation Commit
 (the last meaningful implementation commit recorded in Project Brain)
