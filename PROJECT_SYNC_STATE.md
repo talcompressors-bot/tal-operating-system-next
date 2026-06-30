@@ -99,7 +99,7 @@ Future closeouts must report what was requested, what was built, app changes, sc
 
 Last Recorded Implementation Commit
 (the last meaningful implementation commit recorded in Project Brain)
-`5313aec Improve autonomous business draft generation`
+`783765d Fix executive runtime observe warnings`
 
 Last Recorded Closeout Commit
 (the last meaningful closeout/state-sync commit recorded in Project Brain)
@@ -289,7 +289,7 @@ Pending.
 
 Current Next Task
 (the next safe/context capability unless Liad selects another path)
-Asset Workspace / Asset Timeline.
+Select the next ERP runtime capability through the Chief Architect evidence loop before Builder/Codex starts. Historical candidates include Asset Workspace / Asset Timeline and ServiceReport -> BusinessDocument approval/readiness hardening.
 
 Immediate Local Decision
 (what is pending locally)
