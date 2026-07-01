@@ -60,6 +60,87 @@ export type KnowledgeEvidence = {
   dataQualityGaps: string[];
 };
 
+export type KnowledgeGraphNodeType =
+  | "customer"
+  | "equipment"
+  | "equipment-model"
+  | "equipment-series"
+  | "service-report"
+  | "business-document"
+  | "business-document-item"
+  | "part-used"
+  | "official-model-parts-catalog"
+  | "products-catalog"
+  | "inventory"
+  | "maven-history"
+  | "pricing-history"
+  | "supplier-knowledge"
+  | "source-document";
+
+export type KnowledgeGraphRelationshipType =
+  | "CUSTOMER_HAS_EQUIPMENT"
+  | "CUSTOMER_HAS_SERVICE_REPORT"
+  | "CUSTOMER_HAS_BUSINESS_DOCUMENT"
+  | "CUSTOMER_HAS_PRICING_HISTORY"
+  | "CUSTOMER_HAS_MAVEN_HISTORY"
+  | "EQUIPMENT_HAS_MODEL"
+  | "EQUIPMENT_BELONGS_TO_SERIES"
+  | "EQUIPMENT_APPEARS_IN_SERVICE_REPORT"
+  | "EQUIPMENT_USED_PART"
+  | "EQUIPMENT_MODEL_HAS_OFFICIAL_PART"
+  | "EQUIPMENT_SERIES_HAS_OFFICIAL_PART"
+  | "SERVICE_REPORT_HAS_BUSINESS_DOCUMENT"
+  | "SERVICE_REPORT_USED_PART"
+  | "BUSINESS_DOCUMENT_HAS_ITEM"
+  | "BUSINESS_DOCUMENT_LINKED_TO_MAVEN_HISTORY"
+  | "BUSINESS_DOCUMENT_ITEM_HAS_PRICING_HISTORY"
+  | "BUSINESS_DOCUMENT_ITEM_REFERENCES_PRODUCT"
+  | "PART_USED_REFERENCES_PRODUCT"
+  | "PART_USED_REFERENCES_OFFICIAL_SKU"
+  | "PRODUCT_HAS_INVENTORY"
+  | "PRODUCT_HAS_SUPPLIER"
+  | "PRODUCT_HAS_MAVEN_HISTORY"
+  | "MAVEN_HISTORY_HAS_PRICING"
+  | "SUPPLIER_PROVIDES_PART"
+  | "SOURCE_MENTIONS_ENTITY";
+
+export type KnowledgeGraphNode = {
+  id: string;
+  type: KnowledgeGraphNodeType;
+  label: string;
+  identity: string;
+  aliases: string[];
+  evidenceIds: string[];
+  authorityLevel: KnowledgeAuthorityLevel;
+  confidence: number;
+  attributes: Record<string, unknown>;
+  dataQualityGaps: string[];
+};
+
+export type KnowledgeGraphEdge = {
+  id: string;
+  type: KnowledgeGraphRelationshipType;
+  fromNodeId: string;
+  toNodeId: string;
+  evidenceIds: string[];
+  confidence: number;
+  reason: string;
+  dataQualityGaps: string[];
+};
+
+export type KnowledgeGraph = {
+  nodes: KnowledgeGraphNode[];
+  edges: KnowledgeGraphEdge[];
+  evidence: KnowledgeEvidence[];
+  dataQualityGaps: string[];
+  trace: {
+    sourcesSearched: string[];
+    evidenceCount: number;
+    correlatedNodeCount: number;
+    correlatedEdgeCount: number;
+  };
+};
+
 export type BusinessKnowledgeProvider = {
   id: string;
   sourceType: KnowledgeSourceType;
@@ -413,6 +494,734 @@ function queryMatchesProvider(
     (!query.providerIds || query.providerIds.includes(provider.id)) &&
     (!query.sourceTypes || query.sourceTypes.includes(provider.sourceType))
   );
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function dedupeValues(values: string[]) {
+  return Array.from(new Set(values.map(readSearchText).filter(Boolean)));
+}
+
+function mergeAuthorityLevel(
+  left: KnowledgeAuthorityLevel,
+  right: KnowledgeAuthorityLevel,
+): KnowledgeAuthorityLevel {
+  return left < right ? left : right;
+}
+
+function mergeUnique<T>(left: T[], right: T[]) {
+  return Array.from(new Set([...left, ...right]));
+}
+
+function graphIdentity(type: KnowledgeGraphNodeType, value: unknown) {
+  const identity = normalizeSearchIdentity(value);
+
+  return identity ? `${type}:${identity}` : "";
+}
+
+function edgeId(
+  type: KnowledgeGraphRelationshipType,
+  fromNodeId: string,
+  toNodeId: string,
+) {
+  return `${type}:${fromNodeId}->${toNodeId}`;
+}
+
+function deriveEquipmentSeries(model: unknown) {
+  const value = readSearchText(model);
+
+  if (!value) {
+    return "";
+  }
+
+  const [firstToken = ""] = value.split(/\s+/);
+  const series = firstToken.match(/^[a-zA-Z]+[0-9]*/)?.[0] ?? "";
+
+  return series || firstToken;
+}
+
+function findRecordValue(record: Record<string, unknown>, keys: string[]) {
+  const normalizedKeys = new Map(
+    Object.keys(record).map((key) => [
+      key.toLowerCase().replace(/[^a-z0-9\u0590-\u05ff]/g, ""),
+      key,
+    ]),
+  );
+
+  for (const key of keys) {
+    const normalized = key.toLowerCase().replace(/[^a-z0-9\u0590-\u05ff]/g, "");
+    const actualKey = normalizedKeys.get(normalized);
+
+    if (actualKey && hasSearchValue(record[actualKey])) {
+      return record[actualKey];
+    }
+  }
+
+  return undefined;
+}
+
+class EvidenceCorrelationBuilder {
+  private readonly nodes = new Map<string, KnowledgeGraphNode>();
+  private readonly edges = new Map<string, KnowledgeGraphEdge>();
+  private readonly gaps = new Set<string>();
+
+  constructor(private readonly evidence: KnowledgeEvidence[]) {}
+
+  build(): KnowledgeGraph {
+    this.evidence.forEach((item) => this.addEvidence(item));
+
+    return {
+      nodes: Array.from(this.nodes.values()).sort((left, right) =>
+        left.type.localeCompare(right.type) || left.label.localeCompare(right.label),
+      ),
+      edges: Array.from(this.edges.values()).sort((left, right) =>
+        left.type.localeCompare(right.type) || left.id.localeCompare(right.id),
+      ),
+      evidence: this.evidence,
+      dataQualityGaps: Array.from(this.gaps),
+      trace: {
+        sourcesSearched: Array.from(
+          new Set(
+            this.evidence.map(
+              (item) => `${item.providerId}:${item.sourceType}:${item.sourceName}`,
+            ),
+          ),
+        ),
+        evidenceCount: this.evidence.length,
+        correlatedNodeCount: this.nodes.size,
+        correlatedEdgeCount: this.edges.size,
+      },
+    };
+  }
+
+  private addEvidence(evidence: KnowledgeEvidence) {
+    evidence.dataQualityGaps.forEach((gap) => this.gaps.add(gap));
+
+    if (evidence.entityType === "equipment" || evidence.entityType === "equipment-history") {
+      this.addEquipmentEvidence(evidence);
+      return;
+    }
+
+    if (evidence.entityType === "official-model-parts-catalog") {
+      this.addOfficialPartsEvidence(evidence);
+      return;
+    }
+
+    if (evidence.sourceType === "csv" && isRecord(evidence.data)) {
+      this.addCsvEvidence(evidence, evidence.data);
+      return;
+    }
+
+    this.addSourceDocumentEvidence(evidence);
+  }
+
+  private addNode(
+    type: KnowledgeGraphNodeType,
+    identityValue: unknown,
+    labelValue: unknown,
+    evidence: KnowledgeEvidence,
+    attributes: Record<string, unknown> = {},
+    options: {
+      aliases?: string[];
+      confidence?: number;
+      dataQualityGaps?: string[];
+    } = {},
+  ) {
+    const id = graphIdentity(type, identityValue);
+
+    if (!id) {
+      return undefined;
+    }
+
+    const existing = this.nodes.get(id);
+    const label = readSearchText(labelValue) || id;
+    const dataQualityGaps = options.dataQualityGaps ?? [];
+
+    dataQualityGaps.forEach((gap) => this.gaps.add(gap));
+
+    if (existing) {
+      existing.aliases = mergeUnique(existing.aliases, options.aliases ?? []);
+      existing.evidenceIds = mergeUnique(existing.evidenceIds, [evidence.id]);
+      existing.authorityLevel = mergeAuthorityLevel(
+        existing.authorityLevel,
+        evidence.authorityLevel,
+      );
+      existing.confidence = Math.max(existing.confidence, options.confidence ?? evidence.score);
+      existing.attributes = { ...existing.attributes, ...attributes };
+      existing.dataQualityGaps = mergeUnique(existing.dataQualityGaps, dataQualityGaps);
+      return existing;
+    }
+
+    const node: KnowledgeGraphNode = {
+      id,
+      type,
+      label,
+      identity: readSearchText(identityValue),
+      aliases: dedupeValues(options.aliases ?? []),
+      evidenceIds: [evidence.id],
+      authorityLevel: evidence.authorityLevel,
+      confidence: options.confidence ?? evidence.score,
+      attributes,
+      dataQualityGaps,
+    };
+
+    this.nodes.set(id, node);
+    return node;
+  }
+
+  private addEdge(
+    type: KnowledgeGraphRelationshipType,
+    fromNode: KnowledgeGraphNode | undefined,
+    toNode: KnowledgeGraphNode | undefined,
+    evidence: KnowledgeEvidence,
+    reason: string,
+    confidence: number,
+    dataQualityGaps: string[] = [],
+  ) {
+    if (!fromNode || !toNode) {
+      return;
+    }
+
+    const id = edgeId(type, fromNode.id, toNode.id);
+    const existing = this.edges.get(id);
+
+    dataQualityGaps.forEach((gap) => this.gaps.add(gap));
+
+    if (existing) {
+      existing.evidenceIds = mergeUnique(existing.evidenceIds, [evidence.id]);
+      existing.confidence = Math.max(existing.confidence, confidence);
+      existing.dataQualityGaps = mergeUnique(existing.dataQualityGaps, dataQualityGaps);
+      return;
+    }
+
+    this.edges.set(id, {
+      id,
+      type,
+      fromNodeId: fromNode.id,
+      toNodeId: toNode.id,
+      evidenceIds: [evidence.id],
+      confidence,
+      reason,
+      dataQualityGaps,
+    });
+  }
+
+  private addEquipmentEvidence(evidence: KnowledgeEvidence) {
+    const item = evidence.data as EquipmentKnowledgeRecord;
+    const equipment = this.addNode(
+      "equipment",
+      item.appsheetItemId,
+      equipmentTitle(item) || item.appsheetItemId,
+      evidence,
+      {
+        equipmentNumber: item.equipmentNumber,
+        equipmentType: item.equipmentType,
+        equipmentSubtype: item.equipmentSubtype,
+        equipmentModel: item.equipmentModel,
+        serialNumber: item.serialNumber,
+        compressorCategory: item.compressorCategory,
+        systemStatus: item.systemStatus,
+      },
+      {
+        aliases: [item.equipmentNumber ?? "", item.serialNumber ?? ""],
+        confidence: evidence.score,
+      },
+    );
+    const model = this.addNode(
+      "equipment-model",
+      item.equipmentModel,
+      item.equipmentModel,
+      evidence,
+      { compressorCategory: item.compressorCategory },
+      {
+        confidence: hasSearchValue(item.equipmentModel) ? 80 : 30,
+        dataQualityGaps: hasSearchValue(item.equipmentModel)
+          ? []
+          : ["Equipment model is missing; model correlation cannot be trusted."],
+      },
+    );
+    const seriesValue = deriveEquipmentSeries(item.equipmentModel);
+    const series = this.addNode(
+      "equipment-series",
+      seriesValue,
+      seriesValue,
+      evidence,
+      { derivedFromModel: item.equipmentModel },
+      {
+        confidence: seriesValue ? 55 : 20,
+        dataQualityGaps: seriesValue
+          ? ["Equipment series is inferred from model text, not an official parsed field."]
+          : ["Equipment series is missing because equipment model is missing."],
+      },
+    );
+
+    this.addEdge(
+      "EQUIPMENT_HAS_MODEL",
+      equipment,
+      model,
+      evidence,
+      "Equipment row carries an equipmentModel value.",
+      80,
+    );
+    this.addEdge(
+      "EQUIPMENT_BELONGS_TO_SERIES",
+      equipment,
+      series,
+      evidence,
+      "Equipment series is derived from the equipment model text.",
+      55,
+      ["Series relationship is inferred until an official model-series table is parsed."],
+    );
+
+    const serviceReport = item.serviceReport;
+
+    if (!serviceReport) {
+      return;
+    }
+
+    const serviceReportNode = this.addNode(
+      "service-report",
+      serviceReport.appsheetReportId,
+      serviceReport.reportNumberText ?? serviceReport.reportCounter,
+      evidence,
+      {
+        reportCounter: serviceReport.reportCounter,
+        serviceDate: serviceReport.serviceDate,
+        technicianName: serviceReport.technicianName,
+        serviceType: serviceReport.serviceType,
+        status: serviceReport.status,
+      },
+      {
+        aliases: [
+          serviceReport.reportNumberText ?? "",
+          serviceReport.reportCounter?.toString() ?? "",
+        ],
+        confidence: 90,
+      },
+    );
+    const customer = serviceReport.customer
+      ? this.addNode(
+          "customer",
+          serviceReport.customer.appsheetCustomerId,
+          serviceReport.customer.name,
+          evidence,
+          { name: serviceReport.customer.name },
+          { confidence: 90 },
+        )
+      : undefined;
+
+    this.addEdge(
+      "EQUIPMENT_APPEARS_IN_SERVICE_REPORT",
+      equipment,
+      serviceReportNode,
+      evidence,
+      "Equipment row is linked to a ServiceReport.",
+      90,
+    );
+    this.addEdge(
+      "CUSTOMER_HAS_SERVICE_REPORT",
+      customer,
+      serviceReportNode,
+      evidence,
+      "ServiceReport is linked to a customer.",
+      90,
+    );
+    this.addEdge(
+      "CUSTOMER_HAS_EQUIPMENT",
+      customer,
+      equipment,
+      evidence,
+      "Customer is linked to equipment through a ServiceReport equipment row.",
+      80,
+    );
+
+    serviceReport.partsUsed.forEach((part, index) => {
+      const partIdentity = [
+        serviceReport.appsheetReportId,
+        part.partSku,
+        part.partName,
+        index,
+      ].join(":");
+      const partNode = this.addNode(
+        "part-used",
+        partIdentity,
+        part.partName ?? part.partSku,
+        evidence,
+        {
+          partSku: part.partSku,
+          quantity: part.quantity,
+          matchSource: part.matchSource,
+          matchConfidence: part.matchConfidence,
+          needsUserApproval: part.needsUserApproval,
+        },
+        { aliases: [part.partSku ?? ""], confidence: part.matchConfidence ?? 55 },
+      );
+      const productNode = part.product
+        ? this.addNode(
+            "products-catalog",
+            part.partSku ?? part.product.name,
+            part.product.name,
+            evidence,
+            {
+              category: part.product.category,
+              subcategory: part.product.subcategory,
+              compatibleEquipment: part.product.compatibleEquipment,
+            },
+            { aliases: [part.product.name], confidence: part.matchConfidence ?? 60 },
+          )
+        : undefined;
+
+      this.addEdge(
+        "SERVICE_REPORT_USED_PART",
+        serviceReportNode,
+        partNode,
+        evidence,
+        "PartUsed row is linked to the ServiceReport.",
+        85,
+      );
+      this.addEdge(
+        "EQUIPMENT_USED_PART",
+        equipment,
+        partNode,
+        evidence,
+        "PartUsed row carries an equipment reference in the same ServiceReport context.",
+        65,
+        part.equipmentReference
+          ? []
+          : ["PartUsed row does not contain a specific equipment reference."],
+      );
+      this.addEdge(
+        "PART_USED_REFERENCES_PRODUCT",
+        partNode,
+        productNode,
+        evidence,
+        "PartUsed row is linked to a ProductsCatalog item.",
+        part.matchConfidence ?? 60,
+      );
+    });
+
+    serviceReport.businessDocuments.forEach((document) => {
+      const documentNode = this.addNode(
+        "business-document",
+        document.appsheetBusinessDocumentId,
+        document.draftTitle ?? document.appsheetBusinessDocumentId,
+        evidence,
+        {
+          documentTypeSelected: document.documentTypeSelected,
+          status: document.status,
+          approvalStatus: document.approvalStatus,
+          totalAmount: document.totalAmount,
+          currency: document.currency,
+        },
+        { confidence: 85 },
+      );
+
+      this.addEdge(
+        "SERVICE_REPORT_HAS_BUSINESS_DOCUMENT",
+        serviceReportNode,
+        documentNode,
+        evidence,
+        "BusinessDocument is linked to the ServiceReport.",
+        90,
+      );
+      this.addEdge(
+        "CUSTOMER_HAS_BUSINESS_DOCUMENT",
+        customer,
+        documentNode,
+        evidence,
+        "BusinessDocument is linked to the same customer through the ServiceReport.",
+        80,
+      );
+
+      document.items.forEach((line, index) => {
+        const itemIdentity = `${document.appsheetBusinessDocumentId}:${index}:${line.itemName}`;
+        const lineNode = this.addNode(
+          "business-document-item",
+          itemIdentity,
+          line.itemName,
+          evidence,
+          {
+            description: line.description,
+            quantity: line.quantity,
+            unitPrice: line.unitPrice,
+            totalPrice: line.totalPrice,
+            source: line.source,
+            needsPriceApproval: line.needsPriceApproval,
+            matchConfidence: line.matchConfidence,
+          },
+          { confidence: line.matchConfidence ?? 70 },
+        );
+        const pricingNode = this.addNode(
+          "pricing-history",
+          `${document.appsheetBusinessDocumentId}:${index}:${line.itemName}`,
+          `${line.itemName} pricing`,
+          evidence,
+          {
+            unitPrice: line.unitPrice,
+            totalPrice: line.totalPrice,
+            currency: document.currency,
+            source: line.source,
+            approvalStatus: document.approvalStatus,
+          },
+          {
+            confidence: document.approvalStatus === "APPROVED" ? 85 : 55,
+            dataQualityGaps: line.unitPrice
+              ? []
+              : ["BusinessDocumentItem has no unit price, so pricing history is incomplete."],
+          },
+        );
+
+        this.addEdge(
+          "BUSINESS_DOCUMENT_HAS_ITEM",
+          documentNode,
+          lineNode,
+          evidence,
+          "BusinessDocument contains this line item.",
+          90,
+        );
+        this.addEdge(
+          "BUSINESS_DOCUMENT_ITEM_HAS_PRICING_HISTORY",
+          lineNode,
+          pricingNode,
+          evidence,
+          "BusinessDocumentItem carries historical price fields.",
+          document.approvalStatus === "APPROVED" ? 85 : 55,
+        );
+        this.addEdge(
+          "CUSTOMER_HAS_PRICING_HISTORY",
+          customer,
+          pricingNode,
+          evidence,
+          "Pricing history is linked to the customer through the ServiceReport and BusinessDocument.",
+          document.approvalStatus === "APPROVED" ? 80 : 50,
+        );
+      });
+    });
+  }
+
+  private addOfficialPartsEvidence(evidence: KnowledgeEvidence) {
+    const row = evidence.data;
+
+    if (!isRecord(row)) {
+      this.addSourceDocumentEvidence(evidence);
+      return;
+    }
+
+    const sku = findRecordValue(row, ["manufacturerSku", "sku"]);
+    const partName = findRecordValue(row, [
+      "manufacturerPartName",
+      "englishDescription",
+      "partCategory",
+    ]);
+    const modelName = findRecordValue(row, ["model", "normalizedModel"]);
+    const partCategory = findRecordValue(row, ["partCategory"]);
+    const sourceSheet = findRecordValue(row, ["sourceSheet"]);
+    const officialPart = this.addNode(
+      "official-model-parts-catalog",
+      sku ?? `${modelName}:${partCategory}:${partName}`,
+      `${sku ?? ""} ${partName ?? ""}`.trim(),
+      evidence,
+      {
+        sku,
+        partName,
+        partCategory,
+        model: modelName,
+        sourceSheet,
+      },
+      {
+        aliases: [readSearchText(partName), readSearchText(partCategory)],
+        confidence: evidence.score,
+      },
+    );
+    const model = this.addNode(
+      "equipment-model",
+      modelName,
+      modelName,
+      evidence,
+      {},
+      { confidence: 90 },
+    );
+    const seriesValue = deriveEquipmentSeries(modelName);
+    const series = this.addNode(
+      "equipment-series",
+      seriesValue,
+      seriesValue,
+      evidence,
+      { derivedFromModel: modelName },
+      {
+        confidence: seriesValue ? 65 : 20,
+        dataQualityGaps: seriesValue
+          ? ["Series is inferred from official model text until an explicit series field exists."]
+          : ["Official catalog row does not expose a series field."],
+      },
+    );
+    const supplier = this.addNode(
+      "supplier-knowledge",
+      sourceSheet ?? evidence.sourceName,
+      sourceSheet ?? evidence.sourceName,
+      evidence,
+      { sourceName: evidence.sourceName },
+      {
+        confidence: 45,
+        dataQualityGaps: [
+          "Supplier is inferred from source metadata; no supplier master record is linked yet.",
+        ],
+      },
+    );
+
+    this.addEdge(
+      "EQUIPMENT_MODEL_HAS_OFFICIAL_PART",
+      model,
+      officialPart,
+      evidence,
+      "Official Model Parts Catalog row links model to manufacturer SKU.",
+      95,
+    );
+    this.addEdge(
+      "EQUIPMENT_SERIES_HAS_OFFICIAL_PART",
+      series,
+      officialPart,
+      evidence,
+      "Official catalog model can be grouped by inferred equipment series.",
+      65,
+      ["Series relationship is inferred until official series mapping is parsed."],
+    );
+    this.addEdge(
+      "SUPPLIER_PROVIDES_PART",
+      supplier,
+      officialPart,
+      evidence,
+      "Supplier/source knowledge is tied to the official catalog row source.",
+      45,
+      ["Supplier relationship is source-derived, not validated supplier master data."],
+    );
+  }
+
+  private addCsvEvidence(
+    evidence: KnowledgeEvidence,
+    row: Record<string, unknown>,
+  ) {
+    if (evidence.entityType === "customer") {
+      this.addNode(
+        "customer",
+        findRecordValue(row, ["CustomerID", "appsheetCustomerId", "id", "customerId"]) ??
+          evidence.id,
+        findRecordValue(row, ["Name", "CustomerName", "name"]) ?? evidence.title,
+        evidence,
+        { row },
+        {
+          confidence: 50,
+          dataQualityGaps: ["CSV customer node comes from export snapshot evidence."],
+        },
+      );
+      return;
+    }
+
+    if (evidence.entityType === "service-report") {
+      this.addNode(
+        "service-report",
+        findRecordValue(row, ["ReportID", "appsheetReportId", "id", "reportId"]) ??
+          evidence.id,
+        findRecordValue(row, ["ReportCounter", "ReportNumber", "reportCounter"]) ??
+          evidence.title,
+        evidence,
+        { row },
+        {
+          confidence: 50,
+          dataQualityGaps: ["CSV service-report node comes from export snapshot evidence."],
+        },
+      );
+      return;
+    }
+
+    if (evidence.entityType === "equipment") {
+      const equipment = this.addNode(
+        "equipment",
+        findRecordValue(row, ["ItemID", "appsheetItemId", "id"]) ?? evidence.id,
+        findRecordValue(row, ["EquipmentNumber", "equipmentNumber", "SerialNumber"]) ??
+          evidence.title,
+        evidence,
+        { row },
+        {
+          aliases: [
+            readSearchText(findRecordValue(row, ["EquipmentNumber", "equipmentNumber"])),
+            readSearchText(findRecordValue(row, ["SerialNumber", "serialNumber"])),
+          ],
+          confidence: 50,
+          dataQualityGaps: ["CSV equipment node comes from export snapshot evidence."],
+        },
+      );
+      const modelName = findRecordValue(row, ["EquipmentModel", "equipmentModel", "Model"]);
+      const model = this.addNode(
+        "equipment-model",
+        modelName,
+        modelName,
+        evidence,
+        { row },
+        {
+          confidence: 45,
+          dataQualityGaps: modelName
+            ? ["CSV equipment model comes from export snapshot evidence."]
+            : ["CSV equipment row has no parsed model field."],
+        },
+      );
+
+      this.addEdge(
+        "EQUIPMENT_HAS_MODEL",
+        equipment,
+        model,
+        evidence,
+        "CSV equipment row includes model text.",
+        45,
+        ["CSV evidence is not live structured runtime state."],
+      );
+      return;
+    }
+
+    this.addSourceDocumentEvidence(evidence);
+  }
+
+  private addSourceDocumentEvidence(evidence: KnowledgeEvidence) {
+    const sourceNode = this.addNode(
+      "source-document",
+      evidence.id,
+      evidence.title,
+      evidence,
+      {
+        providerId: evidence.providerId,
+        sourceType: evidence.sourceType,
+        sourceName: evidence.sourceName,
+        entityType: evidence.entityType,
+        traceLocation: evidence.trace.location,
+      },
+      {
+        confidence: evidence.score,
+        dataQualityGaps: evidence.dataQualityGaps,
+      },
+    );
+
+    evidence.trace.matchedFields.forEach((field) => {
+      const fieldNode = this.addNode(
+        "source-document",
+        `${evidence.id}:${field}`,
+        field,
+        evidence,
+        { matchedField: field },
+        { confidence: Math.max(20, evidence.score - 20) },
+      );
+
+      this.addEdge(
+        "SOURCE_MENTIONS_ENTITY",
+        sourceNode,
+        fieldNode,
+        evidence,
+        "Evidence source contains a matched field, but no structured entity adapter exists yet.",
+        Math.max(20, evidence.score - 20),
+      );
+    });
+  }
 }
 
 class PrismaKnowledgeProvider implements BusinessKnowledgeProvider {
@@ -914,6 +1723,16 @@ export class BusinessKnowledgeEngine {
       .slice(0, query.limit ?? 50);
   }
 
+  correlateEvidence(evidence: KnowledgeEvidence[]): KnowledgeGraph {
+    return new EvidenceCorrelationBuilder(evidence).build();
+  }
+
+  async buildEvidenceGraph(query: KnowledgeQuery): Promise<KnowledgeGraph> {
+    const evidence = await this.search(query);
+
+    return this.correlateEvidence(evidence);
+  }
+
   async searchEquipmentList(filters: EquipmentKnowledgeFilters) {
     const evidence = await this.search({
       providerIds: ["prisma"],
@@ -950,6 +1769,12 @@ export class BusinessKnowledgeEngine {
       related: relatedEvidence.map((item) => item.data as EquipmentKnowledgeRecord),
       evidence: [...currentEvidence, ...relatedEvidence],
     };
+  }
+
+  async getAssetEvidenceGraph(id: string): Promise<KnowledgeGraph | null> {
+    const context = await this.getAssetKnowledgeContext(id);
+
+    return context ? this.correlateEvidence(context.evidence) : null;
   }
 }
 
