@@ -157,8 +157,16 @@ export default async function EquipmentDetailPage({
               <strong>{assetIntelligence.summary.linkedBusinessDocuments}</strong>
             </div>
             <div className="review-status-item">
+              <span>Parts usage rows</span>
+              <strong>{assetIntelligence.summary.partsUsedRecords}</strong>
+            </div>
+            <div className="review-status-item">
               <span>Recurring signals</span>
               <strong>{assetIntelligence.summary.recurringSignals}</strong>
+            </div>
+            <div className="review-status-item">
+              <span>Reasoning conclusions</span>
+              <strong>{assetIntelligence.summary.reasoningConclusions}</strong>
             </div>
             <div className="review-status-item">
               <span>Data gaps</span>
@@ -209,6 +217,57 @@ export default async function EquipmentDetailPage({
               <li key={evidence}>{evidence}</li>
             ))}
           </ul>
+        </article>
+
+        <article className="info-panel wide">
+          <h2>Senior service reasoning</h2>
+          {assetIntelligence.reasoningConclusions.length ? (
+            <div className="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Conclusion</th>
+                    <th>Confidence</th>
+                    <th>Reasoning</th>
+                    <th>Evidence</th>
+                    <th>Rejected alternatives</th>
+                    <th>Recommended action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {assetIntelligence.reasoningConclusions.map((conclusion) => (
+                    <tr key={`${conclusion.category}-${conclusion.title}`}>
+                      <td>
+                        <strong>{conclusion.title}</strong>
+                        <span className="table-note">
+                          {conclusion.category} - {conclusion.severity}
+                        </span>
+                      </td>
+                      <td>{conclusion.confidence}%</td>
+                      <td>{conclusion.conclusion}</td>
+                      <td>
+                        <ul className="pricing-evidence-list">
+                          {conclusion.evidence.map((evidence) => (
+                            <li key={evidence}>{evidence}</li>
+                          ))}
+                        </ul>
+                      </td>
+                      <td>
+                        <ul className="pricing-evidence-list">
+                          {conclusion.rejectedAlternatives.map((alternative) => (
+                            <li key={alternative}>{alternative}</li>
+                          ))}
+                        </ul>
+                      </td>
+                      <td>{conclusion.recommendedAction}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p>No service-engineering conclusion was strong enough from current evidence.</p>
+          )}
         </article>
 
         <article className="info-panel wide">
@@ -265,6 +324,7 @@ export default async function EquipmentDetailPage({
                   <th>Status</th>
                   <th>Relationship</th>
                   <th>Service evidence</th>
+                  <th>Parts evidence</th>
                   <th>Business documents</th>
                 </tr>
               </thead>
@@ -298,6 +358,17 @@ export default async function EquipmentDetailPage({
                       <span className="table-note">{event.recommendation}</span>
                     </td>
                     <td>
+                      {event.partsUsed.length ? (
+                        <ul className="pricing-evidence-list">
+                          {event.partsUsed.map((part) => (
+                            <li key={part}>{part}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        "No linked parts usage"
+                      )}
+                    </td>
+                    <td>
                       {event.businessDocuments.length ? (
                         <ul className="pricing-evidence-list">
                           {event.businessDocuments.map((document) => (
@@ -309,6 +380,7 @@ export default async function EquipmentDetailPage({
                                 {document.type} - {document.status} -{" "}
                                 {document.approvalStatus} - {document.totalAmount}
                               </span>
+                              <span>{document.lineSummary}</span>
                             </li>
                           ))}
                         </ul>
