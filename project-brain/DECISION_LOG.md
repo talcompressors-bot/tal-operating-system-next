@@ -3,6 +3,22 @@
 ## 2026-07-01
 
 Decision:
+Transform Asset Intelligence from a read-only information view into a deterministic reasoning engine on the existing Equipment detail screen.
+
+Reason:
+The approved next objective was for Asset Intelligence to think like a senior compressor service engineer without creating another dashboard. The highest-value runtime improvement was to correlate existing evidence and produce traceable conclusions: recurring failures, abnormal repair patterns, likely root-cause paths, preventive maintenance opportunities, missing technical information, and commercial opportunities.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` in the existing Asset Intelligence adapter and page only. The engine reads existing `ReportEquipmentItems`, linked `ServiceReports`, linked `Customers`, linked `BusinessDocuments`, linked `BusinessDocumentItems`, and linked `PartsUsed`/Product evidence when present. It does not select SKUs, mutate inventory, create BusinessDocuments, write DB rows, call Maven/Invoice4U, email customers, change schema, install packages, create a dashboard, or expand architecture documentation.
+
+Status:
+Implemented in commit `e278c4f Add asset intelligence reasoning engine`. Validation passed with `npx.cmd tsc --noEmit --pretty false --incremental false`, `npm.cmd run build`, `git diff --check`, and read-only Prisma evidence counts (`ReportEquipmentItems=75`, `ServiceReports=63`, `PartsUsed=0`, `BusinessDocuments=10`, `BusinessDocumentItems=25`; sample ServiceReport `5802` / `9981b978` links equipment row `bd479b2c`, two BusinessDocuments, and line evidence). Current blocker is `none`; data-quality caveat is that structured `PartsUsed` currently has zero rows. Project completion remains 81%.
+
+---
+
+## 2026-07-01
+
+Decision:
 Implement the first incremental Tal Intelligence Core runtime slice as read-only Asset Intelligence on the existing Equipment detail screen.
 
 Reason:

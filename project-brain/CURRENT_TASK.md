@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`58275e4 Add asset intelligence runtime` (latest runtime implementation; latest architecture/governance documentation remains `92cbcbf Add Tal Intelligence Core architecture`; latest runtime support-tooling implementation remains `783765d Fix executive runtime observe warnings`)
+`e278c4f Add asset intelligence reasoning engine` (latest runtime implementation; latest architecture/governance documentation remains `92cbcbf Add Tal Intelligence Core architecture`; latest runtime support-tooling implementation remains `783765d Fix executive runtime observe warnings`)
 
 ## Last Closeout Commit
 
@@ -59,33 +59,39 @@ Approval gates:
 
 ## Latest Tal Intelligence Core Runtime Implementation
 
-Asset Intelligence runtime is implemented and validated on the existing Equipment detail screen.
+Asset Intelligence reasoning engine is implemented and validated on the existing Equipment detail screen.
 
 Completed commit:
 
+- `e278c4f Add asset intelligence reasoning engine`
 - `58275e4 Add asset intelligence runtime`
 
 What changed:
 
+- Extended the existing Asset Intelligence view model into a deterministic reasoning engine that correlates equipment rows, service reports, PartsUsed, linked BusinessDocuments, and BusinessDocumentItems.
+- Added traceable senior-service conclusions for recurring failures, abnormal repair patterns, likely root-cause paths, preventive maintenance opportunities, missing technical information, and commercial opportunities.
+- Every reasoning conclusion includes category, severity, confidence, conclusion text, source evidence, rejected alternatives, and recommended action.
+- Extended the existing `/equipment/[id]` page with a `Senior service reasoning` section and added parts/document-line evidence to the existing asset service timeline.
 - Extended `app/equipment/equipment-adapter.ts` with a read-only Asset Intelligence projection over existing `ReportEquipmentItems`, linked `ServiceReports`, linked `Customers`, and linked `BusinessDocuments`.
 - Extended `app/equipment/[id]/page.tsx` with a Tal Intelligence Core Asset Intelligence panel showing business objective, identity confidence, sources searched, relationship evidence, recurring service signals, data-quality gaps, recommended next action, and an asset service timeline.
-- Reused the current Prisma schema and existing app routes. No new architecture document, schema, table, import, DB write, package, external adapter, or placeholder code was added.
+- Reused the current Prisma schema and existing app route. No new dashboard, architecture document, schema, table, import, DB write, package, external adapter, or placeholder code was added.
 
 Validation:
 
 - `npx.cmd tsc --noEmit --pretty false --incremental false` passed.
 - `npm.cmd run build` passed and confirmed `/equipment/[id]` compiles as a dynamic route.
 - `git diff --check` passed with line-ending warnings only.
-- Read-only Prisma count/sample validation passed: `ReportEquipmentItems=75`, `ServiceReports=63`, `BusinessDocuments=10`, sample equipment row `974cd590` linked to ServiceReport `5826`.
+- Read-only Prisma count/sample validation passed: `ReportEquipmentItems=75`, `ServiceReports=63`, `PartsUsed=0`, `BusinessDocuments=10`, `BusinessDocumentItems=25`; sample ServiceReport `5802` / `9981b978` links equipment row `bd479b2c`, two BusinessDocuments, and document line evidence.
+- Local route HTML validation was not run because the user-owned `http://localhost:3000` dev server was not reachable; Codex did not start a dev server.
 - A raw Node import of the Next/TypeScript adapter was not used as final validation because extensionless ESM imports are resolved by Next build tooling, not raw Node.
 
 Current blocker:
 
-- none for the Asset Intelligence runtime slice.
+- none for the Asset Intelligence reasoning engine. Data-quality caveat: current structured `PartsUsed` has `0` rows, so parts evidence is evaluated but unavailable until imported/populated.
 
 Exact next task:
 
-- Select the next Tal Intelligence Core runtime capability through the Chief Architect evidence loop. Recommended next candidate: strengthen operational recommendations from Asset Intelligence into Service Intelligence only if it can reuse current evidence without schema changes or protected writes.
+- Select the next Tal Intelligence Core runtime capability through the Chief Architect evidence loop. Recommended next candidate: use these reasoning conclusions to improve ServiceReport-to-BusinessDocument recommendations only through existing approved gateway boundaries, or address the `PartsUsed=0` evidence gap through an approved import/data task.
 
 Approval gates:
 
