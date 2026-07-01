@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`38a6162 Add evidence correlation graph` (latest runtime implementation; latest architecture/governance documentation remains `92cbcbf Add Tal Intelligence Core architecture`; latest runtime support-tooling implementation remains `783765d Fix executive runtime observe warnings`)
+`4c49755 Add evidence graph validation gate` (latest runtime implementation; latest architecture/governance documentation remains `92cbcbf Add Tal Intelligence Core architecture`; latest runtime support-tooling implementation remains `783765d Fix executive runtime observe warnings`)
 
 ## Last Closeout Commit
 
@@ -58,6 +58,44 @@ Approval gates:
 - Explicit approval remains required before schema changes, DB writes/imports outside approved protected flows, Maven/Invoice4U, email/customer action, inventory mutation, source-system/cloud/production action, package install, deletion/move, or automatic modification of official business data.
 
 ## Latest Tal Intelligence Core Runtime Implementation
+
+Evidence Graph Validation Gate is implemented before any recommendation engine migration.
+
+Completed commit:
+
+- `4c49755 Add evidence graph validation gate`
+
+What changed:
+
+- Added `validateKnowledgeGraph()` to validate graph contracts, evidence references, duplicate IDs, orphan edges, confidence ranges, and graph trace counts.
+- Added `evaluateEvidenceGraphRecommendationGate()` so future recommendation consumers can be blocked unless the graph validates and required node types, relationship types, and source types are present.
+- The gate returns missing required node types, relationship types, source types, missing evidence sources/data-quality gaps, blockers, and validation detail.
+- Added `tools/evidence-graph-validation.ts` with focused validation for `correlateEvidence()` and `buildEvidenceGraph()` using controlled fixtures plus a read-only runtime smoke validation for equipment `bd479b2c`.
+- The validation harness checks graph contracts, known fixture relationships, negative missing-model/CSV snapshot cases, authority-level strengthening from official catalog evidence, cross-provider behavior, and recommendation-gate allow/block behavior.
+- No AI Draft or ServiceReport recommendation consumer was migrated. No schema change, DB write/import, Google Sheets/AppSheet/Maven/Apps Script/Drive/email/customer action, inventory mutation, package install, parser install, persisted graph storage, source-system action, production action, or architecture-document expansion occurred.
+
+Validation:
+
+- `npx.cmd tsc --noEmit --pretty false --incremental false` passed.
+- Temporary harness compile passed with `npx.cmd tsc --target ES2022 --module commonjs --moduleResolution node --esModuleInterop --skipLibCheck --resolveJsonModule --noEmit false --outDir "$env:TEMP\tal-evidence-graph-validation" tools/evidence-graph-validation.ts lib/business-knowledge-engine.ts lib/prisma.ts lib/manufacturer-parts-registry.ts`.
+- Read-only harness runtime passed outside the sandbox with `node -r dotenv/config "$env:TEMP\tal-evidence-graph-validation\tools\evidence-graph-validation.js"` after setting `NODE_PATH` to workspace `node_modules`.
+- Harness output: fixture graph `13` nodes, `16` edges, `3` sources, `9` gaps; runtime graph `11` nodes, `15` edges, `1` source, `3` gaps.
+- `npm.cmd run build` passed.
+- `git diff --check` passed with line-ending warnings only.
+
+Current blocker:
+
+- none for Evidence Graph validation. Remaining gaps are intentionally listed by the gate: graph consumers still need required node/edge/source declarations, live Sheets/Excel/PDF/image extraction remains gated, inventory/Maven/product graph depth remains limited until read-only provider depth is expanded, and persisted graph storage would require separate schema approval.
+
+Exact next task:
+
+- Before any recommendation migration, wire future graph consumers through `evaluateEvidenceGraphRecommendationGate()` with explicit required graph coverage. Recommended safe next task: consume `getAssetEvidenceGraph()` in Asset Intelligence/service analysis as a read-only evidence view or expand read-only provider retrieval depth for inventory/Maven/product graph evidence.
+
+Approval gates:
+
+- Explicit approval remains required before AI Draft or ServiceReport recommendation migration, schema changes, DB writes/imports outside approved protected flows, Maven/Invoice4U, email/customer action, inventory mutation, source-system/cloud/production action, package install, parser install, deletion/move, persisted graph storage, or automatic modification of official business data.
+
+## Previous Tal Intelligence Core Runtime Implementation
 
 Business Knowledge Engine Evidence Correlation Engine is implemented as an in-memory, read-only unified evidence graph builder.
 

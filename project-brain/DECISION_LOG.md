@@ -3,6 +3,22 @@
 ## 2026-07-01
 
 Decision:
+Evidence Graph validation is mandatory before recommendation consumers may rely on the Business Knowledge Engine graph.
+
+Reason:
+The graph can become a high-leverage dependency for AI Draft, ServiceReport recommendations, pricing, inventory, and service analysis. It must fail closed when graph contracts are invalid, required business relationships are missing, or required source families are absent. Missing evidence must be listed explicitly rather than silently ignored.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` in `lib/business-knowledge-engine.ts` and `tools/evidence-graph-validation.ts`. The runtime adds `validateKnowledgeGraph()` and `evaluateEvidenceGraphRecommendationGate()`; the tool validates controlled fixtures and one read-only runtime asset graph. No recommendation consumer was migrated, no recommendation logic was added, no schema or DB write/import occurred, no package/parser was installed, and no Maven/Invoice4U, Google Sheets, AppSheet, Apps Script, Drive, email, inventory, source-system, production, or persisted graph action occurred.
+
+Status:
+Implemented in commit `4c49755 Add evidence graph validation gate`. Validation passed with project TypeScript, temporary harness compile, unsandboxed read-only harness runtime (`fixtureNodes=13`, `fixtureEdges=16`, `fixtureSources=3`, `fixtureGaps=9`; `runtimeNodes=11`, `runtimeEdges=15`, `runtimeSources=1`, `runtimeGaps=3`), Next build, and `git diff --check`. Current blocker is `none`; future graph consumers must declare required node types, relationship types, and source types before using graph output. Project completion remains 81%.
+
+---
+
+## 2026-07-01
+
+Decision:
 Implement the Business Knowledge Engine Evidence Correlation Engine before migrating additional recommendation consumers.
 
 Reason:
