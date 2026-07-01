@@ -18,6 +18,8 @@ export default async function EquipmentDetailPage({
     notFound();
   }
 
+  const { assetIntelligence } = equipment;
+
   return (
     <section className="page-shell">
       <div className="detail-header">
@@ -128,6 +130,197 @@ export default async function EquipmentDetailPage({
               <dd>{equipment.serviceReportTechnician}</dd>
             </div>
           </dl>
+        </article>
+
+        <article className="info-panel wide">
+          <h2>Tal Intelligence Core - Asset Intelligence</h2>
+          <p>{assetIntelligence.boundary}</p>
+          <div className="review-status-grid" style={{ marginTop: 18 }}>
+            <div className="review-status-item strong">
+              <span>Objective</span>
+              <strong>{assetIntelligence.businessObjective}</strong>
+            </div>
+            <div className="review-status-item">
+              <span>Identity confidence</span>
+              <strong>
+                {assetIntelligence.identityConfidence.label} -{" "}
+                {assetIntelligence.identityConfidence.score}%
+              </strong>
+              <small>{assetIntelligence.identityConfidence.reason}</small>
+            </div>
+            <div className="review-status-item">
+              <span>Related reports</span>
+              <strong>{assetIntelligence.summary.relatedServiceReports}</strong>
+            </div>
+            <div className="review-status-item">
+              <span>Business documents</span>
+              <strong>{assetIntelligence.summary.linkedBusinessDocuments}</strong>
+            </div>
+            <div className="review-status-item">
+              <span>Recurring signals</span>
+              <strong>{assetIntelligence.summary.recurringSignals}</strong>
+            </div>
+            <div className="review-status-item">
+              <span>Data gaps</span>
+              <strong>{assetIntelligence.summary.dataQualityGaps}</strong>
+            </div>
+          </div>
+        </article>
+
+        <article className="info-panel wide">
+          <h2>Recommended next action</h2>
+          <dl>
+            <div>
+              <dt>Action</dt>
+              <dd>
+                {assetIntelligence.nextBestAction.href ? (
+                  <Link href={assetIntelligence.nextBestAction.href}>
+                    {assetIntelligence.nextBestAction.label}
+                  </Link>
+                ) : (
+                  assetIntelligence.nextBestAction.label
+                )}
+              </dd>
+            </div>
+            <div>
+              <dt>Reason</dt>
+              <dd>{assetIntelligence.nextBestAction.reason}</dd>
+            </div>
+          </dl>
+        </article>
+
+        <article className="info-panel wide">
+          <h2>Sources searched</h2>
+          <div className="evidence-grid">
+            {assetIntelligence.sourcesSearched.map((source) => (
+              <div className="evidence-item" key={source.source}>
+                <span>{source.source}</span>
+                <strong>{source.status}</strong>
+                <p>{source.explanation}</p>
+              </div>
+            ))}
+          </div>
+        </article>
+
+        <article className="info-panel wide">
+          <h2>Relationship evidence</h2>
+          <ul className="warning-list neutral">
+            {assetIntelligence.relationshipEvidence.map((evidence) => (
+              <li key={evidence}>{evidence}</li>
+            ))}
+          </ul>
+        </article>
+
+        <article className="info-panel wide">
+          <h2>Recurring service signals</h2>
+          {assetIntelligence.recurringSignals.length ? (
+            <div className="table-card">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Signal</th>
+                    <th>Matches</th>
+                    <th>Evidence</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {assetIntelligence.recurringSignals.map((signal) => (
+                    <tr key={signal.label}>
+                      <td>{signal.label}</td>
+                      <td>{signal.count}</td>
+                      <td>{signal.evidence || "No report labels available"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p>No recurring service signal was detected from current evidence.</p>
+          )}
+        </article>
+
+        <article className="info-panel wide">
+          <h2>Data-quality gaps</h2>
+          {assetIntelligence.dataQualityGaps.length ? (
+            <ul className="warning-list">
+              {assetIntelligence.dataQualityGaps.map((gap) => (
+                <li key={gap}>{gap}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>No asset data-quality gap was detected from current evidence.</p>
+          )}
+        </article>
+
+        <article className="info-panel wide">
+          <h2>Asset service timeline</h2>
+          <div className="table-card">
+            <table>
+              <thead>
+                <tr>
+                  <th>Report</th>
+                  <th>Date</th>
+                  <th>Customer</th>
+                  <th>Technician</th>
+                  <th>Status</th>
+                  <th>Relationship</th>
+                  <th>Service evidence</th>
+                  <th>Business documents</th>
+                </tr>
+              </thead>
+              <tbody>
+                {assetIntelligence.serviceTimeline.map((event) => (
+                  <tr key={`${event.serviceReportId}-${event.relationship}`}>
+                    <td>
+                      {event.serviceReportId ? (
+                        <Link href={`/service-reports/${event.serviceReportId}`}>
+                          {event.serviceReportNumber}
+                        </Link>
+                      ) : (
+                        event.serviceReportNumber
+                      )}
+                    </td>
+                    <td>{event.serviceDate}</td>
+                    <td>
+                      {event.customerId ? (
+                        <Link href={`/customers/${event.customerId}`}>
+                          {event.customerName}
+                        </Link>
+                      ) : (
+                        event.customerName
+                      )}
+                    </td>
+                    <td>{event.technician}</td>
+                    <td>{event.status}</td>
+                    <td>{event.relationship}</td>
+                    <td>
+                      <strong>{event.serviceSummary}</strong>
+                      <span className="table-note">{event.recommendation}</span>
+                    </td>
+                    <td>
+                      {event.businessDocuments.length ? (
+                        <ul className="pricing-evidence-list">
+                          {event.businessDocuments.map((document) => (
+                            <li key={document.id}>
+                              <Link href={`/business-documents/${document.id}`}>
+                                {document.title}
+                              </Link>
+                              <span>
+                                {document.type} - {document.status} -{" "}
+                                {document.approvalStatus} - {document.totalAmount}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        "No linked document"
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </article>
 
         <article className="info-panel wide">
