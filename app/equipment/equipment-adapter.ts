@@ -1,21 +1,11 @@
-import type {
-  BusinessDocument,
-  BusinessDocumentItem,
-  Customer,
-  PartUsed,
-  Prisma,
-  Product,
-  ReportEquipmentItem,
-  ServiceReport,
-} from "@prisma/client";
-import { prisma } from "../../lib/prisma";
+import type { Prisma } from "@prisma/client";
+import {
+  getBusinessKnowledgeEngine,
+  type EquipmentKnowledgeFilters,
+  type EquipmentKnowledgeRecord,
+} from "../../lib/business-knowledge-engine";
 
-export type EquipmentListFilters = {
-  query?: string;
-  type?: string;
-  status?: string;
-  linked?: boolean;
-};
+export type EquipmentListFilters = EquipmentKnowledgeFilters;
 
 export type EquipmentListItem = {
   id: string;
@@ -45,87 +35,7 @@ export type EquipmentDetail = EquipmentListItem & {
 
 type EquipmentDetailBase = Omit<EquipmentDetail, "assetIntelligence">;
 
-type EquipmentServiceReport = Pick<
-  ServiceReport,
-  | "appsheetReportId"
-  | "reportCounter"
-  | "reportNumberText"
-  | "serviceDate"
-  | "technicianName"
-  | "reportType"
-  | "serviceType"
-  | "serviceDescription"
-  | "workPerformed"
-  | "technicianSummary"
-  | "recommendations"
-  | "status"
-  | "sourceStatusText"
-  | "rawSource"
-> & {
-  customer: Pick<Customer, "appsheetCustomerId" | "name"> | null;
-  businessDocuments: Array<
-    Pick<
-      BusinessDocument,
-      | "appsheetBusinessDocumentId"
-      | "draftTitle"
-      | "documentTypeSelected"
-      | "status"
-      | "approvalStatus"
-      | "totalAmount"
-      | "currency"
-      | "description"
-    >
-    & {
-      items: Array<
-        Pick<
-          BusinessDocumentItem,
-          | "itemName"
-          | "description"
-          | "quantity"
-          | "unitPrice"
-          | "totalPrice"
-          | "source"
-          | "needsPriceApproval"
-          | "matchConfidence"
-        >
-      >;
-    }
-  >;
-  partsUsed: Array<
-    Pick<
-      PartUsed,
-      | "partName"
-      | "partSku"
-      | "quantity"
-      | "equipmentReference"
-      | "matchSource"
-      | "matchConfidence"
-      | "needsUserApproval"
-    > & {
-      product: Pick<Product, "name" | "category" | "subcategory" | "compatibleEquipment"> | null;
-    }
-  >;
-};
-
-type EquipmentRecord = Pick<
-  ReportEquipmentItem,
-  | "appsheetItemId"
-  | "sourceReportId"
-  | "reportCounter"
-  | "equipmentNumber"
-  | "equipmentType"
-  | "equipmentSubtype"
-  | "equipmentModel"
-  | "serialNumber"
-  | "compressorCategory"
-  | "serviceDescription"
-  | "currentHours"
-  | "nextService"
-  | "systemStatus"
-  | "technicianRecommendations"
-> & {
-  serviceReport: EquipmentServiceReport | null;
-};
+type EquipmentRecord = EquipmentKnowledgeRecord;
 
 export type AssetIntelligence = {
   boundary: string;
@@ -265,7 +175,7 @@ function formatDate(date: Date | null | undefined, rawSource: Prisma.JsonValue) 
   return date.toISOString().slice(0, 10);
 }
 
-function formatReportNumber(report: EquipmentServiceReport | null) {
+function formatReportNumber(report: EquipmentRecord["serviceReport"]) {
   if (!report) {
     return "No linked report";
   }
@@ -285,26 +195,6 @@ function hasBusinessValue(value: unknown) {
 
 function normalizeIdentity(value: unknown) {
   return readText(value).toLowerCase().replace(/[^a-z0-9\u0590-\u05ff]/g, "");
-}
-
-function buildRelatedEquipmentWhere(
-  item: EquipmentRecord,
-): Prisma.ReportEquipmentItemWhereInput | undefined {
-  const orFilters: Prisma.ReportEquipmentItemWhereInput[] = [];
-
-  if (hasBusinessValue(item.serialNumber)) {
-    orFilters.push({ serialNumber: item.serialNumber });
-  }
-
-  if (hasBusinessValue(item.equipmentNumber)) {
-    orFilters.push({ equipmentNumber: item.equipmentNumber });
-  }
-
-  if (hasBusinessValue(item.equipmentModel)) {
-    orFilters.push({ equipmentModel: item.equipmentModel });
-  }
-
-  return orFilters.length ? { OR: orFilters } : undefined;
 }
 
 function relationshipLabel(current: EquipmentRecord, related: EquipmentRecord) {
@@ -1069,10 +959,10 @@ function buildSourcesSearched(
 ): AssetIntelligence["sourcesSearched"] {
   return [
     {
-      source: "Business Knowledge Base",
+      source: "Business Knowledge Engine",
       status: "Used",
       explanation:
-        "Used structured PostgreSQL relationships between equipment, service reports, customers, and business documents.",
+        "Used unified evidence returned by the Business Knowledge Engine instead of querying a source directly from Tal Intelligence Core.",
     },
     {
       source: "Equipment History",
@@ -1302,169 +1192,23 @@ function mapEquipmentDetail(item: EquipmentRecord): EquipmentDetailBase {
   };
 }
 
-function buildEquipmentWhere(filters: EquipmentListFilters) {
-  const andFilters: Prisma.ReportEquipmentItemWhereInput[] = [];
-
-  if (filters.query) {
-    const query = filters.query;
-
-    andFilters.push({
-      OR: [
-        { appsheetItemId: { contains: query, mode: "insensitive" } },
-        { equipmentNumber: { contains: query, mode: "insensitive" } },
-        { equipmentType: { contains: query, mode: "insensitive" } },
-        { equipmentSubtype: { contains: query, mode: "insensitive" } },
-        { equipmentModel: { contains: query, mode: "insensitive" } },
-        { serialNumber: { contains: query, mode: "insensitive" } },
-        { compressorCategory: { contains: query, mode: "insensitive" } },
-        { systemStatus: { contains: query, mode: "insensitive" } },
-        { sourceReportId: { contains: query, mode: "insensitive" } },
-        { reportCounter: { contains: query, mode: "insensitive" } },
-      ],
-    });
-  }
-
-  if (filters.type) {
-    andFilters.push({
-      equipmentType: { contains: filters.type, mode: "insensitive" },
-    });
-  }
-
-  if (filters.status) {
-    andFilters.push({
-      systemStatus: { contains: filters.status, mode: "insensitive" },
-    });
-  }
-
-  if (filters.linked === true) {
-    andFilters.push({ serviceReportId: { not: null } });
-  }
-
-  if (filters.linked === false) {
-    andFilters.push({ serviceReportId: null });
-  }
-
-  return andFilters.length ? { AND: andFilters } : undefined;
-}
-
-const equipmentSelect = {
-  appsheetItemId: true,
-  sourceReportId: true,
-  reportCounter: true,
-  equipmentNumber: true,
-  equipmentType: true,
-  equipmentSubtype: true,
-  equipmentModel: true,
-  serialNumber: true,
-  compressorCategory: true,
-  serviceDescription: true,
-  currentHours: true,
-  nextService: true,
-  systemStatus: true,
-  technicianRecommendations: true,
-  serviceReport: {
-    select: {
-      appsheetReportId: true,
-      reportCounter: true,
-      reportNumberText: true,
-      serviceDate: true,
-      technicianName: true,
-      reportType: true,
-      serviceType: true,
-      serviceDescription: true,
-      workPerformed: true,
-      technicianSummary: true,
-      recommendations: true,
-      status: true,
-      sourceStatusText: true,
-      rawSource: true,
-      customer: { select: { appsheetCustomerId: true, name: true } },
-      businessDocuments: {
-        orderBy: [{ createdAt: "desc" }, { appsheetBusinessDocumentId: "asc" }],
-        select: {
-          appsheetBusinessDocumentId: true,
-          draftTitle: true,
-          documentTypeSelected: true,
-          status: true,
-          approvalStatus: true,
-          totalAmount: true,
-          currency: true,
-          description: true,
-          items: {
-            orderBy: [{ createdAt: "asc" }, { itemName: "asc" }],
-            select: {
-              itemName: true,
-              description: true,
-              quantity: true,
-              unitPrice: true,
-              totalPrice: true,
-              source: true,
-              needsPriceApproval: true,
-              matchConfidence: true,
-            },
-          },
-        },
-      },
-      partsUsed: {
-        orderBy: [{ createdAt: "asc" }, { partName: "asc" }],
-        select: {
-          partName: true,
-          partSku: true,
-          quantity: true,
-          equipmentReference: true,
-          matchSource: true,
-          matchConfidence: true,
-          needsUserApproval: true,
-          product: {
-            select: {
-              name: true,
-              category: true,
-              subcategory: true,
-              compatibleEquipment: true,
-            },
-          },
-        },
-      },
-    },
-  },
-} satisfies Prisma.ReportEquipmentItemSelect;
-
 export async function getEquipmentList(filters: EquipmentListFilters = {}) {
-  const equipment = await prisma.reportEquipmentItem.findMany({
-    where: buildEquipmentWhere(filters),
-    select: equipmentSelect,
-    orderBy: [
-      { equipmentNumber: "asc" },
-      { equipmentModel: "asc" },
-      { appsheetItemId: "asc" },
-    ],
-  });
+  const equipment =
+    await getBusinessKnowledgeEngine().searchEquipmentList(filters);
 
   return equipment.map(mapEquipmentListItem);
 }
 
 export async function getEquipmentById(id: string) {
-  const item = await prisma.reportEquipmentItem.findUnique({
-    where: { appsheetItemId: id },
-    select: equipmentSelect,
-  });
+  const assetKnowledge =
+    await getBusinessKnowledgeEngine().getAssetKnowledgeContext(id);
 
-  if (!item) {
+  if (!assetKnowledge) {
     return undefined;
   }
 
-  const relatedWhere = buildRelatedEquipmentWhere(item);
-  const relatedItems = relatedWhere
-    ? await prisma.reportEquipmentItem.findMany({
-        where: relatedWhere,
-        select: equipmentSelect,
-        orderBy: [
-          { serviceReport: { serviceDate: "desc" } },
-          { reportCounter: "desc" },
-          { appsheetItemId: "asc" },
-        ],
-      })
-    : [item];
+  const item = assetKnowledge.current;
+  const relatedItems = assetKnowledge.related;
   const detail = mapEquipmentDetail(item);
 
   return {
