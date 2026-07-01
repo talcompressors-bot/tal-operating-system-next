@@ -141,6 +141,44 @@ export type KnowledgeGraph = {
   };
 };
 
+export type EvidenceGraphValidationIssue = {
+  severity: "error" | "warning";
+  code: string;
+  message: string;
+  graphObjectId?: string;
+};
+
+export type EvidenceGraphValidationResult = {
+  passed: boolean;
+  errors: EvidenceGraphValidationIssue[];
+  warnings: EvidenceGraphValidationIssue[];
+  summary: {
+    evidenceCount: number;
+    nodeCount: number;
+    edgeCount: number;
+    sourceCount: number;
+  };
+};
+
+export type EvidenceGraphRecommendationGateInput = {
+  graph: KnowledgeGraph;
+  requiredNodeTypes?: KnowledgeGraphNodeType[];
+  requiredRelationshipTypes?: KnowledgeGraphRelationshipType[];
+  requiredSourceTypes?: KnowledgeSourceType[];
+  businessObjective: string;
+};
+
+export type EvidenceGraphRecommendationGateResult = {
+  allowed: boolean;
+  businessObjective: string;
+  validation: EvidenceGraphValidationResult;
+  missingRequiredNodeTypes: KnowledgeGraphNodeType[];
+  missingRequiredRelationshipTypes: KnowledgeGraphRelationshipType[];
+  missingRequiredSourceTypes: KnowledgeSourceType[];
+  missingEvidenceSources: string[];
+  blockers: string[];
+};
+
 export type BusinessKnowledgeProvider = {
   id: string;
   sourceType: KnowledgeSourceType;
@@ -1699,6 +1737,228 @@ class FileMetadataKnowledgeProvider implements BusinessKnowledgeProvider {
 
     return evidence.slice(0, query.limit ?? 20);
   }
+}
+
+function addValidationIssue(
+  issues: EvidenceGraphValidationIssue[],
+  severity: EvidenceGraphValidationIssue["severity"],
+  code: string,
+  message: string,
+  graphObjectId?: string,
+) {
+  issues.push({ severity, code, message, graphObjectId });
+}
+
+export function validateKnowledgeGraph(
+  graph: KnowledgeGraph,
+): EvidenceGraphValidationResult {
+  const errors: EvidenceGraphValidationIssue[] = [];
+  const warnings: EvidenceGraphValidationIssue[] = [];
+  const evidenceIds = new Set(graph.evidence.map((item) => item.id));
+  const nodeIds = new Set<string>();
+  const edgeIds = new Set<string>();
+
+  graph.nodes.forEach((node) => {
+    if (nodeIds.has(node.id)) {
+      addValidationIssue(errors, "error", "DUPLICATE_NODE_ID", "Duplicate graph node id.", node.id);
+    }
+
+    nodeIds.add(node.id);
+
+    if (!node.id || !node.type || !node.label || !node.identity) {
+      addValidationIssue(
+        errors,
+        "error",
+        "INVALID_NODE_CONTRACT",
+        "Graph node is missing id, type, label, or identity.",
+        node.id,
+      );
+    }
+
+    if (!node.evidenceIds.length) {
+      addValidationIssue(
+        errors,
+        "error",
+        "NODE_WITHOUT_EVIDENCE",
+        "Graph node has no source evidence.",
+        node.id,
+      );
+    }
+
+    node.evidenceIds.forEach((evidenceId) => {
+      if (!evidenceIds.has(evidenceId)) {
+        addValidationIssue(
+          errors,
+          "error",
+          "NODE_UNKNOWN_EVIDENCE",
+          "Graph node references evidence that is not in the graph packet.",
+          node.id,
+        );
+      }
+    });
+
+    if (node.confidence < 0 || node.confidence > 100) {
+      addValidationIssue(
+        errors,
+        "error",
+        "NODE_CONFIDENCE_OUT_OF_RANGE",
+        "Graph node confidence must be between 0 and 100.",
+        node.id,
+      );
+    }
+  });
+
+  graph.edges.forEach((edge) => {
+    if (edgeIds.has(edge.id)) {
+      addValidationIssue(errors, "error", "DUPLICATE_EDGE_ID", "Duplicate graph edge id.", edge.id);
+    }
+
+    edgeIds.add(edge.id);
+
+    if (!edge.id || !edge.type || !edge.fromNodeId || !edge.toNodeId || !edge.reason) {
+      addValidationIssue(
+        errors,
+        "error",
+        "INVALID_EDGE_CONTRACT",
+        "Graph edge is missing id, type, endpoint, or reason.",
+        edge.id,
+      );
+    }
+
+    if (!nodeIds.has(edge.fromNodeId) || !nodeIds.has(edge.toNodeId)) {
+      addValidationIssue(
+        errors,
+        "error",
+        "ORPHAN_EDGE",
+        "Graph edge points to a node id that does not exist.",
+        edge.id,
+      );
+    }
+
+    if (!edge.evidenceIds.length) {
+      addValidationIssue(
+        errors,
+        "error",
+        "EDGE_WITHOUT_EVIDENCE",
+        "Graph edge has no source evidence.",
+        edge.id,
+      );
+    }
+
+    edge.evidenceIds.forEach((evidenceId) => {
+      if (!evidenceIds.has(evidenceId)) {
+        addValidationIssue(
+          errors,
+          "error",
+          "EDGE_UNKNOWN_EVIDENCE",
+          "Graph edge references evidence that is not in the graph packet.",
+          edge.id,
+        );
+      }
+    });
+
+    if (edge.confidence < 0 || edge.confidence > 100) {
+      addValidationIssue(
+        errors,
+        "error",
+        "EDGE_CONFIDENCE_OUT_OF_RANGE",
+        "Graph edge confidence must be between 0 and 100.",
+        edge.id,
+      );
+    }
+  });
+
+  if (graph.trace.evidenceCount !== graph.evidence.length) {
+    addValidationIssue(
+      errors,
+      "error",
+      "TRACE_EVIDENCE_COUNT_MISMATCH",
+      "Graph trace evidence count does not match graph evidence length.",
+    );
+  }
+
+  if (graph.trace.correlatedNodeCount !== graph.nodes.length) {
+    addValidationIssue(
+      errors,
+      "error",
+      "TRACE_NODE_COUNT_MISMATCH",
+      "Graph trace node count does not match graph node length.",
+    );
+  }
+
+  if (graph.trace.correlatedEdgeCount !== graph.edges.length) {
+    addValidationIssue(
+      errors,
+      "error",
+      "TRACE_EDGE_COUNT_MISMATCH",
+      "Graph trace edge count does not match graph edge length.",
+    );
+  }
+
+  graph.evidence.forEach((evidence) => {
+    if (!evidence.status.runtimeSearchable) {
+      addValidationIssue(
+        warnings,
+        "warning",
+        "EVIDENCE_NOT_RUNTIME_SEARCHABLE",
+        "Evidence exists in graph but is not marked runtime-searchable.",
+        evidence.id,
+      );
+    }
+  });
+
+  return {
+    passed: errors.length === 0,
+    errors,
+    warnings,
+    summary: {
+      evidenceCount: graph.evidence.length,
+      nodeCount: graph.nodes.length,
+      edgeCount: graph.edges.length,
+      sourceCount: graph.trace.sourcesSearched.length,
+    },
+  };
+}
+
+export function evaluateEvidenceGraphRecommendationGate(
+  input: EvidenceGraphRecommendationGateInput,
+): EvidenceGraphRecommendationGateResult {
+  const validation = validateKnowledgeGraph(input.graph);
+  const availableNodeTypes = new Set(input.graph.nodes.map((node) => node.type));
+  const availableRelationshipTypes = new Set(input.graph.edges.map((edge) => edge.type));
+  const availableSourceTypes = new Set(input.graph.evidence.map((evidence) => evidence.sourceType));
+  const missingRequiredNodeTypes = (input.requiredNodeTypes ?? []).filter(
+    (type) => !availableNodeTypes.has(type),
+  );
+  const missingRequiredRelationshipTypes = (input.requiredRelationshipTypes ?? []).filter(
+    (type) => !availableRelationshipTypes.has(type),
+  );
+  const missingRequiredSourceTypes = (input.requiredSourceTypes ?? []).filter(
+    (type) => !availableSourceTypes.has(type),
+  );
+  const missingEvidenceSources = [
+    ...missingRequiredSourceTypes.map((type) => `Missing required source type: ${type}`),
+    ...input.graph.dataQualityGaps,
+  ];
+  const blockers = [
+    ...validation.errors.map((issue) => `${issue.code}: ${issue.message}`),
+    ...missingRequiredNodeTypes.map((type) => `Missing required node type: ${type}`),
+    ...missingRequiredRelationshipTypes.map(
+      (type) => `Missing required relationship type: ${type}`,
+    ),
+    ...missingRequiredSourceTypes.map((type) => `Missing required source type: ${type}`),
+  ];
+
+  return {
+    allowed: blockers.length === 0,
+    businessObjective: input.businessObjective,
+    validation,
+    missingRequiredNodeTypes,
+    missingRequiredRelationshipTypes,
+    missingRequiredSourceTypes,
+    missingEvidenceSources,
+    blockers,
+  };
 }
 
 export class BusinessKnowledgeEngine {
