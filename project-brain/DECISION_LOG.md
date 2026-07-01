@@ -3,6 +3,22 @@
 ## 2026-07-01
 
 Decision:
+Implement the first incremental Tal Intelligence Core runtime slice as read-only Asset Intelligence on the existing Equipment detail screen.
+
+Reason:
+The highest-impact missing capability was asset-level runtime correlation. Tal Intelligence Core could not operate effectively if equipment history, linked service reports, linked business documents, recurring signals, identity confidence, and data-quality gaps remained scattered across separate views. Asset Intelligence gives service and business users one traceable runtime context before future recommendations, while preserving the frozen architecture and avoiding protected writes.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` in `app/equipment/equipment-adapter.ts` and `app/equipment/[id]/page.tsx`. It reads existing structured business knowledge from `ReportEquipmentItems`, linked `ServiceReports`, linked `Customers`, and linked `BusinessDocuments`. It does not select SKUs, mutate inventory, create documents, write DB rows, call Maven/Invoice4U, email customers, change schema, install packages, or expand architecture documentation.
+
+Status:
+Implemented in commit `58275e4 Add asset intelligence runtime`. Validation passed with `npx.cmd tsc --noEmit --pretty false --incremental false`, `npm.cmd run build`, `git diff --check`, and read-only Prisma count/sample validation (`ReportEquipmentItems=75`, `ServiceReports=63`, `BusinessDocuments=10`, sample equipment row `974cd590` linked to ServiceReport `5826`). Current blocker is `none`. Exact next task is selecting the next Tal Intelligence Core runtime capability through the Chief Architect evidence loop. Project completion remains 81%.
+
+---
+
+## 2026-07-01
+
+Decision:
 Tal Intelligence Core is documented as the binding central intelligence architecture for the Tal Operating System.
 
 Reason:

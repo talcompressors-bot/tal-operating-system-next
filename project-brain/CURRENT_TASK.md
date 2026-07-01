@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`92cbcbf Add Tal Intelligence Core architecture` (latest architecture/governance documentation; latest runtime support-tooling implementation remains `783765d Fix executive runtime observe warnings`; latest runtime feature remains the ServiceReport to BusinessDocument draft-quality work)
+`58275e4 Add asset intelligence runtime` (latest runtime implementation; latest architecture/governance documentation remains `92cbcbf Add Tal Intelligence Core architecture`; latest runtime support-tooling implementation remains `783765d Fix executive runtime observe warnings`)
 
 ## Last Closeout Commit
 
@@ -52,6 +52,40 @@ Current blocker:
 Exact next task:
 
 - Return to ERP Sprint 13 capability selection through the Chief Architect evidence loop. Historical candidates remain Asset Workspace / Asset Timeline and further ServiceReport -> BusinessDocument approval/readiness hardening, unless Liad selects another capability.
+
+Approval gates:
+
+- Explicit approval remains required before schema changes, DB writes/imports outside approved protected flows, Maven/Invoice4U, email/customer action, inventory mutation, source-system/cloud/production action, package install, deletion/move, or automatic modification of official business data.
+
+## Latest Tal Intelligence Core Runtime Implementation
+
+Asset Intelligence runtime is implemented and validated on the existing Equipment detail screen.
+
+Completed commit:
+
+- `58275e4 Add asset intelligence runtime`
+
+What changed:
+
+- Extended `app/equipment/equipment-adapter.ts` with a read-only Asset Intelligence projection over existing `ReportEquipmentItems`, linked `ServiceReports`, linked `Customers`, and linked `BusinessDocuments`.
+- Extended `app/equipment/[id]/page.tsx` with a Tal Intelligence Core Asset Intelligence panel showing business objective, identity confidence, sources searched, relationship evidence, recurring service signals, data-quality gaps, recommended next action, and an asset service timeline.
+- Reused the current Prisma schema and existing app routes. No new architecture document, schema, table, import, DB write, package, external adapter, or placeholder code was added.
+
+Validation:
+
+- `npx.cmd tsc --noEmit --pretty false --incremental false` passed.
+- `npm.cmd run build` passed and confirmed `/equipment/[id]` compiles as a dynamic route.
+- `git diff --check` passed with line-ending warnings only.
+- Read-only Prisma count/sample validation passed: `ReportEquipmentItems=75`, `ServiceReports=63`, `BusinessDocuments=10`, sample equipment row `974cd590` linked to ServiceReport `5826`.
+- A raw Node import of the Next/TypeScript adapter was not used as final validation because extensionless ESM imports are resolved by Next build tooling, not raw Node.
+
+Current blocker:
+
+- none for the Asset Intelligence runtime slice.
+
+Exact next task:
+
+- Select the next Tal Intelligence Core runtime capability through the Chief Architect evidence loop. Recommended next candidate: strengthen operational recommendations from Asset Intelligence into Service Intelligence only if it can reuse current evidence without schema changes or protected writes.
 
 Approval gates:
 
