@@ -1,5 +1,21 @@
 # DECISION LOG
 
+## 2026-07-01
+
+Decision:
+Tal Intelligence Core is documented as the binding central intelligence architecture for the Tal Operating System.
+
+Reason:
+Tal Compressors needs one owning architecture for business intelligence, AI recommendations, drafts, service analysis, inventory logic, customer history, pricing logic, and knowledge learning. New intelligence features must not create isolated or parallel knowledge systems. Tal Intelligence Core owns the shared Business Knowledge Base, while capabilities analyze and act on shared knowledge.
+
+Boundary:
+Documentation/governance only. Added `project-brain/TAL_INTELLIGENCE_CORE.md` and referenced it from `PROJECT_OPERATING_PROTOCOL.md` and `PROJECT_INDEX.md`. This does not approve implementing all capabilities now and does not approve schema changes, DB writes/imports, Google Sheets/AppSheet/Maven/Apps Script/Drive/email/inventory/production actions, package installs, deletes/moves, or automatic modification of official business data.
+
+Status:
+Implemented in commit `92cbcbf Add Tal Intelligence Core architecture`. Validation: `git diff --check` passed with line-ending warnings only; changed files were documentation/governance only. Current blocker is `none`. Exact next task remains ERP Sprint 13 capability selection through the Chief Architect evidence loop. Project completion remains 81%.
+
+---
+
 ## 2026-06-30
 
 Decision:

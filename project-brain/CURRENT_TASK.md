@@ -1,7 +1,7 @@
 # CURRENT TASK
 
-Last updated: 2026-06-30
-Mode: CAPABILITY_BUILDING; governance frozen; TDOS frozen in Maintenance Mode; domain-driven roadmap realigned; Autonomous Business Draft Generation Sprint 12 implemented; Production Draft Review and Learning Loop Sprint 11 implemented; Production Draft Generation Sprint 10 implemented; Business Intent Policy Layer Sprint 9 implemented; Generalized BusinessDocument Draft Gateway Sprint 8 implemented; End-to-End Service Flow MVP Sprint 7 implemented; Customer 360 Workspace Sprint 6 implemented; Operations Command Center Sprint 5 implemented; Operations Center Sprint 4 implemented; Financial Capability Sprint 3 implemented; Commercial Lifecycle Hardening Sprint 2 implemented; BusinessCase Runtime Sprint 1 implemented; Financial Intake Engine design documented; Universal Business Document Engine foundation implemented; TDOS risk-based operating model integrated; Wave 2 complete; architecture audit complete; Commercial, Financial, operational workspace, customer, service-flow integration, draft-gateway, intent-policy, production draft generation, approved-correction learning, and autonomous Hebrew draft generation runtime work started; Maven remains an External Adapter gate only; no real Maven execution approved yet
+Last updated: 2026-07-01
+Mode: CAPABILITY_BUILDING; governance frozen; TDOS frozen in Maintenance Mode; Tal Intelligence Core architecture documented as the single owning architecture for business intelligence and knowledge learning; domain-driven roadmap realigned; Autonomous Business Draft Generation Sprint 12 implemented; Production Draft Review and Learning Loop Sprint 11 implemented; Production Draft Generation Sprint 10 implemented; Business Intent Policy Layer Sprint 9 implemented; Generalized BusinessDocument Draft Gateway Sprint 8 implemented; End-to-End Service Flow MVP Sprint 7 implemented; Customer 360 Workspace Sprint 6 implemented; Operations Command Center Sprint 5 implemented; Operations Center Sprint 4 implemented; Financial Capability Sprint 3 implemented; Commercial Lifecycle Hardening Sprint 2 implemented; BusinessCase Runtime Sprint 1 implemented; Financial Intake Engine design documented; Universal Business Document Engine foundation implemented; TDOS risk-based operating model integrated; Wave 2 complete; architecture audit complete; Commercial, Financial, operational workspace, customer, service-flow integration, draft-gateway, intent-policy, production draft generation, approved-correction learning, and autonomous Hebrew draft generation runtime work started; Maven remains an External Adapter gate only; no real Maven execution approved yet
 
 ## Canonical Role
 
@@ -19,11 +19,43 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`783765d Fix executive runtime observe warnings` (latest support-tooling implementation; latest runtime feature remains the ServiceReport to BusinessDocument draft-quality work)
+`92cbcbf Add Tal Intelligence Core architecture` (latest architecture/governance documentation; latest runtime support-tooling implementation remains `783765d Fix executive runtime observe warnings`; latest runtime feature remains the ServiceReport to BusinessDocument draft-quality work)
 
 ## Last Closeout Commit
 
 `b5c5418 Sync project brain after operations command center`
+
+## Latest Architecture Documentation
+
+Tal Intelligence Core is documented as the binding central intelligence architecture in `project-brain/TAL_INTELLIGENCE_CORE.md` and referenced from `PROJECT_OPERATING_PROTOCOL.md` and `PROJECT_INDEX.md`.
+
+Completed commit:
+
+- `92cbcbf Add Tal Intelligence Core architecture`
+
+What changed:
+
+- Added Tal Intelligence Core mission, implementation rule, capability registry rule, knowledge governance levels, explainability rule, evidence/search rules, confidence rule, knowledge-gap management, relationship model, learning rule, and nine core capabilities including Business Strategy Intelligence.
+- Added the operating-protocol rule that every future feature, service, database model, automation, AI workflow, API, background job, and business process must identify which Tal Intelligence Core capability owns or consumes it.
+- Added Project Index navigation and supporting read-order references.
+- Did not change app code, Prisma schema, migrations, DB data, Maven/Invoice4U, Apps Script, Google Sheets, AppSheet, Drive, email, inventory, or production systems.
+
+Validation:
+
+- `git diff --check` passed with line-ending warnings only.
+- Diff review confirmed changed files were documentation/governance only.
+
+Current blocker:
+
+- none for the Tal Intelligence Core architecture documentation.
+
+Exact next task:
+
+- Return to ERP Sprint 13 capability selection through the Chief Architect evidence loop. Historical candidates remain Asset Workspace / Asset Timeline and further ServiceReport -> BusinessDocument approval/readiness hardening, unless Liad selects another capability.
+
+Approval gates:
+
+- Explicit approval remains required before schema changes, DB writes/imports outside approved protected flows, Maven/Invoice4U, email/customer action, inventory mutation, source-system/cloud/production action, package install, deletion/move, or automatic modification of official business data.
 
 ## Latest Runtime Quality Implementation
 
