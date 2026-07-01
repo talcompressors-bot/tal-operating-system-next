@@ -2193,3 +2193,19 @@ Architecture/design documentation only in `project-brain/DOCUMENT_ENGINE.md`. No
 
 Status:
 Added to the reusable Document Engine Knowledge Base. Future implementation requires separate approval for schema, attachment storage, privacy/retention, OCR/file/email/bank import adapters, matching workflow, payment suggestion workflow, receipt creation, and any external write.
+
+---
+
+## 2026-07-01
+
+Decision:
+Production recommendation migration is blocked until missing P1 Business Knowledge Coverage is sufficient or explicitly represented as blockers by the Evidence Graph recommendation gate.
+
+Reason:
+The first internal workflow has been identified, but production-grade recommendations require all P1 evidence sources to be searchable, correlated, ranked, and traceable through the Business Knowledge Engine. Current runtime evidence shows `PartsUsed=0`, `Product=0`, `InventoryStock=0`, `InventoryTransaction=0`, and Maven runtime tables at `0`, while BusinessDocument learning evidence is present but not yet normalized as a BKE pricing/correction provider. Official manufacturer catalog evidence exists through generated fixtures, but original Excel workbook parsing is not enabled at runtime.
+
+Boundaries:
+This decision updates `DATA_COVERAGE_AUDIT.md` and Project Brain state only. No draft generator migration, recommendation logic, schema change, DB write/import, Maven/Invoice4U action, Google Sheets/AppSheet/Apps Script/Drive/email/customer action, inventory action, package/parser install, source-system action, production action, or architecture-document expansion is approved by this decision.
+
+Status:
+Approved as coverage planning and migration gate clarification. Next safe work should expand read-only Business Knowledge Engine provider depth for populated/local P1 sources before any production recommendation migration.

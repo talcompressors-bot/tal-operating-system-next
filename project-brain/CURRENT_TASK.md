@@ -57,6 +57,40 @@ Approval gates:
 
 - Explicit approval remains required before schema changes, DB writes/imports outside approved protected flows, Maven/Invoice4U, email/customer action, inventory mutation, source-system/cloud/production action, package install, deletion/move, or automatic modification of official business data.
 
+## Latest Tal Intelligence Core Coverage Planning
+
+Business Knowledge Coverage Plan for missing P1 sources is documented before any recommendation engine migration.
+
+Completed commit:
+
+- `f4c5810 Add P1 business knowledge coverage plan`
+
+What changed:
+
+- Updated `DATA_COVERAGE_AUDIT.md` from a runtime table-count-only audit into a project-wide P1 Business Knowledge Coverage Plan.
+- Listed missing P1 sources required before ServiceReport-to-BusinessDocument draft generation can become a production recommendation engine: Official Model Parts Catalog / manufacturer registry, PartsUsed, ProductsCatalog, pricing history, approved corrections, Maven history, inventory, supplier knowledge, Google Sheets/AppSheet active tables, technical Excel catalogs, and technical/historical PDFs.
+- For each P1 source, recorded current coverage percentage, runtime availability, parsed/indexed/searchable/correlated/ranked status, Evidence Graph use, and remaining blockers.
+- Updated read-only runtime counts: `Customer=763`, `ServiceReport=63`, `ReportEquipmentItem=75`, `PartUsed=0`, `Product=0`, `InventoryStock=0`, `InventoryTransaction=0`, `BusinessDocument=10`, `BusinessDocumentItem=25`, `BusinessDocumentLog=25`, `MavenCustomer=0`, `MavenDocument=0`, `MavenDocumentItem=0`, `MavenItem=0`.
+- Explicitly blocked production recommendation migration until the recommendation gate can show official catalog evidence, customer/equipment/service evidence, approved pricing evidence or blockers, parts/product/Maven/inventory/supplier coverage or explicit gaps, rejected alternatives, and data-quality gaps.
+- No recommendation migration, app code, schema change, DB write/import, Google Sheets/AppSheet/Maven/Apps Script/Drive/email/customer action, inventory action, package/parser install, source-system action, production action, or architecture-document expansion occurred.
+
+Validation:
+
+- Read-only Prisma count query passed outside the network sandbox with `node -r dotenv/config`.
+- `git diff --check` passed with line-ending warnings only.
+
+Current blocker:
+
+- Production recommendation migration is blocked until P1 Business Knowledge Coverage is sufficient or every missing P1 source is explicitly represented as a blocker by `evaluateEvidenceGraphRecommendationGate()`.
+
+Exact next task:
+
+- Implement the smallest read-only P1 provider-depth improvement in the Business Knowledge Engine, starting with populated/local evidence that needs no schema/import/source-system action: BusinessDocumentItem pricing history and approved correction evidence, or official manufacturer catalog fixture completeness/ranking. Do not migrate draft generation yet.
+
+Approval gates:
+
+- Explicit approval remains required before recommendation migration, schema changes, DB writes/imports outside approved protected flows, Maven/Invoice4U, email/customer action, inventory mutation, source-system/cloud/production action, package install, parser install, deletion/move, persisted graph storage, or automatic modification of official business data.
+
 ## Latest Tal Intelligence Core Runtime Implementation
 
 Evidence Graph Validation Gate is implemented before any recommendation engine migration.
