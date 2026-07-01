@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`e278c4f Add asset intelligence reasoning engine` (latest runtime implementation; latest architecture/governance documentation remains `92cbcbf Add Tal Intelligence Core architecture`; latest runtime support-tooling implementation remains `783765d Fix executive runtime observe warnings`)
+`aac294f Add business knowledge engine` (latest runtime implementation; latest architecture/governance documentation remains `92cbcbf Add Tal Intelligence Core architecture`; latest runtime support-tooling implementation remains `783765d Fix executive runtime observe warnings`)
 
 ## Last Closeout Commit
 
@@ -58,6 +58,43 @@ Approval gates:
 - Explicit approval remains required before schema changes, DB writes/imports outside approved protected flows, Maven/Invoice4U, email/customer action, inventory mutation, source-system/cloud/production action, package install, deletion/move, or automatic modification of official business data.
 
 ## Latest Tal Intelligence Core Runtime Implementation
+
+Business Knowledge Engine runtime foundation is implemented as the single retrieval boundary for Tal Intelligence Core consumers.
+
+Completed commit:
+
+- `aac294f Add business knowledge engine`
+
+What changed:
+
+- Added `lib/business-knowledge-engine.ts` with a common `BusinessKnowledgeProvider.search()` interface and unified `KnowledgeEvidence` contract.
+- Added read-only providers for Prisma, Google Sheets registry metadata, local CSV exports, manufacturer JSON fixtures, Markdown knowledge, Excel file metadata, PDF file metadata, and image file metadata.
+- Providers expose source type, authority level, trace location, parsed/indexed/runtime-searchable status, and data-quality gaps.
+- Moved Asset Intelligence equipment list/detail retrieval behind the Business Knowledge Engine. `app/equipment/equipment-adapter.ts` no longer directly imports Prisma or builds source-specific equipment queries.
+- The existing Asset Intelligence reasoning behavior remains read-only and now consumes engine-returned equipment evidence.
+- No schema change, DB write/import, Google Sheets/AppSheet/Maven/Apps Script/Drive/email/customer action, inventory mutation, package install, parser install, source-system action, production action, or architecture-document expansion occurred.
+
+Validation:
+
+- `npm.cmd run build` passed.
+- `npx.cmd tsc --noEmit --pretty false --incremental false` passed when run sequentially after build.
+- `git diff --check` passed with line-ending warnings only.
+- Source grep confirmed `app/equipment/equipment-adapter.ts` no longer contains direct `prisma.` calls.
+- Local route validation was not run because the user-owned `http://localhost:3000` dev server was not reachable; Codex did not start a dev server.
+
+Current blocker:
+
+- none for the Business Knowledge Engine foundation. Data-quality caveats remain: live Google Sheets rows, EPM Excel row extraction, PDF text extraction, and image/OCR extraction require separately approved connector/export/parser/OCR work before they can produce fully parsed evidence.
+
+Exact next task:
+
+- Migrate the next Tal Intelligence Core recommendation consumer, preferably ServiceReport-to-BusinessDocument production draft generation, to retrieve evidence through the Business Knowledge Engine instead of querying Prisma/Product/Maven tables directly.
+
+Approval gates:
+
+- Explicit approval remains required before schema changes, DB writes/imports outside approved protected flows, Maven/Invoice4U, email/customer action, inventory mutation, source-system/cloud/production action, package install, parser install, deletion/move, or automatic modification of official business data.
+
+## Previous Tal Intelligence Core Runtime Implementation
 
 Asset Intelligence reasoning engine is implemented and validated on the existing Equipment detail screen.
 

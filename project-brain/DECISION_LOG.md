@@ -3,6 +3,22 @@
 ## 2026-07-01
 
 Decision:
+Implement Business Knowledge Engine as the single retrieval boundary for Tal Intelligence Core consumers.
+
+Reason:
+Tal Intelligence Core should not build intelligence directly on top of Prisma or any individual source. The operating system needs one retrieval layer that can search, rank, correlate, and return traceable business evidence across supported source families, while providers remain pluggable and source-specific parsing stays behind the engine.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` in `lib/business-knowledge-engine.ts` and the existing Asset Intelligence adapter only. The engine exposes a common provider search interface and unified evidence contract, with read-only providers for Prisma, Google Sheets registry metadata, CSV exports, manufacturer JSON fixtures, Markdown knowledge, Excel file metadata, PDF file metadata, and image file metadata. Asset Intelligence now retrieves equipment evidence through the engine. No schema change, DB write/import, Google Sheets/AppSheet/Maven/Apps Script/Drive/email/customer action, inventory mutation, package install, parser install, source-system action, production action, or architecture-document expansion occurred.
+
+Status:
+Implemented in commit `aac294f Add business knowledge engine`. Validation passed with `npm.cmd run build`, sequential `npx.cmd tsc --noEmit --pretty false --incremental false`, `git diff --check`, and grep evidence confirming `app/equipment/equipment-adapter.ts` has no direct `prisma.` calls. Current blocker is `none`; remaining knowledge gaps are parser/connector gaps for live Google Sheets rows, full EPM Excel extraction, PDFs, and image/OCR evidence. Project completion remains 81%.
+
+---
+
+## 2026-07-01
+
+Decision:
 Transform Asset Intelligence from a read-only information view into a deterministic reasoning engine on the existing Equipment detail screen.
 
 Reason:
