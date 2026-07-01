@@ -19,7 +19,7 @@ Startup remote sync, shutdown path, Reality Check commit comparison, Supabase st
 
 ## Last Implementation Commit
 
-`aac294f Add business knowledge engine` (latest runtime implementation; latest architecture/governance documentation remains `92cbcbf Add Tal Intelligence Core architecture`; latest runtime support-tooling implementation remains `783765d Fix executive runtime observe warnings`)
+`38a6162 Add evidence correlation graph` (latest runtime implementation; latest architecture/governance documentation remains `92cbcbf Add Tal Intelligence Core architecture`; latest runtime support-tooling implementation remains `783765d Fix executive runtime observe warnings`)
 
 ## Last Closeout Commit
 
@@ -58,6 +58,43 @@ Approval gates:
 - Explicit approval remains required before schema changes, DB writes/imports outside approved protected flows, Maven/Invoice4U, email/customer action, inventory mutation, source-system/cloud/production action, package install, deletion/move, or automatic modification of official business data.
 
 ## Latest Tal Intelligence Core Runtime Implementation
+
+Business Knowledge Engine Evidence Correlation Engine is implemented as an in-memory, read-only unified evidence graph builder.
+
+Completed commit:
+
+- `38a6162 Add evidence correlation graph`
+
+What changed:
+
+- Extended `lib/business-knowledge-engine.ts` with reusable `KnowledgeGraph`, `KnowledgeGraphNode`, and `KnowledgeGraphEdge` contracts.
+- Added graph node coverage for customer, equipment, equipment model, equipment series, service report, business document, business document item, parts used, official model parts catalog, products catalog, inventory, Maven history, pricing history, supplier knowledge, and source-document evidence.
+- Added graph relationship coverage for customer/equipment/report/document/pricing links, equipment/model/series links, service-report/parts links, document/item/pricing links, official catalog model/series/SKU links, product/inventory/supplier/Maven relationship types, Maven/pricing relationship types, and fallback source mentions.
+- Added deterministic correlation methods: `correlateEvidence()`, `buildEvidenceGraph()`, and `getAssetEvidenceGraph()`.
+- Correlation stays evidence-only and recommendation-free. It does not select SKUs, create recommendations, mutate data, persist graph rows, install parsers, or query protected external sources.
+- No schema change, DB write/import, Google Sheets/AppSheet/Maven/Apps Script/Drive/email/customer action, inventory mutation, package install, parser install, source-system action, production action, or architecture-document expansion occurred.
+
+Validation:
+
+- `npx.cmd tsc --noEmit --pretty false --incremental false` passed.
+- `npm.cmd run build` passed.
+- `git diff --check` passed with line-ending warnings only.
+- Local route validation was not run because the user-owned `http://localhost:3000` dev server was not reachable; Codex did not start a dev server.
+- Raw Node import was not used as final validation because this Next.js/TypeScript app relies on Next module resolution for extensionless imports.
+
+Current blocker:
+
+- none for the in-memory Evidence Correlation Engine foundation. Remaining knowledge gaps: live Google Sheets rows, full Excel row extraction, PDF/OCR extraction, image/OCR extraction, inventory/Maven/product graph richness, and persisted knowledge graph storage all require separately approved connector/export/parser/import/schema work if selected later.
+
+Exact next task:
+
+- Use the Evidence Correlation Engine as the required graph boundary before migrating additional recommendation consumers. Recommended next safe task: expose or consume `getAssetEvidenceGraph()` in Asset Intelligence/service analysis without adding recommendation logic, or expand provider retrieval depth for inventory/Maven/product graph evidence through read-only Prisma only.
+
+Approval gates:
+
+- Explicit approval remains required before schema changes, DB writes/imports outside approved protected flows, Maven/Invoice4U, email/customer action, inventory mutation, source-system/cloud/production action, package install, parser install, deletion/move, persisted graph storage, or automatic modification of official business data.
+
+## Previous Tal Intelligence Core Runtime Implementation
 
 Business Knowledge Engine runtime foundation is implemented as the single retrieval boundary for Tal Intelligence Core consumers.
 

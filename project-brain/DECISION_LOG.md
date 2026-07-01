@@ -3,6 +3,22 @@
 ## 2026-07-01
 
 Decision:
+Implement the Business Knowledge Engine Evidence Correlation Engine before migrating additional recommendation consumers.
+
+Reason:
+Tal Intelligence Core needs a unified evidence graph so future capabilities consume correlated business knowledge instead of isolated retrieval records. Recommendation consumers should not be migrated until the Business Knowledge Engine can express traceable relationships across customers, equipment, models, series, service reports, documents, line items, parts, official catalog evidence, product/inventory/Maven/pricing/supplier knowledge, and source-document fallbacks.
+
+Boundary:
+Implemented as `SAFE_LOCAL_IMPLEMENTATION` in `lib/business-knowledge-engine.ts` only. The change adds in-memory read-only graph contracts and deterministic correlation methods: `correlateEvidence()`, `buildEvidenceGraph()`, and `getAssetEvidenceGraph()`. It does not add recommendation logic, persist graph rows, change Prisma schema, write/import DB data, install packages/parsers, call Maven/Invoice4U, change Google Sheets/AppSheet/Apps Script/Drive/email/inventory/source systems, or create production behavior.
+
+Status:
+Implemented in commit `38a6162 Add evidence correlation graph`. Validation passed with `npx.cmd tsc --noEmit --pretty false --incremental false`, `npm.cmd run build`, and `git diff --check` with line-ending warnings only. Local route validation was not run because the user-owned `http://localhost:3000` dev server was unreachable and Codex did not start one. Current blocker is `none`; remaining graph depth gaps are live Sheets rows, full Excel/PDF/image extraction, richer read-only inventory/Maven/product provider evidence, and persisted graph storage if separately approved later. Project completion remains 81%.
+
+---
+
+## 2026-07-01
+
+Decision:
 Implement Business Knowledge Engine as the single retrieval boundary for Tal Intelligence Core consumers.
 
 Reason:
