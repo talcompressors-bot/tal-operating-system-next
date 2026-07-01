@@ -660,6 +660,7 @@ Readiness split:
 | Application routes | Implemented Next.js route inventory with module, status, data source, record count, and AppSheet equivalent | `APPLICATION_ROUTE_MAP.md` |
 | Data coverage | Read-only Prisma count audit and module readiness recommendation | `DATA_COVERAGE_AUDIT.md` |
 | System map | Current legacy and target system navigation | `project-brain/maps/SYSTEM_MAP.md` |
+| Tal Intelligence Core | Binding architecture for business intelligence, AI recommendations, drafts, service analysis, inventory logic, customer history, pricing logic, and knowledge learning | `project-brain/TAL_INTELLIGENCE_CORE.md` |
 
 ```mermaid
 flowchart TD
@@ -739,6 +740,7 @@ After the mandatory startup files, read only the supporting files relevant to th
 - agents/AGENT_REGISTRY.md, if routing agent work
 - agents/INFRASTRUCTURE_MANAGER_AGENT.md, for architecture, schema, migration, source-of-truth, or future-platform work
 - project-brain/PROJECT_BRAIN_MASTER.md, for durable memory
+- project-brain/TAL_INTELLIGENCE_CORE.md, for business intelligence, recommendation, knowledge-learning, inventory, customer-history, pricing, and service-analysis architecture
 - project-brain/DECISION_LOG.md, for approved decisions
 - project-brain/maps/SYSTEM_MAP.md, for the canonical system map
 - project-brain/migration/POSTGRESQL_V1_SCOPE.md, for PostgreSQL migration scope

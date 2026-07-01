@@ -46,6 +46,16 @@ Case-specific documents may exist only temporarily during research. Permanent kn
 
 Future work must extend reusable Knowledge Bases instead of creating permanent `*_EVIDENCE_PACKET`, `*_DISCOVERY`, `*_SPEC`, per-model, or per-service-report Project Brain documents.
 
+## Critical Architecture Rule: Tal Intelligence Core
+
+`project-brain/TAL_INTELLIGENCE_CORE.md` is the binding architecture document for Tal Intelligence Core.
+
+Tal Intelligence Core is the single owning architecture for all business intelligence, AI recommendations, drafts, service analysis, inventory logic, customer history, pricing logic, and knowledge learning in the Tal Operating System.
+
+Every new feature, service, database model, automation, AI workflow, API, background job, and business process must identify which Tal Intelligence Core capability owns or consumes it. No capability owns business knowledge exclusively; Tal Intelligence Core owns the shared Business Knowledge Base, and capabilities only analyze and act on shared knowledge.
+
+This rule does not approve implementing all Tal Intelligence Core capabilities now. It only defines the required architecture boundary for future work.
+
 Allowed temporary case documents:
 
 - short-lived research notes while evidence is being gathered
